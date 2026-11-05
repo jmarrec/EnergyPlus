@@ -14,40 +14,40 @@
 ! Cooling Capacity function of temperature curve  - CoolCapfT
 ! The objects and syntax in this dataset comply with EnergyPlus, Version 8.4.0 and above, unless otherwise noted.
 
-  Curve:Biquadratic,
-    ExhAbsorb_CapFt,         !- Name
-    -1.15131,                !- Coefficient1 Constant
-    -0.0801316,              !- Coefficient2 x
-    -0.00945353,             !- Coefficient3 x**2
-    0.209867,                !- Coefficient4 y
-    -0.00567055,             !- Coefficient5 y**2
-    0.00943605,              !- Coefficient6 x*y
-    4.44444,                 !- Minimum Value of x
-    8.88889,                 !- Maximum Value of x
-    21.11111,                !- Minimum Value of y
-    35.0;                    !- Maximum Value of y
+Curve:Biquadratic,
+  ExhAbsorb_CapFt,         !- Name
+  -1.15131,                !- Coefficient1 Constant
+  -0.0801316,              !- Coefficient2 x
+  -0.00945353,             !- Coefficient3 x**2
+  0.209867,                !- Coefficient4 y
+  -0.00567055,             !- Coefficient5 y**2
+  0.00943605,              !- Coefficient6 x*y
+  4.44444,                 !- Minimum Value of x
+  8.88889,                 !- Maximum Value of x
+  21.11111,                !- Minimum Value of y
+  35.0;                    !- Maximum Value of y
 
 ! Thermal energy input to cooling output ratio function of temperature curve -  TeFIRfT
 
-  Curve:Biquadratic,
-    ExhAbsorb_EIRFt,         !- Name
-    1.31195,                 !- Coefficient1 Constant
-    -0.0159283,              !- Coefficient2 x
-    0.000773725,             !- Coefficient3 x**2
-    -0.0196279,              !- Coefficient4 y
-    0.000378351,             !- Coefficient5 y**2
-    5.58356e-05,             !- Coefficient6 x*y
-    4.44444,                 !- Minimum Value of x
-    8.88889,                 !- Maximum Value of x
-    21.11111,                !- Minimum Value of y
-    35.0;                    !- Maximum Value of y
+Curve:Biquadratic,
+  ExhAbsorb_EIRFt,         !- Name
+  1.31195,                 !- Coefficient1 Constant
+  -0.0159283,              !- Coefficient2 x
+  0.000773725,             !- Coefficient3 x**2
+  -0.0196279,              !- Coefficient4 y
+  0.000378351,             !- Coefficient5 y**2
+  5.58356e-05,             !- Coefficient6 x*y
+  4.44444,                 !- Minimum Value of x
+  8.88889,                 !- Maximum Value of x
+  21.11111,                !- Minimum Value of y
+  35.0;                    !- Maximum Value of y
 
 ! Thermal energy input to cooling output ratio function of part load ratio curve -  TeFIRfPLR
 
-  Curve:Quadratic,
-    ExhAbsorb_PLR,           !- Name
-    0.026280035,             !- Coefficient1 Constant
-    0.678066088,             !- Coefficient2 x
-    0.273905867,             !- Coefficient3 x**2
-    0.0,                     !- Minimum Value of x
-    1.0;                     !- Maximum Value of x
+Curve:Quadratic,
+  ExhAbsorb_PLR,           !- Name
+  0.026280035,             !- Coefficient1 Constant
+  0.678066088,             !- Coefficient2 x
+  0.273905867,             !- Coefficient3 x**2
+  0.0,                     !- Minimum Value of x
+  1.0;                     !- Maximum Value of x

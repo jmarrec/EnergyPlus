@@ -13,13 +13,13 @@
 ! GLYCOL TEMPERATURES
 ! The objects and syntax in this dataset comply with EnergyPlus, Version 8.4.0 and above, unless otherwise noted.
 
-  FluidProperties:Temperatures,
-    GlycolTemperatures,      !- Name
-    -35.0,-30.0,-25.0,-20.0,-15.0,-10.0,-5.0,
-    0.0,5.0,10.0,15.0,20.0,25.0,30.0,
-    35.0,40.0,45.0,50.0,55.0,60.0,65.0,
-    70.0,75.0,80.0,85.0,90.0,95.0,100.0,
-    105.0,110.0,115.0,120.0,125.0;
+FluidProperties:Temperatures,
+  GlycolTemperatures,      !- Name
+  -35.0,-30.0,-25.0,-20.0,-15.0,-10.0,-5.0,
+  0.0,5.0,10.0,15.0,20.0,25.0,30.0,
+  35.0,40.0,45.0,50.0,55.0,60.0,65.0,
+  70.0,75.0,80.0,85.0,90.0,95.0,100.0,
+  105.0,110.0,115.0,120.0,125.0;
 
 ! =============================================================================
 !
@@ -27,106 +27,106 @@
 !
 ! =============================================================================
 
-  FluidProperties:Name,
-    Water,                   !- Fluid Name
-    Glycol;                  !- Fluid Type
+FluidProperties:Name,
+  Water,                   !- Fluid Name
+  Glycol;                  !- Fluid Type
 
 ! ****************************** WATER PROPERTIES *****************************
 ! -------------------------- Water Specific Heat Data -------------------------
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
-    4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
-    4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
-    4221.0,4228.0,4235.0,4243.0,4252.0;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
+  4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
+  4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
+  4221.0,4228.0,4235.0,4243.0,4252.0;
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    1.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
-    4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
-    4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
-    4221.0,4228.0,4235.0,4243.0,4252.0;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  1.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
+  4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
+  4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
+  4221.0,4228.0,4235.0,4243.0,4252.0;
 
 ! ------------------------ Water Specific Density Data ------------------------
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
-    994.2,992.3,990.3,988.2,985.8,983.3,980.7,
-    977.9,975.0,971.9,968.8,965.5,962.0,958.5,
-    954.8,951.1,947.2,943.2,939.1;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
+  994.2,992.3,990.3,988.2,985.8,983.3,980.7,
+  977.9,975.0,971.9,968.8,965.5,962.0,958.5,
+  954.8,951.1,947.2,943.2,939.1;
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    1.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
-    994.2,992.3,990.3,988.2,985.8,983.3,980.7,
-    977.9,975.0,971.9,968.8,965.5,962.0,958.5,
-    954.8,951.1,947.2,943.2,939.1;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  1.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
+  994.2,992.3,990.3,988.2,985.8,983.3,980.7,
+  977.9,975.0,971.9,968.8,965.5,962.0,958.5,
+  954.8,951.1,947.2,943.2,939.1;
 
 ! ----------------------- Water Thermal Conductivity Data -----------------------
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
-    0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
-    0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
-    0.6807,0.6818,0.6827,0.6833,0.6837;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
+  0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
+  0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
+  0.6807,0.6818,0.6827,0.6833,0.6837;
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    1.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
-    0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
-    0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
-    0.6807,0.6818,0.6827,0.6833,0.6837;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  1.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
+  0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
+  0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
+  0.6807,0.6818,0.6827,0.6833,0.6837;
 
 ! ---------------------------- Water Viscosity Data -----------------------------
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
-    0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
-    0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
-    0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
+  0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
+  0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
+  0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
 
-  FluidProperties:Concentration,
-    Water,                   !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    1.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
-    0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
-    0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
-    0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
+FluidProperties:Concentration,
+  Water,                   !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  1.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
+  0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
+  0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
+  0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
 
 ! =============================================================================
 !
@@ -134,458 +134,458 @@
 !
 ! =============================================================================
 
-  FluidProperties:Name,
-    EthyleneGlycol,          !- Fluid Name
-    Glycol;                  !- Fluid Type
+FluidProperties:Name,
+  EthyleneGlycol,          !- Fluid Name
+  Glycol;                  !- Fluid Type
 
 ! ************************* ETHYLENE GLYCOL PROPERTIES ************************
 ! --------------------- Ethylene Glycol Specific Heat Data --------------------
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
-    4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
-    4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
-    4221.0,4228.0,4235.0,4243.0,4252.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
+  4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
+  4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
+  4221.0,4228.0,4235.0,4243.0,4252.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    3937.0,3946.0,3954.0,3963.0,3972.0,3981.0,3989.0,
-    3998.0,4007.0,4015.0,4024.0,4033.0,4042.0,4050.0,
-    4059.0,4068.0,4077.0,4085.0,4094.0,4103.0,4112.0,
-    4120.0,4129.0,4138.0,4147.0,4155.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  3937.0,3946.0,3954.0,3963.0,3972.0,3981.0,3989.0,
+  3998.0,4007.0,4015.0,4024.0,4033.0,4042.0,4050.0,
+  4059.0,4068.0,4077.0,4085.0,4094.0,4103.0,4112.0,
+  4120.0,4129.0,4138.0,4147.0,4155.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,3757.0,
-    3769.0,3780.0,3792.0,3803.0,3815.0,3826.0,3838.0,
-    3849.0,3861.0,3872.0,3884.0,3895.0,3907.0,3918.0,
-    3930.0,3941.0,3953.0,3964.0,3976.0,3987.0,3999.0,
-    4010.0,4022.0,4033.0,4045.0,4056.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,3757.0,
+  3769.0,3780.0,3792.0,3803.0,3815.0,3826.0,3838.0,
+  3849.0,3861.0,3872.0,3884.0,3895.0,3907.0,3918.0,
+  3930.0,3941.0,3953.0,3964.0,3976.0,3987.0,3999.0,
+  4010.0,4022.0,4033.0,4045.0,4056.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,3560.0,3574.0,
-    3589.0,3603.0,3617.0,3631.0,3645.0,3660.0,3674.0,
-    3688.0,3702.0,3716.0,3730.0,3745.0,3759.0,3773.0,
-    3787.0,3801.0,3816.0,3830.0,3844.0,3858.0,3872.0,
-    3886.0,3901.0,3915.0,3929.0,3943.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,3560.0,3574.0,
+  3589.0,3603.0,3617.0,3631.0,3645.0,3660.0,3674.0,
+  3688.0,3702.0,3716.0,3730.0,3745.0,3759.0,3773.0,
+  3787.0,3801.0,3816.0,3830.0,3844.0,3858.0,3872.0,
+  3886.0,3901.0,3915.0,3929.0,3943.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,3334.0,3351.0,3367.0,3384.0,
-    3401.0,3418.0,3435.0,3451.0,3468.0,3485.0,3502.0,
-    3518.0,3535.0,3552.0,3569.0,3585.0,3602.0,3619.0,
-    3636.0,3653.0,3669.0,3686.0,3703.0,3720.0,3736.0,
-    3753.0,3770.0,3787.0,3804.0,3820.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,3334.0,3351.0,3367.0,3384.0,
+  3401.0,3418.0,3435.0,3451.0,3468.0,3485.0,3502.0,
+  3518.0,3535.0,3552.0,3569.0,3585.0,3602.0,3619.0,
+  3636.0,3653.0,3669.0,3686.0,3703.0,3720.0,3736.0,
+  3753.0,3770.0,3787.0,3804.0,3820.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    3068.0,3088.0,3107.0,3126.0,3145.0,3165.0,3184.0,
-    3203.0,3223.0,3242.0,3261.0,3281.0,3300.0,3319.0,
-    3339.0,3358.0,3377.0,3396.0,3416.0,3435.0,3454.0,
-    3474.0,3493.0,3512.0,3532.0,3551.0,3570.0,3590.0,
-    3609.0,3628.0,3647.0,3667.0,3686.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  3068.0,3088.0,3107.0,3126.0,3145.0,3165.0,3184.0,
+  3203.0,3223.0,3242.0,3261.0,3281.0,3300.0,3319.0,
+  3339.0,3358.0,3377.0,3396.0,3416.0,3435.0,3454.0,
+  3474.0,3493.0,3512.0,3532.0,3551.0,3570.0,3590.0,
+  3609.0,3628.0,3647.0,3667.0,3686.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    2844.0,2866.0,2888.0,2909.0,2931.0,2953.0,2975.0,
-    2997.0,3018.0,3040.0,3062.0,3084.0,3106.0,3127.0,
-    3149.0,3171.0,3193.0,3215.0,3236.0,3258.0,3280.0,
-    3302.0,3324.0,3345.0,3367.0,3389.0,3411.0,3433.0,
-    3454.0,3476.0,3498.0,3520.0,3542.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  2844.0,2866.0,2888.0,2909.0,2931.0,2953.0,2975.0,
+  2997.0,3018.0,3040.0,3062.0,3084.0,3106.0,3127.0,
+  3149.0,3171.0,3193.0,3215.0,3236.0,3258.0,3280.0,
+  3302.0,3324.0,3345.0,3367.0,3389.0,3411.0,3433.0,
+  3454.0,3476.0,3498.0,3520.0,3542.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    2612.0,2636.0,2660.0,2685.0,2709.0,2733.0,2757.0,
-    2782.0,2806.0,2830.0,2854.0,2878.0,2903.0,2927.0,
-    2951.0,2975.0,3000.0,3024.0,3048.0,3072.0,3097.0,
-    3121.0,3145.0,3164.0,3193.0,3218.0,3242.0,3266.0,
-    3290.0,3315.0,3339.0,3363.0,3387.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  2612.0,2636.0,2660.0,2685.0,2709.0,2733.0,2757.0,
+  2782.0,2806.0,2830.0,2854.0,2878.0,2903.0,2927.0,
+  2951.0,2975.0,3000.0,3024.0,3048.0,3072.0,3097.0,
+  3121.0,3145.0,3164.0,3193.0,3218.0,3242.0,3266.0,
+  3290.0,3315.0,3339.0,3363.0,3387.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    2370.0,2397.0,2423.0,2450.0,2477.0,2503.0,2530.0,
-    2556.0,2583.0,2610.0,2636.0,2663.0,2690.0,2716.0,
-    2743.0,2770.0,2796.0,2823.0,2850.0,2876.0,2903.0,
-    2929.0,2956.0,2983.0,3009.0,3036.0,3063.0,3089.0,
-    3116.0,3143.0,3169.0,3196.0,3223.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  2370.0,2397.0,2423.0,2450.0,2477.0,2503.0,2530.0,
+  2556.0,2583.0,2610.0,2636.0,2663.0,2690.0,2716.0,
+  2743.0,2770.0,2796.0,2823.0,2850.0,2876.0,2903.0,
+  2929.0,2956.0,2983.0,3009.0,3036.0,3063.0,3089.0,
+  3116.0,3143.0,3169.0,3196.0,3223.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    0.0,0.0,2177.0,2206.0,2235.0,2264.0,2293.0,
-    2322.0,2351.0,2380.0,2409.0,2438.0,2467.0,2496.0,
-    2525.0,2554.0,2583.0,2612.0,2641.0,2670.0,2699.0,
-    2728.0,2757.0,2786.0,2815.0,2844.0,2873.0,2902.0,
-    2931.0,2960.0,2989.0,3018.0,3047.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  0.0,0.0,2177.0,2206.0,2235.0,2264.0,2293.0,
+  2322.0,2351.0,2380.0,2409.0,2438.0,2467.0,2496.0,
+  2525.0,2554.0,2583.0,2612.0,2641.0,2670.0,2699.0,
+  2728.0,2757.0,2786.0,2815.0,2844.0,2873.0,2902.0,
+  2931.0,2960.0,2989.0,3018.0,3047.0;
 
 ! ---------------------- Ethylene Glycol Density Data -------------------------
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
-    994.2,992.3,990.3,988.2,985.8,983.3,980.7,
-    977.9,975.0,971.9,968.8,965.5,962.0,958.5,
-    954.8,951.1,947.2,943.2,939.1;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
+  994.2,992.3,990.3,988.2,985.8,983.3,980.7,
+  977.9,975.0,971.9,968.8,965.5,962.0,958.5,
+  954.8,951.1,947.2,943.2,939.1;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    1019.0,1018.0,1016.0,1015.0,1013.0,1012.0,1010.0,
-    1008.0,1006.0,1004.0,1002.0,999.2,996.7,994.1,
-    991.3,988.5,985.5,982.4,979.2,975.8,972.3,
-    968.7,965.0,961.2,957.2,953.1;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  1019.0,1018.0,1016.0,1015.0,1013.0,1012.0,1010.0,
+  1008.0,1006.0,1004.0,1002.0,999.2,996.7,994.1,
+  991.3,988.5,985.5,982.4,979.2,975.8,972.3,
+  968.7,965.0,961.2,957.2,953.1;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,1037.0,
-    1036.0,1034.0,1033.0,1031.0,1030.0,1028.0,1026.0,
-    1024.0,1022.0,1020.0,1017.0,1015.0,1012.0,1009.0,
-    1006.0,1003.0,1000.0,997.0,993.6,990.1,986.5,
-    982.8,978.9,974.9,970.8,966.6;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,1037.0,
+  1036.0,1034.0,1033.0,1031.0,1030.0,1028.0,1026.0,
+  1024.0,1022.0,1020.0,1017.0,1015.0,1012.0,1009.0,
+  1006.0,1003.0,1000.0,997.0,993.6,990.1,986.5,
+  982.8,978.9,974.9,970.8,966.6;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,1054.0,1053.0,
-    1052.0,1050.0,1049.0,1047.0,1045.0,1043.0,1041.0,
-    1039.0,1037.0,1034.0,1031.0,1029.0,1026.0,1023.0,
-    1020.0,1017.0,1014.0,1011.0,1007.0,1003.0,999.7,
-    995.8,991.8,987.7,983.4,979.1;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,1054.0,1053.0,
+  1052.0,1050.0,1049.0,1047.0,1045.0,1043.0,1041.0,
+  1039.0,1037.0,1034.0,1031.0,1029.0,1026.0,1023.0,
+  1020.0,1017.0,1014.0,1011.0,1007.0,1003.0,999.7,
+  995.8,991.8,987.7,983.4,979.1;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,1072.0,1071.0,1070.0,1068.0,
-    1067.0,1065.0,1063.0,1062.0,1060.0,1058.0,1055.0,
-    1053.0,1051.0,1048.0,1045.0,1043.0,1040.0,1037.0,
-    1033.0,1030.0,1027.0,1023.0,1019.0,1016.0,1012.0,
-    1008.0,1004.0,999.3,994.9,990.4;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,1072.0,1071.0,1070.0,1068.0,
+  1067.0,1065.0,1063.0,1062.0,1060.0,1058.0,1055.0,
+  1053.0,1051.0,1048.0,1045.0,1043.0,1040.0,1037.0,
+  1033.0,1030.0,1027.0,1023.0,1019.0,1016.0,1012.0,
+  1008.0,1004.0,999.3,994.9,990.4;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    1090.0,1089.0,1088.0,1087.0,1086.0,1084.0,1083.0,
-    1081.0,1079.0,1077.0,1075.0,1073.0,1071.0,1069.0,
-    1066.0,1064.0,1061.0,1058.0,1055.0,1052.0,1049.0,
-    1045.0,1042.0,1038.0,1035.0,1031.0,1027.0,1023.0,
-    1019.0,1014.0,1010.0,1005.0,1001.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  1090.0,1089.0,1088.0,1087.0,1086.0,1084.0,1083.0,
+  1081.0,1079.0,1077.0,1075.0,1073.0,1071.0,1069.0,
+  1066.0,1064.0,1061.0,1058.0,1055.0,1052.0,1049.0,
+  1045.0,1042.0,1038.0,1035.0,1031.0,1027.0,1023.0,
+  1019.0,1014.0,1010.0,1005.0,1001.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    1105.0,1104.0,1102.0,1101.0,1100.0,1098.0,1096.0,
-    1095.0,1093.0,1091.0,1089.0,1086.0,1084.0,1081.0,
-    1079.0,1076.0,1073.0,1070.0,1067.0,1064.0,1060.0,
-    1057.0,1053.0,1049.0,1046.0,1042.0,1038.0,1033.0,
-    1029.0,1025.0,1020.0,1015.0,1010.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  1105.0,1104.0,1102.0,1101.0,1100.0,1098.0,1096.0,
+  1095.0,1093.0,1091.0,1089.0,1086.0,1084.0,1081.0,
+  1079.0,1076.0,1073.0,1070.0,1067.0,1064.0,1060.0,
+  1057.0,1053.0,1049.0,1046.0,1042.0,1038.0,1033.0,
+  1029.0,1025.0,1020.0,1015.0,1010.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    1119.0,1117.0,1116.0,1115.0,1113.0,1111.0,1109.0,
-    1108.0,1105.0,1103.0,1101.0,1098.0,1096.0,1093.0,
-    1090.0,1088.0,1084.0,1081.0,1078.0,1075.0,1071.0,
-    1067.0,1064.0,1060.0,1056.0,1052.0,1047.0,1043.0,
-    1038.0,1034.0,1029.0,1024.0,1019.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  1119.0,1117.0,1116.0,1115.0,1113.0,1111.0,1109.0,
+  1108.0,1105.0,1103.0,1101.0,1098.0,1096.0,1093.0,
+  1090.0,1088.0,1084.0,1081.0,1078.0,1075.0,1071.0,
+  1067.0,1064.0,1060.0,1056.0,1052.0,1047.0,1043.0,
+  1038.0,1034.0,1029.0,1024.0,1019.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    1132.0,1131.0,1129.0,1128.0,1126.0,1124.0,1122.0,
-    1120.0,1118.0,1115.0,1113.0,1110.0,1107.0,1105.0,
-    1102.0,1098.0,1095.0,1092.0,1088.0,1085.0,1081.0,
-    1077.0,1073.0,1069.0,1065.0,1061.0,1056.0,1052.0,
-    1047.0,1042.0,1038.0,1032.0,1027.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  1132.0,1131.0,1129.0,1128.0,1126.0,1124.0,1122.0,
+  1120.0,1118.0,1115.0,1113.0,1110.0,1107.0,1105.0,
+  1102.0,1098.0,1095.0,1092.0,1088.0,1085.0,1081.0,
+  1077.0,1073.0,1069.0,1065.0,1061.0,1056.0,1052.0,
+  1047.0,1042.0,1038.0,1032.0,1027.0;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    0.0,0.0,1142.0,1140.0,1138.0,1136.0,1134.0,
-    1132.0,1129.0,1127.0,1124.0,1121.0,1118.0,1115.0,
-    1112.0,1109.0,1106.0,1102.0,1098.0,1095.0,1091.0,
-    1087.0,1083.0,1078.0,1074.0,1070.0,1065.0,1060.0,
-    1055.0,1050.0,1045.0,1040.0,1035.0;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  0.0,0.0,1142.0,1140.0,1138.0,1136.0,1134.0,
+  1132.0,1129.0,1127.0,1124.0,1121.0,1118.0,1115.0,
+  1112.0,1109.0,1106.0,1102.0,1098.0,1095.0,1091.0,
+  1087.0,1083.0,1078.0,1074.0,1070.0,1065.0,1060.0,
+  1055.0,1050.0,1045.0,1040.0,1035.0;
 
 ! ------------------ Ethylene Glycol Thermal Conductivity Data ----------------
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
-    0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
-    0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
-    0.6807,0.6818,0.6827,0.6833,0.6837;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
+  0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
+  0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
+  0.6807,0.6818,0.6827,0.6833,0.6837;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.511,0.52,0.528,0.537,0.545,0.552,0.559,
-    0.566,0.572,0.577,0.583,0.588,0.592,0.596,
-    0.6,0.603,0.606,0.608,0.61,0.612,0.613,
-    0.614,0.614,0.614,0.613,0.612;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.511,0.52,0.528,0.537,0.545,0.552,0.559,
+  0.566,0.572,0.577,0.583,0.588,0.592,0.596,
+  0.6,0.603,0.606,0.608,0.61,0.612,0.613,
+  0.614,0.614,0.614,0.613,0.612;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.46,
-    0.468,0.476,0.483,0.49,0.497,0.503,0.509,
-    0.515,0.52,0.525,0.529,0.534,0.538,0.541,
-    0.544,0.547,0.549,0.551,0.553,0.555,0.556,
-    0.556,0.557,0.557,0.556,0.555;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.46,
+  0.468,0.476,0.483,0.49,0.497,0.503,0.509,
+  0.515,0.52,0.525,0.529,0.534,0.538,0.541,
+  0.544,0.547,0.549,0.551,0.553,0.555,0.556,
+  0.556,0.557,0.557,0.556,0.555;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.415,0.422,
-    0.429,0.436,0.442,0.448,0.453,0.459,0.464,
-    0.469,0.473,0.477,0.481,0.485,0.488,0.491,
-    0.494,0.496,0.498,0.5,0.501,0.503,0.504,
-    0.504,0.505,0.505,0.504,0.504;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.415,0.422,
+  0.429,0.436,0.442,0.448,0.453,0.459,0.464,
+  0.469,0.473,0.477,0.481,0.485,0.488,0.491,
+  0.494,0.496,0.498,0.5,0.501,0.503,0.504,
+  0.504,0.505,0.505,0.504,0.504;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.371,0.377,0.383,0.389,
-    0.395,0.4,0.405,0.41,0.415,0.419,0.424,
-    0.428,0.431,0.435,0.438,0.441,0.444,0.446,
-    0.449,0.451,0.452,0.454,0.455,0.456,0.457,
-    0.458,0.458,0.458,0.458,0.458;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.371,0.377,0.383,0.389,
+  0.395,0.4,0.405,0.41,0.415,0.419,0.424,
+  0.428,0.431,0.435,0.438,0.441,0.444,0.446,
+  0.449,0.451,0.452,0.454,0.455,0.456,0.457,
+  0.458,0.458,0.458,0.458,0.458;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    0.328,0.333,0.339,0.344,0.349,0.354,0.359,
-    0.364,0.368,0.373,0.377,0.38,0.384,0.387,
-    0.391,0.394,0.397,0.399,0.402,0.404,0.406,
-    0.408,0.41,0.411,0.413,0.414,0.415,0.416,
-    0.416,0.417,0.417,0.417,0.417;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  0.328,0.333,0.339,0.344,0.349,0.354,0.359,
+  0.364,0.368,0.373,0.377,0.38,0.384,0.387,
+  0.391,0.394,0.397,0.399,0.402,0.404,0.406,
+  0.408,0.41,0.411,0.413,0.414,0.415,0.416,
+  0.416,0.417,0.417,0.417,0.417;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    0.307,0.312,0.316,0.321,0.325,0.329,0.333,
-    0.336,0.34,0.343,0.346,0.349,0.352,0.355,
-    0.358,0.36,0.363,0.365,0.367,0.369,0.371,
-    0.372,0.374,0.375,0.376,0.377,0.378,0.379,
-    0.379,0.38,0.38,0.38,0.38;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  0.307,0.312,0.316,0.321,0.325,0.329,0.333,
+  0.336,0.34,0.343,0.346,0.349,0.352,0.355,
+  0.358,0.36,0.363,0.365,0.367,0.369,0.371,
+  0.372,0.374,0.375,0.376,0.377,0.378,0.379,
+  0.379,0.38,0.38,0.38,0.38;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    0.289,0.293,0.296,0.3,0.303,0.306,0.309,
-    0.312,0.314,0.317,0.32,0.322,0.324,0.327,
-    0.329,0.331,0.332,0.334,0.336,0.337,0.339,
-    0.34,0.341,0.342,0.343,0.344,0.345,0.346,
-    0.346,0.347,0.347,0.347,0.347;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  0.289,0.293,0.296,0.3,0.303,0.306,0.309,
+  0.312,0.314,0.317,0.32,0.322,0.324,0.327,
+  0.329,0.331,0.332,0.334,0.336,0.337,0.339,
+  0.34,0.341,0.342,0.343,0.344,0.345,0.346,
+  0.346,0.347,0.347,0.347,0.347;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    0.274,0.276,0.279,0.281,0.283,0.286,0.288,
-    0.29,0.292,0.294,0.296,0.298,0.299,0.301,
-    0.303,0.304,0.306,0.307,0.308,0.31,0.311,
-    0.312,0.313,0.314,0.314,0.315,0.316,0.316,
-    0.317,0.317,0.318,0.318,0.318;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  0.274,0.276,0.279,0.281,0.283,0.286,0.288,
+  0.29,0.292,0.294,0.296,0.298,0.299,0.301,
+  0.303,0.304,0.306,0.307,0.308,0.31,0.311,
+  0.312,0.313,0.314,0.314,0.315,0.316,0.316,
+  0.317,0.317,0.318,0.318,0.318;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    0.0,0.0,0.263,0.265,0.266,0.268,0.269,
-    0.271,0.272,0.274,0.275,0.276,0.278,0.279,
-    0.28,0.281,0.282,0.283,0.284,0.285,0.286,
-    0.287,0.288,0.288,0.289,0.29,0.29,0.291,
-    0.291,0.292,0.292,0.293,0.293;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  0.0,0.0,0.263,0.265,0.266,0.268,0.269,
+  0.271,0.272,0.274,0.275,0.276,0.278,0.279,
+  0.28,0.281,0.282,0.283,0.284,0.285,0.286,
+  0.287,0.288,0.288,0.289,0.29,0.29,0.291,
+  0.291,0.292,0.292,0.293,0.293;
 
 ! ----------------------- Ethylene Glycol Viscosity Data ----------------------
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
-    0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
-    0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
-    0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
+  0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
+  0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
+  0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.00208,0.00179,0.00156,0.00137,0.00121,0.00108,0.00097,
-    0.00088,0.0008,0.00073,0.00067,0.00062,0.00057,0.00053,
-    0.0005,0.00047,0.00044,0.00041,0.00039,0.00037,0.00035,
-    0.00033,0.00032,0.0003,0.00029,0.00028;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.00208,0.00179,0.00156,0.00137,0.00121,0.00108,0.00097,
+  0.00088,0.0008,0.00073,0.00067,0.00062,0.00057,0.00053,
+  0.0005,0.00047,0.00044,0.00041,0.00039,0.00037,0.00035,
+  0.00033,0.00032,0.0003,0.00029,0.00028;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.00365,
-    0.00302,0.00254,0.00218,0.00189,0.00165,0.00146,0.0013,
-    0.00117,0.00106,0.00096,0.00088,0.00081,0.00074,0.00069,
-    0.00064,0.00059,0.00055,0.00052,0.00049,0.00046,0.00043,
-    0.0004,0.00038,0.00036,0.00034,0.00033;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.00365,
+  0.00302,0.00254,0.00218,0.00189,0.00165,0.00146,0.0013,
+  0.00117,0.00106,0.00096,0.00088,0.00081,0.00074,0.00069,
+  0.00064,0.00059,0.00055,0.00052,0.00049,0.00046,0.00043,
+  0.0004,0.00038,0.00036,0.00034,0.00033;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.00619,0.00503,
-    0.00415,0.00348,0.00295,0.00253,0.0022,0.00192,0.00169,
-    0.0015,0.00134,0.00121,0.00109,0.00099,0.0009,0.00083,
-    0.00076,0.0007,0.00065,0.0006,0.00056,0.00052,0.00049,
-    0.00046,0.00043,0.00041,0.00038,0.00036;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.00619,0.00503,
+  0.00415,0.00348,0.00295,0.00253,0.0022,0.00192,0.00169,
+  0.0015,0.00134,0.00121,0.00109,0.00099,0.0009,0.00083,
+  0.00076,0.0007,0.00065,0.0006,0.00056,0.00052,0.00049,
+  0.00046,0.00043,0.00041,0.00038,0.00036;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.01575,0.01174,0.00906,0.00718,
-    0.00583,0.00482,0.00404,0.00344,0.00296,0.00257,0.00226,
-    0.00199,0.00177,0.00159,0.00143,0.00129,0.00117,0.00106,
-    0.00097,0.00089,0.00082,0.00076,0.0007,0.00065,0.0006,
-    0.00056,0.00053,0.00049,0.00046,0.00043;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.01575,0.01174,0.00906,0.00718,
+  0.00583,0.00482,0.00404,0.00344,0.00296,0.00257,0.00226,
+  0.00199,0.00177,0.00159,0.00143,0.00129,0.00117,0.00106,
+  0.00097,0.00089,0.00082,0.00076,0.0007,0.00065,0.0006,
+  0.00056,0.00053,0.00049,0.00046,0.00043;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    0.06693,0.04398,0.0305,0.02207,0.01653,0.01274,0.01005,
-    0.00809,0.00663,0.0055,0.00463,0.00394,0.00339,0.00294,
-    0.00256,0.00226,0.002,0.00178,0.00159,0.00143,0.00129,
-    0.00117,0.00107,0.00098,0.00089,0.00082,0.00076,0.0007,
-    0.00065,0.0006,0.00056,0.00053,0.00049;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  0.06693,0.04398,0.0305,0.02207,0.01653,0.01274,0.01005,
+  0.00809,0.00663,0.0055,0.00463,0.00394,0.00339,0.00294,
+  0.00256,0.00226,0.002,0.00178,0.00159,0.00143,0.00129,
+  0.00117,0.00107,0.00098,0.00089,0.00082,0.00076,0.0007,
+  0.00065,0.0006,0.00056,0.00053,0.00049;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    0.09344,0.06525,0.04675,0.03428,0.02569,0.01962,0.01525,
-    0.01205,0.00966,0.00785,0.00646,0.00538,0.00452,0.00384,
-    0.00329,0.00284,0.00247,0.00216,0.00191,0.00169,0.00151,
-    0.00135,0.00122,0.0011,0.001,0.00092,0.00084,0.00077,
-    0.00071,0.00066,0.00061,0.00057,0.00053;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  0.09344,0.06525,0.04675,0.03428,0.02569,0.01962,0.01525,
+  0.01205,0.00966,0.00785,0.00646,0.00538,0.00452,0.00384,
+  0.00329,0.00284,0.00247,0.00216,0.00191,0.00169,0.00151,
+  0.00135,0.00122,0.0011,0.001,0.00092,0.00084,0.00077,
+  0.00071,0.00066,0.00061,0.00057,0.00053;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    0.1335,0.09657,0.07038,0.05194,0.03888,0.02953,0.02276,
-    0.01779,0.01409,0.01131,0.00918,0.00753,0.00624,0.00523,
-    0.00442,0.00376,0.00323,0.0028,0.00243,0.00213,0.00188,
-    0.00167,0.00149,0.00133,0.0012,0.00109,0.00099,0.0009,
-    0.00082,0.00076,0.0007,0.00064,0.0006;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  0.1335,0.09657,0.07038,0.05194,0.03888,0.02953,0.02276,
+  0.01779,0.01409,0.01131,0.00918,0.00753,0.00624,0.00523,
+  0.00442,0.00376,0.00323,0.0028,0.00243,0.00213,0.00188,
+  0.00167,0.00149,0.00133,0.0012,0.00109,0.00099,0.0009,
+  0.00082,0.00076,0.0007,0.00064,0.0006;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    0.1911,0.141,0.1022,0.07453,0.05509,0.04136,0.03156,
-    0.02444,0.0192,0.01529,0.01233,0.01005,0.00829,0.0069,
-    0.00579,0.00491,0.00419,0.00361,0.00312,0.00272,0.00239,
-    0.00211,0.00187,0.00166,0.00149,0.00134,0.00121,0.0011,
-    0.001,0.00091,0.00083,0.00077,0.00071;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  0.1911,0.141,0.1022,0.07453,0.05509,0.04136,0.03156,
+  0.02444,0.0192,0.01529,0.01233,0.01005,0.00829,0.0069,
+  0.00579,0.00491,0.00419,0.00361,0.00312,0.00272,0.00239,
+  0.00211,0.00187,0.00166,0.00149,0.00134,0.00121,0.0011,
+  0.001,0.00091,0.00083,0.00077,0.00071;
 
-  FluidProperties:Concentration,
-    EthyleneGlycol,          !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    0.0,0.0,0.1969,0.1284,0.08752,0.06185,0.04508,
-    0.03374,0.02584,0.02018,0.01604,0.01295,0.01059,0.00877,
-    0.00734,0.00621,0.0053,0.00456,0.00395,0.00345,0.00303,
-    0.00267,0.00237,0.00212,0.0019,0.00171,0.00154,0.0014,
-    0.00127,0.00116,0.00107,0.00098,0.0009;
+FluidProperties:Concentration,
+  EthyleneGlycol,          !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  0.0,0.0,0.1969,0.1284,0.08752,0.06185,0.04508,
+  0.03374,0.02584,0.02018,0.01604,0.01295,0.01059,0.00877,
+  0.00734,0.00621,0.0053,0.00456,0.00395,0.00345,0.00303,
+  0.00267,0.00237,0.00212,0.0019,0.00171,0.00154,0.0014,
+  0.00127,0.00116,0.00107,0.00098,0.0009;
 
 ! =============================================================================
 !
@@ -593,455 +593,455 @@
 !
 ! =============================================================================
 
-  FluidProperties:Name,
-    PropyleneGlycol,         !- Fluid Name
-    Glycol;                  !- Fluid Type
+FluidProperties:Name,
+  PropyleneGlycol,         !- Fluid Name
+  Glycol;                  !- Fluid Type
 
 ! ************************ PROPYLENE GLYCOL PROPERTIES ************************
 ! -------------------- Propylene Glycol Specific Heat Data --------------------
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
-    4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
-    4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
-    4221.0,4228.0,4235.0,4243.0,4252.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  4218.0,4204.0,4194.0,4187.0,4183.0,4180.0,4179.0,
+  4178.0,4179.0,4179.0,4181.0,4182.0,4184.0,4187.0,
+  4189.0,4193.0,4196.0,4200.0,4204.0,4210.0,4215.0,
+  4221.0,4228.0,4235.0,4243.0,4252.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    4042.0,4050.0,4058.0,4067.0,4075.0,4083.0,4091.0,
-    4099.0,4107.0,4115.0,4123.0,4131.0,4139.0,4147.0,
-    4155.0,4163.0,4171.0,4179.0,4187.0,4195.0,4203.0,
-    4211.0,4219.0,4227.0,4235.0,4243.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  4042.0,4050.0,4058.0,4067.0,4075.0,4083.0,4091.0,
+  4099.0,4107.0,4115.0,4123.0,4131.0,4139.0,4147.0,
+  4155.0,4163.0,4171.0,4179.0,4187.0,4195.0,4203.0,
+  4211.0,4219.0,4227.0,4235.0,4243.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,3918.0,
-    3929.0,3940.0,3951.0,3962.0,3973.0,3983.0,3994.0,
-    4005.0,4016.0,4027.0,4038.0,4049.0,4060.0,4071.0,
-    4082.0,4093.0,4104.0,4115.0,4126.0,4136.0,4147.0,
-    4158.0,4169.0,4180.0,4191.0,4202.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,3918.0,
+  3929.0,3940.0,3951.0,3962.0,3973.0,3983.0,3994.0,
+  4005.0,4016.0,4027.0,4038.0,4049.0,4060.0,4071.0,
+  4082.0,4093.0,4104.0,4115.0,4126.0,4136.0,4147.0,
+  4158.0,4169.0,4180.0,4191.0,4202.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,3765.0,3779.0,
-    3793.0,3807.0,3820.0,3834.0,3848.0,3862.0,3875.0,
-    3889.0,3903.0,3917.0,3930.0,3944.0,3958.0,3972.0,
-    3985.0,3999.0,4013.0,4027.0,4040.0,4054.0,4068.0,
-    4082.0,4095.0,4109.0,4123.0,4137.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,3765.0,3779.0,
+  3793.0,3807.0,3820.0,3834.0,3848.0,3862.0,3875.0,
+  3889.0,3903.0,3917.0,3930.0,3944.0,3958.0,3972.0,
+  3985.0,3999.0,4013.0,4027.0,4040.0,4054.0,4068.0,
+  4082.0,4095.0,4109.0,4123.0,4137.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,3586.0,3603.0,3619.0,
-    3636.0,3652.0,3669.0,3685.0,3702.0,3718.0,3735.0,
-    3751.0,3768.0,3784.0,3801.0,3817.0,3834.0,3850.0,
-    3867.0,3883.0,3900.0,3916.0,3933.0,3949.0,3966.0,
-    3982.0,3999.0,4015.0,4032.0,4049.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,3586.0,3603.0,3619.0,
+  3636.0,3652.0,3669.0,3685.0,3702.0,3718.0,3735.0,
+  3751.0,3768.0,3784.0,3801.0,3817.0,3834.0,3850.0,
+  3867.0,3883.0,3900.0,3916.0,3933.0,3949.0,3966.0,
+  3982.0,3999.0,4015.0,4032.0,4049.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    0.0,0.0,3358.0,3378.0,3397.0,3416.0,3435.0,
-    3455.0,3474.0,3493.0,3513.0,3532.0,3551.0,3570.0,
-    3590.0,3609.0,3628.0,3648.0,3667.0,3686.0,3706.0,
-    3725.0,3744.0,3763.0,3783.0,3802.0,3821.0,3841.0,
-    3860.0,3879.0,3898.0,3918.0,3937.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  0.0,0.0,3358.0,3378.0,3397.0,3416.0,3435.0,
+  3455.0,3474.0,3493.0,3513.0,3532.0,3551.0,3570.0,
+  3590.0,3609.0,3628.0,3648.0,3667.0,3686.0,3706.0,
+  3725.0,3744.0,3763.0,3783.0,3802.0,3821.0,3841.0,
+  3860.0,3879.0,3898.0,3918.0,3937.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    3096.0,3118.0,3140.0,3162.0,3184.0,3206.0,3228.0,
-    3250.0,3272.0,3295.0,3317.0,3339.0,3361.0,3383.0,
-    3405.0,3427.0,3449.0,3471.0,3493.0,3515.0,3537.0,
-    3559.0,3581.0,3603.0,3625.0,3647.0,3670.0,3692.0,
-    3714.0,3736.0,3758.0,3780.0,3802.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  3096.0,3118.0,3140.0,3162.0,3184.0,3206.0,3228.0,
+  3250.0,3272.0,3295.0,3317.0,3339.0,3361.0,3383.0,
+  3405.0,3427.0,3449.0,3471.0,3493.0,3515.0,3537.0,
+  3559.0,3581.0,3603.0,3625.0,3647.0,3670.0,3692.0,
+  3714.0,3736.0,3758.0,3780.0,3802.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    2843.0,2868.0,2893.0,2918.0,2943.0,2968.0,2993.0,
-    3018.0,3042.0,3067.0,3092.0,3117.0,3142.0,3167.0,
-    3192.0,3217.0,3242.0,3266.0,3291.0,3316.0,3341.0,
-    3366.0,3391.0,3416.0,3441.0,3465.0,3490.0,3515.0,
-    3540.0,3565.0,3590.0,3615.0,3640.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  2843.0,2868.0,2893.0,2918.0,2943.0,2968.0,2993.0,
+  3018.0,3042.0,3067.0,3092.0,3117.0,3142.0,3167.0,
+  3192.0,3217.0,3242.0,3266.0,3291.0,3316.0,3341.0,
+  3366.0,3391.0,3416.0,3441.0,3465.0,3490.0,3515.0,
+  3540.0,3565.0,3590.0,3615.0,3640.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    2572.0,2600.0,2627.0,2655.0,2683.0,2710.0,2738.0,
-    2766.0,2793.0,2821.0,2849.0,2876.0,2904.0,2931.0,
-    2959.0,2987.0,3014.0,3042.0,3070.0,3097.0,3125.0,
-    3153.0,3180.0,3208.0,3236.0,3263.0,3291.0,3319.0,
-    3346.0,3374.0,3402.0,3429.0,3457.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  2572.0,2600.0,2627.0,2655.0,2683.0,2710.0,2738.0,
+  2766.0,2793.0,2821.0,2849.0,2876.0,2904.0,2931.0,
+  2959.0,2987.0,3014.0,3042.0,3070.0,3097.0,3125.0,
+  3153.0,3180.0,3208.0,3236.0,3263.0,3291.0,3319.0,
+  3346.0,3374.0,3402.0,3429.0,3457.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    SpecificHeat,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    2264.0,2295.0,2326.0,2356.0,2387.0,2417.0,2448.0,
-    2478.0,2509.0,2539.0,2570.0,2600.0,2631.0,2661.0,
-    2692.0,2723.0,2753.0,2784.0,2814.0,2845.0,2875.0,
-    2906.0,2936.0,2967.0,2997.0,3028.0,3058.0,3089.0,
-    3119.0,3150.0,3181.0,3211.0,3242.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  SpecificHeat,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  2264.0,2295.0,2326.0,2356.0,2387.0,2417.0,2448.0,
+  2478.0,2509.0,2539.0,2570.0,2600.0,2631.0,2661.0,
+  2692.0,2723.0,2753.0,2784.0,2814.0,2845.0,2875.0,
+  2906.0,2936.0,2967.0,2997.0,3028.0,3058.0,3089.0,
+  3119.0,3150.0,3181.0,3211.0,3242.0;
 
 ! ---------------------- Propylene Glycol Density Data ------------------------
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
-    994.2,992.3,990.3,988.2,985.8,983.3,980.7,
-    977.9,975.0,971.9,968.8,965.5,962.0,958.5,
-    954.8,951.1,947.2,943.2,939.1;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  1000.0,1000.0,999.8,999.2,998.3,997.2,995.8,
+  994.2,992.3,990.3,988.2,985.8,983.3,980.7,
+  977.9,975.0,971.9,968.8,965.5,962.0,958.5,
+  954.8,951.1,947.2,943.2,939.1;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    1014.0,1013.0,1011.0,1010.0,1008.0,1006.0,1004.0,
-    1003.0,1000.0,998.2,995.9,993.4,990.8,988.1,
-    985.3,982.3,979.2,976.0,972.7,969.2,965.7,
-    962.0,958.2,954.2,950.2,946.0;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  1014.0,1013.0,1011.0,1010.0,1008.0,1006.0,1004.0,
+  1003.0,1000.0,998.2,995.9,993.4,990.8,988.1,
+  985.3,982.3,979.2,976.0,972.7,969.2,965.7,
+  962.0,958.2,954.2,950.2,946.0;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,1027.0,
-    1026.0,1024.0,1023.0,1021.0,1019.0,1017.0,1015.0,
-    1013.0,1010.0,1008.0,1005.0,1002.0,999.3,996.3,
-    993.1,989.8,986.4,982.9,979.2,975.5,971.6,
-    967.5,963.4,959.1,954.7,950.1;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,1027.0,
+  1026.0,1024.0,1023.0,1021.0,1019.0,1017.0,1015.0,
+  1013.0,1010.0,1008.0,1005.0,1002.0,999.3,996.3,
+  993.1,989.8,986.4,982.9,979.2,975.5,971.6,
+  967.5,963.4,959.1,954.7,950.1;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,1039.0,1038.0,
-    1036.0,1034.0,1033.0,1030.0,1028.0,1026.0,1024.0,
-    1021.0,1018.0,1016.0,1013.0,1010.0,1006.0,1003.0,
-    999.7,996.1,992.4,988.6,984.7,980.6,976.4,
-    972.0,967.6,963.0,958.3,953.4;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,1039.0,1038.0,
+  1036.0,1034.0,1033.0,1030.0,1028.0,1026.0,1024.0,
+  1021.0,1018.0,1016.0,1013.0,1010.0,1006.0,1003.0,
+  999.7,996.1,992.4,988.6,984.7,980.6,976.4,
+  972.0,967.6,963.0,958.3,953.4;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,1050.0,1049.0,1047.0,
-    1045.0,1043.0,1041.0,1039.0,1036.0,1034.0,1031.0,
-    1028.0,1025.0,1022.0,1019.0,1016.0,1012.0,1009.0,
-    1005.0,1001.0,997.2,993.2,989.0,984.6,980.1,
-    975.5,970.8,966.0,961.0,955.9;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,1050.0,1049.0,1047.0,
+  1045.0,1043.0,1041.0,1039.0,1036.0,1034.0,1031.0,
+  1028.0,1025.0,1022.0,1019.0,1016.0,1012.0,1009.0,
+  1005.0,1001.0,997.2,993.2,989.0,984.6,980.1,
+  975.5,970.8,966.0,961.0,955.9;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    0.0,0.0,1062.0,1060.0,1059.0,1057.0,1055.0,
-    1053.0,1050.0,1048.0,1046.0,1043.0,1040.0,1037.0,
-    1034.0,1031.0,1028.0,1024.0,1021.0,1017.0,1013.0,
-    1009.0,1005.0,1001.0,996.7,992.3,987.7,983.0,
-    978.2,973.2,968.1,962.9,957.5;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  0.0,0.0,1062.0,1060.0,1059.0,1057.0,1055.0,
+  1053.0,1050.0,1048.0,1046.0,1043.0,1040.0,1037.0,
+  1034.0,1031.0,1028.0,1024.0,1021.0,1017.0,1013.0,
+  1009.0,1005.0,1001.0,996.7,992.3,987.7,983.0,
+  978.2,973.2,968.1,962.9,957.5;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    1073.0,1071.0,1070.0,1068.0,1066.0,1064.0,1061.0,
-    1059.0,1056.0,1054.0,1051.0,1048.0,1045.0,1042.0,
-    1039.0,1036.0,1032.0,1028.0,1025.0,1021.0,1017.0,
-    1012.0,1008.0,1004.0,999.3,994.6,989.8,984.9,
-    979.9,974.7,969.5,964.0,958.5;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  1073.0,1071.0,1070.0,1068.0,1066.0,1064.0,1061.0,
+  1059.0,1056.0,1054.0,1051.0,1048.0,1045.0,1042.0,
+  1039.0,1036.0,1032.0,1028.0,1025.0,1021.0,1017.0,
+  1012.0,1008.0,1004.0,999.3,994.6,989.8,984.9,
+  979.9,974.7,969.5,964.0,958.5;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    1080.0,1078.0,1076.0,1074.0,1072.0,1069.0,1067.0,
-    1064.0,1061.0,1058.0,1056.0,1052.0,1049.0,1046.0,
-    1042.0,1039.0,1035.0,1031.0,1027.0,1023.0,1019.0,
-    1015.0,1010.0,1006.0,1001.0,996.0,991.1,986.0,
-    980.8,975.4,970.0,964.4,958.7;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  1080.0,1078.0,1076.0,1074.0,1072.0,1069.0,1067.0,
+  1064.0,1061.0,1058.0,1056.0,1052.0,1049.0,1046.0,
+  1042.0,1039.0,1035.0,1031.0,1027.0,1023.0,1019.0,
+  1015.0,1010.0,1006.0,1001.0,996.0,991.1,986.0,
+  980.8,975.4,970.0,964.4,958.7;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    1094.0,1091.0,1087.0,1084.0,1080.0,1076.0,1072.0,
-    1068.0,1065.0,1061.0,1057.0,1053.0,1049.0,1045.0,
-    1041.0,1037.0,1033.0,1029.0,1025.0,1021.0,1017.0,
-    1013.0,1009.0,1005.0,1001.0,996.4,992.2,987.9,
-    983.7,979.4,975.1,970.7,966.4;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  1094.0,1091.0,1087.0,1084.0,1080.0,1076.0,1072.0,
+  1068.0,1065.0,1061.0,1057.0,1053.0,1049.0,1045.0,
+  1041.0,1037.0,1033.0,1029.0,1025.0,1021.0,1017.0,
+  1013.0,1009.0,1005.0,1001.0,996.4,992.2,987.9,
+  983.7,979.4,975.1,970.7,966.4;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Density,                 !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    1092.0,1089.0,1085.0,1082.0,1078.0,1074.0,1070.0,
-    1066.0,1063.0,1059.0,1055.0,1051.0,1047.0,1043.0,
-    1039.0,1035.0,1031.0,1027.0,1023.0,1019.0,1015.0,
-    1011.0,1007.0,1003.0,998.6,994.4,990.2,985.9,
-    981.6,977.3,973.0,968.7,964.3;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Density,                 !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  1092.0,1089.0,1085.0,1082.0,1078.0,1074.0,1070.0,
+  1066.0,1063.0,1059.0,1055.0,1051.0,1047.0,1043.0,
+  1039.0,1035.0,1031.0,1027.0,1023.0,1019.0,1015.0,
+  1011.0,1007.0,1003.0,998.6,994.4,990.2,985.9,
+  981.6,977.3,973.0,968.7,964.3;
 
 ! ------------------ Propylene Glycol Thermal Conductivity Data ---------------
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
-    0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
-    0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
-    0.6807,0.6818,0.6827,0.6833,0.6837;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.5612,0.5707,0.5802,0.5895,0.5986,0.6073,0.6156,
+  0.6235,0.6308,0.6375,0.6437,0.6494,0.6545,0.6592,
+  0.6633,0.6669,0.6702,0.673,0.6754,0.6775,0.6793,
+  0.6807,0.6818,0.6827,0.6833,0.6837;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.51,0.518,0.527,0.535,0.543,0.55,0.557,
-    0.563,0.569,0.575,0.58,0.585,0.589,0.593,
-    0.596,0.599,0.602,0.604,0.606,0.607,0.608,
-    0.609,0.609,0.608,0.608,0.606;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.51,0.518,0.527,0.535,0.543,0.55,0.557,
+  0.563,0.569,0.575,0.58,0.585,0.589,0.593,
+  0.596,0.599,0.602,0.604,0.606,0.607,0.608,
+  0.609,0.609,0.608,0.608,0.606;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.456,
-    0.464,0.472,0.479,0.485,0.492,0.498,0.503,
-    0.508,0.513,0.518,0.522,0.526,0.529,0.532,
-    0.535,0.538,0.54,0.541,0.543,0.544,0.544,
-    0.544,0.544,0.544,0.543,0.542;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.456,
+  0.464,0.472,0.479,0.485,0.492,0.498,0.503,
+  0.508,0.513,0.518,0.522,0.526,0.529,0.532,
+  0.535,0.538,0.54,0.541,0.543,0.544,0.544,
+  0.544,0.544,0.544,0.543,0.542;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.41,0.416,
-    0.423,0.429,0.434,0.44,0.445,0.449,0.454,
-    0.458,0.462,0.466,0.469,0.472,0.475,0.477,
-    0.479,0.481,0.482,0.484,0.484,0.485,0.485,
-    0.485,0.485,0.485,0.484,0.482;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.41,0.416,
+  0.423,0.429,0.434,0.44,0.445,0.449,0.454,
+  0.458,0.462,0.466,0.469,0.472,0.475,0.477,
+  0.479,0.481,0.482,0.484,0.484,0.485,0.485,
+  0.485,0.485,0.485,0.484,0.482;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.369,0.375,0.38,
-    0.385,0.389,0.394,0.398,0.402,0.406,0.409,
-    0.412,0.415,0.418,0.42,0.423,0.425,0.426,
-    0.428,0.429,0.43,0.431,0.431,0.432,0.432,
-    0.432,0.431,0.43,0.429,0.428;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.369,0.375,0.38,
+  0.385,0.389,0.394,0.398,0.402,0.406,0.409,
+  0.412,0.415,0.418,0.42,0.423,0.425,0.426,
+  0.428,0.429,0.43,0.431,0.431,0.432,0.432,
+  0.432,0.431,0.43,0.429,0.428;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    0.0,0.0,0.329,0.334,0.338,0.342,0.346,
-    0.349,0.353,0.356,0.359,0.362,0.365,0.367,
-    0.37,0.372,0.374,0.375,0.377,0.378,0.379,
-    0.38,0.381,0.382,0.382,0.382,0.382,0.382,
-    0.382,0.381,0.38,0.379,0.378;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  0.0,0.0,0.329,0.334,0.338,0.342,0.346,
+  0.349,0.353,0.356,0.359,0.362,0.365,0.367,
+  0.37,0.372,0.374,0.375,0.377,0.378,0.379,
+  0.38,0.381,0.382,0.382,0.382,0.382,0.382,
+  0.382,0.381,0.38,0.379,0.378;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    0.296,0.3,0.303,0.306,0.309,0.312,0.314,
-    0.317,0.319,0.321,0.323,0.325,0.327,0.329,
-    0.33,0.331,0.333,0.334,0.335,0.335,0.336,
-    0.336,0.337,0.337,0.337,0.337,0.336,0.336,
-    0.335,0.335,0.334,0.333,0.332;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  0.296,0.3,0.303,0.306,0.309,0.312,0.314,
+  0.317,0.319,0.321,0.323,0.325,0.327,0.329,
+  0.33,0.331,0.333,0.334,0.335,0.335,0.336,
+  0.336,0.337,0.337,0.337,0.337,0.336,0.336,
+  0.335,0.335,0.334,0.333,0.332;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    0.275,0.277,0.278,0.28,0.282,0.284,0.285,
-    0.286,0.289,0.29,0.291,0.292,0.293,0.293,
-    0.294,0.294,0.295,0.295,0.295,0.295,0.295,
-    0.295,0.295,0.295,0.295,0.294,0.294,0.293,
-    0.292,0.292,0.291,0.29,0.288;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  0.275,0.277,0.278,0.28,0.282,0.284,0.285,
+  0.286,0.289,0.29,0.291,0.292,0.293,0.293,
+  0.294,0.294,0.295,0.295,0.295,0.295,0.295,
+  0.295,0.295,0.295,0.295,0.294,0.294,0.293,
+  0.292,0.292,0.291,0.29,0.288;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    0.255,0.256,0.257,0.257,0.258,0.259,0.259,
-    0.259,0.26,0.26,0.26,0.261,0.261,0.261,
-    0.261,0.261,0.26,0.26,0.26,0.26,0.259,
-    0.259,0.258,0.258,0.257,0.256,0.256,0.255,
-    0.254,0.253,0.252,0.251,0.25;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  0.255,0.256,0.257,0.257,0.258,0.259,0.259,
+  0.259,0.26,0.26,0.26,0.261,0.261,0.261,
+  0.261,0.261,0.26,0.26,0.26,0.26,0.259,
+  0.259,0.258,0.258,0.257,0.256,0.256,0.255,
+  0.254,0.253,0.252,0.251,0.25;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Conductivity,            !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    0.237,0.237,0.236,0.236,0.236,0.235,0.235,
-    0.234,0.234,0.233,0.233,0.232,0.2331,0.231,
-    0.23,0.229,0.229,0.228,0.227,0.227,0.226,
-    0.225,0.224,0.223,0.222,0.221,0.22,0.219,
-    0.218,0.217,0.216,0.215,0.214;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Conductivity,            !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  0.237,0.237,0.236,0.236,0.236,0.235,0.235,
+  0.234,0.234,0.233,0.233,0.232,0.2331,0.231,
+  0.23,0.229,0.229,0.228,0.227,0.227,0.226,
+  0.225,0.224,0.223,0.222,0.221,0.22,0.219,
+  0.218,0.217,0.216,0.215,0.214;
 
 ! ----------------------- Ethylene Glycol Viscosity Data ----------------------
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.0,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
-    0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
-    0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
-    0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.0,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.001791,0.001518,0.001306,0.001137,0.001001,0.00089,0.0007973,
+  0.0007193,0.000653,0.0005961,0.0005469,0.000504,0.0004665,0.0004333,
+  0.000404,0.0003778,0.0003544,0.0003334,0.0003145,0.0002974,0.0002818,
+  0.0002677,0.0002548,0.000243,0.0002321,0.0002221;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.1,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-    0.00268,0.00223,0.00189,0.00163,0.00142,0.00125,0.00111,
-    0.00099,0.00089,0.00081,0.00073,0.00067,0.00062,0.00057,
-    0.00053,0.00049,0.00046,0.00043,0.0004,0.00038,0.00035,
-    0.00033,0.00032,0.0003,0.00028,0.00027;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.1,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+  0.00268,0.00223,0.00189,0.00163,0.00142,0.00125,0.00111,
+  0.00099,0.00089,0.00081,0.00073,0.00067,0.00062,0.00057,
+  0.00053,0.00049,0.00046,0.00043,0.0004,0.00038,0.00035,
+  0.00033,0.00032,0.0003,0.00028,0.00027;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.2,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.0,0.00498,
-    0.00405,0.00334,0.00279,0.00236,0.00202,0.00174,0.00152,
-    0.00134,0.00118,0.00106,0.00095,0.00086,0.00078,0.00071,
-    0.00066,0.0006,0.00056,0.00052,0.00049,0.00045,0.00043,
-    0.0004,0.00038,0.00036,0.00034,0.00032;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.2,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.0,0.00498,
+  0.00405,0.00334,0.00279,0.00236,0.00202,0.00174,0.00152,
+  0.00134,0.00118,0.00106,0.00095,0.00086,0.00078,0.00071,
+  0.00066,0.0006,0.00056,0.00052,0.00049,0.00045,0.00043,
+  0.0004,0.00038,0.00036,0.00034,0.00032;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.3,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.0,0.01187,0.00908,
-    0.00708,0.00561,0.00452,0.00369,0.00306,0.00257,0.00218,
-    0.00188,0.00163,0.00143,0.00126,0.00113,0.00101,0.00091,
-    0.00083,0.00076,0.0007,0.00065,0.00061,0.00057,0.00053,
-    0.0005,0.00047,0.00045,0.00043,0.00041;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.3,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.0,0.01187,0.00908,
+  0.00708,0.00561,0.00452,0.00369,0.00306,0.00257,0.00218,
+  0.00188,0.00163,0.00143,0.00126,0.00113,0.00101,0.00091,
+  0.00083,0.00076,0.0007,0.00065,0.00061,0.00057,0.00053,
+  0.0005,0.00047,0.00045,0.00043,0.00041;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.4,                     !- Concentration {dimensionless}
-    0.0,0.0,0.0,0.0,0.03322,0.02327,0.01675,
-    0.01237,0.00935,0.00722,0.00569,0.00457,0.00373,0.00309,
-    0.0026,0.00221,0.00191,0.00166,0.00147,0.0013,0.00117,
-    0.00106,0.00096,0.00088,0.00081,0.00075,0.0007,0.00066,
-    0.00062,0.00059,0.00056,0.00053,0.00051;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.4,                     !- Concentration {dimensionless}
+  0.0,0.0,0.0,0.0,0.03322,0.02327,0.01675,
+  0.01237,0.00935,0.00722,0.00569,0.00457,0.00373,0.00309,
+  0.0026,0.00221,0.00191,0.00166,0.00147,0.0013,0.00117,
+  0.00106,0.00096,0.00088,0.00081,0.00075,0.0007,0.00066,
+  0.00062,0.00059,0.00056,0.00053,0.00051;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.5,                     !- Concentration {dimensionless}
-    0.0,0.0,0.1106,0.07303,0.0497,0.03478,0.02499,
-    0.0184,0.01385,0.01065,0.00834,0.00665,0.00539,0.00443,
-    0.00369,0.00311,0.00265,0.00229,0.00199,0.00175,0.00155,
-    0.00138,0.00124,0.00112,0.00102,0.00093,0.00086,0.00079,
-    0.00074,0.00069,0.00064,0.0006,0.00057;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.5,                     !- Concentration {dimensionless}
+  0.0,0.0,0.1106,0.07303,0.0497,0.03478,0.02499,
+  0.0184,0.01385,0.01065,0.00834,0.00665,0.00539,0.00443,
+  0.00369,0.00311,0.00265,0.00229,0.00199,0.00175,0.00155,
+  0.00138,0.00124,0.00112,0.00102,0.00093,0.00086,0.00079,
+  0.00074,0.00069,0.00064,0.0006,0.00057;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.6,                     !- Concentration {dimensionless}
-    0.524,0.3304,0.2114,0.138,0.092,0.06278,0.04384,
-    0.03132,0.02287,0.01705,0.01296,0.01004,0.00791,0.00634,
-    0.00515,0.00425,0.00355,0.003,0.00257,0.00222,0.00193,
-    0.0017,0.00151,0.00135,0.00122,0.0011,0.00101,0.00092,
-    0.00085,0.00079,0.00074,0.00069,0.00065;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.6,                     !- Concentration {dimensionless}
+  0.524,0.3304,0.2114,0.138,0.092,0.06278,0.04384,
+  0.03132,0.02287,0.01705,0.01296,0.01004,0.00791,0.00634,
+  0.00515,0.00425,0.00355,0.003,0.00257,0.00222,0.00193,
+  0.0017,0.00151,0.00135,0.00122,0.0011,0.00101,0.00092,
+  0.00085,0.00079,0.00074,0.00069,0.00065;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.7,                     !- Concentration {dimensionless}
-    0.9162,0.5511,0.3401,0.2157,0.1406,0.09423,0.06483,
-    0.04574,0.03304,0.02441,0.01841,0.01415,0.01108,0.00881,
-    0.00712,0.00584,0.00485,0.00408,0.00346,0.00298,0.00258,
-    0.00226,0.00199,0.00177,0.00159,0.00143,0.0013,0.00118,
-    0.00108,0.001,0.00093,0.00086,0.0008;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.7,                     !- Concentration {dimensionless}
+  0.9162,0.5511,0.3401,0.2157,0.1406,0.09423,0.06483,
+  0.04574,0.03304,0.02441,0.01841,0.01415,0.01108,0.00881,
+  0.00712,0.00584,0.00485,0.00408,0.00346,0.00298,0.00258,
+  0.00226,0.00199,0.00177,0.00159,0.00143,0.0013,0.00118,
+  0.00108,0.001,0.00093,0.00086,0.0008;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.8,                     !- Concentration {dimensionless}
-    1.434,0.9085,0.5759,0.3688,0.2399,0.159,0.1076,
-    0.07445,0.05263,0.03799,0.028,0.02104,0.0161,0.01255,
-    0.00994,0.00799,0.00652,0.00539,0.00451,0.00382,0.00328,
-    0.00283,0.00247,0.00218,0.00194,0.00173,0.00156,0.00142,
-    0.00129,0.00119,0.00109,0.00102,0.00095;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.8,                     !- Concentration {dimensionless}
+  1.434,0.9085,0.5759,0.3688,0.2399,0.159,0.1076,
+  0.07445,0.05263,0.03799,0.028,0.02104,0.0161,0.01255,
+  0.00994,0.00799,0.00652,0.00539,0.00451,0.00382,0.00328,
+  0.00283,0.00247,0.00218,0.00194,0.00173,0.00156,0.00142,
+  0.00129,0.00119,0.00109,0.00102,0.00095;
 
-  FluidProperties:Concentration,
-    PropyleneGlycol,         !- Fluid Name
-    Viscosity,               !- Fluid Property Type
-    GlycolTemperatures,      !- Temperature Values Name
-    0.9,                     !- Concentration {dimensionless}
-    3.813,2.071,1.176,0.6961,0.4282,0.2729,0.1798,
-    0.122,0.08515,0.06093,0.04462,0.03338,0.02545,0.01976,
-    0.0156,0.01249,0.01015,0.00835,0.00695,0.00585,0.00497,
-    0.00426,0.00369,0.00322,0.00283,0.0025,0.00223,0.002,
-    0.0018,0.00163,0.00148,0.00135,0.00124;
+FluidProperties:Concentration,
+  PropyleneGlycol,         !- Fluid Name
+  Viscosity,               !- Fluid Property Type
+  GlycolTemperatures,      !- Temperature Values Name
+  0.9,                     !- Concentration {dimensionless}
+  3.813,2.071,1.176,0.6961,0.4282,0.2729,0.1798,
+  0.122,0.08515,0.06093,0.04462,0.03338,0.02545,0.01976,
+  0.0156,0.01249,0.01015,0.00835,0.00695,0.00585,0.00497,
+  0.00426,0.00369,0.00322,0.00283,0.0025,0.00223,0.002,
+  0.0018,0.00163,0.00148,0.00135,0.00124;

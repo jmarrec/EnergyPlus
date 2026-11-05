@@ -19,362 +19,362 @@
 ! System:   Ideal Loads
 ! Plant:    None (simple ideal loads)
 
-  Version,27.1;
+Version,27.1;
 
-  RunPeriod,
-    Run Period 1,            !- Name
-    4,                       !- Begin Month
-    1,                       !- Begin Day of Month
-    ,                        !- Begin Year
-    4,                       !- End Month
-    7,                       !- End Day of Month
-    ,                        !- End Year
-    ,                        !- Day of Week for Start Day
-    ,                        !- Use Weather File Holidays and Special Days
-    ,                        !- Use Weather File Daylight Saving Period
-    ,                        !- Apply Weekend Holiday Rule
-    ,                        !- Use Weather File Rain Indicators
-    ;                        !- Use Weather File Snow Indicators
+RunPeriod,
+  Run Period 1,            !- Name
+  4,                       !- Begin Month
+  1,                       !- Begin Day of Month
+  ,                        !- Begin Year
+  4,                       !- End Month
+  7,                       !- End Day of Month
+  ,                        !- End Year
+  ,                        !- Day of Week for Start Day
+  ,                        !- Use Weather File Holidays and Special Days
+  ,                        !- Use Weather File Daylight Saving Period
+  ,                        !- Apply Weekend Holiday Rule
+  ,                        !- Use Weather File Rain Indicators
+  ;                        !- Use Weather File Snow Indicators
 
-  Site:Location,
-    Chicago,                 !- Name
-    42.0,                    !- Latitude {deg}
-    -88.0,                   !- Longitude {deg}
-    -6.0,                    !- Time Zone {hr}
-    186.0;                   !- Elevation {m}
+Site:Location,
+  Chicago,                 !- Name
+  42.0,                    !- Latitude {deg}
+  -88.0,                   !- Longitude {deg}
+  -6.0,                    !- Time Zone {hr}
+  186.0;                   !- Elevation {m}
 
-  Site:GroundTemperature:BuildingSurface,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0;
+Site:GroundTemperature:BuildingSurface,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0;
 
-  SizingPeriod:DesignDay,
-    Chicago ILLINOIS SUMMER,  !- Name
-    7,                       !- Month
-    21,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.77778,                !- Maximum Dry-Bulb Temperature {C}
-    10.88889,                !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    WetBulb,                 !- Humidity Condition Type
-    23.33333,                !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99433.54,                !- Barometric Pressure {Pa}
-    3.8,                     !- Wind Speed {m/s}
-    213.0,                   !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.98;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Chicago ILLINOIS SUMMER,  !- Name
+  7,                       !- Month
+  21,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.77778,                !- Maximum Dry-Bulb Temperature {C}
+  10.88889,                !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  23.33333,                !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  99433.54,                !- Barometric Pressure {Pa}
+  3.8,                     !- Wind Speed {m/s}
+  213.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0.98;                    !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Chicago ILLINOIS WINTER,  !- Name
-    1,                       !- Month
-    21,                      !- Day of Month
-    WinterDesignDay,         !- Day Type
-    -21.11111,               !- Maximum Dry-Bulb Temperature {C}
-    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    WetBulb,                 !- Humidity Condition Type
-    -21.11111,               !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99782.25,                !- Barometric Pressure {Pa}
-    11.6,                    !- Wind Speed {m/s}
-    326.0,                   !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.5;                     !- Sky Clearness
+SizingPeriod:DesignDay,
+  Chicago ILLINOIS WINTER,  !- Name
+  1,                       !- Month
+  21,                      !- Day of Month
+  WinterDesignDay,         !- Day Type
+  -21.11111,               !- Maximum Dry-Bulb Temperature {C}
+  0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  -21.11111,               !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  99782.25,                !- Barometric Pressure {Pa}
+  11.6,                    !- Wind Speed {m/s}
+  326.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0.5;                     !- Sky Clearness
 
-  SimulationControl,
-    No,                      !- Do Zone Sizing Calculation
-    No,                      !- Do System Sizing Calculation
-    No,                      !- Do Plant Sizing Calculation
-    Yes,                     !- Run Simulation for Sizing Periods
-    Yes,                     !- Run Simulation for Weather File Run Periods
-    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
-    1;                       !- Maximum Number of HVAC Sizing Simulation Passes
+SimulationControl,
+  No,                      !- Do Zone Sizing Calculation
+  No,                      !- Do System Sizing Calculation
+  No,                      !- Do Plant Sizing Calculation
+  Yes,                     !- Run Simulation for Sizing Periods
+  Yes,                     !- Run Simulation for Weather File Run Periods
+  No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+  1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
 ! MATERIALs
 
-  Material,
-    A3 - STEEL SIDING,       !- Name
-    Smooth,                  !- Roughness
-    0.0015,                  !- Thickness {m}
-    44.96,                   !- Conductivity {W/m-K}
-    7688.86,                 !- Density {kg/m3}
-    410.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.2,                     !- Solar Absorptance
-    0.2;                     !- Visible Absorptance
+Material,
+  A3 - STEEL SIDING,       !- Name
+  Smooth,                  !- Roughness
+  0.0015,                  !- Thickness {m}
+  44.96,                   !- Conductivity {W/m-K}
+  7688.86,                 !- Density {kg/m3}
+  410.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.2,                     !- Solar Absorptance
+  0.2;                     !- Visible Absorptance
 
-  Material,
-    AC03 Acoustic Tile 3/4 in,  !- Name
-    MediumSmooth,            !- Roughness
-    0.019099999,             !- Thickness {m}
-    0.057,                   !- Conductivity {W/m-K}
-    288.0,                   !- Density {kg/m3}
-    1339.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  AC03 Acoustic Tile 3/4 in,  !- Name
+  MediumSmooth,            !- Roughness
+  0.019099999,             !- Thickness {m}
+  0.057,                   !- Conductivity {W/m-K}
+  288.0,                   !- Density {kg/m3}
+  1339.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    GP02 Gyps or Plast Brd 5/8 in,  !- Name
-    MediumSmooth,            !- Roughness
-    0.015900001,             !- Thickness {m}
-    0.16,                    !- Conductivity {W/m-K}
-    801.0,                   !- Density {kg/m3}
-    837.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.75,                    !- Solar Absorptance
-    0.75;                    !- Visible Absorptance
+Material,
+  GP02 Gyps or Plast Brd 5/8 in,  !- Name
+  MediumSmooth,            !- Roughness
+  0.015900001,             !- Thickness {m}
+  0.16,                    !- Conductivity {W/m-K}
+  801.0,                   !- Density {kg/m3}
+  837.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.75,                    !- Solar Absorptance
+  0.75;                    !- Visible Absorptance
 
-  Material,
-    C5 - 4 IN HW CONCRETE,   !- Name
-    MediumRough,             !- Roughness
-    0.1014984,               !- Thickness {m}
-    1.729577,                !- Conductivity {W/m-K}
-    2242.585,                !- Density {kg/m3}
-    836.8,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.65,                    !- Solar Absorptance
-    0.65;                    !- Visible Absorptance
+Material,
+  C5 - 4 IN HW CONCRETE,   !- Name
+  MediumRough,             !- Roughness
+  0.1014984,               !- Thickness {m}
+  1.729577,                !- Conductivity {W/m-K}
+  2242.585,                !- Density {kg/m3}
+  836.8,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.65,                    !- Solar Absorptance
+  0.65;                    !- Visible Absorptance
 
-  Material,
-    C13 - 6 IN HW CONCRETE,  !- Name
-    MediumRough,             !- Roughness
-    0.15,                    !- Thickness {m}
-    1.72,                    !- Conductivity {W/m-K}
-    2242.58,                 !- Density {kg/m3}
-    830.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.65,                    !- Solar Absorptance
-    0.65;                    !- Visible Absorptance
+Material,
+  C13 - 6 IN HW CONCRETE,  !- Name
+  MediumRough,             !- Roughness
+  0.15,                    !- Thickness {m}
+  1.72,                    !- Conductivity {W/m-K}
+  2242.58,                 !- Density {kg/m3}
+  830.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.65,                    !- Solar Absorptance
+  0.65;                    !- Visible Absorptance
 
-  Material,
-    CB52 - 6 IN MW CONCRETE / PERLITE CBLK,  !- Name
-    MediumRough,             !- Roughness
-    0.15,                    !- Thickness {m}
-    0.39,                    !- Conductivity {W/m-K}
-    1345.55,                 !- Density {kg/m3}
-    830.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.2,                     !- Solar Absorptance
-    0.2;                     !- Visible Absorptance
+Material,
+  CB52 - 6 IN MW CONCRETE / PERLITE CBLK,  !- Name
+  MediumRough,             !- Roughness
+  0.15,                    !- Thickness {m}
+  0.39,                    !- Conductivity {W/m-K}
+  1345.55,                 !- Density {kg/m3}
+  830.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.2,                     !- Solar Absorptance
+  0.2;                     !- Visible Absorptance
 
-  Material,
-    CLAY TILE 2 CELL - 10 IN,  !- Name
-    Smooth,                  !- Roughness
-    0.25,                    !- Thickness {m}
-    0.63,                    !- Conductivity {W/m-K}
-    1121.29,                 !- Density {kg/m3}
-    830.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.63,                    !- Solar Absorptance
-    0.63;                    !- Visible Absorptance
+Material,
+  CLAY TILE 2 CELL - 10 IN,  !- Name
+  Smooth,                  !- Roughness
+  0.25,                    !- Thickness {m}
+  0.63,                    !- Conductivity {W/m-K}
+  1121.29,                 !- Density {kg/m3}
+  830.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.63,                    !- Solar Absorptance
+  0.63;                    !- Visible Absorptance
 
-  Material:NoMass,
-    BOARD INSULATION,        !- Name
-    Rough,                   !- Roughness
-    0.17,                    !- Thermal Resistance {m2-K/W}
-    0.9,                     !- Thermal Absorptance
-    0.75,                    !- Solar Absorptance
-    0.75;                    !- Visible Absorptance
+Material:NoMass,
+  BOARD INSULATION,        !- Name
+  Rough,                   !- Roughness
+  0.17,                    !- Thermal Resistance {m2-K/W}
+  0.9,                     !- Thermal Absorptance
+  0.75,                    !- Solar Absorptance
+  0.75;                    !- Visible Absorptance
 
-  Material,
-    WOOD - SOFT 4MM,         !- Name
-    MediumSmooth,            !- Roughness
-    0.04,                    !- Thickness {m}
-    0.115,                   !- Conductivity {W/m-K}
-    51.259,                  !- Density {kg/m3}
-    1381.8,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.32,                    !- Solar Absorptance
-    0.32;                    !- Visible Absorptance
+Material,
+  WOOD - SOFT 4MM,         !- Name
+  MediumSmooth,            !- Roughness
+  0.04,                    !- Thickness {m}
+  0.115,                   !- Conductivity {W/m-K}
+  51.259,                  !- Density {kg/m3}
+  1381.8,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.32,                    !- Solar Absorptance
+  0.32;                    !- Visible Absorptance
 
-  WindowMaterial:Glazing,
-    GLASS - CLEAR SHEET 1 / 8 IN,  !- Name
-    SpectralAverage,         !- Optical Data Type
-    ,                        !- Window Glass Spectral Data Set Name
-    0.003,                   !- Thickness {m}
-    0.85,                    !- Solar Transmittance at Normal Incidence
-    0.075,                   !- Front Side Solar Reflectance at Normal Incidence
-    0.075,                   !- Back Side Solar Reflectance at Normal Incidence
-    0.901,                   !- Visible Transmittance at Normal Incidence
-    0.081,                   !- Front Side Visible Reflectance at Normal Incidence
-    0.081,                   !- Back Side Visible Reflectance at Normal Incidence
-    0.0,                     !- Infrared Transmittance at Normal Incidence
-    0.84,                    !- Front Side Infrared Hemispherical Emissivity
-    0.84,                    !- Back Side Infrared Hemispherical Emissivity
-    0.9;                     !- Conductivity {W/m-K}
+WindowMaterial:Glazing,
+  GLASS - CLEAR SHEET 1 / 8 IN,  !- Name
+  SpectralAverage,         !- Optical Data Type
+  ,                        !- Window Glass Spectral Data Set Name
+  0.003,                   !- Thickness {m}
+  0.85,                    !- Solar Transmittance at Normal Incidence
+  0.075,                   !- Front Side Solar Reflectance at Normal Incidence
+  0.075,                   !- Back Side Solar Reflectance at Normal Incidence
+  0.901,                   !- Visible Transmittance at Normal Incidence
+  0.081,                   !- Front Side Visible Reflectance at Normal Incidence
+  0.081,                   !- Back Side Visible Reflectance at Normal Incidence
+  0.0,                     !- Infrared Transmittance at Normal Incidence
+  0.84,                    !- Front Side Infrared Hemispherical Emissivity
+  0.84,                    !- Back Side Infrared Hemispherical Emissivity
+  0.9;                     !- Conductivity {W/m-K}
 
-  WindowMaterial:Gas,
-    AirGap - AIRSPACE RESISTANCE,  !- Name
-    Air,                     !- Gas Type
-    0.0125;                  !- Thickness {m}
+WindowMaterial:Gas,
+  AirGap - AIRSPACE RESISTANCE,  !- Name
+  Air,                     !- Gas Type
+  0.0125;                  !- Thickness {m}
 
 ! CONSTRUCTIONs
 
-  Construction,
-    EXTERIOR,                !- Name
-    A3 - STEEL SIDING,       !- Outside Layer
-    CB52 - 6 IN MW CONCRETE / PERLITE CBLK,  !- Layer 2
-    BOARD INSULATION,        !- Layer 3
-    GP02 Gyps or Plast Brd 5/8 in;  !- Layer 4
+Construction,
+  EXTERIOR,                !- Name
+  A3 - STEEL SIDING,       !- Outside Layer
+  CB52 - 6 IN MW CONCRETE / PERLITE CBLK,  !- Layer 2
+  BOARD INSULATION,        !- Layer 3
+  GP02 Gyps or Plast Brd 5/8 in;  !- Layer 4
 
-  Construction,
-    INTERIOR,                !- Name
-    GP02 Gyps or Plast Brd 5/8 in,  !- Outside Layer
-    CB52 - 6 IN MW CONCRETE / PERLITE CBLK,  !- Layer 2
-    GP02 Gyps or Plast Brd 5/8 in;  !- Layer 3
+Construction,
+  INTERIOR,                !- Name
+  GP02 Gyps or Plast Brd 5/8 in,  !- Outside Layer
+  CB52 - 6 IN MW CONCRETE / PERLITE CBLK,  !- Layer 2
+  GP02 Gyps or Plast Brd 5/8 in;  !- Layer 3
 
-  Construction,
-    FLOORSLAB,               !- Name
-    BOARD INSULATION,        !- Outside Layer
-    C13 - 6 IN HW CONCRETE,  !- Layer 2
-    CLAY TILE 2 CELL - 10 IN;  !- Layer 3
+Construction,
+  FLOORSLAB,               !- Name
+  BOARD INSULATION,        !- Outside Layer
+  C13 - 6 IN HW CONCRETE,  !- Layer 2
+  CLAY TILE 2 CELL - 10 IN;  !- Layer 3
 
-  Construction,
-    ROOFSLAB,                !- Name
-    BOARD INSULATION,        !- Outside Layer
-    C5 - 4 IN HW CONCRETE;   !- Layer 2
+Construction,
+  ROOFSLAB,                !- Name
+  BOARD INSULATION,        !- Outside Layer
+  C5 - 4 IN HW CONCRETE;   !- Layer 2
 
-  Construction,
-    DOUBLE PANE WINDOW,      !- Name
-    GLASS - CLEAR SHEET 1 / 8 IN,  !- Outside Layer
-    AirGap - AIRSPACE RESISTANCE,  !- Layer 2
-    GLASS - CLEAR SHEET 1 / 8 IN;  !- Layer 3
+Construction,
+  DOUBLE PANE WINDOW,      !- Name
+  GLASS - CLEAR SHEET 1 / 8 IN,  !- Outside Layer
+  AirGap - AIRSPACE RESISTANCE,  !- Layer 2
+  GLASS - CLEAR SHEET 1 / 8 IN;  !- Layer 3
 
 !Schedules
 
-  ScheduleTypeLimits,
-    Any Number;              !- Name
+ScheduleTypeLimits,
+  Any Number;              !- Name
 
-  ScheduleTypeLimits,
-    Temperature,             !- Name
-    -60.0,                   !- Lower Limit Value
-    200.0,                   !- Upper Limit Value
-    Continuous,              !- Numeric Type
-    Temperature;             !- Unit Type
+ScheduleTypeLimits,
+  Temperature,             !- Name
+  -60.0,                   !- Lower Limit Value
+  200.0,                   !- Upper Limit Value
+  Continuous,              !- Numeric Type
+  Temperature;             !- Unit Type
 
-  ScheduleTypeLimits,
-    Control Type,            !- Name
-    0.0,                     !- Lower Limit Value
-    4.0,                     !- Upper Limit Value
-    Discrete;                !- Numeric Type
+ScheduleTypeLimits,
+  Control Type,            !- Name
+  0.0,                     !- Lower Limit Value
+  4.0,                     !- Upper Limit Value
+  Discrete;                !- Numeric Type
 
-  Schedule:Compact,
-    BLDG Sch   3,            !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: Weekdays,           !- Field 2
-    Until:  6:00,0.05,       !- Field 3
-    Until:  7:00,0.20,       !- Field 5
-    Until: 17:00,1.00,       !- Field 7
-    Until: 24:00,0.05,       !- Field 9
-    For: Weekends Holidays,  !- Field 11
-    Until: 24:00,0.05,       !- Field 12
-    For: AllOtherDays,       !- Field 14
-    Until: 24:00,0.05;       !- Field 15
+Schedule:Compact,
+  BLDG Sch   3,            !- Name
+  Any Number,              !- Schedule Type Limits Name
+  Through: 12/31,          !- Field 1
+  For: Weekdays,           !- Field 2
+  Until:  6:00,0.05,       !- Field 3
+  Until:  7:00,0.20,       !- Field 5
+  Until: 17:00,1.00,       !- Field 7
+  Until: 24:00,0.05,       !- Field 9
+  For: Weekends Holidays,  !- Field 11
+  Until: 24:00,0.05,       !- Field 12
+  For: AllOtherDays,       !- Field 14
+  Until: 24:00,0.05;       !- Field 15
 
-  Schedule:Compact,
-    Heating Setpoints,       !- Name
-    Temperature,             !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until:  7:00,15.,        !- Field 3
-    Until: 17:00,20.,        !- Field 5
-    Until: 24:00,15.;        !- Field 7
+Schedule:Compact,
+  Heating Setpoints,       !- Name
+  Temperature,             !- Schedule Type Limits Name
+  Through: 12/31,          !- Field 1
+  For: AllDays,            !- Field 2
+  Until:  7:00,15.,        !- Field 3
+  Until: 17:00,20.,        !- Field 5
+  Until: 24:00,15.;        !- Field 7
 
-  Schedule:Compact,
-    Cooling Setpoints,       !- Name
-    Temperature,             !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until:  7:00,30.,        !- Field 3
-    Until: 20:00,23.,        !- Field 5
-    Until: 24:00,30.;        !- Field 7
+Schedule:Compact,
+  Cooling Setpoints,       !- Name
+  Temperature,             !- Schedule Type Limits Name
+  Through: 12/31,          !- Field 1
+  For: AllDays,            !- Field 2
+  Until:  7:00,30.,        !- Field 3
+  Until: 20:00,23.,        !- Field 5
+  Until: 24:00,30.;        !- Field 7
 
-  Schedule:Compact,
-    Zone Control Type Sched,  !- Name
-    Control Type,            !- Schedule Type Limits Name
-    Through: 3/31,           !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,1,          !- Field 3
-    Through: 9/30,           !- Field 5
-    For: AllDays,            !- Field 6
-    Until: 24:00,2,          !- Field 7
-    Through: 12/31,          !- Field 9
-    For: AllDays,            !- Field 10
-    Until: 24:00,1;          !- Field 11
+Schedule:Compact,
+  Zone Control Type Sched,  !- Name
+  Control Type,            !- Schedule Type Limits Name
+  Through: 3/31,           !- Field 1
+  For: AllDays,            !- Field 2
+  Until: 24:00,1,          !- Field 3
+  Through: 9/30,           !- Field 5
+  For: AllDays,            !- Field 6
+  Until: 24:00,2,          !- Field 7
+  Through: 12/31,          !- Field 9
+  For: AllDays,            !- Field 10
+  Until: 24:00,1;          !- Field 11
 
-  Timestep,4;
+Timestep,4;
 
-  HeatBalanceAlgorithm,ConductionTransferFunction;
+HeatBalanceAlgorithm,ConductionTransferFunction;
 
-  SurfaceConvectionAlgorithm:Inside,Simple;
+SurfaceConvectionAlgorithm:Inside,Simple;
 
-  SurfaceConvectionAlgorithm:Outside,SimpleCombined;
+SurfaceConvectionAlgorithm:Outside,SimpleCombined;
 
-  ShadowCalculation,
-    PolygonClipping,         !- Shading Calculation Method
-    Periodic,                !- Shading Calculation Update Frequency Method
-    20;                      !- Shading Calculation Update Frequency
+ShadowCalculation,
+  PolygonClipping,         !- Shading Calculation Method
+  Periodic,                !- Shading Calculation Update Frequency Method
+  20;                      !- Shading Calculation Update Frequency
 
-  GlobalGeometryRules,
-    UpperLeftCorner,         !- Starting Vertex Position
-    Counterclockwise,        !- Vertex Entry Direction
-    World;                   !- Coordinate System
+GlobalGeometryRules,
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  World;                   !- Coordinate System
 
-  Building,
-    Bldg0,                   !- Name
-    0.0,                     !- North Axis {deg}
-    Suburbs,                 !- Terrain
-    0.039999999,             !- Loads Convergence Tolerance Value {W}
-    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
-    MinimalShadowing,        !- Solar Distribution
-    25,                      !- Maximum Number of Warmup Days
-    6;                       !- Minimum Number of Warmup Days
+Building,
+  Bldg0,                   !- Name
+  0.0,                     !- North Axis {deg}
+  Suburbs,                 !- Terrain
+  0.039999999,             !- Loads Convergence Tolerance Value {W}
+  0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
+  MinimalShadowing,        !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  6;                       !- Minimum Number of Warmup Days
 
 ! =========== ZONE Object List ===========
 
-  Zone,
-    1fNY1vx3jAvesY6geZTgIV,  !- Name
-    0.0,                     !- Direction of Relative North {deg}
-    0.0,                     !- X Origin {m}
-    0.0,                     !- Y Origin {m}
-    0.0,                     !- Z Origin {m}
-    1,                       !- Type
-    1,                       !- Multiplier
-    2.4384,                  !- Ceiling Height {m}
-    Autocalculate;           !- Volume {m3}
+Zone,
+  1fNY1vx3jAvesY6geZTgIV,  !- Name
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  2.4384,                  !- Ceiling Height {m}
+  Autocalculate;           !- Volume {m3}
 
-  Zone,
-    3i2eFc1ofBz80jvIMxrXvL,  !- Name
-    0.0,                     !- Direction of Relative North {deg}
-    0.0,                     !- X Origin {m}
-    0.0,                     !- Y Origin {m}
-    0.0,                     !- Z Origin {m}
-    1,                       !- Type
-    1,                       !- Multiplier
-    2.4384,                  !- Ceiling Height {m}
-    Autocalculate;           !- Volume {m3}
+Zone,
+  3i2eFc1ofBz80jvIMxrXvL,  !- Name
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  2.4384,                  !- Ceiling Height {m}
+  Autocalculate;           !- Volume {m3}
 
 !  Daylighting:DELight:Controls,
 !    DElight Zone,           !- Name
@@ -386,26 +386,26 @@
 !    1.0,                    !- Probability Lighting will be Reset When Needed in Manual Stepped Control
 !    0.5;                    !- Gridding Resolution {m2}
 
-  Daylighting:Controls,
-    DElight Zone,            !- Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone or Space Name
-    DElight,                 !- Daylighting Method
-    ,                        !- Availability Schedule Name
-    Continuous,              !- Lighting Control Type
-    0.3,                     !- Minimum Input Power Fraction for Continuous or ContinuousOff Dimming Control
-    0.2,                     !- Minimum Light Output Fraction for Continuous or ContinuousOff Dimming Control
-    ,                        !- Number of Stepped Control Steps
-    1.0,                     !- Probability Lighting will be Reset When Needed in Manual Stepped Control
-    ,                        !- Glare Calculation Daylighting Reference Point Name
-    0.0,                     !- Glare Calculation Azimuth Angle of View Direction Clockwise from Zone y-Axis {deg}
-    ,                        !- Maximum Allowable Discomfort Glare Index
-    0.5,                     !- DElight Gridding Resolution {m2}
-    RefPt 1,                 !- Daylighting Reference Point 1 Name
-    0.5,                     !- Fraction of Lights Controlled by Reference Point 1
-    500.0,                   !- Illuminance Setpoint at Reference Point 1 {lux}
-    RefPt 2,                 !- Daylighting Reference Point 2 Name
-    0.5,                     !- Fraction of Lights Controlled by Reference Point 2
-    500.0;                   !- Illuminance Setpoint at Reference Point 2 {lux}
+Daylighting:Controls,
+  DElight Zone,            !- Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone or Space Name
+  DElight,                 !- Daylighting Method
+  ,                        !- Availability Schedule Name
+  Continuous,              !- Lighting Control Type
+  0.3,                     !- Minimum Input Power Fraction for Continuous or ContinuousOff Dimming Control
+  0.2,                     !- Minimum Light Output Fraction for Continuous or ContinuousOff Dimming Control
+  ,                        !- Number of Stepped Control Steps
+  1.0,                     !- Probability Lighting will be Reset When Needed in Manual Stepped Control
+  ,                        !- Glare Calculation Daylighting Reference Point Name
+  0.0,                     !- Glare Calculation Azimuth Angle of View Direction Clockwise from Zone y-Axis {deg}
+  ,                        !- Maximum Allowable Discomfort Glare Index
+  0.5,                     !- DElight Gridding Resolution {m2}
+  RefPt 1,                 !- Daylighting Reference Point 1 Name
+  0.5,                     !- Fraction of Lights Controlled by Reference Point 1
+  500.0,                   !- Illuminance Setpoint at Reference Point 1 {lux}
+  RefPt 2,                 !- Daylighting Reference Point 2 Name
+  0.5,                     !- Fraction of Lights Controlled by Reference Point 2
+  500.0;                   !- Illuminance Setpoint at Reference Point 2 {lux}
 
 !  Daylighting:DELight:ReferencePoint,
 !    RefPt 1,                !- Name
@@ -416,12 +416,12 @@
 !    0.5,                    !- Fraction of Zone Controlled by Reference Point
 !    500.;                   !- Illuminance Setpoint at Reference Point {lux}
 
-  Daylighting:ReferencePoint,
-    RefPt 1,                 !- Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone or Space Name
-    2.309,                   !- X-Coordinate of Reference Point {m}
-    1.4224,                  !- Y-Coordinate of Reference Point {m}
-    0.9;                     !- Z-Coordinate of Reference Point {m}
+Daylighting:ReferencePoint,
+  RefPt 1,                 !- Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone or Space Name
+  2.309,                   !- X-Coordinate of Reference Point {m}
+  1.4224,                  !- Y-Coordinate of Reference Point {m}
+  0.9;                     !- Z-Coordinate of Reference Point {m}
 
 !  Daylighting:DELight:ReferencePoint,
 !    RefPt 2,                !- Name
@@ -432,82 +432,82 @@
 !    0.5,                    !- Fraction of Zone Controlled by Reference Point
 !    500.;                   !- Illuminance Setpoint at Reference Point {lux}
 
-  Daylighting:ReferencePoint,
-    RefPt 2,                 !- Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone or Space Name
-    2.309,                   !- X-Coordinate of Reference Point {m}
-    2.8448,                  !- Y-Coordinate of Reference Point {m}
-    0.9;                     !- Z-Coordinate of Reference Point {m}
+Daylighting:ReferencePoint,
+  RefPt 2,                 !- Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone or Space Name
+  2.309,                   !- X-Coordinate of Reference Point {m}
+  2.8448,                  !- Y-Coordinate of Reference Point {m}
+  0.9;                     !- Z-Coordinate of Reference Point {m}
 
-  Daylighting:DELight:ComplexFenestration,
-    Test CFS,                !- Name
-    BTDF^GEN^WINDOW^1.0^20.0,  !- Complex Fenestration Type
-    3i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Building Surface Name
-    Wndo1F03i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Window Name
-    0.0;                     !- Fenestration Rotation {deg}
+Daylighting:DELight:ComplexFenestration,
+  Test CFS,                !- Name
+  BTDF^GEN^WINDOW^1.0^20.0,  !- Complex Fenestration Type
+  3i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Building Surface Name
+  Wndo1F03i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Window Name
+  0.0;                     !- Fenestration Rotation {deg}
 
-  Lights,
-    3i2eFc1ofBz80jvIMxrXvL Lights 1,  !- Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone or ZoneList or Space or SpaceList Name
-    BLDG Sch   3,            !- Schedule Name
-    LightingLevel,           !- Design Level Calculation Method
-    1464.375,                !- Lighting Level {W}
-    ,                        !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0.0,                     !- Return Air Fraction
-    0.2,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+Lights,
+  3i2eFc1ofBz80jvIMxrXvL Lights 1,  !- Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone or ZoneList or Space or SpaceList Name
+  BLDG Sch   3,            !- Schedule Name
+  LightingLevel,           !- Design Level Calculation Method
+  1464.375,                !- Lighting Level {W}
+  ,                        !- Watts per Floor Area {W/m2}
+  ,                        !- Watts per Person {W/person}
+  0.0,                     !- Return Air Fraction
+  0.2,                     !- Fraction Radiant
+  0.2,                     !- Fraction Visible
+  1.0,                     !- Fraction Replaceable
+  GeneralLights;           !- End-Use Subcategory
 
-  Daylighting:Controls,
-    1fNY1vx3jAvesY6geZTgIV_DaylCtrl,  !- Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone or Space Name
-    SplitFlux,               !- Daylighting Method
-    ,                        !- Availability Schedule Name
-    Continuous,              !- Lighting Control Type
-    0.3,                     !- Minimum Input Power Fraction for Continuous or ContinuousOff Dimming Control
-    0.2,                     !- Minimum Light Output Fraction for Continuous or ContinuousOff Dimming Control
-    ,                        !- Number of Stepped Control Steps
-    1.0,                     !- Probability Lighting will be Reset When Needed in Manual Stepped Control
-    1fNY1vx3jAvesY6geZTgIV_DaylRefPt1,  !- Glare Calculation Daylighting Reference Point Name
-    180.0,                   !- Glare Calculation Azimuth Angle of View Direction Clockwise from Zone y-Axis {deg}
-    50.0,                    !- Maximum Allowable Discomfort Glare Index
-    ,                        !- DElight Gridding Resolution {m2}
-    1fNY1vx3jAvesY6geZTgIV_DaylRefPt1,  !- Daylighting Reference Point 1 Name
-    0.5,                     !- Fraction of Lights Controlled by Reference Point 1
-    500.0,                   !- Illuminance Setpoint at Reference Point 1 {lux}
-    1fNY1vx3jAvesY6geZTgIV_DaylRefPt2,  !- Daylighting Reference Point 2 Name
-    0.5,                     !- Fraction of Lights Controlled by Reference Point 2
-    500.0;                   !- Illuminance Setpoint at Reference Point 2 {lux}
+Daylighting:Controls,
+  1fNY1vx3jAvesY6geZTgIV_DaylCtrl,  !- Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone or Space Name
+  SplitFlux,               !- Daylighting Method
+  ,                        !- Availability Schedule Name
+  Continuous,              !- Lighting Control Type
+  0.3,                     !- Minimum Input Power Fraction for Continuous or ContinuousOff Dimming Control
+  0.2,                     !- Minimum Light Output Fraction for Continuous or ContinuousOff Dimming Control
+  ,                        !- Number of Stepped Control Steps
+  1.0,                     !- Probability Lighting will be Reset When Needed in Manual Stepped Control
+  1fNY1vx3jAvesY6geZTgIV_DaylRefPt1,  !- Glare Calculation Daylighting Reference Point Name
+  180.0,                   !- Glare Calculation Azimuth Angle of View Direction Clockwise from Zone y-Axis {deg}
+  50.0,                    !- Maximum Allowable Discomfort Glare Index
+  ,                        !- DElight Gridding Resolution {m2}
+  1fNY1vx3jAvesY6geZTgIV_DaylRefPt1,  !- Daylighting Reference Point 1 Name
+  0.5,                     !- Fraction of Lights Controlled by Reference Point 1
+  500.0,                   !- Illuminance Setpoint at Reference Point 1 {lux}
+  1fNY1vx3jAvesY6geZTgIV_DaylRefPt2,  !- Daylighting Reference Point 2 Name
+  0.5,                     !- Fraction of Lights Controlled by Reference Point 2
+  500.0;                   !- Illuminance Setpoint at Reference Point 2 {lux}
 
-  Daylighting:ReferencePoint,
-    1fNY1vx3jAvesY6geZTgIV_DaylRefPt1,  !- Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone or Space Name
-    6.827,                   !- X-Coordinate of Reference Point {m}
-    1.4224,                  !- Y-Coordinate of Reference Point {m}
-    0.9;                     !- Z-Coordinate of Reference Point {m}
+Daylighting:ReferencePoint,
+  1fNY1vx3jAvesY6geZTgIV_DaylRefPt1,  !- Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone or Space Name
+  6.827,                   !- X-Coordinate of Reference Point {m}
+  1.4224,                  !- Y-Coordinate of Reference Point {m}
+  0.9;                     !- Z-Coordinate of Reference Point {m}
 
-  Daylighting:ReferencePoint,
-    1fNY1vx3jAvesY6geZTgIV_DaylRefPt2,  !- Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone or Space Name
-    6.827,                   !- X-Coordinate of Reference Point {m}
-    2.8448,                  !- Y-Coordinate of Reference Point {m}
-    0.9;                     !- Z-Coordinate of Reference Point {m}
+Daylighting:ReferencePoint,
+  1fNY1vx3jAvesY6geZTgIV_DaylRefPt2,  !- Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone or Space Name
+  6.827,                   !- X-Coordinate of Reference Point {m}
+  2.8448,                  !- Y-Coordinate of Reference Point {m}
+  0.9;                     !- Z-Coordinate of Reference Point {m}
 
-  Lights,
-    1fNY1vx3jAvesY6geZTgIV Lights 1,  !- Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone or ZoneList or Space or SpaceList Name
-    BLDG Sch   3,            !- Schedule Name
-    LightingLevel,           !- Design Level Calculation Method
-    1464.375,                !- Lighting Level {W}
-    ,                        !- Watts per Floor Area {W/m2}
-    ,                        !- Watts per Person {W/person}
-    0.0,                     !- Return Air Fraction
-    0.2,                     !- Fraction Radiant
-    0.2,                     !- Fraction Visible
-    1.0,                     !- Fraction Replaceable
-    GeneralLights;           !- End-Use Subcategory
+Lights,
+  1fNY1vx3jAvesY6geZTgIV Lights 1,  !- Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone or ZoneList or Space or SpaceList Name
+  BLDG Sch   3,            !- Schedule Name
+  LightingLevel,           !- Design Level Calculation Method
+  1464.375,                !- Lighting Level {W}
+  ,                        !- Watts per Floor Area {W/m2}
+  ,                        !- Watts per Person {W/person}
+  0.0,                     !- Return Air Fraction
+  0.2,                     !- Fraction Radiant
+  0.2,                     !- Fraction Visible
+  1.0,                     !- Fraction Replaceable
+  GeneralLights;           !- End-Use Subcategory
 
 ! =========== Interior Thermal SURFACE Object List ===========
 ! Vertices in World Coordinate System, beginning in exterior upper left
@@ -515,41 +515,41 @@
 ! Surface Face Tilt:     90.00000
 ! Surface Face Area:     10.40514
 
-  BuildingSurface:Detailed,
-    1fNY1vx3jAvesY6geZTgIV3i2eFc1ofBz80jvIMxrXvL>O0>WF0,  !- Name
-    Wall,                    !- Surface Type
-    INTERIOR,                !- Construction Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
-    ,                        !- Space Name
-    Surface,                 !- Outside Boundary Condition
-    3i2eFc1ofBz80jvIMxrXvL1fNY1vx3jAvesY6geZTgIV>O0>WF0,  !- Outside Boundary Condition Object
-    NoSun,                   !- Sun Exposure
-    NoWind,                  !- Wind Exposure
-    0.0,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    4.7244,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  1fNY1vx3jAvesY6geZTgIV3i2eFc1ofBz80jvIMxrXvL>O0>WF0,  !- Name
+  Wall,                    !- Surface Type
+  INTERIOR,                !- Construction Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
+  ,                        !- Space Name
+  Surface,                 !- Outside Boundary Condition
+  3i2eFc1ofBz80jvIMxrXvL1fNY1vx3jAvesY6geZTgIV>O0>WF0,  !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  0.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  4.7244,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 
-  BuildingSurface:Detailed,
-    3i2eFc1ofBz80jvIMxrXvL1fNY1vx3jAvesY6geZTgIV>O0>WF0,  !- Name
-    Wall,                    !- Surface Type
-    INTERIOR,                !- Construction Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
-    ,                        !- Space Name
-    Surface,                 !- Outside Boundary Condition
-    1fNY1vx3jAvesY6geZTgIV3i2eFc1ofBz80jvIMxrXvL>O0>WF0,  !- Outside Boundary Condition Object
-    NoSun,                   !- Sun Exposure
-    NoWind,                  !- Wind Exposure
-    0.0,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    4.7244,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    4.7244,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  3i2eFc1ofBz80jvIMxrXvL1fNY1vx3jAvesY6geZTgIV>O0>WF0,  !- Name
+  Wall,                    !- Surface Type
+  INTERIOR,                !- Construction Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
+  ,                        !- Space Name
+  Surface,                 !- Outside Boundary Condition
+  1fNY1vx3jAvesY6geZTgIV3i2eFc1ofBz80jvIMxrXvL>O0>WF0,  !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  0.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  4.7244,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  4.7244,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! =========== Exterior Thermal SURFACE Object List ===========
 ! Vertices in World Coordinate System, beginning in exterior upper left
@@ -557,415 +557,415 @@
 ! Surface Face Tilt:     90.00000
 ! Surface Face Area:     10.40514
 
-  BuildingSurface:Detailed,
-    1fNY1vx3jAvesY6geZTgIV3BXETEK3b0y9mhtiI1pN8K>EWF0,  !- Name
-    Wall,                    !- Surface Type
-    EXTERIOR,                !- Construction Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    9.2964,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    9.2964,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    4.7244,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  1fNY1vx3jAvesY6geZTgIV3BXETEK3b0y9mhtiI1pN8K>EWF0,  !- Name
+  Wall,                    !- Surface Type
+  EXTERIOR,                !- Construction Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  9.2964,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  9.2964,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  4.7244,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Surface Face Azimuth:     90.00000
 ! Surface Face Tilt:     90.00000
 ! Surface Face Area:     10.40514
 
-  BuildingSurface:Detailed,
-    1fNY1vx3jAvesY6geZTgIV3ggZ6C38z36AKq1tiHRHLz>EWF0,  !- Name
-    Wall,                    !- Surface Type
-    EXTERIOR,                !- Construction Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    9.2964,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    9.2964,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.2964,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.2964,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  1fNY1vx3jAvesY6geZTgIV3ggZ6C38z36AKq1tiHRHLz>EWF0,  !- Name
+  Wall,                    !- Surface Type
+  EXTERIOR,                !- Construction Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  9.2964,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  9.2964,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  9.2964,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  9.2964,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Surface Face Azimuth:    180.00000
 ! Surface Face Tilt:     90.00000
 ! Surface Face Area:     10.40514
 
-  BuildingSurface:Detailed,
-    1fNY1vx3jAvesY6geZTgIV1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
-    Wall,                    !- Surface Type
-    EXTERIOR,                !- Construction Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    4.7244,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.2964,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.2964,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  1fNY1vx3jAvesY6geZTgIV1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
+  Wall,                    !- Surface Type
+  EXTERIOR,                !- Construction Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  4.7244,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  9.2964,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  9.2964,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Opening Face Azimuth:    180.00000
 ! Opening Face Tilt:     90.00000
 ! Opening Face Area (BSPro):      1.39355
 
-  FenestrationSurface:Detailed,
-    Wndo0F01fNY1vx3jAvesY6geZTgIV1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
-    Window,                  !- Surface Type
-    DOUBLE PANE WINDOW,      !- Construction Name
-    1fNY1vx3jAvesY6geZTgIV1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Building Surface Name
-    ,                        !- Outside Boundary Condition Object
-    0.5,                     !- View Factor to Ground
-    ,                        !- Frame and Divider Name
-    1,                       !- Multiplier
-    4,                       !- Number of Vertices
-    6.065025079288,-0.152399999386,1.8288,  !- X,Y,Z ==> Vertex 1 {m}
-    6.065025079288,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 2 {m}
-    7.589025079288,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 3 {m}
-    7.589025079288,-0.152399999386,1.8288;  !- X,Y,Z ==> Vertex 4 {m}
+FenestrationSurface:Detailed,
+  Wndo0F01fNY1vx3jAvesY6geZTgIV1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
+  Window,                  !- Surface Type
+  DOUBLE PANE WINDOW,      !- Construction Name
+  1fNY1vx3jAvesY6geZTgIV1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  0.5,                     !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  1,                       !- Multiplier
+  4,                       !- Number of Vertices
+  6.065025079288,-0.152399999386,1.8288,  !- X,Y,Z ==> Vertex 1 {m}
+  6.065025079288,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 2 {m}
+  7.589025079288,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 3 {m}
+  7.589025079288,-0.152399999386,1.8288;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Roof Face Azimuth:     -1.00000
 ! Roof Face Tilt:      0.00000
 ! Roof Face Area:     20.90318
 
-  BuildingSurface:Detailed,
-    1fNY1vx3jAvesY6geZTgIV25EpU6T6H0AP8f46j0$0KQ>RF0,  !- Name
-    Roof,                    !- Surface Type
-    ROOFSLAB,                !- Construction Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.0,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    4.7244,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 2 {m}
-    9.2964,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 3 {m}
-    9.2964,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  1fNY1vx3jAvesY6geZTgIV25EpU6T6H0AP8f46j0$0KQ>RF0,  !- Name
+  Roof,                    !- Surface Type
+  ROOFSLAB,                !- Construction Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  4.7244,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 2 {m}
+  9.2964,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 3 {m}
+  9.2964,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Floor Face Azimuth:     -1.00000
 ! Floor Face Tilt:      0.00000
 ! Floor Face Area:     20.90318
 
-  BuildingSurface:Detailed,
-    1fNY1vx3jAvesY6geZTgIV1S6VWFO4jFN8FWbynZy1RY>FF0,  !- Name
-    Floor,                   !- Surface Type
-    FLOORSLAB,               !- Construction Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
-    ,                        !- Space Name
-    Ground,                  !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    NoSun,                   !- Sun Exposure
-    NoWind,                  !- Wind Exposure
-    0.0,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    9.2964,4.4196,0.0,  !- X,Y,Z ==> Vertex 1 {m}
-    9.2964,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    4.7244,4.4196,0.0;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  1fNY1vx3jAvesY6geZTgIV1S6VWFO4jFN8FWbynZy1RY>FF0,  !- Name
+  Floor,                   !- Surface Type
+  FLOORSLAB,               !- Construction Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
+  ,                        !- Space Name
+  Ground,                  !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  0.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  9.2964,4.4196,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  9.2964,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  4.7244,4.4196,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Surface Face Azimuth:      0.00000
 ! Surface Face Tilt:     90.00000
 ! Surface Face Area:     10.40514
 
-  BuildingSurface:Detailed,
-    3i2eFc1ofBz80jvIMxrXvL3BXETEK3b0y9mhtiI1pN8K>EWF0,  !- Name
-    Wall,                    !- Surface Type
-    EXTERIOR,                !- Construction Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.1524,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.1524,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  3i2eFc1ofBz80jvIMxrXvL3BXETEK3b0y9mhtiI1pN8K>EWF0,  !- Name
+  Wall,                    !- Surface Type
+  EXTERIOR,                !- Construction Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  4.7244,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.1524,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.1524,4.4196,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Surface Face Azimuth:    180.00000
 ! Surface Face Tilt:     90.00000
 ! Surface Face Area:     10.40514
 
-  BuildingSurface:Detailed,
-    3i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
-    Wall,                    !- Surface Type
-    EXTERIOR,                !- Construction Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    0.1524,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    0.1524,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    4.7244,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  3i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
+  Wall,                    !- Surface Type
+  EXTERIOR,                !- Construction Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0.1524,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  0.1524,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  4.7244,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Opening Face Azimuth:    180.00000
 ! Opening Face Tilt:     90.00000
 ! Opening Face Area (BSPro):      1.39355
 
-  FenestrationSurface:Detailed,
-    Wndo1F03i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
-    Window,                  !- Surface Type
-    DOUBLE PANE WINDOW,      !- Construction Name
-    3i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Building Surface Name
-    ,                        !- Outside Boundary Condition Object
-    0.5,                     !- View Factor to Ground
-    ,                        !- Frame and Divider Name
-    1,                       !- Multiplier
-    4,                       !- Number of Vertices
-    1.547000377289,-0.152399999386,1.8288,  !- X,Y,Z ==> Vertex 1 {m}
-    1.547000377289,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 2 {m}
-    3.071000377289,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 3 {m}
-    3.071000377289,-0.152399999386,1.8288;  !- X,Y,Z ==> Vertex 4 {m}
+FenestrationSurface:Detailed,
+  Wndo1F03i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Name
+  Window,                  !- Surface Type
+  DOUBLE PANE WINDOW,      !- Construction Name
+  3i2eFc1ofBz80jvIMxrXvL1KacGhEwLAJhAz_9iQZZ23>EWF0,  !- Building Surface Name
+  ,                        !- Outside Boundary Condition Object
+  0.5,                     !- View Factor to Ground
+  ,                        !- Frame and Divider Name
+  1,                       !- Multiplier
+  4,                       !- Number of Vertices
+  1.547000377289,-0.152399999386,1.8288,  !- X,Y,Z ==> Vertex 1 {m}
+  1.547000377289,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 2 {m}
+  3.071000377289,-0.152399999386,0.9144,  !- X,Y,Z ==> Vertex 3 {m}
+  3.071000377289,-0.152399999386,1.8288;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Surface Face Azimuth:    270.00000
 ! Surface Face Tilt:     90.00000
 ! Surface Face Area:     10.40514
 
-  BuildingSurface:Detailed,
-    3i2eFc1ofBz80jvIMxrXvL3_Q6Pa2458mxVu7woBDfHK>EWF0,  !- Name
-    Wall,                    !- Surface Type
-    EXTERIOR,                !- Construction Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    0.1524,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    0.1524,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.1524,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.1524,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  3i2eFc1ofBz80jvIMxrXvL3_Q6Pa2458mxVu7woBDfHK>EWF0,  !- Name
+  Wall,                    !- Surface Type
+  EXTERIOR,                !- Construction Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0.1524,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  0.1524,4.4196,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.1524,-0.1524,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.1524,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Roof Face Azimuth:     -1.00000
 ! Roof Face Tilt:      0.00000
 ! Roof Face Area:     20.90318
 
-  BuildingSurface:Detailed,
-    3i2eFc1ofBz80jvIMxrXvL25EpU6T6H0AP8f46j0$0KQ>RF0,  !- Name
-    Roof,                    !- Surface Type
-    ROOFSLAB,                !- Construction Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.0,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
-    0.1524,4.4196,2.4384,  !- X,Y,Z ==> Vertex 2 {m}
-    0.1524,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 3 {m}
-    4.7244,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  3i2eFc1ofBz80jvIMxrXvL25EpU6T6H0AP8f46j0$0KQ>RF0,  !- Name
+  Roof,                    !- Surface Type
+  ROOFSLAB,                !- Construction Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  4.7244,4.4196,2.4384,  !- X,Y,Z ==> Vertex 1 {m}
+  0.1524,4.4196,2.4384,  !- X,Y,Z ==> Vertex 2 {m}
+  0.1524,-0.1524,2.4384,  !- X,Y,Z ==> Vertex 3 {m}
+  4.7244,-0.1524,2.4384;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! Vertices in World Coordinate System, beginning in exterior upper left
 ! Floor Face Azimuth:     -1.00000
 ! Floor Face Tilt:      0.00000
 ! Floor Face Area:     20.90318
 
-  BuildingSurface:Detailed,
-    3i2eFc1ofBz80jvIMxrXvL1S6VWFO4jFN8FWbynZy1RY>FF0,  !- Name
-    Floor,                   !- Surface Type
-    FLOORSLAB,               !- Construction Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
-    ,                        !- Space Name
-    Ground,                  !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    NoSun,                   !- Sun Exposure
-    NoWind,                  !- Wind Exposure
-    0.0,                     !- View Factor to Ground
-    4,                       !- Number of Vertices
-    4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.1524,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.1524,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    4.7244,4.4196,0.0;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  3i2eFc1ofBz80jvIMxrXvL1S6VWFO4jFN8FWbynZy1RY>FF0,  !- Name
+  Floor,                   !- Surface Type
+  FLOORSLAB,               !- Construction Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
+  ,                        !- Space Name
+  Ground,                  !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  0.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  4.7244,-0.1524,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  0.1524,-0.1524,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.1524,4.4196,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  4.7244,4.4196,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
-  ZoneControl:Thermostat,
-    DElight Zone Thermostat,  !- Name
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone or ZoneList Name
-    Zone Control Type Sched,  !- Control Type Schedule Name
-    ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
-    ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
-    Heating Setpoint with SB,  !- Control 1 Name
-    ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
-    Cooling Setpoint with SB;  !- Control 2 Name
+ZoneControl:Thermostat,
+  DElight Zone Thermostat,  !- Name
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone or ZoneList Name
+  Zone Control Type Sched,  !- Control Type Schedule Name
+  ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
+  ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
+  Heating Setpoint with SB,  !- Control 1 Name
+  ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
+  Cooling Setpoint with SB;  !- Control 2 Name
 
-  ZoneControl:Thermostat,
-    Detailed Zone Thermostat,  !- Name
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone or ZoneList Name
-    Zone Control Type Sched,  !- Control Type Schedule Name
-    ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
-    ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
-    Heating Setpoint with SB,  !- Control 1 Name
-    ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
-    Cooling Setpoint with SB;  !- Control 2 Name
+ZoneControl:Thermostat,
+  Detailed Zone Thermostat,  !- Name
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone or ZoneList Name
+  Zone Control Type Sched,  !- Control Type Schedule Name
+  ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
+  ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
+  Heating Setpoint with SB,  !- Control 1 Name
+  ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
+  Cooling Setpoint with SB;  !- Control 2 Name
 
-  ThermostatSetpoint:SingleHeating,
-    Heating Setpoint with SB,  !- Name
-    Heating Setpoints;       !- Setpoint Temperature Schedule Name
+ThermostatSetpoint:SingleHeating,
+  Heating Setpoint with SB,  !- Name
+  Heating Setpoints;       !- Setpoint Temperature Schedule Name
 
-  ThermostatSetpoint:SingleCooling,
-    Cooling Setpoint with SB,  !- Name
-    Cooling Setpoints;       !- Setpoint Temperature Schedule Name
+ThermostatSetpoint:SingleCooling,
+  Cooling Setpoint with SB,  !- Name
+  Cooling Setpoints;       !- Setpoint Temperature Schedule Name
 
-  ZoneHVAC:EquipmentConnections,
-    3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
-    Zone2Equipment,          !- Zone Conditioning Equipment List Name
-    Zone2Inlets,             !- Zone Air Inlet Node or NodeList Name
-    ,                        !- Zone Air Exhaust Node or NodeList Name
-    NODE_5,                  !- Zone Air Node Name
-    NODE_6;                  !- Zone Return Air Node or NodeList Name
+ZoneHVAC:EquipmentConnections,
+  3i2eFc1ofBz80jvIMxrXvL,  !- Zone Name
+  Zone2Equipment,          !- Zone Conditioning Equipment List Name
+  Zone2Inlets,             !- Zone Air Inlet Node or NodeList Name
+  ,                        !- Zone Air Exhaust Node or NodeList Name
+  NODE_5,                  !- Zone Air Node Name
+  NODE_6;                  !- Zone Return Air Node or NodeList Name
 
-  ZoneHVAC:EquipmentConnections,
-    1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
-    Zone1Equipment,          !- Zone Conditioning Equipment List Name
-    Zone1Inlets,             !- Zone Air Inlet Node or NodeList Name
-    ,                        !- Zone Air Exhaust Node or NodeList Name
-    NODE_3,                  !- Zone Air Node Name
-    NODE_4;                  !- Zone Return Air Node or NodeList Name
+ZoneHVAC:EquipmentConnections,
+  1fNY1vx3jAvesY6geZTgIV,  !- Zone Name
+  Zone1Equipment,          !- Zone Conditioning Equipment List Name
+  Zone1Inlets,             !- Zone Air Inlet Node or NodeList Name
+  ,                        !- Zone Air Exhaust Node or NodeList Name
+  NODE_3,                  !- Zone Air Node Name
+  NODE_4;                  !- Zone Return Air Node or NodeList Name
 
-  ZoneHVAC:EquipmentList,
-    Zone2Equipment,          !- Name
-    SequentialLoad,          !- Load Distribution Scheme
-    ZoneHVAC:IdealLoadsAirSystem,  !- Zone Equipment 1 Object Type
-    Zone2Air,                !- Zone Equipment 1 Name
-    1,                       !- Zone Equipment 1 Cooling Sequence
-    1,                       !- Zone Equipment 1 Heating or No-Load Sequence
-    ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
-    ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
+ZoneHVAC:EquipmentList,
+  Zone2Equipment,          !- Name
+  SequentialLoad,          !- Load Distribution Scheme
+  ZoneHVAC:IdealLoadsAirSystem,  !- Zone Equipment 1 Object Type
+  Zone2Air,                !- Zone Equipment 1 Name
+  1,                       !- Zone Equipment 1 Cooling Sequence
+  1,                       !- Zone Equipment 1 Heating or No-Load Sequence
+  ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
+  ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
 
-  ZoneHVAC:EquipmentList,
-    Zone1Equipment,          !- Name
-    SequentialLoad,          !- Load Distribution Scheme
-    ZoneHVAC:IdealLoadsAirSystem,  !- Zone Equipment 1 Object Type
-    Zone1Air,                !- Zone Equipment 1 Name
-    1,                       !- Zone Equipment 1 Cooling Sequence
-    1,                       !- Zone Equipment 1 Heating or No-Load Sequence
-    ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
-    ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
+ZoneHVAC:EquipmentList,
+  Zone1Equipment,          !- Name
+  SequentialLoad,          !- Load Distribution Scheme
+  ZoneHVAC:IdealLoadsAirSystem,  !- Zone Equipment 1 Object Type
+  Zone1Air,                !- Zone Equipment 1 Name
+  1,                       !- Zone Equipment 1 Cooling Sequence
+  1,                       !- Zone Equipment 1 Heating or No-Load Sequence
+  ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
+  ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
 
-  ZoneHVAC:IdealLoadsAirSystem,
-    Zone2Air,                !- Name
-    ,                        !- Availability Schedule Name
-    NODE_2,                  !- Zone Supply Air Node Name
-    ,                        !- Zone Exhaust Air Node Name
-    ,                        !- System Inlet Air Node Name
-    50.0,                    !- Maximum Heating Supply Air Temperature {C}
-    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
-    0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
-    0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
-    NoLimit,                 !- Heating Limit
-    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
-    ,                        !- Maximum Sensible Heating Capacity {W}
-    NoLimit,                 !- Cooling Limit
-    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
-    ,                        !- Maximum Total Cooling Capacity {W}
-    ,                        !- Heating Availability Schedule Name
-    ,                        !- Cooling Availability Schedule Name
-    ConstantSupplyHumidityRatio,  !- Dehumidification Control Type
-    ,                        !- Cooling Sensible Heat Ratio {dimensionless}
-    ConstantSupplyHumidityRatio,  !- Humidification Control Type
-    ,                        !- Design Specification Outdoor Air Object Name
-    ,                        !- Outdoor Air Inlet Node Name
-    ,                        !- Demand Controlled Ventilation Type
-    ,                        !- Outdoor Air Economizer Type
-    ,                        !- Heat Recovery Type
-    ,                        !- Sensible Heat Recovery Effectiveness {dimensionless}
-    ;                        !- Latent Heat Recovery Effectiveness {dimensionless}
+ZoneHVAC:IdealLoadsAirSystem,
+  Zone2Air,                !- Name
+  ,                        !- Availability Schedule Name
+  NODE_2,                  !- Zone Supply Air Node Name
+  ,                        !- Zone Exhaust Air Node Name
+  ,                        !- System Inlet Air Node Name
+  50.0,                    !- Maximum Heating Supply Air Temperature {C}
+  13.0,                    !- Minimum Cooling Supply Air Temperature {C}
+  0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+  0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+  NoLimit,                 !- Heating Limit
+  Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+  ,                        !- Maximum Sensible Heating Capacity {W}
+  NoLimit,                 !- Cooling Limit
+  Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                        !- Maximum Total Cooling Capacity {W}
+  ,                        !- Heating Availability Schedule Name
+  ,                        !- Cooling Availability Schedule Name
+  ConstantSupplyHumidityRatio,  !- Dehumidification Control Type
+  ,                        !- Cooling Sensible Heat Ratio {dimensionless}
+  ConstantSupplyHumidityRatio,  !- Humidification Control Type
+  ,                        !- Design Specification Outdoor Air Object Name
+  ,                        !- Outdoor Air Inlet Node Name
+  ,                        !- Demand Controlled Ventilation Type
+  ,                        !- Outdoor Air Economizer Type
+  ,                        !- Heat Recovery Type
+  ,                        !- Sensible Heat Recovery Effectiveness {dimensionless}
+  ;                        !- Latent Heat Recovery Effectiveness {dimensionless}
 
-  ZoneHVAC:IdealLoadsAirSystem,
-    Zone1Air,                !- Name
-    ,                        !- Availability Schedule Name
-    NODE_1,                  !- Zone Supply Air Node Name
-    ,                        !- Zone Exhaust Air Node Name
-    ,                        !- System Inlet Air Node Name
-    50.0,                    !- Maximum Heating Supply Air Temperature {C}
-    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
-    0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
-    0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
-    NoLimit,                 !- Heating Limit
-    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
-    ,                        !- Maximum Sensible Heating Capacity {W}
-    NoLimit,                 !- Cooling Limit
-    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
-    ,                        !- Maximum Total Cooling Capacity {W}
-    ,                        !- Heating Availability Schedule Name
-    ,                        !- Cooling Availability Schedule Name
-    ConstantSupplyHumidityRatio,  !- Dehumidification Control Type
-    ,                        !- Cooling Sensible Heat Ratio {dimensionless}
-    ConstantSupplyHumidityRatio,  !- Humidification Control Type
-    ,                        !- Design Specification Outdoor Air Object Name
-    ,                        !- Outdoor Air Inlet Node Name
-    ,                        !- Demand Controlled Ventilation Type
-    ,                        !- Outdoor Air Economizer Type
-    ,                        !- Heat Recovery Type
-    ,                        !- Sensible Heat Recovery Effectiveness {dimensionless}
-    ;                        !- Latent Heat Recovery Effectiveness {dimensionless}
+ZoneHVAC:IdealLoadsAirSystem,
+  Zone1Air,                !- Name
+  ,                        !- Availability Schedule Name
+  NODE_1,                  !- Zone Supply Air Node Name
+  ,                        !- Zone Exhaust Air Node Name
+  ,                        !- System Inlet Air Node Name
+  50.0,                    !- Maximum Heating Supply Air Temperature {C}
+  13.0,                    !- Minimum Cooling Supply Air Temperature {C}
+  0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+  0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+  NoLimit,                 !- Heating Limit
+  Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+  ,                        !- Maximum Sensible Heating Capacity {W}
+  NoLimit,                 !- Cooling Limit
+  Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                        !- Maximum Total Cooling Capacity {W}
+  ,                        !- Heating Availability Schedule Name
+  ,                        !- Cooling Availability Schedule Name
+  ConstantSupplyHumidityRatio,  !- Dehumidification Control Type
+  ,                        !- Cooling Sensible Heat Ratio {dimensionless}
+  ConstantSupplyHumidityRatio,  !- Humidification Control Type
+  ,                        !- Design Specification Outdoor Air Object Name
+  ,                        !- Outdoor Air Inlet Node Name
+  ,                        !- Demand Controlled Ventilation Type
+  ,                        !- Outdoor Air Economizer Type
+  ,                        !- Heat Recovery Type
+  ,                        !- Sensible Heat Recovery Effectiveness {dimensionless}
+  ;                        !- Latent Heat Recovery Effectiveness {dimensionless}
 
-  NodeList,
-    Zone2Inlets,             !- Name
-    NODE_2;                  !- Node 1 Name
+NodeList,
+  Zone2Inlets,             !- Name
+  NODE_2;                  !- Node 1 Name
 
-  NodeList,
-    Zone1Inlets,             !- Name
-    NODE_1;                  !- Node 1 Name
+NodeList,
+  Zone1Inlets,             !- Name
+  NODE_1;                  !- Node 1 Name
 
-  Output:Variable,*,Daylighting Reference Point 1 Illuminance,Timestep;
+Output:Variable,*,Daylighting Reference Point 1 Illuminance,Timestep;
 
-  Output:Variable,*,Daylighting Reference Point 2 Illuminance,Timestep;
+Output:Variable,*,Daylighting Reference Point 2 Illuminance,Timestep;
 
-  Output:Variable,*,Daylighting Lighting Power Multiplier,Timestep;
+Output:Variable,*,Daylighting Lighting Power Multiplier,Timestep;
 
-  Output:Variable,*,Daylighting Reference Point Illuminance,Timestep;
+Output:Variable,*,Daylighting Reference Point Illuminance,Timestep;
 
-  Output:Surfaces:Drawing,DXF;
+Output:Surfaces:Drawing,DXF;
 
-  Output:VariableDictionary,regular;
+Output:VariableDictionary,regular;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
+Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,Monthly;
+Output:Meter:MeterFileOnly,Electricity:Building,Monthly;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,Monthly;
+Output:Meter:MeterFileOnly,InteriorLights:Electricity,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
+Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,RunPeriod;
+Output:Meter:MeterFileOnly,Electricity:Building,RunPeriod;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,RunPeriod;
+Output:Meter:MeterFileOnly,InteriorLights:Electricity,RunPeriod;
 
-  OutputControl:Table:Style,
-    HTML;                    !- Column Separator
+OutputControl:Table:Style,
+  HTML;                    !- Column Separator
 
-  Output:Table:SummaryReports,
-    AllSummary;              !- Report 1 Name
+Output:Table:SummaryReports,
+  AllSummary;              !- Report 1 Name

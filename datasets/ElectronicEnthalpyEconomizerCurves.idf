@@ -128,38 +128,38 @@
 !
 ! The objects and syntax in this dataset comply with EnergyPlus, Version 8.4.0 and above, unless otherwise noted.
 
-  Curve:Cubic,
-    ElectronicEnthalpyCurveA,  !- Name
-    0.01342704,              !- Coefficient1 Constant
-    -0.00047892,             !- Coefficient2 x
-    5.3352e-05,              !- Coefficient3 x**2
-    -1.8103e-06,             !- Coefficient4 x**3
-    16.6,                    !- Minimum Value of x
-    29.13;                   !- Maximum Value of x
+Curve:Cubic,
+  ElectronicEnthalpyCurveA,  !- Name
+  0.01342704,              !- Coefficient1 Constant
+  -0.00047892,             !- Coefficient2 x
+  5.3352e-05,              !- Coefficient3 x**2
+  -1.8103e-06,             !- Coefficient4 x**3
+  16.6,                    !- Minimum Value of x
+  29.13;                   !- Maximum Value of x
 
-  Curve:Cubic,
-    ElectronicEnthalpyCurveB,  !- Name
-    0.011529339,             !- Coefficient1 Constant
-    -0.00032266,             !- Coefficient2 x
-    4.2788e-05,              !- Coefficient3 x**2
-    -1.692e-06,              !- Coefficient4 x**3
-    14.88,                   !- Minimum Value of x
-    27.4;                    !- Maximum Value of x
+Curve:Cubic,
+  ElectronicEnthalpyCurveB,  !- Name
+  0.011529339,             !- Coefficient1 Constant
+  -0.00032266,             !- Coefficient2 x
+  4.2788e-05,              !- Coefficient3 x**2
+  -1.692e-06,              !- Coefficient4 x**3
+  14.88,                   !- Minimum Value of x
+  27.4;                    !- Maximum Value of x
 
-  Curve:Cubic,
-    ElectronicEnthalpyCurveC,  !- Name
-    0.010189477,             !- Coefficient1 Constant
-    -0.000235708,            !- Coefficient2 x
-    3.4991e-05,              !- Coefficient3 x**2
-    -1.608e-06,              !- Coefficient4 x**3
-    13.16,                   !- Minimum Value of x
-    25.67;                   !- Maximum Value of x
+Curve:Cubic,
+  ElectronicEnthalpyCurveC,  !- Name
+  0.010189477,             !- Coefficient1 Constant
+  -0.000235708,            !- Coefficient2 x
+  3.4991e-05,              !- Coefficient3 x**2
+  -1.608e-06,              !- Coefficient4 x**3
+  13.16,                   !- Minimum Value of x
+  25.67;                   !- Maximum Value of x
 
-  Curve:Cubic,
-    ElectronicEnthalpyCurveD,  !- Name
-    0.008798417,             !- Coefficient1 Constant
-    -0.000132302,            !- Coefficient2 x
-    2.5932e-05,              !- Coefficient3 x**2
-    -1.494e-06,              !- Coefficient4 x**3
-    11.43,                   !- Minimum Value of x
-    23.94;                   !- Maximum Value of x
+Curve:Cubic,
+  ElectronicEnthalpyCurveD,  !- Name
+  0.008798417,             !- Coefficient1 Constant
+  -0.000132302,            !- Coefficient2 x
+  2.5932e-05,              !- Coefficient3 x**2
+  -1.494e-06,              !- Coefficient4 x**3
+  11.43,                   !- Minimum Value of x
+  23.94;                   !- Maximum Value of x

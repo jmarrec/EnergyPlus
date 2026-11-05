@@ -19,44 +19,44 @@
 ! Material layer names follow:
 ! The objects and syntax in this dataset comply with EnergyPlus, Version 8.4.0 and above, unless otherwise noted.
 
-  Construction,
-    Composite 2x4 Wood Stud R11,  !- Name
-    Composite 2x4 Wood Stud R11 #3,  !- Outside Layer
-    Composite 2x4 Wood Stud R11 #2,  !- Layer 2
-    Composite 2x4 Wood Stud R11 #1;  !- Layer 3
+Construction,
+  Composite 2x4 Wood Stud R11,  !- Name
+  Composite 2x4 Wood Stud R11 #3,  !- Outside Layer
+  Composite 2x4 Wood Stud R11 #2,  !- Layer 2
+  Composite 2x4 Wood Stud R11 #1;  !- Layer 3
 
-  Material,
-    Composite 2x4 Wood Stud R11 #1,  !- Name
-    Smooth,                  !- Roughness
-    0.019,                   !- Thickness {m}
-    0.186,                   !- Conductivity {W/m-K}
-    640.0,                   !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x4 Wood Stud R11 #1,  !- Name
+  Smooth,                  !- Roughness
+  0.019,                   !- Thickness {m}
+  0.186,                   !- Conductivity {W/m-K}
+  640.0,                   !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x4 Wood Stud R11 #2,  !- Name
-    Smooth,                  !- Roughness
-    0.083,                   !- Thickness {m}
-    0.049,                   !- Conductivity {W/m-K}
-    119.63,                  !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x4 Wood Stud R11 #2,  !- Name
+  Smooth,                  !- Roughness
+  0.083,                   !- Thickness {m}
+  0.049,                   !- Conductivity {W/m-K}
+  119.63,                  !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x4 Wood Stud R11 #3,  !- Name
-    Smooth,                  !- Roughness
-    0.025,                   !- Thickness {m}
-    0.124,                   !- Conductivity {W/m-K}
-    508.45,                  !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x4 Wood Stud R11 #3,  !- Name
+  Smooth,                  !- Roughness
+  0.025,                   !- Thickness {m}
+  0.124,                   !- Conductivity {W/m-K}
+  508.45,                  !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 2
 ! 2"x6" wood studs at 24" on center with between-stud R19 fibreglass insulation.
@@ -65,44 +65,44 @@
 ! Total wall thickness = 7.00in (0.178m)
 ! Material layer names follow:
 
-  Construction,
-    Composite 2x6 Wood Stud R19,  !- Name
-    Composite 2x6 Wood Stud R19 #3,  !- Outside Layer
-    Composite 2x6 Wood Stud R19 #2,  !- Layer 2
-    Composite 2x6 Wood Stud R19 #1;  !- Layer 3
+Construction,
+  Composite 2x6 Wood Stud R19,  !- Name
+  Composite 2x6 Wood Stud R19 #3,  !- Outside Layer
+  Composite 2x6 Wood Stud R19 #2,  !- Layer 2
+  Composite 2x6 Wood Stud R19 #1;  !- Layer 3
 
-  Material,
-    Composite 2x6 Wood Stud R19 #1,  !- Name
-    Smooth,                  !- Roughness
-    0.019,                   !- Thickness {m}
-    0.137,                   !- Conductivity {W/m-K}
-    640.0,                   !- Density {kg/m3}
-    1006.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x6 Wood Stud R19 #1,  !- Name
+  Smooth,                  !- Roughness
+  0.019,                   !- Thickness {m}
+  0.137,                   !- Conductivity {W/m-K}
+  640.0,                   !- Density {kg/m3}
+  1006.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x6 Wood Stud R19 #2,  !- Name
-    Smooth,                  !- Roughness
-    0.133,                   !- Thickness {m}
-    0.047,                   !- Conductivity {W/m-K}
-    93.84,                   !- Density {kg/m3}
-    1006.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x6 Wood Stud R19 #2,  !- Name
+  Smooth,                  !- Roughness
+  0.133,                   !- Thickness {m}
+  0.047,                   !- Conductivity {W/m-K}
+  93.84,                   !- Density {kg/m3}
+  1006.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x6 Wood Stud R19 #3,  !- Name
-    Smooth,                  !- Roughness
-    0.025,                   !- Thickness {m}
-    0.246,                   !- Conductivity {W/m-K}
-    492.67,                  !- Density {kg/m3}
-    1006.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x6 Wood Stud R19 #3,  !- Name
+  Smooth,                  !- Roughness
+  0.025,                   !- Thickness {m}
+  0.246,                   !- Conductivity {W/m-K}
+  492.67,                  !- Density {kg/m3}
+  1006.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 7
 ! Wall system is made of two rigid insulation sides held together with wire mesh.
@@ -112,44 +112,44 @@
 ! Total wall thickness = 10.25in (0.260m).
 ! Material layer names follow:
 
-  Construction,
-    Composite Insulated Concrete Form Wall With Steel Ties,  !- Name
-    Composite Insulated Concrete Form Wall With Steel Ties #3,  !- Outside Layer
-    Composite Insulated Concrete Form Wall With Steel Ties #2,  !- Layer 2
-    Composite Insulated Concrete Form Wall With Steel Ties #1;  !- Layer 3
+Construction,
+  Composite Insulated Concrete Form Wall With Steel Ties,  !- Name
+  Composite Insulated Concrete Form Wall With Steel Ties #3,  !- Outside Layer
+  Composite Insulated Concrete Form Wall With Steel Ties #2,  !- Layer 2
+  Composite Insulated Concrete Form Wall With Steel Ties #1;  !- Layer 3
 
-  Material,
-    Composite Insulated Concrete Form Wall With Steel Ties #1,  !- Name
-    VeryRough,               !- Roughness
-    0.089,                   !- Thickness {m}
-    0.079,                   !- Conductivity {W/m-K}
-    1110.0,                  !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Insulated Concrete Form Wall With Steel Ties #1,  !- Name
+  VeryRough,               !- Roughness
+  0.089,                   !- Thickness {m}
+  0.079,                   !- Conductivity {W/m-K}
+  1110.0,                  !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Insulated Concrete Form Wall With Steel Ties #2,  !- Name
-    Smooth,                  !- Roughness
-    0.095,                   !- Thickness {m}
-    0.499,                   !- Conductivity {W/m-K}
-    1552.01,                 !- Density {kg/m3}
-    880.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Insulated Concrete Form Wall With Steel Ties #2,  !- Name
+  Smooth,                  !- Roughness
+  0.095,                   !- Thickness {m}
+  0.499,                   !- Conductivity {W/m-K}
+  1552.01,                 !- Density {kg/m3}
+  880.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Insulated Concrete Form Wall With Steel Ties #3,  !- Name
-    Smooth,                  !- Roughness
-    0.089,                   !- Thickness {m}
-    0.134,                   !- Conductivity {W/m-K}
-    832.5,                   !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Insulated Concrete Form Wall With Steel Ties #3,  !- Name
+  Smooth,                  !- Roughness
+  0.089,                   !- Thickness {m}
+  0.134,                   !- Conductivity {W/m-K}
+  832.5,                   !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 8
 ! Wall system is made of two 3" concrete slabs separated by 2" rigid insulation.
@@ -159,44 +159,44 @@
 ! Total wall thickness = 8.0in (0.203m).
 ! Material layer names follow:
 
-  Construction,
-    Composite Concrete/Foam/Concrete With Steel Connectors,  !- Name
-    Composite Concrete/Foam/Concrete With Steel Connectors #3,  !- Outside Layer
-    Composite Concrete/Foam/Concrete With Steel Connectors #2,  !- Layer 2
-    Composite Concrete/Foam/Concrete With Steel Connectors #1;  !- Layer 3
+Construction,
+  Composite Concrete/Foam/Concrete With Steel Connectors,  !- Name
+  Composite Concrete/Foam/Concrete With Steel Connectors #3,  !- Outside Layer
+  Composite Concrete/Foam/Concrete With Steel Connectors #2,  !- Layer 2
+  Composite Concrete/Foam/Concrete With Steel Connectors #1;  !- Layer 3
 
-  Material,
-    Composite Concrete/Foam/Concrete With Steel Connectors #1,  !- Name
-    Rough,                   !- Roughness
-    0.064,                   !- Thickness {m}
-    1.329,                   !- Conductivity {W/m-K}
-    2213.25,                 !- Density {kg/m3}
-    964.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Concrete/Foam/Concrete With Steel Connectors #1,  !- Name
+  Rough,                   !- Roughness
+  0.064,                   !- Thickness {m}
+  1.329,                   !- Conductivity {W/m-K}
+  2213.25,                 !- Density {kg/m3}
+  964.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Concrete/Foam/Concrete With Steel Connectors #2,  !- Name
-    Smooth,                  !- Roughness
-    0.076,                   !- Thickness {m}
-    0.061,                   !- Conductivity {W/m-K}
-    41.53,                   !- Density {kg/m3}
-    1173.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Concrete/Foam/Concrete With Steel Connectors #2,  !- Name
+  Smooth,                  !- Roughness
+  0.076,                   !- Thickness {m}
+  0.061,                   !- Conductivity {W/m-K}
+  41.53,                   !- Density {kg/m3}
+  1173.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Concrete/Foam/Concrete With Steel Connectors #3,  !- Name
-    Rough,                   !- Roughness
-    0.064,                   !- Thickness {m}
-    1.078,                   !- Conductivity {W/m-K}
-    2185.44,                 !- Density {kg/m3}
-    1173.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Concrete/Foam/Concrete With Steel Connectors #3,  !- Name
+  Rough,                   !- Roughness
+  0.064,                   !- Thickness {m}
+  1.078,                   !- Conductivity {W/m-K}
+  2185.44,                 !- Density {kg/m3}
+  1173.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 9
 ! Wall system is made of two 3" concrete slabs separated by 2" rigid insulation.
@@ -206,44 +206,44 @@
 ! Total wall thickness = 8.0in (0.203m).
 ! Material layer names follow:
 
-  Construction,
-    Composite Concrete/Foam/Concrete With Plastic Connectors,  !- Name
-    Composite Concrete/Foam/Concrete With Plastic Connectors #3,  !- Outside Layer
-    Composite Concrete/Foam/Concrete With Plastic Connectors #2,  !- Layer 2
-    Composite Concrete/Foam/Concrete With Plastic Connectors #1;  !- Layer 3
+Construction,
+  Composite Concrete/Foam/Concrete With Plastic Connectors,  !- Name
+  Composite Concrete/Foam/Concrete With Plastic Connectors #3,  !- Outside Layer
+  Composite Concrete/Foam/Concrete With Plastic Connectors #2,  !- Layer 2
+  Composite Concrete/Foam/Concrete With Plastic Connectors #1;  !- Layer 3
 
-  Material,
-    Composite Concrete/Foam/Concrete With Plastic Connectors #1,  !- Name
-    Rough,                   !- Roughness
-    0.07,                    !- Thickness {m}
-    1.201,                   !- Conductivity {W/m-K}
-    2240.0,                  !- Density {kg/m3}
-    901.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Concrete/Foam/Concrete With Plastic Connectors #1,  !- Name
+  Rough,                   !- Roughness
+  0.07,                    !- Thickness {m}
+  1.201,                   !- Conductivity {W/m-K}
+  2240.0,                  !- Density {kg/m3}
+  901.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Concrete/Foam/Concrete With Plastic Connectors #2,  !- Name
-    Smooth,                  !- Roughness
-    0.064,                   !- Thickness {m}
-    0.036,                   !- Conductivity {W/m-K}
-    43.16,                   !- Density {kg/m3}
-    1173.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Concrete/Foam/Concrete With Plastic Connectors #2,  !- Name
+  Smooth,                  !- Roughness
+  0.064,                   !- Thickness {m}
+  0.036,                   !- Conductivity {W/m-K}
+  43.16,                   !- Density {kg/m3}
+  1173.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Concrete/Foam/Concrete With Plastic Connectors #3,  !- Name
-    Rough,                   !- Roughness
-    0.07,                    !- Thickness {m}
-    1.361,                   !- Conductivity {W/m-K}
-    2153.49,                 !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Concrete/Foam/Concrete With Plastic Connectors #3,  !- Name
+  Rough,                   !- Roughness
+  0.07,                    !- Thickness {m}
+  1.361,                   !- Conductivity {W/m-K}
+  2153.49,                 !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 10
 ! 2"x4" steel studs at 24" on center with between-stud R11 fibreglass insulation.
@@ -253,44 +253,44 @@
 ! Total wall thickness = 5.00in (0.127m)
 ! Material layer names follow:
 
-  Construction,
-    Composite 2x4 Steel Stud R11,  !- Name
-    Composite 2x4 Steel Stud R11 #3,  !- Outside Layer
-    Composite 2x4 Steel Stud R11 #2,  !- Layer 2
-    Composite 2x4 Steel Stud R11 #1;  !- Layer 3
+Construction,
+  Composite 2x4 Steel Stud R11,  !- Name
+  Composite 2x4 Steel Stud R11 #3,  !- Outside Layer
+  Composite 2x4 Steel Stud R11 #2,  !- Layer 2
+  Composite 2x4 Steel Stud R11 #1;  !- Layer 3
 
-  Material,
-    Composite 2x4 Steel Stud R11 #1,  !- Name
-    Smooth,                  !- Roughness
-    0.013,                   !- Thickness {m}
-    0.72,                    !- Conductivity {W/m-K}
-    640.0,                   !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x4 Steel Stud R11 #1,  !- Name
+  Smooth,                  !- Roughness
+  0.013,                   !- Thickness {m}
+  0.72,                    !- Conductivity {W/m-K}
+  640.0,                   !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x4 Steel Stud R11 #2,  !- Name
-    Smooth,                  !- Roughness
-    0.089,                   !- Thickness {m}
-    0.06,                    !- Conductivity {W/m-K}
-    118.223,                 !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x4 Steel Stud R11 #2,  !- Name
+  Smooth,                  !- Roughness
+  0.089,                   !- Thickness {m}
+  0.06,                    !- Conductivity {W/m-K}
+  118.223,                 !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x4 Steel Stud R11 #3,  !- Name
-    Smooth,                  !- Roughness
-    0.025,                   !- Thickness {m}
-    0.452,                   !- Conductivity {W/m-K}
-    413.782,                 !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x4 Steel Stud R11 #3,  !- Name
+  Smooth,                  !- Roughness
+  0.025,                   !- Thickness {m}
+  0.452,                   !- Conductivity {W/m-K}
+  413.782,                 !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 15
 ! Brick veneer, polystyrene, 2"x4" steel studs at 24" on center with
@@ -302,44 +302,44 @@
 ! Total wall thickness = 8.75in (0.222m)
 ! Material layer names follow:
 
-  Construction,
-    Composite Brick Foam 2x4 Steel Stud R11,  !- Name
-    Composite Brick Foam 2x4 Steel Stud R11 #3,  !- Outside Layer
-    Composite Brick Foam 2x4 Steel Stud R11 #2,  !- Layer 2
-    Composite Brick Foam 2x4 Steel Stud R11 #1;  !- Layer 3
+Construction,
+  Composite Brick Foam 2x4 Steel Stud R11,  !- Name
+  Composite Brick Foam 2x4 Steel Stud R11 #3,  !- Outside Layer
+  Composite Brick Foam 2x4 Steel Stud R11 #2,  !- Layer 2
+  Composite Brick Foam 2x4 Steel Stud R11 #1;  !- Layer 3
 
-  Material,
-    Composite Brick Foam 2x4 Steel Stud R11 #1,  !- Name
-    MediumRough,             !- Roughness
-    0.013,                   !- Thickness {m}
-    0.169,                   !- Conductivity {W/m-K}
-    640.0,                   !- Density {kg/m3}
-    1048.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Brick Foam 2x4 Steel Stud R11 #1,  !- Name
+  MediumRough,             !- Roughness
+  0.013,                   !- Thickness {m}
+  0.169,                   !- Conductivity {W/m-K}
+  640.0,                   !- Density {kg/m3}
+  1048.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Brick Foam 2x4 Steel Stud R11 #2,  !- Name
-    Smooth,                  !- Roughness
-    0.127,                   !- Thickness {m}
-    0.062,                   !- Conductivity {W/m-K}
-    57.26,                   !- Density {kg/m3}
-    964.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Brick Foam 2x4 Steel Stud R11 #2,  !- Name
+  Smooth,                  !- Roughness
+  0.127,                   !- Thickness {m}
+  0.062,                   !- Conductivity {W/m-K}
+  57.26,                   !- Density {kg/m3}
+  964.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Brick Foam 2x4 Steel Stud R11 #3,  !- Name
-    Smooth,                  !- Roughness
-    0.083,                   !- Thickness {m}
-    0.638,                   !- Conductivity {W/m-K}
-    2026.14,                 !- Density {kg/m3}
-    796.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Brick Foam 2x4 Steel Stud R11 #3,  !- Name
+  Smooth,                  !- Roughness
+  0.083,                   !- Thickness {m}
+  0.638,                   !- Conductivity {W/m-K}
+  2026.14,                 !- Density {kg/m3}
+  796.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 16
 ! 2"x6" steel studs at 24" on center with between-stud R19 fibreglass insulation.
@@ -349,44 +349,44 @@
 ! Total wall thickness = 7.00in (0.178m)
 ! Material layer names follow:
 
-  Construction,
-    Composite 2x6 Steel Stud R19,  !- Name
-    Composite 2x6 Steel Stud R19 #3,  !- Outside Layer
-    Composite 2x6 Steel Stud R19 #2,  !- Layer 2
-    Composite 2x6 Steel Stud R19 #1;  !- Layer 3
+Construction,
+  Composite 2x6 Steel Stud R19,  !- Name
+  Composite 2x6 Steel Stud R19 #3,  !- Outside Layer
+  Composite 2x6 Steel Stud R19 #2,  !- Layer 2
+  Composite 2x6 Steel Stud R19 #1;  !- Layer 3
 
-  Material,
-    Composite 2x6 Steel Stud R19 #1,  !- Name
-    Smooth,                  !- Roughness
-    0.019,                   !- Thickness {m}
-    0.253,                   !- Conductivity {W/m-K}
-    560.0,                   !- Density {kg/m3}
-    1006.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x6 Steel Stud R19 #1,  !- Name
+  Smooth,                  !- Roughness
+  0.019,                   !- Thickness {m}
+  0.253,                   !- Conductivity {W/m-K}
+  560.0,                   !- Density {kg/m3}
+  1006.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x6 Steel Stud R19 #2,  !- Name
-    Smooth,                  !- Roughness
-    0.133,                   !- Thickness {m}
-    0.073,                   !- Conductivity {W/m-K}
-    61.8,                    !- Density {kg/m3}
-    1006.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x6 Steel Stud R19 #2,  !- Name
+  Smooth,                  !- Roughness
+  0.133,                   !- Thickness {m}
+  0.073,                   !- Conductivity {W/m-K}
+  61.8,                    !- Density {kg/m3}
+  1006.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2x6 Steel Stud R19 #3,  !- Name
-    Smooth,                  !- Roughness
-    0.025,                   !- Thickness {m}
-    0.248,                   !- Conductivity {W/m-K}
-    486.67,                  !- Density {kg/m3}
-    1006.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2x6 Steel Stud R19 #3,  !- Name
+  Smooth,                  !- Roughness
+  0.025,                   !- Thickness {m}
+  0.248,                   !- Conductivity {W/m-K}
+  486.67,                  !- Density {kg/m3}
+  1006.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 17
 ! Polystyrene, 2"x6" steel studs at 24" on center with between-stud R19 fibreglass insulation.
@@ -397,44 +397,44 @@
 ! Total wall thickness = 8.25in (0.210m)
 ! Material layer names follow:
 
-  Construction,
-    Composite Foam 2x6 Steel Stud R19,  !- Name
-    Composite Foam 2x6 Steel Stud R19 #3,  !- Outside Layer
-    Composite Foam 2x6 Steel Stud R19 #2,  !- Layer 2
-    Composite Foam 2x6 Steel Stud R19 #1;  !- Layer 3
+Construction,
+  Composite Foam 2x6 Steel Stud R19,  !- Name
+  Composite Foam 2x6 Steel Stud R19 #3,  !- Outside Layer
+  Composite Foam 2x6 Steel Stud R19 #2,  !- Layer 2
+  Composite Foam 2x6 Steel Stud R19 #1;  !- Layer 3
 
-  Material,
-    Composite Foam 2x6 Steel Stud R19 #1,  !- Name
-    VeryRough,               !- Roughness
-    0.019,                   !- Thickness {m}
-    0.149,                   !- Conductivity {W/m-K}
-    400.0,                   !- Density {kg/m3}
-    1006.0,                  !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Foam 2x6 Steel Stud R19 #1,  !- Name
+  VeryRough,               !- Roughness
+  0.019,                   !- Thickness {m}
+  0.149,                   !- Conductivity {W/m-K}
+  400.0,                   !- Density {kg/m3}
+  1006.0,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Foam 2x6 Steel Stud R19 #2,  !- Name
-    Smooth,                  !- Roughness
-    0.127,                   !- Thickness {m}
-    0.051,                   !- Conductivity {W/m-K}
-    85.95,                   !- Density {kg/m3}
-    964.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Foam 2x6 Steel Stud R19 #2,  !- Name
+  Smooth,                  !- Roughness
+  0.127,                   !- Thickness {m}
+  0.051,                   !- Conductivity {W/m-K}
+  85.95,                   !- Density {kg/m3}
+  964.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Foam 2x6 Steel Stud R19 #3,  !- Name
-    Smooth,                  !- Roughness
-    0.064,                   !- Thickness {m}
-    1.163,                   !- Conductivity {W/m-K}
-    790.7,                   !- Density {kg/m3}
-    838.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Foam 2x6 Steel Stud R19 #3,  !- Name
+  Smooth,                  !- Roughness
+  0.064,                   !- Thickness {m}
+  1.163,                   !- Conductivity {W/m-K}
+  790.7,                   !- Density {kg/m3}
+  838.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 18
 ! Brick veneer, polystyrene, 2"x6" steel studs at 24" on center with
@@ -446,44 +446,44 @@
 ! Total wall thickness = 10.75in (0.273m)
 ! Material layer names follow:
 
-  Construction,
-    Composite Brick Foam 2x6 Steel Stud R19,  !- Name
-    Composite Brick Foam 2x6 Steel Stud R19 #3,  !- Outside Layer
-    Composite Brick Foam 2x6 Steel Stud R19 #2,  !- Layer 2
-    Composite Brick Foam 2x6 Steel Stud R19 #1;  !- Layer 3
+Construction,
+  Composite Brick Foam 2x6 Steel Stud R19,  !- Name
+  Composite Brick Foam 2x6 Steel Stud R19 #3,  !- Outside Layer
+  Composite Brick Foam 2x6 Steel Stud R19 #2,  !- Layer 2
+  Composite Brick Foam 2x6 Steel Stud R19 #1;  !- Layer 3
 
-  Material,
-    Composite Brick Foam 2x6 Steel Stud R19 #1,  !- Name
-    MediumRough,             !- Roughness
-    0.019,                   !- Thickness {m}
-    0.151,                   !- Conductivity {W/m-K}
-    400.0,                   !- Density {kg/m3}
-    964.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Brick Foam 2x6 Steel Stud R19 #1,  !- Name
+  MediumRough,             !- Roughness
+  0.019,                   !- Thickness {m}
+  0.151,                   !- Conductivity {W/m-K}
+  400.0,                   !- Density {kg/m3}
+  964.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Brick Foam 2x6 Steel Stud R19 #2,  !- Name
-    Smooth,                  !- Roughness
-    0.165,                   !- Thickness {m}
-    0.065,                   !- Conductivity {W/m-K}
-    73.52,                   !- Density {kg/m3}
-    964.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Brick Foam 2x6 Steel Stud R19 #2,  !- Name
+  Smooth,                  !- Roughness
+  0.165,                   !- Thickness {m}
+  0.065,                   !- Conductivity {W/m-K}
+  73.52,                   !- Density {kg/m3}
+  964.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite Brick Foam 2x6 Steel Stud R19 #3,  !- Name
-    Smooth,                  !- Roughness
-    0.089,                   !- Thickness {m}
-    1.318,                   !- Conductivity {W/m-K}
-    1911.57,                 !- Density {kg/m3}
-    964.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite Brick Foam 2x6 Steel Stud R19 #3,  !- Name
+  Smooth,                  !- Roughness
+  0.089,                   !- Thickness {m}
+  1.318,                   !- Conductivity {W/m-K}
+  1911.57,                 !- Density {kg/m3}
+  964.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 19
 ! Wall system is made of 12" 2-core concrete blocks without insulation.
@@ -492,44 +492,44 @@
 ! Total wall thickness = 11.625in (0.295m).
 ! Material layer names follow:
 
-  Construction,
-    Composite 2-Core Filled Concrete Block Uninsulated,  !- Name
-    Composite 2-Core Filled Concrete Block Uninsulated #3,  !- Outside Layer
-    Composite 2-Core Filled Concrete Block Uninsulated #2,  !- Layer 2
-    Composite 2-Core Filled Concrete Block Uninsulated #1;  !- Layer 3
+Construction,
+  Composite 2-Core Filled Concrete Block Uninsulated,  !- Name
+  Composite 2-Core Filled Concrete Block Uninsulated #3,  !- Outside Layer
+  Composite 2-Core Filled Concrete Block Uninsulated #2,  !- Layer 2
+  Composite 2-Core Filled Concrete Block Uninsulated #1;  !- Layer 3
 
-  Material,
-    Composite 2-Core Filled Concrete Block Uninsulated #1,  !- Name
-    MediumRough,             !- Roughness
-    0.079,                   !- Thickness {m}
-    1.378,                   !- Conductivity {W/m-K}
-    1731.45,                 !- Density {kg/m3}
-    838.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2-Core Filled Concrete Block Uninsulated #1,  !- Name
+  MediumRough,             !- Roughness
+  0.079,                   !- Thickness {m}
+  1.378,                   !- Conductivity {W/m-K}
+  1731.45,                 !- Density {kg/m3}
+  838.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2-Core Filled Concrete Block Uninsulated #2,  !- Name
-    Smooth,                  !- Roughness
-    0.127,                   !- Thickness {m}
-    1.065,                   !- Conductivity {W/m-K}
-    1031.57,                 !- Density {kg/m3}
-    419.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2-Core Filled Concrete Block Uninsulated #2,  !- Name
+  Smooth,                  !- Roughness
+  0.127,                   !- Thickness {m}
+  1.065,                   !- Conductivity {W/m-K}
+  1031.57,                 !- Density {kg/m3}
+  419.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2-Core Filled Concrete Block Uninsulated #3,  !- Name
-    MediumRough,             !- Roughness
-    0.089,                   !- Thickness {m}
-    1.437,                   !- Conductivity {W/m-K}
-    1647.86,                 !- Density {kg/m3}
-    838.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2-Core Filled Concrete Block Uninsulated #3,  !- Name
+  MediumRough,             !- Roughness
+  0.089,                   !- Thickness {m}
+  1.437,                   !- Conductivity {W/m-K}
+  1647.86,                 !- Density {kg/m3}
+  838.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
 ! ASHRAE 1145-RP Wall Assembly 20
 ! Wall system is made of 12" 2-core concrete blocks with 1.875"-thick
@@ -539,41 +539,41 @@
 ! Total wall thickness = 11.625in (0.295m).
 ! Material layer names follow:
 
-  Construction,
-    Composite 2-Core Filled Concrete Block Insulated,  !- Name
-    Composite 2-Core Filled Concrete Block Insulated #3,  !- Outside Layer
-    Composite 2-Core Filled Concrete Block Insulated #2,  !- Layer 2
-    Composite 2-Core Filled Concrete Block Insulated #1;  !- Layer 3
+Construction,
+  Composite 2-Core Filled Concrete Block Insulated,  !- Name
+  Composite 2-Core Filled Concrete Block Insulated #3,  !- Outside Layer
+  Composite 2-Core Filled Concrete Block Insulated #2,  !- Layer 2
+  Composite 2-Core Filled Concrete Block Insulated #1;  !- Layer 3
 
-  Material,
-    Composite 2-Core Filled Concrete Block Insulated #1,  !- Name
-    MediumRough,             !- Roughness
-    0.079,                   !- Thickness {m}
-    0.88,                    !- Conductivity {W/m-K}
-    1774.75,                 !- Density {kg/m3}
-    838.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2-Core Filled Concrete Block Insulated #1,  !- Name
+  MediumRough,             !- Roughness
+  0.079,                   !- Thickness {m}
+  0.88,                    !- Conductivity {W/m-K}
+  1774.75,                 !- Density {kg/m3}
+  838.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2-Core Filled Concrete Block Insulated #2,  !- Name
-    Smooth,                  !- Roughness
-    0.127,                   !- Thickness {m}
-    0.572,                   !- Conductivity {W/m-K}
-    346.61,                  !- Density {kg/m3}
-    838.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2-Core Filled Concrete Block Insulated #2,  !- Name
+  Smooth,                  !- Roughness
+  0.127,                   !- Thickness {m}
+  0.572,                   !- Conductivity {W/m-K}
+  346.61,                  !- Density {kg/m3}
+  838.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
 
-  Material,
-    Composite 2-Core Filled Concrete Block Insulated #3,  !- Name
-    MediumRough,             !- Roughness
-    0.089,                   !- Thickness {m}
-    0.973,                   !- Conductivity {W/m-K}
-    1862.66,                 !- Density {kg/m3}
-    838.0,                   !- Specific Heat {J/kg-K}
-    0.9,                     !- Thermal Absorptance
-    0.7,                     !- Solar Absorptance
-    0.7;                     !- Visible Absorptance
+Material,
+  Composite 2-Core Filled Concrete Block Insulated #3,  !- Name
+  MediumRough,             !- Roughness
+  0.089,                   !- Thickness {m}
+  0.973,                   !- Conductivity {W/m-K}
+  1862.66,                 !- Density {kg/m3}
+  838.0,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.7,                     !- Solar Absorptance
+  0.7;                     !- Visible Absorptance
