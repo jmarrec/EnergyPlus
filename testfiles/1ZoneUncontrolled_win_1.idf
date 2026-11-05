@@ -94,7 +94,7 @@
 
   Building,
     Simple One Zone w Windows,  !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.004,                   !- Temperature Convergence Tolerance Value {deltaC}
@@ -136,31 +136,31 @@
     Denver Stapleton Intl Arpt CO USA WMO=724690,  !- Name
     39.77,                   !- Latitude {deg}
     -104.87,                 !- Longitude {deg}
-    -7.00,                   !- Time Zone {hr}
-    1611.00;                 !- Elevation {m}
+    -7.0,                    !- Time Zone {hr}
+    1611.0;                  !- Elevation {m}
 
- ! Denver Stapleton Intl Arpt CO USA Annual Heating Design Conditions Wind Speed=2.3m/s Wind Dir=180
- ! Coldest Month=December
- ! Denver Stapleton Intl Arpt CO USA Annual Heating 99%, MaxDB=-16°C
+! Denver Stapleton Intl Arpt CO USA Annual Heating Design Conditions Wind Speed=2.3m/s Wind Dir=180
+! Coldest Month=December
+! Denver Stapleton Intl Arpt CO USA Annual Heating 99%, MaxDB=-16°C
 
   SizingPeriod:DesignDay,
     Denver Stapleton Intl Arpt Ann Htg 99% Condns DB,  !- Name
     12,                      !- Month
     21,                      !- Day of Month
     WinterDesignDay,         !- Day Type
-    -16,                     !- Maximum Dry-Bulb Temperature {C}
+    -16.0,                   !- Maximum Dry-Bulb Temperature {C}
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -16,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    -16.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    83411.,                  !- Barometric Pressure {Pa}
+    83411.0,                 !- Barometric Pressure {Pa}
     2.3,                     !- Wind Speed {m/s}
-    180,                     !- Wind Direction {deg}
+    180.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -169,11 +169,11 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
- ! Denver Stapleton Intl Arpt Annual Cooling Design Conditions Wind Speed=4m/s Wind Dir=120
- ! Hottest Month=July
- ! Denver Stapleton Intl Arpt CO USA Annual Cooling (DB=>MWB) 1%, MaxDB=32.6°C MWB=15.6°C
+! Denver Stapleton Intl Arpt Annual Cooling Design Conditions Wind Speed=4m/s Wind Dir=120
+! Hottest Month=July
+! Denver Stapleton Intl Arpt CO USA Annual Cooling (DB=>MWB) 1%, MaxDB=32.6°C MWB=15.6°C
 
   SizingPeriod:DesignDay,
     Denver Stapleton Intl Arpt Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -184,15 +184,15 @@
     15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     15.6,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    83411.,                  !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
+    83411.0,                 !- Barometric Pressure {Pa}
+    4.0,                     !- Wind Speed {m/s}
+    120.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -201,23 +201,23 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
   Material:NoMass,
     R13LAYER,                !- Name
     Rough,                   !- Roughness
     2.290965,                !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material:NoMass,
     R31LAYER,                !- Name
     Rough,                   !- Roughness
     5.456,                   !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     C5 - 4 IN HW CONCRETE,   !- Name
@@ -225,10 +225,10 @@
     0.1014984,               !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Construction,
     R13WALL,                 !- Name
@@ -250,24 +250,24 @@
 
   Zone,
     ZONE ONE,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   ScheduleTypeLimits,
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
   BuildingSurface:Detailed,
@@ -280,12 +280,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win001,    !- Name
@@ -293,14 +293,14 @@
     DoubleClear,             !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.548000,0,2.5000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.548000,0,0.5000,  !- X,Y,Z ==> Vertex 2 {m}
-    5.548000,0,0.5000,  !- X,Y,Z ==> Vertex 3 {m}
-    5.548000,0,2.5000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.548,0.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}
+    0.548,0.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}
+    5.548,0.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}
+    5.548,0.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall002,           !- Name
@@ -312,12 +312,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    15.24000,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall003,           !- Name
@@ -329,12 +329,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    15.24000,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall004,           !- Name
@@ -346,12 +346,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Flr001,            !- Name
@@ -363,12 +363,12 @@
     Zn001:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    15.24000,0.000000,0.0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,15.24000,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,15.24000,0.0;  !- X,Y,Z ==> Vertex 4 {m}
+    15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24,15.24,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Roof001,           !- Name
@@ -380,52 +380,51 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,15.24000,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,4.572,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24000,0.000000,4.572,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,15.24000,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;
 
-  Output:Variable,*,Zone Mean Air Temperature,timestep;
+  Output:Variable,*,Zone Mean Air Temperature,Timestep;
 
-  Output:Variable,*,Enclosure Windows Total Transmitted Solar Radiation Rate,timestep;
+  Output:Variable,*,Enclosure Windows Total Transmitted Solar Radiation Rate,Timestep;
 
-  Output:Variable,ZN001:WALL001,Surface Outside Face Incident Solar Radiation Rate per Area,timestep;
+  Output:Variable,ZN001:WALL001,Surface Outside Face Incident Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,ZN001:WALL001,Surface Outside Face Sunlit Fraction,timestep;
+  Output:Variable,ZN001:WALL001,Surface Outside Face Sunlit Fraction,Timestep;
 
-  Output:Variable,ZN001:WALL001,Surface Inside Face Temperature,timestep;
+  Output:Variable,ZN001:WALL001,Surface Inside Face Temperature,Timestep;
 
-  Output:Variable,ZN001:WALL001,Surface Outside Face Temperature,timestep;
+  Output:Variable,ZN001:WALL001,Surface Outside Face Temperature,Timestep;
 
-  Output:Variable,ZN001:WALL001:WIN001,Surface Outside Face Incident Solar Radiation Rate per Area,timestep;
+  Output:Variable,ZN001:WALL001:WIN001,Surface Outside Face Incident Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,ZN001:WALL001:WIN001,Surface Outside Face Sunlit Fraction,timestep;
+  Output:Variable,ZN001:WALL001:WIN001,Surface Outside Face Sunlit Fraction,Timestep;
 
-  Output:Variable,ZN001:WALL001:WIN001,Surface Window Transmitted Solar Radiation Rate,timestep;
+  Output:Variable,ZN001:WALL001:WIN001,Surface Window Transmitted Solar Radiation Rate,Timestep;
 
-  Output:Variable,ZN001:WALL001:WIN001,Surface Inside Face Temperature,timestep;
+  Output:Variable,ZN001:WALL001:WIN001,Surface Inside Face Temperature,Timestep;
 
-  Output:Variable,ZN001:WALL001:WIN001,Surface Outside Face Temperature,timestep;
+  Output:Variable,ZN001:WALL001:WIN001,Surface Outside Face Temperature,Timestep;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
+  Output:Surfaces:Drawing,DXF;
 
-  Output:Surfaces:List,details;
+  Output:Surfaces:List,Details;
 
   Output:Constructions,Constructions;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Building,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Building,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,Hourly;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
-

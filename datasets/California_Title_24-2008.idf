@@ -41,7 +41,7 @@
     ,                        !- Lighting Level {W}
     15.15,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -55,9 +55,9 @@
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Auditoriums,             !- Name
@@ -105,7 +105,7 @@
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -119,9 +119,9 @@
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Classroom Building,      !- Name
@@ -158,7 +158,7 @@
     ,                        !- People per Floor Area {person/m2}
     18.58,                   !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.40,                    !- Sensible Heat Fraction
+    0.4,                     !- Sensible Heat Fraction
     ActSchd197;              !- Activity Level Schedule Name
 
   Lights,
@@ -169,7 +169,7 @@
     ,                        !- Lighting Level {W}
     6.46,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -183,9 +183,9 @@
     ,                        !- Design Level {W}
     4.63,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Commercial and Industrial Building,  !- Name
@@ -233,7 +233,7 @@
     ,                        !- Lighting Level {W}
     12.92,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -247,9 +247,9 @@
     ,                        !- Design Level {W}
     10.33,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Convention Centers,      !- Name
@@ -286,7 +286,7 @@
     ,                        !- People per Floor Area {person/m2}
     9.29,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.50,                    !- Sensible Heat Fraction
+    0.5,                     !- Sensible Heat Fraction
     ActSchd146;              !- Activity Level Schedule Name
 
   Lights,
@@ -297,7 +297,7 @@
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -311,9 +311,9 @@
     ,                        !- Design Level {W}
     16.15,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Financial Institutions,  !- Name
@@ -361,7 +361,7 @@
     ,                        !- Lighting Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -375,9 +375,9 @@
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     General Commercial and Industrial Work Buildings,  !- Name
@@ -412,7 +412,7 @@
     Area/Person,             !- Number of People Calculation Method
     ,                        !- Number of People
     ,                        !- People per Floor Area {person/m2}
-    3.20,                    !- Floor Area per Person {m2/person}
+    3.2,                     !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
     0.53,                    !- Sensible Heat Fraction
     ActSchd140;              !- Activity Level Schedule Name
@@ -425,7 +425,7 @@
     ,                        !- Lighting Level {W}
     16.15,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -437,11 +437,11 @@
     EQP-SCHED-BldgAvg,       !- Schedule Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
-    9.80,                    !- Watts per Floor Area {W/m2}
+    9.8,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Grocery Stores,          !- Name
@@ -478,7 +478,7 @@
     ,                        !- People per Floor Area {person/m2}
     9.29,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.50,                    !- Sensible Heat Fraction
+    0.5,                     !- Sensible Heat Fraction
     ActSchd146;              !- Activity Level Schedule Name
 
   Lights,
@@ -489,7 +489,7 @@
     ,                        !- Lighting Level {W}
     13.99,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -503,9 +503,9 @@
     ,                        !- Design Level {W}
     16.15,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Library,                 !- Name
@@ -553,7 +553,7 @@
     ,                        !- Lighting Level {W}
     11.84,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -567,9 +567,9 @@
     ,                        !- Design Level {W}
     12.7,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Medical Buildings and Clinics,  !- Name
@@ -617,7 +617,7 @@
     ,                        !- Lighting Level {W}
     9.15,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -631,9 +631,9 @@
     ,                        !- Design Level {W}
     14.43,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Office Buildings,        !- Name
@@ -681,7 +681,7 @@
     ,                        !- Lighting Level {W}
     17.22,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -695,9 +695,9 @@
     ,                        !- Design Level {W}
     10.33,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Religious Facilities,    !- Name
@@ -745,7 +745,7 @@
     ,                        !- Lighting Level {W}
     12.92,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -757,11 +757,11 @@
     EQP-SCHED-BldgAvg,       !- Schedule Name
     Watts/Area,              !- Design Level Calculation Method
     ,                        !- Design Level {W}
-    8.50,                    !- Watts per Floor Area {W/m2}
+    8.5,                     !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Restaurants,             !- Name
@@ -809,7 +809,7 @@
     ,                        !- Lighting Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -823,9 +823,9 @@
     ,                        !- Design Level {W}
     10.77,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Schools,                 !- Name
@@ -862,7 +862,7 @@
     ,                        !- People per Floor Area {person/m2}
     0.71,                    !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
-    0.40,                    !- Sensible Heat Fraction
+    0.4,                     !- Sensible Heat Fraction
     ActSchd197;              !- Activity Level Schedule Name
 
   Lights,
@@ -873,7 +873,7 @@
     ,                        !- Lighting Level {W}
     13.99,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -887,9 +887,9 @@
     ,                        !- Design Level {W}
     5.81,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Theaters,                !- Name
@@ -933,27 +933,27 @@
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
     Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
     Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
     Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     Humidity,                !- Name
-    10,                      !- Lower Limit Value
-    90,                      !- Upper Limit Value
+    10.0,                    !- Lower Limit Value
+    90.0,                    !- Upper Limit Value
     Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
@@ -961,11 +961,11 @@
 
 !  Occupancy schedule
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     OCC-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.,         !- Field 3
     Until:  5:00,0.05,       !- Field 5
     Until:  6:00,0.1,        !- Field 7
@@ -984,16 +984,16 @@
     Until: 17:00,0.15,       !- Field 32
     Until: 20:00,0.05,       !- Field 34
     Until: 24:00,0.,         !- Field 36
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 38
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 38
     Until:  7:00,0.,         !- Field 39
     Until: 20:00,0.05,       !- Field 41
     Until: 24:00,0.;         !- Field 43
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.05,       !- Field 3
     Until:  5:00,0.1,        !- Field 5
     Until:  6:00,0.2,        !- Field 7
@@ -1013,18 +1013,18 @@
     Until: 17:00,0.2,        !- Field 34
     Until: 18:00,0.15,       !- Field 36
     Until: 24:00,0.1,        !- Field 38
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 40
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 40
     Until:  5:00,0.05,       !- Field 41
     Until:  7:00,0.1,        !- Field 43
     Until:  17:00,0.15,      !- Field 45
     Until:  20:00,0.1,       !- Field 47
     Until:  24:00,0.05;      !- Field 49
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT_BiLevel-SCHED,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.04,       !- Field 3
     Until:  5:00,0.08,       !- Field 5
     Until:  6:00,0.15,       !- Field 7
@@ -1053,7 +1053,7 @@
     Until:  21:00,0.08,      !- Field 52
     Until:  23:00,0.07,      !- Field 54
     Until:  24:00,0.08,      !- Field 56
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 58
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 58
     Until:  5:00,0.04,       !- Field 59
     Until:  7:00,0.08,       !- Field 61
     Until:  8:00,0.12,       !- Field 63
@@ -1062,11 +1062,11 @@
     Until:  20:00,0.08,      !- Field 69
     Until:  24:00,0.04;      !- Field 71
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT_Stack-SCHED,         !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.04,       !- Field 3
     Until:  5:00,0.09,       !- Field 5
     Until:  6:00,0.17,       !- Field 7
@@ -1085,18 +1085,18 @@
     Until: 17:00,0.17,       !- Field 32
     Until: 18:00,0.13,       !- Field 34
     Until: 24:00,0.09,       !- Field 36
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 38
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 38
     Until:  5:00,0.04,       !- Field 39
     Until:  7:00,0.09,       !- Field 41
     Until:  17:00,0.13,      !- Field 43
     Until:  20:00,0.09,      !- Field 45
     Until:  24:00,0.04;      !- Field 47
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT_Library-SCHED,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.04,       !- Field 3
     Until:  5:00,0.08,       !- Field 5
     Until:  6:00,0.16,       !- Field 7
@@ -1121,18 +1121,18 @@
     Until: 17:00,0.17,       !- Field 44
     Until: 18:00,0.13,       !- Field 46
     Until: 24:00,0.09,       !- Field 48
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 50
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 50
     Until:  5:00,0.04,       !- Field 51
     Until:  7:00,0.09,       !- Field 53
     Until:  17:00,0.13,      !- Field 55
     Until:  20:00,0.09,      !- Field 57
     Until:  24:00,0.04;      !- Field 59
 
-  SCHEDULE:COMPACT,
-    LIT_ManualDimming-SCHED, !- Name
+  Schedule:Compact,
+    LIT_ManualDimming-SCHED,  !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.05,       !- Field 3
     Until:  5:00,0.09,       !- Field 5
     Until:  6:00,0.18,       !- Field 7
@@ -1151,18 +1151,18 @@
     Until: 17:00,0.18,       !- Field 32
     Until: 18:00,0.14,       !- Field 34
     Until: 24:00,0.09,       !- Field 36
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 38
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 38
     Until:  5:00,0.05,       !- Field 39
     Until:  7:00,0.09,       !- Field 41
     Until:  17:00,0.14,      !- Field 43
     Until:  20:00,0.09,      !- Field 45
     Until:  24:00,0.05;      !- Field 47
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT_ProgramMulti-SCHED,  !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.04,       !- Field 3
     Until:  5:00,0.08,       !- Field 5
     Until:  6:00,0.16,       !- Field 7
@@ -1181,18 +1181,18 @@
     Until: 17:00,0.16,       !- Field 32
     Until: 18:00,0.12,       !- Field 34
     Until: 24:00,0.08,       !- Field 36
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 38
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 38
     Until:  5:00,0.04,       !- Field 39
     Until:  7:00,0.08,       !- Field 41
     Until:  17:00,0.12,      !- Field 43
     Until:  20:00,0.08,      !- Field 45
     Until:  24:00,0.04;      !- Field 47
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT_CombinedDaylight-SCHED,  !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.04,       !- Field 3
     Until:  5:00,0.08,       !- Field 5
     Until:  6:00,0.15,       !- Field 7
@@ -1222,7 +1222,7 @@
     Until: 21:00,0.08,       !- Field 54
     Until: 23:00,0.07,       !- Field 56
     Until: 24:00,0.08,       !- Field 58
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 60
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 60
     Until:  5:00,0.04,       !- Field 61
     Until:  7:00,0.08,       !- Field 63
     Until:  8:00,0.12,       !- Field 65
@@ -1231,11 +1231,11 @@
     Until:  20:00,0.08,      !- Field 71
     Until:  24:00,0.04;      !- Field 73
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT_CombinedDimming-SCHED,  !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.04,       !- Field 3
     Until:  5:00,0.07,       !- Field 5
     Until:  6:00,0.14,       !- Field 7
@@ -1261,7 +1261,7 @@
     Until: 17:00,0.15,       !- Field 46
     Until: 18:00,0.11,       !- Field 48
     Until: 24:00,0.07,       !- Field 50
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 52
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 52
     Until:  5:00,0.04,       !- Field 53
     Until:  7:00,0.07,       !- Field 55
     Until:  8:00,0.11,       !- Field 57
@@ -1272,11 +1272,11 @@
     Until:  20:00,0.07,      !- Field 67
     Until:  24:00,0.03;      !- Field 69
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     EQP-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  5:00,0.15,       !- Field 3
     Until:  6:00,0.2,        !- Field 5
     Until:  7:00,0.35,       !- Field 7
@@ -1293,16 +1293,16 @@
     Until: 14:00,0.25,       !- Field 28
     Until: 17:00,0.2,        !- Field 30
     Until: 24:00,0.15,       !- Field 32
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 34
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 34
     Until:  7:00,0.15,       !- Field 35
     Until: 17:00,0.2,        !- Field 37
     Until: 24:00,0.15;       !- Field 39
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     INF-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  5:00,1.0,        !- Field 3
     Until: 20:00,0.0,        !- Field 5
     Until: 24:00,1.0,        !- Field 7
@@ -1310,14 +1310,14 @@
     Until:  5:00,1.0,        !- Field 10
     Until: 15:00,0.0,        !- Field 12
     Until: 24:00,1.0,        !- Field 14
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 16
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 16
     Until: 24:00,1.0;        !- Field 17
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     FAN-SCHED-BldgAvg,       !- Name
     On/Off,                  !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  5:00,0.,         !- Field 3
     Until: 20:00,1.,         !- Field 5
     Until: 24:00,0.,         !- Field 7
@@ -1325,25 +1325,25 @@
     Until:  5:00,0.,         !- Field 10
     Until: 15:00,1.,         !- Field 12
     Until: 24:00,0.,         !- Field 14
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 16
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 16
     Until: 24:00,0.;         !- Field 17
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     HTG-SCHED-BldgAvg,       !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  5:00,15.6,       !- Field 3
     Until:  7:00,18.3,       !- Field 5
     Until: 18:00,21.1,       !- Field 7
     Until: 19:00,18.3,       !- Field 9
     Until: 24:00,15.6,       !- Field 11
-    For: Weekends Holidays WinterDesignDay AllOtherDays, !- Field 13
+    For: Weekends Holidays WinterDesignDay AllOtherDays,  !- Field 13
     Until:  5:00,15.6,       !- Field 14
     Until: 16:00,18.3,       !- Field 16
     Until: 24:00,15.6;       !- Field 18
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     CLG-SCHED-BldgAvg,       !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
@@ -1352,11 +1352,11 @@
     Until: 18:00,22.8,       !- Field 5
     Until: 24:00,25.0;       !- Field 7
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     DHW-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.,         !- Field 3
     Until:  6:00,0.1,        !- Field 5
     Until: 10:00,0.5,        !- Field 7
@@ -1373,87 +1373,86 @@
     Until: 17:00,0.2,        !- Field 28
     Until: 20:00,0.1,        !- Field 30
     Until: 24:00,0.,         !- Field 32
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 34
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 34
     Until:  7:00,0.,         !- Field 35
     Until: 20:00,0.1,        !- Field 37
     Until: 24:00,0.;         !- Field 39
 
 ! People activity schedules
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd103,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,103;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd105,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,105;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd122,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,122;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd132,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,132;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd134,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,134;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd136,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,136;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd140,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,140;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd146,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,146;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd178,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,178;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd197,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,197;        !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd293,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
     Until: 24:00,293;        !- Field 3
-

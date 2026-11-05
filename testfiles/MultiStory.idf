@@ -94,14 +94,14 @@
     6;                       !- Minimum Number of Warmup Days
 
   Site:WeatherStation,
-    30,                      !- Wind Sensor Height Above Ground {m}
+    30.0,                    !- Wind Sensor Height Above Ground {m}
     0.33,                    !- Wind Speed Profile Exponent
-    460,                     !- Wind Speed Profile Boundary Layer Thickness {m}
-    30;                      !- Air Temperature Sensor Height Above Ground {m}
+    460.0,                   !- Wind Speed Profile Boundary Layer Thickness {m}
+    30.0;                    !- Air Temperature Sensor Height Above Ground {m}
 
   Site:HeightVariation,
     0.33,                    !- Wind Speed Profile Exponent
-    460,                     !- Wind Speed Profile Boundary Layer Thickness {m}
+    460.0,                   !- Wind Speed Profile Boundary Layer Thickness {m}
     0.0065;                  !- Air Temperature Gradient Coefficient {K/m}
 
   SizingPeriod:WeatherFileDays,
@@ -129,22 +129,22 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     Chicago Ohare Intl Ap IL USA WMO=725300,  !- Name
     41.99,                   !- Latitude {deg}
     -87.91,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    205.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    205.0;                   !- Elevation {m}
 
   Sizing:Parameters,
     1.2,                     !- Heating Sizing Factor
     1.2,                     !- Cooling Sizing Factor
     ;                        !- Timesteps in Averaging Window
 
- ! Chicago Ohare Intl Ap IL USA Annual Heating 99%, MaxDB=-16.6°C
+! Chicago Ohare Intl Ap IL USA Annual Heating 99%, MaxDB=-16.6°C
 
   SizingPeriod:DesignDay,
     Chicago Ohare Intl Ap Ann Htg 99% Condns DB,  !- Name
@@ -155,15 +155,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -16.6,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
+    98886.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -172,9 +172,9 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
- ! Chicago Ohare Intl Ap IL USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.6°C MWB=23°C
+! Chicago Ohare Intl Ap IL USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.6°C MWB=23°C
 
   SizingPeriod:DesignDay,
     Chicago Ohare Intl Ap Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -185,15 +185,15 @@
     10.5,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
+    98886.0,                 !- Barometric Pressure {Pa}
     5.2,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -202,7 +202,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
   RunPeriod,
     Run Period 1,            !- Name
@@ -220,35 +220,35 @@
     Yes;                     !- Use Weather File Snow Indicators
 
   SimulationControl,
-    YES,                     !- Do Zone Sizing Calculation
-    NO,                      !- Do System Sizing Calculation
-    NO,                      !- Do Plant Sizing Calculation
-    NO,                      !- Run Simulation for Sizing Periods
-    YES,                     !- Run Simulation for Weather File Run Periods
+    Yes,                     !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    No,                      !- Run Simulation for Sizing Periods
+    Yes,                     !- Run Simulation for Weather File Run Periods
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
   Material,
     A1 - 1 IN STUCCO,        !- Name
     Smooth,                  !- Roughness
-    2.5389841E-02,           !- Thickness {m}
+    0.025389841,             !- Thickness {m}
     0.6918309,               !- Conductivity {W/m-K}
     1858.142,                !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.92,                    !- Solar Absorptance
     0.92;                    !- Visible Absorptance
 
   Material,
     C2 - 4 IN LW CONCRETE BLOCK,  !- Name
     MediumRough,             !- Roughness
-    0.1000000,               !- Thickness {m}
-    0.3800000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.1,                     !- Thickness {m}
+    0.38,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     C4 - 4 IN COMMON BRICK,  !- Name
@@ -257,18 +257,18 @@
     0.7264224,               !- Conductivity {W/m-K}
     1922.216,                !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.76,                    !- Solar Absorptance
     0.76;                    !- Visible Absorptance
 
   Material,
     E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    1.9050000E-02,           !- Thickness {m}
+    0.01905,                 !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1601.846,                !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.92,                    !- Solar Absorptance
     0.92;                    !- Visible Absorptance
 
@@ -279,7 +279,7 @@
     0.5707605,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.82,                    !- Solar Absorptance
     0.82;                    !- Visible Absorptance
 
@@ -290,101 +290,101 @@
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.65,                    !- Solar Absorptance
     0.65;                    !- Visible Absorptance
 
   Material,
     E2 - 1 / 2 IN SLAG OR STONE,  !- Name
     Rough,                   !- Roughness
-    1.2710161E-02,           !- Thickness {m}
+    0.012710161,             !- Thickness {m}
     1.435549,                !- Conductivity {W/m-K}
     881.0155,                !- Density {kg/m3}
     1673.6,                  !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.55,                    !- Solar Absorptance
     0.55;                    !- Visible Absorptance
 
   Material,
     E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
     Rough,                   !- Roughness
-    9.5402403E-03,           !- Thickness {m}
+    0.0095402403,            !- Thickness {m}
     0.1902535,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
     1673.6,                  !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.75,                    !- Solar Absorptance
     0.75;                    !- Visible Absorptance
 
   Material,
     B5 - 1 IN DENSE INSULATION,  !- Name
     VeryRough,               !- Roughness
-    2.5389841E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.025389841,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     91.30524,                !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
-    0.50,                    !- Solar Absorptance
-    0.50;                    !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C12 - 2 IN HW CONCRETE,  !- Name
     MediumRough,             !- Roughness
-    5.0901599E-02,           !- Thickness {m}
+    0.050901599,             !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    0.9,                     !- Thermal Absorptance
     0.65,                    !- Solar Absorptance
     0.65;                    !- Visible Absorptance
 
   Material,
     ROOFING - ASPHALT SHINGLES,  !- Name
     VeryRough,               !- Roughness
-    3.1999999E-03,           !- Thickness {m}
-    2.9999999E-02,           !- Conductivity {W/m-K}
+    0.0031999999,            !- Thickness {m}
+    0.029999999,             !- Conductivity {W/m-K}
     1121.29,                 !- Density {kg/m3}
     830.0,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
-    0.70,                    !- Solar Absorptance
-    0.70;                    !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
 
   Material,
-    BB46 - 5 / 8 IN PLYWOOD, !- Name
+    BB46 - 5 / 8 IN PLYWOOD,  !- Name
     Smooth,                  !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    0.110,                   !- Conductivity {W/m-K}
+    0.0099999998,            !- Thickness {m}
+    0.11,                    !- Conductivity {W/m-K}
     544.62,                  !- Density {kg/m3}
     1210.0,                  !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
-    0.70,                    !- Solar Absorptance
-    0.70;                    !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
 
   Material,
     INS - GLASS FIBER BONDED 3 IN,  !- Name
     VeryRough,               !- Roughness
-    7.000E-02,               !- Thickness {m}
-    2.9999999E-02,           !- Conductivity {W/m-K}
+    0.07,                    !- Thickness {m}
+    0.029999999,             !- Conductivity {W/m-K}
     96.11,                   !- Density {kg/m3}
     790.0,                   !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
-    0.50,                    !- Solar Absorptance
-    0.50;                    !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material:AirGap,
     E4 - CEILING AIRSPACE,   !- Name
-    0.1700000;               !- Thermal Resistance {m2-K/W}
+    0.17;                    !- Thermal Resistance {m2-K/W}
 
   Material,
     E5 - ACOUSTIC TILE,      !- Name
     MediumSmooth,            !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    5.9999999E-02,           !- Conductivity {W/m-K}
-    480.5500,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.3200000,               !- Solar Absorptance
-    0.3200000;               !- Visible Absorptance
+    0.0099999998,            !- Thickness {m}
+    0.059999999,             !- Conductivity {W/m-K}
+    480.55,                  !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.32,                    !- Solar Absorptance
+    0.32;                    !- Visible Absorptance
 
   WindowMaterial:Glazing,
     CLEAR GLASS,             !- Name
@@ -392,15 +392,15 @@
     ,                        !- Window Glass Spectral Data Set Name
     0.003,                   !- Thickness {m}
     0.837,                   !- Solar Transmittance at Normal Incidence
-    7.50E-02,                !- Front Side Solar Reflectance at Normal Incidence
-    7.50E-02,                !- Back Side Solar Reflectance at Normal Incidence
+    0.075,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.075,                   !- Back Side Solar Reflectance at Normal Incidence
     0.898,                   !- Visible Transmittance at Normal Incidence
-    8.10E-02,                !- Front Side Visible Reflectance at Normal Incidence
-    8.10E-02,                !- Back Side Visible Reflectance at Normal Incidence
+    0.081,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.081,                   !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
     0.84,                    !- Front Side Infrared Hemispherical Emissivity
     0.84,                    !- Back Side Infrared Hemispherical Emissivity
-    0.90;                    !- Conductivity {W/m-K}
+    0.9;                     !- Conductivity {W/m-K}
 
   Construction,
     Ext Wall,                !- Name
@@ -428,7 +428,7 @@
     Roof,                    !- Name
     ROOFING - ASPHALT SHINGLES,  !- Outside Layer
     E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Layer 2
-    BB46 - 5 / 8 IN PLYWOOD; !- Layer 3
+    BB46 - 5 / 8 IN PLYWOOD;  !- Layer 3
 
   Construction,
     Single Pane Window,      !- Name
@@ -454,7 +454,7 @@
     ,                        !- Lighting Level {W}
     9.15,                    !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.42,                    !- Fraction Radiant
     0.18,                    !- Fraction Visible
     ,                        !- Fraction Replaceable
@@ -468,9 +468,9 @@
     ,                        !- Design Level {W}
     14.43,                   !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   HotWaterEquipment,
     Office Buildings,        !- Name
@@ -494,11 +494,11 @@
     1.0,                     !- Upper Limit Value
     Continuous;              !- Numeric Type
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     OCC-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.,         !- Field 3
     Until:  5:00,0.05,       !- Field 5
     Until:  6:00,0.1,        !- Field 7
@@ -517,16 +517,16 @@
     Until: 17:00,0.15,       !- Field 32
     Until: 20:00,0.05,       !- Field 34
     Until: 24:00,0.,         !- Field 36
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 38
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 38
     Until:  7:00,0.,         !- Field 39
     Until: 20:00,0.05,       !- Field 41
     Until: 24:00,0.;         !- Field 43
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     LIT-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.05,       !- Field 3
     Until:  5:00,0.1,        !- Field 5
     Until:  6:00,0.2,        !- Field 7
@@ -546,18 +546,18 @@
     Until: 17:00,0.2,        !- Field 34
     Until: 18:00,0.15,       !- Field 36
     Until: 24:00,0.1,        !- Field 38
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 40
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 40
     Until:  5:00,0.05,       !- Field 41
     Until:  7:00,0.1,        !- Field 43
     Until:  17:00,0.15,      !- Field 45
     Until:  20:00,0.1,       !- Field 47
     Until:  24:00,0.05;      !- Field 49
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     EQP-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  5:00,0.15,       !- Field 3
     Until:  6:00,0.2,        !- Field 5
     Until:  7:00,0.35,       !- Field 7
@@ -574,16 +574,16 @@
     Until: 14:00,0.25,       !- Field 28
     Until: 17:00,0.2,        !- Field 30
     Until: 24:00,0.15,       !- Field 32
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 34
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 34
     Until:  7:00,0.15,       !- Field 35
     Until: 17:00,0.2,        !- Field 37
     Until: 24:00,0.15;       !- Field 39
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     DHW-SCHED-BldgAvg,       !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until:  4:00,0.,         !- Field 3
     Until:  6:00,0.1,        !- Field 5
     Until: 10:00,0.5,        !- Field 7
@@ -600,12 +600,12 @@
     Until: 17:00,0.2,        !- Field 28
     Until: 20:00,0.1,        !- Field 30
     Until: 24:00,0.,         !- Field 32
-    For: Sunday Holidays WinterDesignDay AllOtherDays, !- Field 34
+    For: Sunday Holidays WinterDesignDay AllOtherDays,  !- Field 34
     Until:  7:00,0.,         !- Field 35
     Until: 20:00,0.1,        !- Field 37
     Until: 24:00,0.;         !- Field 39
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ActSchd134,              !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
@@ -643,12 +643,12 @@
     0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Gnd West S Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -665,7 +665,7 @@
 
   BuildingSurface:Detailed,
     Gnd West W Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -682,7 +682,7 @@
 
   BuildingSurface:Detailed,
     Gnd West N Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -699,7 +699,7 @@
 
   BuildingSurface:Detailed,
     Gnd West E Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -716,7 +716,7 @@
 
   BuildingSurface:Detailed,
     Gnd West Floor,          !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor Slab,              !- Construction Name
     Gnd West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -733,7 +733,7 @@
 
   BuildingSurface:Detailed,
     Gnd West Ceiling,        !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     Ceiling,                 !- Construction Name
     Gnd West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -750,7 +750,7 @@
 
   FenestrationSurface:Detailed,
     Gnd West S Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd West S Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -765,7 +765,7 @@
 
   FenestrationSurface:Detailed,
     Gnd West N Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd West N Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -779,8 +779,8 @@
     1.0,6.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Gnd West W Wall Windows, !- Name
-    WINDOW,                  !- Surface Type
+    Gnd West W Wall Windows,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd West W Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -796,10 +796,10 @@
   Sizing:Zone,
     Gnd West Zone,           !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -819,8 +819,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -831,7 +831,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA Gnd West Zone,   !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -839,7 +839,7 @@
   ZoneHVAC:EquipmentConnections,
     Gnd West Zone,           !- Zone Name
     Gnd West Equipment,      !- Zone Conditioning Equipment List Name
-    Gnd West AC Outlet Node, !- Zone Air Inlet Node or NodeList Name
+    Gnd West AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
     Gnd West AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Gnd West Air Node,       !- Zone Air Node Name
     Gnd West Return Node;    !- Zone Return Air Node or NodeList Name
@@ -850,7 +850,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Gnd West Equipment,      !- Name
@@ -871,10 +871,10 @@
   ZoneHVAC:WindowAirConditioner,
     Gnd West Window AC,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
     Gnd West AC Inlet Node,  !- Air Inlet Node Name
-    Gnd West AC Outlet Node, !- Air Outlet Node Name
+    Gnd West AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Gnd West OA Mixer,       !- Outdoor Air Mixer Name
     Fan:OnOff,               !- Supply Air Fan Object Type
@@ -908,7 +908,7 @@
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Gnd West Mixed Node,     !- Air Inlet Node Name
@@ -917,14 +917,14 @@
   Coil:Cooling:DX:SingleSpeed,
     Gnd West OA DX Coil,     !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Gnd West OA Fan Outlet Node,  !- Air Inlet Node Name
-    Gnd West AC Outlet Node, !- Air Outlet Node Name
+    Gnd West AC Outlet Node,  !- Air Outlet Node Name
     WindACCoolCapFT,         !- Total Cooling Capacity Function of Temperature Curve Name
     WindACCoolCapFFF,        !- Total Cooling Capacity Function of Flow Fraction Curve Name
     WindACEIRFT,             !- Energy Input Ratio Function of Temperature Curve Name
@@ -938,7 +938,7 @@
     Gnd West Baseboard,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -951,12 +951,12 @@
     0.0,                     !- Z Origin {m}
     1,                       !- Type
     4,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Gnd Center S Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -973,7 +973,7 @@
 
   BuildingSurface:Detailed,
     Gnd Center W Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -990,7 +990,7 @@
 
   BuildingSurface:Detailed,
     Gnd Center N Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1007,7 +1007,7 @@
 
   BuildingSurface:Detailed,
     Gnd Center E Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1024,7 +1024,7 @@
 
   BuildingSurface:Detailed,
     Gnd Center Floor,        !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor Slab,              !- Construction Name
     Gnd Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1041,7 +1041,7 @@
 
   BuildingSurface:Detailed,
     Gnd Center Ceiling,      !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     Ceiling,                 !- Construction Name
     Gnd Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1057,8 +1057,8 @@
     4.0,6.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Gnd Center S Wall Window,!- Name
-    WINDOW,                  !- Surface Type
+    Gnd Center S Wall Window,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd Center S Wall,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1072,8 +1072,8 @@
     3.0,0.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Gnd Center N Wall Window,!- Name
-    WINDOW,                  !- Surface Type
+    Gnd Center N Wall Window,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd Center N Wall,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1089,14 +1089,14 @@
   Sizing:Zone,
     Gnd Center Zone,         !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-    SZ DSOA Gnd Center Zone, !- Design Specification Outdoor Air Object Name
+    SZ DSOA Gnd Center Zone,  !- Design Specification Outdoor Air Object Name
     1.2,                     !- Zone Heating Sizing Factor
     1.2,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
@@ -1112,8 +1112,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1123,8 +1123,8 @@
     ;                        !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
 
   DesignSpecification:OutdoorAir,
-    SZ DSOA Gnd Center Zone, !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    SZ DSOA Gnd Center Zone,  !- Name
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -1133,7 +1133,7 @@
     Gnd Center Zone,         !- Zone Name
     Gnd Center Equipment,    !- Zone Conditioning Equipment List Name
     Gnd Center AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
-    Gnd Center AC Inlet Node,!- Zone Air Exhaust Node or NodeList Name
+    Gnd Center AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Gnd Center Air Node,     !- Zone Air Node Name
     Gnd Center Return Node;  !- Zone Return Air Node or NodeList Name
 
@@ -1143,7 +1143,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Gnd Center Equipment,    !- Name
@@ -1164,9 +1164,9 @@
   ZoneHVAC:WindowAirConditioner,
     Gnd Center Window AC,    !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
-    Gnd Center AC Inlet Node,!- Air Inlet Node Name
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Gnd Center AC Inlet Node,  !- Air Inlet Node Name
     Gnd Center AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Gnd Center OA Mixer,     !- Outdoor Air Mixer Name
@@ -1183,7 +1183,7 @@
     Gnd Center Mixed Node,   !- Mixed Air Node Name
     Gnd Center OA Node,      !- Outdoor Air Stream Node Name
     Gnd Center Relief Node,  !- Relief Air Stream Node Name
-    Gnd Center AC Inlet Node;!- Return Air Stream Node Name
+    Gnd Center AC Inlet Node;  !- Return Air Stream Node Name
 
   OutdoorAir:Node,
     Gnd Center OA Node,      !- Name
@@ -1194,7 +1194,7 @@
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Gnd Center Mixed Node,   !- Air Inlet Node Name
@@ -1203,10 +1203,10 @@
   Coil:Cooling:DX:SingleSpeed,
     Gnd Center OA DX Coil,   !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Gnd Center OA Fan Outlet Node,  !- Air Inlet Node Name
@@ -1224,7 +1224,7 @@
     Gnd Center Baseboard,    !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -1237,12 +1237,12 @@
     0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Gnd East S Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1259,7 +1259,7 @@
 
   BuildingSurface:Detailed,
     Gnd East W Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1276,7 +1276,7 @@
 
   BuildingSurface:Detailed,
     Gnd East N Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1293,7 +1293,7 @@
 
   BuildingSurface:Detailed,
     Gnd East E Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Gnd East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1310,7 +1310,7 @@
 
   BuildingSurface:Detailed,
     Gnd East Floor,          !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor Slab,              !- Construction Name
     Gnd East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1327,7 +1327,7 @@
 
   BuildingSurface:Detailed,
     Gnd East Ceiling,        !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     Ceiling,                 !- Construction Name
     Gnd East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1344,7 +1344,7 @@
 
   FenestrationSurface:Detailed,
     Gnd East S Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd East S Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1359,7 +1359,7 @@
 
   FenestrationSurface:Detailed,
     Gnd East N Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd East N Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1373,8 +1373,8 @@
     1.0,6.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Gnd East E Wall Windows, !- Name
-    WINDOW,                  !- Surface Type
+    Gnd East E Wall Windows,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Gnd East E Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1390,10 +1390,10 @@
   Sizing:Zone,
     Gnd East Zone,           !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1413,8 +1413,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1425,7 +1425,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA Gnd East Zone,   !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -1433,7 +1433,7 @@
   ZoneHVAC:EquipmentConnections,
     Gnd East Zone,           !- Zone Name
     Gnd East Equipment,      !- Zone Conditioning Equipment List Name
-    Gnd East AC Outlet Node, !- Zone Air Inlet Node or NodeList Name
+    Gnd East AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
     Gnd East AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Gnd East Air Node,       !- Zone Air Node Name
     Gnd East Return Node;    !- Zone Return Air Node or NodeList Name
@@ -1444,7 +1444,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Gnd East Equipment,      !- Name
@@ -1465,10 +1465,10 @@
   ZoneHVAC:WindowAirConditioner,
     Gnd East Window AC,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
     Gnd East AC Inlet Node,  !- Air Inlet Node Name
-    Gnd East AC Outlet Node, !- Air Outlet Node Name
+    Gnd East AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Gnd East OA Mixer,       !- Outdoor Air Mixer Name
     Fan:OnOff,               !- Supply Air Fan Object Type
@@ -1495,7 +1495,7 @@
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Gnd East Mixed Node,     !- Air Inlet Node Name
@@ -1504,14 +1504,14 @@
   Coil:Cooling:DX:SingleSpeed,
     Gnd East OA DX Coil,     !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Gnd East OA Fan Outlet Node,  !- Air Inlet Node Name
-    Gnd East AC Outlet Node, !- Air Outlet Node Name
+    Gnd East AC Outlet Node,  !- Air Outlet Node Name
     WindACCoolCapFT,         !- Total Cooling Capacity Function of Temperature Curve Name
     WindACCoolCapFFF,        !- Total Cooling Capacity Function of Flow Fraction Curve Name
     WindACEIRFT,             !- Energy Input Ratio Function of Temperature Curve Name
@@ -1525,7 +1525,7 @@
     Gnd East Baseboard,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -1549,12 +1549,12 @@
     12.5,                    !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Mid West S Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1571,7 +1571,7 @@
 
   BuildingSurface:Detailed,
     Mid West W Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1588,7 +1588,7 @@
 
   BuildingSurface:Detailed,
     Mid West N Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1605,7 +1605,7 @@
 
   BuildingSurface:Detailed,
     Mid West E Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1622,7 +1622,7 @@
 
   BuildingSurface:Detailed,
     Mid West Floor,          !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor,                   !- Construction Name
     Mid West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1639,7 +1639,7 @@
 
   BuildingSurface:Detailed,
     Mid West Ceiling,        !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     Ceiling,                 !- Construction Name
     Mid West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -1656,7 +1656,7 @@
 
   FenestrationSurface:Detailed,
     Mid West S Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid West S Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1671,7 +1671,7 @@
 
   FenestrationSurface:Detailed,
     Mid West N Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid West N Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1685,8 +1685,8 @@
     1.0,6.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Mid West W Wall Windows, !- Name
-    WINDOW,                  !- Surface Type
+    Mid West W Wall Windows,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid West W Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1702,10 +1702,10 @@
   Sizing:Zone,
     Mid West Zone,           !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1725,8 +1725,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1737,7 +1737,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA Mid West Zone,   !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -1745,7 +1745,7 @@
   ZoneHVAC:EquipmentConnections,
     Mid West Zone,           !- Zone Name
     Mid West Equipment,      !- Zone Conditioning Equipment List Name
-    Mid West AC Outlet Node, !- Zone Air Inlet Node or NodeList Name
+    Mid West AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
     Mid West AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Mid West Air Node,       !- Zone Air Node Name
     Mid West Return Node;    !- Zone Return Air Node or NodeList Name
@@ -1756,7 +1756,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Mid West Equipment,      !- Name
@@ -1777,10 +1777,10 @@
   ZoneHVAC:WindowAirConditioner,
     Mid West Window AC,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
     Mid West AC Inlet Node,  !- Air Inlet Node Name
-    Mid West AC Outlet Node, !- Air Outlet Node Name
+    Mid West AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Mid West OA Mixer,       !- Outdoor Air Mixer Name
     Fan:OnOff,               !- Supply Air Fan Object Type
@@ -1800,14 +1800,14 @@
 
   OutdoorAir:Node,
     Mid West OA Node,        !- Name
-    13;                      !- Height Above Ground {m}
+    13.0;                    !- Height Above Ground {m}
 
   Fan:OnOff,
     Mid West OA Fan,         !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Mid West Mixed Node,     !- Air Inlet Node Name
@@ -1816,14 +1816,14 @@
   Coil:Cooling:DX:SingleSpeed,
     Mid West OA DX Coil,     !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Mid West OA Fan Outlet Node,  !- Air Inlet Node Name
-    Mid West AC Outlet Node, !- Air Outlet Node Name
+    Mid West AC Outlet Node,  !- Air Outlet Node Name
     WindACCoolCapFT,         !- Total Cooling Capacity Function of Temperature Curve Name
     WindACCoolCapFFF,        !- Total Cooling Capacity Function of Flow Fraction Curve Name
     WindACEIRFT,             !- Energy Input Ratio Function of Temperature Curve Name
@@ -1837,7 +1837,7 @@
     Mid West Baseboard,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -1850,12 +1850,12 @@
     12.5,                    !- Z Origin {m}
     1,                       !- Type
     4,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Mid Center S Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1872,7 +1872,7 @@
 
   BuildingSurface:Detailed,
     Mid Center W Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1889,7 +1889,7 @@
 
   BuildingSurface:Detailed,
     Mid Center N Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1906,7 +1906,7 @@
 
   BuildingSurface:Detailed,
     Mid Center E Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1923,7 +1923,7 @@
 
   BuildingSurface:Detailed,
     Mid Center Floor,        !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor,                   !- Construction Name
     Mid Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1940,7 +1940,7 @@
 
   BuildingSurface:Detailed,
     Mid Center Ceiling,      !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     Ceiling,                 !- Construction Name
     Mid Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -1956,8 +1956,8 @@
     4.0,6.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Mid Center S Wall Window,!- Name
-    WINDOW,                  !- Surface Type
+    Mid Center S Wall Window,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid Center S Wall,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1971,8 +1971,8 @@
     3.0,0.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Mid Center N Wall Window,!- Name
-    WINDOW,                  !- Surface Type
+    Mid Center N Wall Window,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid Center N Wall,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -1988,14 +1988,14 @@
   Sizing:Zone,
     Mid Center Zone,         !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-    SZ DSOA Mid Center Zone, !- Design Specification Outdoor Air Object Name
+    SZ DSOA Mid Center Zone,  !- Design Specification Outdoor Air Object Name
     1.2,                     !- Zone Heating Sizing Factor
     1.2,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
@@ -2011,8 +2011,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -2022,8 +2022,8 @@
     ;                        !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
 
   DesignSpecification:OutdoorAir,
-    SZ DSOA Mid Center Zone, !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    SZ DSOA Mid Center Zone,  !- Name
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -2032,7 +2032,7 @@
     Mid Center Zone,         !- Zone Name
     Mid Center Equipment,    !- Zone Conditioning Equipment List Name
     Mid Center AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
-    Mid Center AC Inlet Node,!- Zone Air Exhaust Node or NodeList Name
+    Mid Center AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Mid Center Air Node,     !- Zone Air Node Name
     Mid Center Return Node;  !- Zone Return Air Node or NodeList Name
 
@@ -2042,7 +2042,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Mid Center Equipment,    !- Name
@@ -2063,9 +2063,9 @@
   ZoneHVAC:WindowAirConditioner,
     Mid Center Window AC,    !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
-    Mid Center AC Inlet Node,!- Air Inlet Node Name
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Mid Center AC Inlet Node,  !- Air Inlet Node Name
     Mid Center AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Mid Center OA Mixer,     !- Outdoor Air Mixer Name
@@ -2082,18 +2082,18 @@
     Mid Center Mixed Node,   !- Mixed Air Node Name
     Mid Center OA Node,      !- Outdoor Air Stream Node Name
     Mid Center Relief Node,  !- Relief Air Stream Node Name
-    Mid Center AC Inlet Node;!- Return Air Stream Node Name
+    Mid Center AC Inlet Node;  !- Return Air Stream Node Name
 
   OutdoorAir:Node,
     Mid Center OA Node,      !- Name
-    13;                      !- Height Above Ground {m}
+    13.0;                    !- Height Above Ground {m}
 
   Fan:OnOff,
     Mid Center OA Fan,       !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Mid Center Mixed Node,   !- Air Inlet Node Name
@@ -2102,10 +2102,10 @@
   Coil:Cooling:DX:SingleSpeed,
     Mid Center OA DX Coil,   !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Mid Center OA Fan Outlet Node,  !- Air Inlet Node Name
@@ -2123,7 +2123,7 @@
     Mid Center Baseboard,    !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -2136,12 +2136,12 @@
     12.5,                    !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Mid East S Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2158,7 +2158,7 @@
 
   BuildingSurface:Detailed,
     Mid East W Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2175,7 +2175,7 @@
 
   BuildingSurface:Detailed,
     Mid East N Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2192,7 +2192,7 @@
 
   BuildingSurface:Detailed,
     Mid East E Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Mid East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2209,7 +2209,7 @@
 
   BuildingSurface:Detailed,
     Mid East Floor,          !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor,                   !- Construction Name
     Mid East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2226,7 +2226,7 @@
 
   BuildingSurface:Detailed,
     Mid East Ceiling,        !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     Ceiling,                 !- Construction Name
     Mid East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2243,7 +2243,7 @@
 
   FenestrationSurface:Detailed,
     Mid East S Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid East S Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2258,7 +2258,7 @@
 
   FenestrationSurface:Detailed,
     Mid East N Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid East N Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2272,8 +2272,8 @@
     1.0,6.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Mid East E Wall Windows, !- Name
-    WINDOW,                  !- Surface Type
+    Mid East E Wall Windows,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Mid East E Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2289,10 +2289,10 @@
   Sizing:Zone,
     Mid East Zone,           !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -2312,8 +2312,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -2324,7 +2324,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA Mid East Zone,   !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -2332,7 +2332,7 @@
   ZoneHVAC:EquipmentConnections,
     Mid East Zone,           !- Zone Name
     Mid East Equipment,      !- Zone Conditioning Equipment List Name
-    Mid East AC Outlet Node, !- Zone Air Inlet Node or NodeList Name
+    Mid East AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
     Mid East AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Mid East Air Node,       !- Zone Air Node Name
     Mid East Return Node;    !- Zone Return Air Node or NodeList Name
@@ -2343,7 +2343,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Mid East Equipment,      !- Name
@@ -2364,10 +2364,10 @@
   ZoneHVAC:WindowAirConditioner,
     Mid East Window AC,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
     Mid East AC Inlet Node,  !- Air Inlet Node Name
-    Mid East AC Outlet Node, !- Air Outlet Node Name
+    Mid East AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Mid East OA Mixer,       !- Outdoor Air Mixer Name
     Fan:OnOff,               !- Supply Air Fan Object Type
@@ -2387,14 +2387,14 @@
 
   OutdoorAir:Node,
     Mid East OA Node,        !- Name
-    13;                      !- Height Above Ground {m}
+    13.0;                    !- Height Above Ground {m}
 
   Fan:OnOff,
     Mid East OA Fan,         !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Mid East Mixed Node,     !- Air Inlet Node Name
@@ -2403,14 +2403,14 @@
   Coil:Cooling:DX:SingleSpeed,
     Mid East OA DX Coil,     !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Mid East OA Fan Outlet Node,  !- Air Inlet Node Name
-    Mid East AC Outlet Node, !- Air Outlet Node Name
+    Mid East AC Outlet Node,  !- Air Outlet Node Name
     WindACCoolCapFT,         !- Total Cooling Capacity Function of Temperature Curve Name
     WindACCoolCapFFF,        !- Total Cooling Capacity Function of Flow Fraction Curve Name
     WindACEIRFT,             !- Energy Input Ratio Function of Temperature Curve Name
@@ -2424,7 +2424,7 @@
     Mid East Baseboard,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -2448,12 +2448,12 @@
     22.5,                    !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Top West S Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2470,7 +2470,7 @@
 
   BuildingSurface:Detailed,
     Top West W Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2487,7 +2487,7 @@
 
   BuildingSurface:Detailed,
     Top West N Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2504,7 +2504,7 @@
 
   BuildingSurface:Detailed,
     Top West E Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2521,7 +2521,7 @@
 
   BuildingSurface:Detailed,
     Top West Floor,          !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor,                   !- Construction Name
     Top West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2538,7 +2538,7 @@
 
   BuildingSurface:Detailed,
     Top West Roof,           !- Name
-    ROOF,                    !- Surface Type
+    Roof,                    !- Surface Type
     Roof,                    !- Construction Name
     Top West Zone,           !- Zone Name
     ,                        !- Space Name
@@ -2555,7 +2555,7 @@
 
   FenestrationSurface:Detailed,
     Top West S Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top West S Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2570,7 +2570,7 @@
 
   FenestrationSurface:Detailed,
     Top West N Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top West N Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2584,8 +2584,8 @@
     1.0,6.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Top West W Wall Windows, !- Name
-    WINDOW,                  !- Surface Type
+    Top West W Wall Windows,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top West W Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2601,10 +2601,10 @@
   Sizing:Zone,
     Top West Zone,           !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -2624,8 +2624,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -2636,7 +2636,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA Top West Zone,   !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -2644,7 +2644,7 @@
   ZoneHVAC:EquipmentConnections,
     Top West Zone,           !- Zone Name
     Top West Equipment,      !- Zone Conditioning Equipment List Name
-    Top West AC Outlet Node, !- Zone Air Inlet Node or NodeList Name
+    Top West AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
     Top West AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Top West Air Node,       !- Zone Air Node Name
     Top West Return Node;    !- Zone Return Air Node or NodeList Name
@@ -2655,7 +2655,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Top West Equipment,      !- Name
@@ -2676,10 +2676,10 @@
   ZoneHVAC:WindowAirConditioner,
     Top West Window AC,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
     Top West AC Inlet Node,  !- Air Inlet Node Name
-    Top West AC Outlet Node, !- Air Outlet Node Name
+    Top West AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Top West OA Mixer,       !- Outdoor Air Mixer Name
     Fan:OnOff,               !- Supply Air Fan Object Type
@@ -2699,14 +2699,14 @@
 
   OutdoorAir:Node,
     Top West OA Node,        !- Name
-    23;                      !- Height Above Ground {m}
+    23.0;                    !- Height Above Ground {m}
 
   Fan:OnOff,
     Top West OA Fan,         !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Top West Mixed Node,     !- Air Inlet Node Name
@@ -2715,14 +2715,14 @@
   Coil:Cooling:DX:SingleSpeed,
     Top West OA DX Coil,     !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Top West OA Fan Outlet Node,  !- Air Inlet Node Name
-    Top West AC Outlet Node, !- Air Outlet Node Name
+    Top West AC Outlet Node,  !- Air Outlet Node Name
     WindACCoolCapFT,         !- Total Cooling Capacity Function of Temperature Curve Name
     WindACCoolCapFFF,        !- Total Cooling Capacity Function of Flow Fraction Curve Name
     WindACEIRFT,             !- Energy Input Ratio Function of Temperature Curve Name
@@ -2736,7 +2736,7 @@
     Top West Baseboard,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -2749,12 +2749,12 @@
     22.5,                    !- Z Origin {m}
     1,                       !- Type
     4,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Top Center S Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -2771,7 +2771,7 @@
 
   BuildingSurface:Detailed,
     Top Center W Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -2788,7 +2788,7 @@
 
   BuildingSurface:Detailed,
     Top Center N Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -2805,7 +2805,7 @@
 
   BuildingSurface:Detailed,
     Top Center E Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -2822,7 +2822,7 @@
 
   BuildingSurface:Detailed,
     Top Center Floor,        !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor,                   !- Construction Name
     Top Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -2839,7 +2839,7 @@
 
   BuildingSurface:Detailed,
     Top Center Roof,         !- Name
-    ROOF,                    !- Surface Type
+    Roof,                    !- Surface Type
     Roof,                    !- Construction Name
     Top Center Zone,         !- Zone Name
     ,                        !- Space Name
@@ -2855,8 +2855,8 @@
     4.0,6.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Top Center S Wall Window,!- Name
-    WINDOW,                  !- Surface Type
+    Top Center S Wall Window,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top Center S Wall,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2870,8 +2870,8 @@
     3.0,0.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Top Center N Wall Window,!- Name
-    WINDOW,                  !- Surface Type
+    Top Center N Wall Window,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top Center N Wall,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -2887,14 +2887,14 @@
   Sizing:Zone,
     Top Center Zone,         !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-    SZ DSOA Top Center Zone, !- Design Specification Outdoor Air Object Name
+    SZ DSOA Top Center Zone,  !- Design Specification Outdoor Air Object Name
     1.2,                     !- Zone Heating Sizing Factor
     1.2,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
@@ -2910,8 +2910,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -2921,8 +2921,8 @@
     ;                        !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
 
   DesignSpecification:OutdoorAir,
-    SZ DSOA Top Center Zone, !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    SZ DSOA Top Center Zone,  !- Name
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -2931,7 +2931,7 @@
     Top Center Zone,         !- Zone Name
     Top Center Equipment,    !- Zone Conditioning Equipment List Name
     Top Center AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
-    Top Center AC Inlet Node,!- Zone Air Exhaust Node or NodeList Name
+    Top Center AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Top Center Air Node,     !- Zone Air Node Name
     Top Center Return Node;  !- Zone Return Air Node or NodeList Name
 
@@ -2941,7 +2941,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Top Center Equipment,    !- Name
@@ -2962,9 +2962,9 @@
   ZoneHVAC:WindowAirConditioner,
     Top Center Window AC,    !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
-    Top Center AC Inlet Node,!- Air Inlet Node Name
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Top Center AC Inlet Node,  !- Air Inlet Node Name
     Top Center AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Top Center OA Mixer,     !- Outdoor Air Mixer Name
@@ -2981,18 +2981,18 @@
     Top Center Mixed Node,   !- Mixed Air Node Name
     Top Center OA Node,      !- Outdoor Air Stream Node Name
     Top Center Relief Node,  !- Relief Air Stream Node Name
-    Top Center AC Inlet Node;!- Return Air Stream Node Name
+    Top Center AC Inlet Node;  !- Return Air Stream Node Name
 
   OutdoorAir:Node,
     Top Center OA Node,      !- Name
-    23;                      !- Height Above Ground {m}
+    23.0;                    !- Height Above Ground {m}
 
   Fan:OnOff,
     Top Center OA Fan,       !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Top Center Mixed Node,   !- Air Inlet Node Name
@@ -3001,10 +3001,10 @@
   Coil:Cooling:DX:SingleSpeed,
     Top Center OA DX Coil,   !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Top Center OA Fan Outlet Node,  !- Air Inlet Node Name
@@ -3022,7 +3022,7 @@
     Top Center Baseboard,    !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
@@ -3035,12 +3035,12 @@
     22.5,                    !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Top East S Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -3057,7 +3057,7 @@
 
   BuildingSurface:Detailed,
     Top East W Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -3074,7 +3074,7 @@
 
   BuildingSurface:Detailed,
     Top East N Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -3091,7 +3091,7 @@
 
   BuildingSurface:Detailed,
     Top East E Wall,         !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Ext Wall,                !- Construction Name
     Top East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -3108,7 +3108,7 @@
 
   BuildingSurface:Detailed,
     Top East Floor,          !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Floor,                   !- Construction Name
     Top East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -3125,7 +3125,7 @@
 
   BuildingSurface:Detailed,
     Top East Roof,           !- Name
-    ROOF,                    !- Surface Type
+    Roof,                    !- Surface Type
     Roof,                    !- Construction Name
     Top East Zone,           !- Zone Name
     ,                        !- Space Name
@@ -3142,7 +3142,7 @@
 
   FenestrationSurface:Detailed,
     Top East S Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top East S Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3157,7 +3157,7 @@
 
   FenestrationSurface:Detailed,
     Top East N Wall Window,  !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top East N Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3171,8 +3171,8 @@
     1.0,6.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    Top East E Wall Windows, !- Name
-    WINDOW,                  !- Surface Type
+    Top East E Wall Windows,  !- Name
+    Window,                  !- Surface Type
     Single Pane Window,      !- Construction Name
     Top East E Wall,         !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -3188,10 +3188,10 @@
   Sizing:Zone,
     Top East Zone,           !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14,                      !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50,                      !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -3211,8 +3211,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -3223,7 +3223,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA Top East Zone,   !- Name
-    FLOW/ZONE,               !- Outdoor Air Method
+    Flow/Zone,               !- Outdoor Air Method
     ,                        !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.01888;                 !- Outdoor Air Flow per Zone {m3/s}
@@ -3231,7 +3231,7 @@
   ZoneHVAC:EquipmentConnections,
     Top East Zone,           !- Zone Name
     Top East Equipment,      !- Zone Conditioning Equipment List Name
-    Top East AC Outlet Node, !- Zone Air Inlet Node or NodeList Name
+    Top East AC Outlet Node,  !- Zone Air Inlet Node or NodeList Name
     Top East AC Inlet Node,  !- Zone Air Exhaust Node or NodeList Name
     Top East Air Node,       !- Zone Air Node Name
     Top East Return Node;    !- Zone Return Air Node or NodeList Name
@@ -3242,7 +3242,7 @@
     Zone Control Type Sch,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Heating Cooling Setpoint;!- Control 1 Name
+    Heating Cooling Setpoint;  !- Control 1 Name
 
   ZoneHVAC:EquipmentList,
     Top East Equipment,      !- Name
@@ -3263,10 +3263,10 @@
   ZoneHVAC:WindowAirConditioner,
     Top East Window AC,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Maximum Supply Air Flow Rate {m3/s}
-    AUTOSIZE,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Supply Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
     Top East AC Inlet Node,  !- Air Inlet Node Name
-    Top East AC Outlet Node, !- Air Outlet Node Name
+    Top East AC Outlet Node,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Top East OA Mixer,       !- Outdoor Air Mixer Name
     Fan:OnOff,               !- Supply Air Fan Object Type
@@ -3286,14 +3286,14 @@
 
   OutdoorAir:Node,
     Top East OA Node,        !- Name
-    23;                      !- Height Above Ground {m}
+    23.0;                    !- Height Above Ground {m}
 
   Fan:OnOff,
     Top East OA Fan,         !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75.0,                    !- Pressure Rise {Pa}
-    AUTOSIZE,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     Top East Mixed Node,     !- Air Inlet Node Name
@@ -3302,14 +3302,14 @@
   Coil:Cooling:DX:SingleSpeed,
     Top East OA DX Coil,     !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
-    AUTOSIZE,                !- Gross Rated Total Cooling Capacity {W}
-    AUTOSIZE,                !- Gross Rated Sensible Heat Ratio
+    Autosize,                !- Gross Rated Total Cooling Capacity {W}
+    Autosize,                !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
-    AUTOSIZE,                !- Rated Air Flow Rate {m3/s}
+    Autosize,                !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     Top East OA Fan Outlet Node,  !- Air Inlet Node Name
-    Top East AC Outlet Node, !- Air Outlet Node Name
+    Top East AC Outlet Node,  !- Air Outlet Node Name
     WindACCoolCapFT,         !- Total Cooling Capacity Function of Temperature Curve Name
     WindACCoolCapFFF,        !- Total Cooling Capacity Function of Flow Fraction Curve Name
     WindACEIRFT,             !- Energy Input Ratio Function of Temperature Curve Name
@@ -3323,16 +3323,16 @@
     Top East Baseboard,      !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     HeatingDesignCapacity,   !- Heating Design Capacity Method
-    AUTOSIZE,                !- Heating Design Capacity {W}
+    Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
     0.95;                    !- Efficiency
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     AlwaysOnSchedule,        !- Name
@@ -3343,9 +3343,9 @@
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     Zone Control Type Sch,   !- Name
@@ -3355,15 +3355,15 @@
     UNTIL: 24:00,4;          !- Field 3
 
   ThermostatSetpoint:DualSetpoint,
-    Heating Cooling Setpoint,!- Name
+    Heating Cooling Setpoint,  !- Name
     Heating Temp Sch,        !- Heating Setpoint Temperature Schedule Name
     Cooling Temp Sch;        !- Cooling Setpoint Temperature Schedule Name
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   Schedule:Compact,
@@ -3384,10 +3384,10 @@
     WindACCoolCapFT,         !- Name
     0.942587793,             !- Coefficient1 Constant
     0.009543347,             !- Coefficient2 x
-    0.000683770,             !- Coefficient3 x**2
+    0.00068377,              !- Coefficient3 x**2
     -0.011042676,            !- Coefficient4 y
-    0.000005249,             !- Coefficient5 y**2
-    -0.000009720,            !- Coefficient6 x*y
+    5.249e-06,               !- Coefficient5 y**2
+    -9.72e-06,               !- Coefficient6 x*y
     12.77778,                !- Minimum Value of x
     23.88889,                !- Maximum Value of x
     18.0,                    !- Minimum Value of y
@@ -3402,7 +3402,7 @@
     WindACEIRFT,             !- Name
     0.342414409,             !- Coefficient1 Constant
     0.034885008,             !- Coefficient2 x
-    -0.000623700,            !- Coefficient3 x**2
+    -0.0006237,              !- Coefficient3 x**2
     0.004977216,             !- Coefficient4 y
     0.000437951,             !- Coefficient5 y**2
     -0.000728028,            !- Coefficient6 x*y
@@ -3440,7 +3440,7 @@
     0.0,                     !- Minimum Value of x
     1.0;                     !- Maximum Value of x
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
   Output:Surfaces:Drawing,DXF;
 
@@ -3538,13 +3538,13 @@
 
   Output:Variable,Top Floor,Zone Group Sensible Cooling Energy,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,monthly;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,RunPeriod;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -3554,4 +3554,3 @@
 
   Output:SQLite,
     Simple;                  !- Option Type
-

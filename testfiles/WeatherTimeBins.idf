@@ -65,11 +65,11 @@
 
   Building,
     None,                    !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
-    0.40,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -93,15 +93,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -129,34 +129,34 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,runperiod;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,RunPeriod;
 
-  Output:Variable,*,Site Outdoor Air Wetbulb Temperature,runperiod;
+  Output:Variable,*,Site Outdoor Air Wetbulb Temperature,RunPeriod;
 
-  Output:Variable,*,Site Outdoor Air Dewpoint Temperature,runperiod;
+  Output:Variable,*,Site Outdoor Air Dewpoint Temperature,RunPeriod;
 
-  Output:Variable,*,Site Outdoor Air Relative Humidity,runperiod;
+  Output:Variable,*,Site Outdoor Air Relative Humidity,RunPeriod;
 
-  Output:Variable,*,Site Outdoor Air Enthalpy,runperiod;
+  Output:Variable,*,Site Outdoor Air Enthalpy,RunPeriod;
 
-  Output:Variable,*,Site Outdoor Air Humidity Ratio,runperiod;
+  Output:Variable,*,Site Outdoor Air Humidity Ratio,RunPeriod;
 
-  Output:Variable,*,Site Wind Direction,runperiod;
+  Output:Variable,*,Site Wind Direction,RunPeriod;
 
-  Output:Variable,*,Site Wind Speed,runperiod;
+  Output:Variable,*,Site Wind Speed,RunPeriod;
 
-  Output:Variable,*,Site Solar Azimuth Angle,runperiod;
+  Output:Variable,*,Site Solar Azimuth Angle,RunPeriod;
 
-  Output:Variable,*,Site Solar Altitude Angle,runperiod;
+  Output:Variable,*,Site Solar Altitude Angle,RunPeriod;
 
-  Output:Variable,*,Site Direct Solar Radiation Rate per Area,runperiod;
+  Output:Variable,*,Site Direct Solar Radiation Rate per Area,RunPeriod;
 
-  Output:Variable,*,Site Diffuse Solar Radiation Rate per Area,runperiod;
+  Output:Variable,*,Site Diffuse Solar Radiation Rate per Area,RunPeriod;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -166,9 +166,9 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     Constant,                !- Name
@@ -180,64 +180,63 @@
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Outdoor Air Drybulb Temperature,  !- Variable Name
-    -30,                     !- Interval Start
-    5,                       !- Interval Size
+    -30.0,                   !- Interval Start
+    5.0,                     !- Interval Size
     15,                      !- Interval Count
     constant;                !- Schedule Name
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Outdoor Air Dewpoint Temperature,  !- Variable Name
-    -30,                     !- Interval Start
-    5,                       !- Interval Size
+    -30.0,                   !- Interval Start
+    5.0,                     !- Interval Size
     15;                      !- Interval Count
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Outdoor Air Relative Humidity,  !- Variable Name
-    0,                       !- Interval Start
-    5,                       !- Interval Size
+    0.0,                     !- Interval Start
+    5.0,                     !- Interval Size
     20;                      !- Interval Count
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Outdoor Air Humidity Ratio,  !- Variable Name
-    0,                       !- Interval Start
+    0.0,                     !- Interval Start
     0.001,                   !- Interval Size
     20;                      !- Interval Count
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Outdoor Air Enthalpy,  !- Variable Name
-    0,                       !- Interval Start
-    5000,                    !- Interval Size
+    0.0,                     !- Interval Start
+    5000.0,                  !- Interval Size
     15;                      !- Interval Count
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Wind Speed,         !- Variable Name
-    0,                       !- Interval Start
-    1,                       !- Interval Size
+    0.0,                     !- Interval Start
+    1.0,                     !- Interval Size
     20;                      !- Interval Count
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Wind Direction,     !- Variable Name
-    0,                       !- Interval Start
-    20,                      !- Interval Size
+    0.0,                     !- Interval Start
+    20.0,                    !- Interval Size
     18;                      !- Interval Count
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Direct Solar Radiation Rate per Area,  !- Variable Name
-    0,                       !- Interval Start
-    100,                     !- Interval Size
+    0.0,                     !- Interval Start
+    100.0,                   !- Interval Size
     10;                      !- Interval Count
 
   Output:Table:TimeBins,
     *,                       !- Key Value
     Site Diffuse Solar Radiation Rate per Area,  !- Variable Name
-    0,                       !- Interval Start
-    100,                     !- Interval Size
+    0.0,                     !- Interval Start
+    100.0,                   !- Interval Size
     10;                      !- Interval Count
-

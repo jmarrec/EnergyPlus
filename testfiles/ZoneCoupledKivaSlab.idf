@@ -50,7 +50,7 @@
   SimulationControl,
     No,                      !- Do Zone Sizing Calculation
     No,                      !- Do System Sizing Calculation
-    NO,                      !- Do Plant Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
     No,                      !- Run Simulation for Sizing Periods
     Yes,                     !- Run Simulation for Weather File Run Periods
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
@@ -64,7 +64,7 @@
     Suburbs,                 !- Terrain
     0.05,                    !- Loads Convergence Tolerance Value {W}
     0.05,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     35,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -81,7 +81,7 @@
     Ohare Intl Ap IL USA TMY3 WMO#=725300,  !- Name
     41.98,                   !- Latitude {deg}
     -87.92,                  !- Longitude {deg}
-    -6,                      !- Time Zone {hr}
+    -6.0,                    !- Time Zone {hr}
     201.0;                   !- Elevation {m}
 
 !- =========== ALL OBJECTS IN CLASS: SIZINGPERIOD:DESIGNDAY ===========
@@ -95,15 +95,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -16.6,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
+    98886.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -112,7 +112,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
   SizingPeriod:DesignDay,
     Chicago Ohare Intl Ap Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -123,15 +123,15 @@
     10.5,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
+    98886.0,                 !- Barometric Pressure {Pa}
     5.2,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -140,7 +140,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
 !- =========== ALL OBJECTS IN CLASS: RUNPERIOD ===========
 
@@ -167,7 +167,7 @@
     0.019,                   !- Thickness {m}
     0.137,                   !- Conductivity {W/m-K}
     640.0,                   !- Density {kg/m3}
-    1006,                    !- Specific Heat {J/kg-K}
+    1006.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -178,7 +178,7 @@
     0.133,                   !- Thickness {m}
     0.047,                   !- Conductivity {W/m-K}
     93.84,                   !- Density {kg/m3}
-    1006,                    !- Specific Heat {J/kg-K}
+    1006.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -189,7 +189,7 @@
     0.025,                   !- Thickness {m}
     0.246,                   !- Conductivity {W/m-K}
     492.67,                  !- Density {kg/m3}
-    1006,                    !- Specific Heat {J/kg-K}
+    1006.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -203,8 +203,8 @@
     MediumRough,             !- Roughness
     0.1524,                  !- Thickness {m}
     1.8,                     !- Conductivity {W/m-K}
-    2400,                    !- Density {kg/m3}
-    750,                     !- Specific Heat {J/kg-K}
+    2400.0,                  !- Density {kg/m3}
+    750.0,                   !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.65,                    !- Solar Absorptance
     0.65;                    !- Visible Absorptance
@@ -214,8 +214,8 @@
     Smooth,                  !- Roughness
     0.0254,                  !- Thickness {m}
     0.035,                   !- Conductivity {W/m-K}
-    265,                     !- Density {kg/m3}
-    1300,                    !- Specific Heat {J/kg-K}
+    265.0,                   !- Density {kg/m3}
+    1300.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.65,                    !- Solar Absorptance
     0.65;                    !- Visible Absorptance
@@ -226,9 +226,9 @@
     Roof Layer 1,            !- Name
     Rough,                   !- Roughness
     3.344,                   !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
 !- =========== ALL OBJECTS IN CLASS: CONSTRUCTION ===========
 
@@ -261,7 +261,7 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
 !- =========== ALL OBJECTS IN CLASS: ZONE ===========
@@ -271,15 +271,15 @@
 
   Zone,
     Main Floor,              !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     ,                        !- Type
     ,                        !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate,           !- Volume {m3}
-    autocalculate;           !- Floor Area {m2}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate,           !- Volume {m3}
+    Autocalculate;           !- Floor Area {m2}
 
 !- =========== ALL OBJECTS IN CLASS: BUILDINGSURFACE:DETAILED ===========
 
@@ -293,7 +293,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,0.0,3.1,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -310,7 +310,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
     10.0,10.0,3.1,  !- X,Y,Z ==> Vertex 1 {m}
     10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -327,7 +327,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
     10.0,0.0,3.1,  !- X,Y,Z ==> Vertex 1 {m}
     10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -344,7 +344,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,10.0,3.1,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -361,7 +361,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,10.0,3.1,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,0.0,3.1,  !- X,Y,Z ==> Vertex 2 {m}
@@ -388,7 +388,7 @@
     Slab Foundation,         !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
     10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
     10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -418,12 +418,12 @@
 
   Foundation:Kiva:Settings,
     1.8,                     !- Soil Conductivity {W/m-K}
-    3200,                    !- Soil Density {kg/m3}
-    836,                     !- Soil Specific Heat {J/kg-K}
+    3200.0,                  !- Soil Density {kg/m3}
+    836.0,                   !- Soil Specific Heat {J/kg-K}
     0.9,                     !- Ground Solar Absorptivity {dimensionless}
     0.9,                     !- Ground Thermal Absorptivity {dimensionless}
     0.03,                    !- Ground Surface Roughness {m}
-    40,                      !- Far-Field Width {m}
+    40.0,                    !- Far-Field Width {m}
     Autoselect;              !- Deep-Ground Boundary Condition
 
 !***********************************************************
@@ -431,23 +431,23 @@
 !***********************************************************
 
   ScheduleTypeLimits,
-    HVACTemplate Any Number; !- Name
+    HVACTemplate Any Number;  !- Name
 
   Schedule:Compact,
     HVACTemplate-Always 20,  !- Name
-    HVACTemplate Any Number, !- Schedule Type Limits Name
+    HVACTemplate Any Number,  !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until: 24:00,20;         !- Field 3
 
   ThermostatSetpoint:DualSetpoint,
-    Always21 Dual SP Control,!- Name
+    Always21 Dual SP Control,  !- Name
     HVACTemplate-Always 20,  !- Heating Setpoint Temperature Schedule Name
     HVACTemplate-Always 20;  !- Cooling Setpoint Temperature Schedule Name
 
   Schedule:Compact,
     HVACTemplate-Always 4,   !- Name
-    HVACTemplate Any Number, !- Schedule Type Limits Name
+    HVACTemplate Any Number,  !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until: 24:00,4;          !- Field 3
@@ -458,15 +458,15 @@
     HVACTemplate-Always 4,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Always21 Dual SP Control;!- Control 1 Name
+    Always21 Dual SP Control;  !- Control 1 Name
 
   ZoneHVAC:EquipmentConnections,
     Main Floor,              !- Zone Name
     Main Floor Equipment,    !- Zone Conditioning Equipment List Name
     Main Floor Ideal Loads Supply Inlet,  !- Zone Air Inlet Node or NodeList Name
     ,                        !- Zone Air Exhaust Node or NodeList Name
-    Main Floor Zone Air Node,!- Zone Air Node Name
-    Main Floor Return Outlet;!- Zone Return Air Node or NodeList Name
+    Main Floor Zone Air Node,  !- Zone Air Node Name
+    Main Floor Return Outlet;  !- Zone Return Air Node or NodeList Name
 
   ZoneHVAC:EquipmentList,
     Main Floor Equipment,    !- Name
@@ -484,8 +484,8 @@
     Main Floor Ideal Loads Supply Inlet,  !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
-    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
+    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.0156,                  !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.0077,                  !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
@@ -516,23 +516,20 @@
 !***********************************************************
 !- =========== ALL OBJECTS IN CLASS: OUTPUT:VARIABLE ===========
 
-  ZoneAirHeatBalanceAlgorithm,
-    AnalyticalSolution,      !- Algorithm
-    ;                        !- Do Space Heat Balance for Sizing
+  ZoneAirHeatBalanceAlgorithm,AnalyticalSolution;
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;
 
-  Output:Variable,*,Zone Mean Air Temperature,hourly;
+  Output:Variable,*,Zone Mean Air Temperature,Hourly;
 
-  Output:Variable,*,Surface Inside Face Temperature,hourly;
+  Output:Variable,*,Surface Inside Face Temperature,Hourly;
 
-  Output:Variable,*,Surface Inside Face Convection Heat Transfer Coefficient,hourly;
+  Output:Variable,*,Surface Inside Face Convection Heat Transfer Coefficient,Hourly;
 
-  Output:Variable,*,Surface Inside Face Conduction Heat Transfer Rate per Area,hourly;
+  Output:Variable,*,Surface Inside Face Conduction Heat Transfer Rate per Area,Hourly;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
-

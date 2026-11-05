@@ -95,4 +95,3 @@
     XENON 13MM,              !- Name
     Xenon,                   !- Gas Type
     0.0127;                  !- Thickness {m}
-

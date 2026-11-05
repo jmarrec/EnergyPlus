@@ -27,11 +27,11 @@
 
   Building,
     PVtest,                  !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
-    0.40,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -44,14 +44,14 @@
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
-  Site:GroundTemperature:BuildingSurface,19.96,19.94,19.99,20.04,20.09,20.17,20.21,20.24,20.23,20.20,20.17,20.12;
+  Site:GroundTemperature:BuildingSurface,19.96,19.94,19.99,20.04,20.09,20.17,20.21,20.24,20.23,20.2,20.17,20.12;
 
   Site:Location,
     CHICAGO_IL_USA TMY2-94846,  !- Name
     41.78,                   !- Latitude {deg}
     -87.75,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
 ! CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
 
@@ -64,15 +64,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -94,15 +94,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -146,35 +146,35 @@
   Material,
     B4 - 3 IN INSULATION,    !- Name
     VeryRough,               !- Roughness
-    7.0000000E-02,           !- Thickness {m}
-    3.9999999E-02,           !- Conductivity {W/m-K}
-    32.03000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    0.07,                    !- Thickness {m}
+    0.039999999,             !- Conductivity {W/m-K}
+    32.03,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     PVModule(glass),         !- Name
     Smooth,                  !- Roughness
     0.007,                   !- Thickness {m}
     0.78,                    !- Conductivity {W/m-K}
-    2700.00,                 !- Density {kg/m3}
-    840.0000,                !- Specific Heat {J/kg-K}
-    0.8400000,               !- Thermal Absorptance
+    2700.0,                  !- Density {kg/m3}
+    840.0,                   !- Specific Heat {J/kg-K}
+    0.84,                    !- Thermal Absorptance
     0.92,                    !- Solar Absorptance
     0.92;                    !- Visible Absorptance
 
   Material,
     E6 - 1 / 2 IN GYP SHEATHING BOARD,  !- Name
     Smooth,                  !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    784.9000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.0099999998,            !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    784.9,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   ConstructionProperty:InternalHeatSource,
     PanelSource,             !- Name
@@ -195,20 +195,20 @@
   Material,
     ROOFING - BUILT UP ROOFING - 3 / 8 IN,  !- Name
     VeryRough,               !- Roughness
-    9.4999997E-03,           !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    1121.290,                !- Density {kg/m3}
-    1460.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7000000,               !- Solar Absorptance
-    0.7000000;               !- Visible Absorptance
+    0.0094999997,            !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    1121.29,                 !- Density {kg/m3}
+    1460.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
 
   Material,
     INS-Roof-R_15,           !- Name
     MediumRough,             !- Roughness
     0.1295,                  !- Thickness {m}
     0.049,                   !- Conductivity {W/m-K}
-    265,                     !- Density {kg/m3}
+    265.0,                   !- Density {kg/m3}
     836.8,                   !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
@@ -219,7 +219,7 @@
     MediumSmooth,            !- Roughness
     0.001524,                !- Thickness {m}
     45.006,                  !- Conductivity {W/m-K}
-    7680,                    !- Density {kg/m3}
+    7680.0,                  !- Density {kg/m3}
     418.4,                   !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
@@ -228,13 +228,13 @@
   Material,
     IN35,                    !- Name
     Rough,                   !- Roughness
-    5.0799999E-02,           !- Thickness {m}
-    3.5000000E-02,           !- Conductivity {W/m-K}
-    29.00000,                !- Density {kg/m3}
-    1213.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    0.050799999,             !- Thickness {m}
+    0.035,                   !- Conductivity {W/m-K}
+    29.0,                    !- Density {kg/m3}
+    1213.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C10 - 8 IN HW CONCRETE,  !- Name
@@ -242,21 +242,21 @@
     0.2033016,               !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material:NoMass,
     R13LAYER,                !- Name
     Rough,                   !- Roughness
     2.290965,                !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Construction,
-    PVRoofPaverUnderlayment, !- Name
+    PVRoofPaverUnderlayment,  !- Name
     IN35,                    !- Outside Layer
     ROOFING - BUILT UP ROOFING - 3 / 8 IN,  !- Layer 2
     INS-Roof-R_15,           !- Layer 3
@@ -272,7 +272,7 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
   Shading:Site:Detailed,
@@ -280,8 +280,8 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     50.0,0.0,2.0,  !- X,Y,Z ==> Vertex 1 {m}
-    50.0,0.00,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    55.0,0.00,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    50.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    55.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     55.0,0.0,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
@@ -289,8 +289,8 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     30.0,1.332,1.4914,  !- X,Y,Z ==> Vertex 1 {m}
-    30.0,0.00,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    35.0,0.00,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    30.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    35.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     35.0,1.332,1.4914;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
@@ -298,8 +298,8 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     40.0,2.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
-    40.0,0.00,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    45.0,0.00,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    40.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    45.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     45.0,2.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
@@ -307,8 +307,8 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     0.0,25.0,12.0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.0,20.00,12.0,  !- X,Y,Z ==> Vertex 2 {m}
-    5.0,20.00,12.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,20.0,12.0,  !- X,Y,Z ==> Vertex 2 {m}
+    5.0,20.0,12.0,  !- X,Y,Z ==> Vertex 3 {m}
     5.0,25.0,12.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
@@ -316,8 +316,8 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     5.0,25.0,22.0,  !- X,Y,Z ==> Vertex 1 {m}
-    5.0,25.00,12.0,  !- X,Y,Z ==> Vertex 2 {m}
-    5.0,20.00,12.0,  !- X,Y,Z ==> Vertex 3 {m}
+    5.0,25.0,12.0,  !- X,Y,Z ==> Vertex 2 {m}
+    5.0,20.0,12.0,  !- X,Y,Z ==> Vertex 3 {m}
     5.0,20.0,22.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
@@ -325,8 +325,8 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     20.0,25.0,12.0,  !- X,Y,Z ==> Vertex 1 {m}
-    20.0,20.00,12.0,  !- X,Y,Z ==> Vertex 2 {m}
-    25.0,20.00,12.0,  !- X,Y,Z ==> Vertex 3 {m}
+    20.0,20.0,12.0,  !- X,Y,Z ==> Vertex 2 {m}
+    25.0,20.0,12.0,  !- X,Y,Z ==> Vertex 3 {m}
     25.0,25.0,12.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
@@ -334,24 +334,24 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     20.0,20.0,22.0,  !- X,Y,Z ==> Vertex 1 {m}
-    20.0,20.00,12.0,  !- X,Y,Z ==> Vertex 2 {m}
-    20.0,25.00,12.0,  !- X,Y,Z ==> Vertex 3 {m}
+    20.0,20.0,12.0,  !- X,Y,Z ==> Vertex 2 {m}
+    20.0,25.0,12.0,  !- X,Y,Z ==> Vertex 3 {m}
     20.0,25.0,22.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   Zone,
     ZONE ONE,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   BuildingSurface:Detailed,
     Zn001:Floor001,          !- Name
-    floor,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR SLAB 8 IN,         !- Construction Name
     ZONE ONE,                !- Zone Name
     ,                        !- Space Name
@@ -359,7 +359,7 @@
     ,                        !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.00000,                 !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,15.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -376,9 +376,9 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.0,0.0,5.000,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
     7.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     7.0,0.0,5.0;  !- X,Y,Z ==> Vertex 4 {m}
@@ -393,9 +393,9 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    7.0,0.0,5.000,  !- X,Y,Z ==> Vertex 1 {m}
+    7.0,0.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     7.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
     14.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     14.0,0.0,5.0;  !- X,Y,Z ==> Vertex 4 {m}
@@ -410,9 +410,9 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    14.0,0.0,5.000,  !- X,Y,Z ==> Vertex 1 {m}
+    14.0,0.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     14.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
     20.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     20.0,0.0,5.0;  !- X,Y,Z ==> Vertex 4 {m}
@@ -427,7 +427,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     20.0,0.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     20.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -444,7 +444,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     20.0,15.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     20.0,15.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -461,7 +461,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,15.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,15.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -470,15 +470,15 @@
 
   BuildingSurface:Detailed,
     Zn001:Roof001,           !- Name
-    roof,                    !- Surface Type
-    PVRoofPaverUnderlayment, !- Construction Name
+    Roof,                    !- Surface Type
+    PVRoofPaverUnderlayment,  !- Construction Name
     ZONE ONE,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     PVRoofPaverSystem1,      !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.000000,                !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,5.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,0.0,5.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -487,15 +487,15 @@
 
   BuildingSurface:Detailed,
     Zn001:Roof002,           !- Name
-    roof,                    !- Surface Type
-    PVRoofPaverUnderlayment, !- Construction Name
+    Roof,                    !- Surface Type
+    PVRoofPaverUnderlayment,  !- Construction Name
     ZONE ONE,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     PVRoofPaverSystem2,      !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.000000,                !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,10.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,5.0,5.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -504,15 +504,15 @@
 
   BuildingSurface:Detailed,
     Zn001:Roof003,           !- Name
-    roof,                    !- Surface Type
-    PVRoofPaverUnderlayment, !- Construction Name
+    Roof,                    !- Surface Type
+    PVRoofPaverUnderlayment,  !- Construction Name
     ZONE ONE,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     PVRoofPaverSystem3,      !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.000000,                !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,15.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,10.0,5.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -576,19 +576,19 @@
   ZoneControl:Thermostat,
     Zone 1 Thermostat,       !- Name
     ZONE ONE,                !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
-    Heating Setpoint with SB,!- Control 1 Name
+    Heating Setpoint with SB,  !- Control 1 Name
     ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
-    Cooling Setpoint with SB;!- Control 2 Name
+    Cooling Setpoint with SB;  !- Control 2 Name
 
   ThermostatSetpoint:SingleHeating,
-    Heating Setpoint with SB,!- Name
+    Heating Setpoint with SB,  !- Name
     Heating Setpoints;       !- Setpoint Temperature Schedule Name
 
   ThermostatSetpoint:SingleCooling,
-    Cooling Setpoint with SB,!- Name
+    Cooling Setpoint with SB,  !- Name
     Cooling Setpoints;       !- Setpoint Temperature Schedule Name
 
   ZoneHVAC:EquipmentConnections,
@@ -615,15 +615,15 @@
     Zone 1 inlet,            !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
-    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
+    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.009,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
-    autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
     NoLimit,                 !- Cooling Limit
-    autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
     ,                        !- Maximum Total Cooling Capacity {W}
     ,                        !- Heating Availability Schedule Name
     ,                        !- Cooling Availability Schedule Name
@@ -643,7 +643,7 @@
     Zone 1 inlet;            !- Node 1 Name
 
   Schedule:Compact,
-    Zone Control Type Sched, !- Name
+    Zone Control Type Sched,  !- Name
     Control Type,            !- Schedule Type Limits Name
     Through: 3/31,           !- Field 1
     For: AllDays,            !- Field 2
@@ -677,20 +677,20 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     always On,               !- Name
@@ -710,7 +710,7 @@
     Simple Electric Load Center,  !- Name
     PV list,                 !- Generator List Name
     Baseload,                !- Generator Operation Scheme Type
-    0,                       !- Generator Demand Limit Scheme Purchased Electric Demand Limit {W}
+    0.0,                     !- Generator Demand Limit Scheme Purchased Electric Demand Limit {W}
     ,                        !- Generator Track Schedule Name Scheme Schedule Name
     ,                        !- Generator Track Meter Scheme Meter Name
     DirectCurrentWithInverter,  !- Electrical Buss Type
@@ -725,109 +725,109 @@
 
   ElectricLoadCenter:Generators,
     PV list,                 !- Name
-    Simple PV South Vertical,!- Generator 1 Name
+    Simple PV South Vertical,  !- Generator 1 Name
     Generator:Photovoltaic,  !- Generator 1 Object Type
-    20000,                   !- Generator 1 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 1 Rated Electric Power Output {W}
     ,                        !- Generator 1 Availability Schedule Name
     ,                        !- Generator 1 Rated Thermal to Electrical Power Ratio
     Simple PV Lat Tilt,      !- Generator 2 Name
     Generator:Photovoltaic,  !- Generator 2 Object Type
-    20000,                   !- Generator 2 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 2 Rated Electric Power Output {W}
     ,                        !- Generator 2 Availability Schedule Name
     ,                        !- Generator 2 Rated Thermal to Electrical Power Ratio
     Simple PV Flat,          !- Generator 3 Name
     Generator:Photovoltaic,  !- Generator 3 Object Type
-    20000,                   !- Generator 3 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 3 Rated Electric Power Output {W}
     ,                        !- Generator 3 Availability Schedule Name
     ,                        !- Generator 3 Rated Thermal to Electrical Power Ratio
     Simple PV Flat:Shaded to East,  !- Generator 4 Name
     Generator:Photovoltaic,  !- Generator 4 Object Type
-    20000,                   !- Generator 4 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 4 Rated Electric Power Output {W}
     ,                        !- Generator 4 Availability Schedule Name
     ,                        !- Generator 4 Rated Thermal to Electrical Power Ratio
     Simple PV Flat:Shaded to West,  !- Generator 5 Name
     Generator:Photovoltaic,  !- Generator 5 Object Type
-    20000,                   !- Generator 5 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 5 Rated Electric Power Output {W}
     ,                        !- Generator 5 Availability Schedule Name
     ,                        !- Generator 5 Rated Thermal to Electrical Power Ratio
-    TRNSYSPV South Vertical, !- Generator 6 Name
+    TRNSYSPV South Vertical,  !- Generator 6 Name
     Generator:Photovoltaic,  !- Generator 6 Object Type
-    20000,                   !- Generator 6 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 6 Rated Electric Power Output {W}
     always on,               !- Generator 6 Availability Schedule Name
     ,                        !- Generator 6 Rated Thermal to Electrical Power Ratio
     TRNSYS PV Lat Tilt,      !- Generator 7 Name
     Generator:Photovoltaic,  !- Generator 7 Object Type
-    20000,                   !- Generator 7 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 7 Rated Electric Power Output {W}
     always on,               !- Generator 7 Availability Schedule Name
     ,                        !- Generator 7 Rated Thermal to Electrical Power Ratio
     TRNSYS PV Flat,          !- Generator 8 Name
     Generator:Photovoltaic,  !- Generator 8 Object Type
-    20000,                   !- Generator 8 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 8 Rated Electric Power Output {W}
     always on,               !- Generator 8 Availability Schedule Name
     ,                        !- Generator 8 Rated Thermal to Electrical Power Ratio
     TRNSYSPV Flat:Shaded to East,  !- Generator 9 Name
     Generator:Photovoltaic,  !- Generator 9 Object Type
-    20000,                   !- Generator 9 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 9 Rated Electric Power Output {W}
     always on,               !- Generator 9 Availability Schedule Name
     ,                        !- Generator 9 Rated Thermal to Electrical Power Ratio
     TRNSYSPV Flat:Shaded to West,  !- Generator 10 Name
     Generator:Photovoltaic,  !- Generator 10 Object Type
-    20000,                   !- Generator 10 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 10 Rated Electric Power Output {W}
     always on,               !- Generator 10 Availability Schedule Name
     ,                        !- Generator 10 Rated Thermal to Electrical Power Ratio
     SNL PV South Vertical,   !- Generator 11 Name
     Generator:Photovoltaic,  !- Generator 11 Object Type
-    20000,                   !- Generator 11 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 11 Rated Electric Power Output {W}
     always on,               !- Generator 11 Availability Schedule Name
     ,                        !- Generator 11 Rated Thermal to Electrical Power Ratio
     SNL PV Lat Tilt,         !- Generator 12 Name
     Generator:Photovoltaic,  !- Generator 12 Object Type
-    20000,                   !- Generator 12 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 12 Rated Electric Power Output {W}
     always on,               !- Generator 12 Availability Schedule Name
     ,                        !- Generator 12 Rated Thermal to Electrical Power Ratio
     SNL PV Flat,             !- Generator 13 Name
     Generator:Photovoltaic,  !- Generator 13 Object Type
-    20000,                   !- Generator 13 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 13 Rated Electric Power Output {W}
     always on,               !- Generator 13 Availability Schedule Name
     ,                        !- Generator 13 Rated Thermal to Electrical Power Ratio
     SNL PV Flat:Shaded to East,  !- Generator 14 Name
     Generator:Photovoltaic,  !- Generator 14 Object Type
-    20000,                   !- Generator 14 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 14 Rated Electric Power Output {W}
     always on,               !- Generator 14 Availability Schedule Name
     ,                        !- Generator 14 Rated Thermal to Electrical Power Ratio
     SNL PV Flat:Shaded to West,  !- Generator 15 Name
     Generator:Photovoltaic,  !- Generator 15 Object Type
-    20000,                   !- Generator 15 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 15 Rated Electric Power Output {W}
     always on,               !- Generator 15 Availability Schedule Name
     ,                        !- Generator 15 Rated Thermal to Electrical Power Ratio
     SNL INTEGRATED PV,       !- Generator 16 Name
     Generator:Photovoltaic,  !- Generator 16 Object Type
-    20000,                   !- Generator 16 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 16 Rated Electric Power Output {W}
     always on,               !- Generator 16 Availability Schedule Name
     ,                        !- Generator 16 Rated Thermal to Electrical Power Ratio
     SIMPLE INTEGRATED PV,    !- Generator 17 Name
     Generator:Photovoltaic,  !- Generator 17 Object Type
-    20000,                   !- Generator 17 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 17 Rated Electric Power Output {W}
     ,                        !- Generator 17 Availability Schedule Name
     ,                        !- Generator 17 Rated Thermal to Electrical Power Ratio
     TRNSYSPV INTEGRATED PV,  !- Generator 18 Name
     Generator:Photovoltaic,  !- Generator 18 Object Type
-    20000,                   !- Generator 18 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 18 Rated Electric Power Output {W}
     always on,               !- Generator 18 Availability Schedule Name
     ,                        !- Generator 18 Rated Thermal to Electrical Power Ratio
     SNL Roof Paver PV,       !- Generator 19 Name
     Generator:Photovoltaic,  !- Generator 19 Object Type
-    20000,                   !- Generator 19 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 19 Rated Electric Power Output {W}
     always on,               !- Generator 19 Availability Schedule Name
     ,                        !- Generator 19 Rated Thermal to Electrical Power Ratio
     SIMPLE Roof Paver PV,    !- Generator 20 Name
     Generator:Photovoltaic,  !- Generator 20 Object Type
-    20000,                   !- Generator 20 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 20 Rated Electric Power Output {W}
     ,                        !- Generator 20 Availability Schedule Name
     ,                        !- Generator 20 Rated Thermal to Electrical Power Ratio
     TRNSYSPV Roof Paver PV,  !- Generator 21 Name
     Generator:Photovoltaic,  !- Generator 21 Object Type
-    20000,                   !- Generator 21 Rated Electric Power Output {W}
+    20000.0,                 !- Generator 21 Rated Electric Power Output {W}
     ,                        !- Generator 21 Availability Schedule Name
     ;                        !- Generator 21 Rated Thermal to Electrical Power Ratio
 
@@ -837,8 +837,8 @@
     PhotovoltaicPerformance:Simple,  !- Photovoltaic Performance Object Type
     12percentEffPVhalfArea,  !- Module Performance Name
     IntegratedSurfaceOutsideFace,  !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    1.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    1;                       !- Number of Modules in Series {dimensionless}
 
   PhotovoltaicPerformance:Simple,
     12percentEffPVhalfArea,  !- Name
@@ -852,20 +852,20 @@
     PhotovoltaicPerformance:Simple,  !- Photovoltaic Performance Object Type
     12percentEffPVhalfArea,  !- Module Performance Name
     IntegratedExteriorVentedCavity,  !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    1.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    1;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
-    Simple PV South Vertical,!- Name
+    Simple PV South Vertical,  !- Name
     SouthVerticalSurface,    !- Surface Name
     PhotovoltaicPerformance:Simple,  !- Photovoltaic Performance Object Type
-    12percentEffPV0.1044Area,!- Module Performance Name
+    12percentEffPV0.1044Area,  !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    1.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    1;                       !- Number of Modules in Series {dimensionless}
 
   PhotovoltaicPerformance:Simple,
-    12percentEffPV0.1044Area,!- Name
+    12percentEffPV0.1044Area,  !- Name
     0.1044,                  !- Fraction of Surface Area with Active Solar Cells {dimensionless}
     Fixed,                   !- Conversion Efficiency Input Mode
     0.12;                    !- Value for Cell Efficiency if Fixed
@@ -876,8 +876,8 @@
     PhotovoltaicPerformance:Simple,  !- Photovoltaic Performance Object Type
     SchedEffPV0.1044Area,    !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    1.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    1;                       !- Number of Modules in Series {dimensionless}
 
   PhotovoltaicPerformance:Simple,
     SchedEffPV0.1044Area,    !- Name
@@ -890,10 +890,10 @@
     Simple PV Flat,          !- Name
     FlatSurface,             !- Surface Name
     PhotovoltaicPerformance:Simple,  !- Photovoltaic Performance Object Type
-    12percentEffPV0.1044Area,!- Module Performance Name
+    12percentEffPV0.1044Area,  !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    1.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    1;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     Simple PV Flat:Shaded to East,  !- Name
@@ -901,8 +901,8 @@
     PhotovoltaicPerformance:Simple,  !- Photovoltaic Performance Object Type
     SchedEffPV0.04176Area,   !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    1.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    1;                       !- Number of Modules in Series {dimensionless}
 
   PhotovoltaicPerformance:Simple,
     SchedEffPV0.04176Area,   !- Name
@@ -917,8 +917,8 @@
     PhotovoltaicPerformance:Simple,  !- Photovoltaic Performance Object Type
     11PercentEffPV0.04176Area,  !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    1.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    1;                       !- Number of Modules in Series {dimensionless}
 
   PhotovoltaicPerformance:Simple,
     11PercentEffPV0.04176Area,  !- Name
@@ -930,86 +930,86 @@
     TRNSYSPV INTEGRATED PV,  !- Name
     Zn001:Wall001b,          !- Surface Name
     PhotovoltaicPerformance:EquivalentOne-Diode,  !- Photovoltaic Performance Object Type
-    Example PV Model Inputs, !- Module Performance Name
+    Example PV Model Inputs,  !- Module Performance Name
     IntegratedSurfaceOutsideFace,  !- Heat Transfer Integration Mode
-    3.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    6.0;                     !- Number of Modules in Series {dimensionless}
+    3,                       !- Number of Series Strings in Parallel {dimensionless}
+    6;                       !- Number of Modules in Series {dimensionless}
 
   PhotovoltaicPerformance:EquivalentOne-Diode,
-    Example PV Model Inputs, !- Name
+    Example PV Model Inputs,  !- Name
     CrystallineSilicon,      !- Cell type
     36,                      !- Number of Cells in Series {dimensionless}
     0.63,                    !- Active Area {m2}
     0.9,                     !- Transmittance Absorptance Product {dimensionless}
     1.12,                    !- Semiconductor Bandgap {eV}
-    1000000,                 !- Shunt Resistance {ohms}
+    1000000.0,               !- Shunt Resistance {ohms}
     4.75,                    !- Short Circuit Current {A}
     21.4,                    !- Open Circuit Voltage {V}
     25.0,                    !- Reference Temperature {C}
     1000.0,                  !- Reference Insolation {W/m2}
     4.45,                    !- Module Current at Maximum Power {A}
-    17,                      !- Module Voltage at Maximum Power {V}
+    17.0,                    !- Module Voltage at Maximum Power {V}
     0.00065,                 !- Temperature Coefficient of Short Circuit Current {A/K}
     -0.08,                   !- Temperature Coefficient of Open Circuit Voltage {V/K}
-    20,                      !- Nominal Operating Cell Temperature Test Ambient Temperature {C}
-    47,                      !- Nominal Operating Cell Temperature Test Cell Temperature {C}
+    20.0,                    !- Nominal Operating Cell Temperature Test Ambient Temperature {C}
+    47.0,                    !- Nominal Operating Cell Temperature Test Cell Temperature {C}
     800.0,                   !- Nominal Operating Cell Temperature Test Insolation {W/m2}
     30.0,                    !- Module Heat Loss Coefficient {W/m2-K}
-    50000;                   !- Total Heat Capacity {J/m2-K}
+    50000.0;                 !- Total Heat Capacity {J/m2-K}
 
   Generator:Photovoltaic,
-    TRNSYSPV South Vertical, !- Name
+    TRNSYSPV South Vertical,  !- Name
     SouthVerticalSurface,    !- Surface Name
     PhotovoltaicPerformance:EquivalentOne-Diode,  !- Photovoltaic Performance Object Type
-    Example PV Model Inputs, !- Module Performance Name
-    DecoupledUllebergDynamic,!- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    Example PV Model Inputs,  !- Module Performance Name
+    DecoupledUllebergDynamic,  !- Heat Transfer Integration Mode
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     TRNSYS PV Lat Tilt,      !- Name
     LatitudeTiltSurface,     !- Surface Name
     PhotovoltaicPerformance:EquivalentOne-Diode,  !- Photovoltaic Performance Object Type
-    Example PV Model Inputs, !- Module Performance Name
-    DecoupledUllebergDynamic,!- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    Example PV Model Inputs,  !- Module Performance Name
+    DecoupledUllebergDynamic,  !- Heat Transfer Integration Mode
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     TRNSYS PV Flat,          !- Name
     FlatSurface,             !- Surface Name
     PhotovoltaicPerformance:EquivalentOne-Diode,  !- Photovoltaic Performance Object Type
-    Example PV Model Inputs, !- Module Performance Name
-    DecoupledUllebergDynamic,!- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    Example PV Model Inputs,  !- Module Performance Name
+    DecoupledUllebergDynamic,  !- Heat Transfer Integration Mode
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     TRNSYSPV Flat:Shaded to East,  !- Name
     FlatSurfaceShadetoEast,  !- Surface Name
     PhotovoltaicPerformance:EquivalentOne-Diode,  !- Photovoltaic Performance Object Type
-    Example PV Model Inputs, !- Module Performance Name
-    DecoupledUllebergDynamic,!- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    Example PV Model Inputs,  !- Module Performance Name
+    DecoupledUllebergDynamic,  !- Heat Transfer Integration Mode
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     TRNSYSPV Flat:Shaded to West,  !- Name
     FlatSurfaceShadetoWest,  !- Surface Name
     PhotovoltaicPerformance:EquivalentOne-Diode,  !- Photovoltaic Performance Object Type
-    Example PV Model Inputs, !- Module Performance Name
-    DecoupledUllebergDynamic,!- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    Example PV Model Inputs,  !- Module Performance Name
+    DecoupledUllebergDynamic,  !- Heat Transfer Integration Mode
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     TRNSYSPV Roof Paver PV,  !- Name
     Zn001:roof002,           !- Surface Name
     PhotovoltaicPerformance:EquivalentOne-Diode,  !- Photovoltaic Performance Object Type
-    Example PV Model Inputs, !- Module Performance Name
+    Example PV Model Inputs,  !- Module Performance Name
     IntegratedExteriorVentedCavity,  !- Heat Transfer Integration Mode
-    3.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    6.0;                     !- Number of Modules in Series {dimensionless}
+    3,                       !- Number of Series Strings in Parallel {dimensionless}
+    6;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     SNL INTEGRATED PV,       !- Name
@@ -1017,8 +1017,8 @@
     PhotovoltaicPerformance:Sandia,  !- Photovoltaic Performance Object Type
     BP Solar BP275,          !- Module Performance Name
     IntegratedSurfaceOutsideFace,  !- Heat Transfer Integration Mode
-    3.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    6.0;                     !- Number of Modules in Series {dimensionless}
+    3,                       !- Number of Series Strings in Parallel {dimensionless}
+    6;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     SNL Roof Paver PV,       !- Name
@@ -1026,8 +1026,8 @@
     PhotovoltaicPerformance:Sandia,  !- Photovoltaic Performance Object Type
     BP Solar BP275,          !- Module Performance Name
     IntegratedExteriorVentedCavity,  !- Heat Transfer Integration Mode
-    3.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    6.0;                     !- Number of Modules in Series {dimensionless}
+    3,                       !- Number of Series Strings in Parallel {dimensionless}
+    6;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     SNL PV South Vertical,   !- Name
@@ -1035,8 +1035,8 @@
     PhotovoltaicPerformance:Sandia,  !- Photovoltaic Performance Object Type
     BP Solar BP275,          !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     SNL PV Lat Tilt,         !- Name
@@ -1044,8 +1044,8 @@
     PhotovoltaicPerformance:Sandia,  !- Photovoltaic Performance Object Type
     BP Solar BP275,          !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     SNL PV Flat,             !- Name
@@ -1053,8 +1053,8 @@
     PhotovoltaicPerformance:Sandia,  !- Photovoltaic Performance Object Type
     BP Solar BP275,          !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     SNL PV Flat:Shaded to East,  !- Name
@@ -1062,8 +1062,8 @@
     PhotovoltaicPerformance:Sandia,  !- Photovoltaic Performance Object Type
     BP Solar BP275,          !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   Generator:Photovoltaic,
     SNL PV Flat:Shaded to West,  !- Name
@@ -1071,8 +1071,8 @@
     PhotovoltaicPerformance:Sandia,  !- Photovoltaic Performance Object Type
     BP Solar BP275,          !- Module Performance Name
     Decoupled,               !- Heat Transfer Integration Mode
-    1.0,                     !- Number of Series Strings in Parallel {dimensionless}
-    2.0;                     !- Number of Modules in Series {dimensionless}
+    1,                       !- Number of Series Strings in Parallel {dimensionless}
+    2;                       !- Number of Modules in Series {dimensionless}
 
   PhotovoltaicPerformance:Sandia,
     BP Solar BP275,          !- Name
@@ -1082,7 +1082,7 @@
     4.75,                    !- Short Circuit Current {A}
     21.4,                    !- Open Circuit Voltage {V}
     4.45,                    !- Current at Maximum Power Point {A}
-    17,                      !- Voltage at Maximum Power Point {V}
+    17.0,                    !- Voltage at Maximum Power Point {V}
     0.0004,                  !- Sandia Database Parameter aIsc {1/K}
     -0.0005,                 !- Sandia Database Parameter aImp {1/K}
     0.991,                   !- Sandia Database Parameter c0 {dimensionless}
@@ -1090,7 +1090,7 @@
     -0.085,                  !- Sandia Database Parameter BVoc0 {V/K}
     0.0,                     !- Sandia Database Parameter mBVoc {V/K}
     -0.085,                  !- Sandia Database Parameter BVmp0 {V/K}
-    0,                       !- Sandia Database Parameter mBVmp {V/K}
+    0.0,                     !- Sandia Database Parameter mBVmp {V/K}
     1.38,                    !- Diode Factor {dimensionless}
     0.091575,                !- Sandia Database Parameter c2 {dimensionless}
     -8.79359,                !- Sandia Database Parameter c3 {dimensionless}
@@ -1098,15 +1098,15 @@
     0.054204,                !- Sandia Database Parameter a1 {dimensionless}
     -0.011043,               !- Sandia Database Parameter a2 {dimensionless}
     -0.0008075,              !- Sandia Database Parameter a3 {dimensionless}
-    -0.00002097,             !- Sandia Database Parameter a4 {dimensionless}
-    1,                       !- Sandia Database Parameter b0 {dimensionless}
+    -2.097e-05,              !- Sandia Database Parameter a4 {dimensionless}
+    1.0,                     !- Sandia Database Parameter b0 {dimensionless}
     -0.002438,               !- Sandia Database Parameter b1 {dimensionless}
     0.0003103,               !- Sandia Database Parameter b2 {dimensionless}
-    -0.00001246,             !- Sandia Database Parameter b3 {dimensionless}
-    2.112E-07,               !- Sandia Database Parameter b4 {dimensionless}
-    -1.359E-09,              !- Sandia Database Parameter b5 {dimensionless}
-    3,                       !- Sandia Database Parameter Delta(Tc) {deltaC}
-    1,                       !- Sandia Database Parameter fd {dimensionless}
+    -1.246e-05,              !- Sandia Database Parameter b3 {dimensionless}
+    2.112e-07,               !- Sandia Database Parameter b4 {dimensionless}
+    -1.359e-09,              !- Sandia Database Parameter b5 {dimensionless}
+    3.0,                     !- Sandia Database Parameter Delta(Tc) {deltaC}
+    1.0,                     !- Sandia Database Parameter fd {dimensionless}
     -3.56,                   !- Sandia Database Parameter a {dimensionless}
     -0.075,                  !- Sandia Database Parameter b {dimensionless}
     0.993,                   !- Sandia Database Parameter c4 {dimensionless}
@@ -1123,23 +1123,23 @@
     Photovoltaics,           !- Drawing Element 1 Type
     2;                       !- Color for Drawing Element 1
 
-  Output:Variable,*,Zone Air Temperature,hourly;
+  Output:Variable,*,Zone Air Temperature,Hourly;
 
-  Output:Variable,*,Generator Produced DC Electricity Rate,hourly;
+  Output:Variable,*,Generator Produced DC Electricity Rate,Hourly;
 
-  Output:Variable,*,Generator Produced DC Electricity Energy,hourly;
+  Output:Variable,*,Generator Produced DC Electricity Energy,Hourly;
 
-  Output:Variable,*,Inverter AC Output Electricity Energy,hourly;
+  Output:Variable,*,Inverter AC Output Electricity Energy,Hourly;
 
-  Output:Variable,*,Inverter AC Output Electricity Rate,hourly;
+  Output:Variable,*,Inverter AC Output Electricity Rate,Hourly;
 
-  Output:Variable,*,Generator PV Array Efficiency,hourly;
+  Output:Variable,*,Generator PV Array Efficiency,Hourly;
 
-  Output:Variable,*,Generator PV Cell Temperature,hourly;
+  Output:Variable,*,Generator PV Cell Temperature,Hourly;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Meter,Photovoltaic:ElectricityProduced,runperiod;
+  Output:Meter,Photovoltaic:ElectricityProduced,RunPeriod;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -1147,11 +1147,10 @@
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
 
-  Output:Meter:MeterFileOnly,Photovoltaic:ElectricityProduced,monthly;
+  Output:Meter:MeterFileOnly,Photovoltaic:ElectricityProduced,Monthly;
 
 !  Report MeterFileOnly,
 !    Photovoltaic:ElectricityProduced,  !- Meter_Name
 !    runperiod;               !- Reporting_Frequency
 
   Output:Surfaces:List,Details;
-

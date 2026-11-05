@@ -63,7 +63,7 @@
 
   Building,
     Teste,                   !- Name
-    45,                      !- North Axis {deg}
+    45.0,                    !- North Axis {deg}
     City,                    !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -127,8 +127,8 @@
     SAN_FRANCISCO_CA_USA_WMO_724940,  !- Name
     37.62,                   !- Latitude {deg}
     -122.37,                 !- Longitude {deg}
-    -8.00,                   !- Time Zone {hr}
-    5.00;                    !- Elevation {m}
+    -8.0,                    !- Time Zone {hr}
+    5.0;                     !- Elevation {m}
 
 ! SAN_FRANCISCO_CA_USA Annual Heating 99%, MaxDB=4.4°C
 
@@ -141,15 +141,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     4.4,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    101265.,                 !- Barometric Pressure {Pa}
+    101265.0,                !- Barometric Pressure {Pa}
     2.4,                     !- Wind Speed {m/s}
-    140,                     !- Wind Direction {deg}
+    140.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -158,7 +158,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
 ! SAN_FRANCISCO_CA_USA Annual Cooling (DB=>MWB) 1%, MaxDB=25.6°C MWB=16.6°C
 
@@ -168,18 +168,18 @@
     21,                      !- Day of Month
     SummerDesignDay,         !- Day Type
     25.6,                    !- Maximum Dry-Bulb Temperature {C}
-    9,                       !- Daily Dry-Bulb Temperature Range {deltaC}
+    9.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     16.6,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    101265.,                 !- Barometric Pressure {Pa}
+    101265.0,                !- Barometric Pressure {Pa}
     5.8,                     !- Wind Speed {m/s}
-    310,                     !- Wind Direction {deg}
+    310.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -188,436 +188,436 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
-  Site:GroundTemperature:BuildingSurface,20,20,20,20,20,20,20,20,20,20,20,20;
+  Site:GroundTemperature:BuildingSurface,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0;
 
   Material,
     HW Concrete - 5cm,       !- Name
     MediumRough,             !- Roughness
     0.05,                    !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     HW Concrete - 10cm,      !- Name
     MediumRough,             !- Roughness
     0.1,                     !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     HW Concrete - 15cm,      !- Name
     MediumRough,             !- Roughness
     0.15,                    !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     HW Concrete - 20cm,      !- Name
     MediumRough,             !- Roughness
     0.2,                     !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     HW Concrete - 25cm,      !- Name
     MediumRough,             !- Roughness
     0.25,                    !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     HW Concrete - 30cm,      !- Name
     MediumRough,             !- Roughness
     0.3,                     !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     HW Concrete - 40cm,      !- Name
     MediumRough,             !- Roughness
     0.4,                     !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     HW Concrete - 50cm,      !- Name
     MediumRough,             !- Roughness
     0.5,                     !- Thickness {m}
-    1.720000,                !- Conductivity {W/m-K}
-    2242.580,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    1.72,                    !- Conductivity {W/m-K}
+    2242.58,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 5cm,       !- Name
     Rough,                   !- Roughness
     0.05,                    !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 10cm,      !- Name
     Rough,                   !- Roughness
     0.1,                     !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 15cm,      !- Name
     Rough,                   !- Roughness
     0.15,                    !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 20cm,      !- Name
     Rough,                   !- Roughness
     0.2,                     !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 25cm,      !- Name
     Rough,                   !- Roughness
     0.25,                    !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 30cm,      !- Name
     Rough,                   !- Roughness
     0.3,                     !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 40cm,      !- Name
     Rough,                   !- Roughness
     0.4,                     !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     LW Concrete - 50cm,      !- Name
     Rough,                   !- Roughness
     0.5,                     !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     Wood - 1cm,              !- Name
     MediumRough,             !- Roughness
     0.01,                    !- Thickness {m}
-    0.1100000,               !- Conductivity {W/m-K}
-    544.6200,                !- Density {kg/m3}
-    1420.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.11,                    !- Conductivity {W/m-K}
+    544.62,                  !- Density {kg/m3}
+    1420.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     Wood - 2cm,              !- Name
     MediumRough,             !- Roughness
     0.02,                    !- Thickness {m}
-    0.1100000,               !- Conductivity {W/m-K}
-    544.6200,                !- Density {kg/m3}
-    1420.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.11,                    !- Conductivity {W/m-K}
+    544.62,                  !- Density {kg/m3}
+    1420.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     Wood - 3cm,              !- Name
     MediumRough,             !- Roughness
     0.03,                    !- Thickness {m}
-    0.1100000,               !- Conductivity {W/m-K}
-    544.6200,                !- Density {kg/m3}
-    1420.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.11,                    !- Conductivity {W/m-K}
+    544.62,                  !- Density {kg/m3}
+    1420.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     Wood - 5cm,              !- Name
     MediumRough,             !- Roughness
     0.05,                    !- Thickness {m}
-    0.1100000,               !- Conductivity {W/m-K}
-    544.6200,                !- Density {kg/m3}
-    1420.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.11,                    !- Conductivity {W/m-K}
+    544.62,                  !- Density {kg/m3}
+    1420.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     Wood - 10cm,             !- Name
     MediumRough,             !- Roughness
     0.1,                     !- Thickness {m}
-    0.1100000,               !- Conductivity {W/m-K}
-    544.6200,                !- Density {kg/m3}
-    1420.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.11,                    !- Conductivity {W/m-K}
+    544.62,                  !- Density {kg/m3}
+    1420.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     Gyp - 1cm,               !- Name
     Smooth,                  !- Roughness
     0.01,                    !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    784.9000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.16,                    !- Conductivity {W/m-K}
+    784.9,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     Gyp - 2cm,               !- Name
     Smooth,                  !- Roughness
     0.02,                    !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    784.9000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.16,                    !- Conductivity {W/m-K}
+    784.9,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     Gyp - 3cm,               !- Name
     Smooth,                  !- Roughness
     0.03,                    !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    784.9000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.16,                    !- Conductivity {W/m-K}
+    784.9,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     Gyp - 5cm,               !- Name
     Smooth,                  !- Roughness
     0.05,                    !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    784.9000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.16,                    !- Conductivity {W/m-K}
+    784.9,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     Gyp - 10cm,              !- Name
     Smooth,                  !- Roughness
     0.1,                     !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    784.9000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.16,                    !- Conductivity {W/m-K}
+    784.9,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     Insulator - 1cm,         !- Name
     VeryRough,               !- Roughness
     0.01,                    !- Thickness {m}
     0.04,                    !- Conductivity {W/m-K}
-    32.03000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    32.03,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     Insulator - 2cm,         !- Name
     VeryRough,               !- Roughness
     0.02,                    !- Thickness {m}
     0.04,                    !- Conductivity {W/m-K}
-    32.03000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    32.03,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     Insulator - 3cm,         !- Name
     VeryRough,               !- Roughness
     0.03,                    !- Thickness {m}
     0.04,                    !- Conductivity {W/m-K}
-    32.03000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    32.03,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     Insulator - 5cm,         !- Name
     VeryRough,               !- Roughness
     0.05,                    !- Thickness {m}
     0.04,                    !- Conductivity {W/m-K}
-    32.03000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    32.03,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     Insulator - 10cm,        !- Name
     VeryRough,               !- Roughness
     0.1,                     !- Thickness {m}
     0.04,                    !- Conductivity {W/m-K}
-    32.03000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    32.03,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     Aluminum - 2mm,          !- Name
     Smooth,                  !- Roughness
     0.002,                   !- Thickness {m}
-    221.3800,                !- Conductivity {W/m-K}
-    2739.150,                !- Density {kg/m3}
-    890.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.2000000,               !- Solar Absorptance
-    0.2000000;               !- Visible Absorptance
+    221.38,                  !- Conductivity {W/m-K}
+    2739.15,                 !- Density {kg/m3}
+    890.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.2,                     !- Solar Absorptance
+    0.2;                     !- Visible Absorptance
 
   Material,
     Aluminum - 4mm,          !- Name
     Smooth,                  !- Roughness
     0.004,                   !- Thickness {m}
-    221.3800,                !- Conductivity {W/m-K}
-    2739.150,                !- Density {kg/m3}
-    890.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.2000000,               !- Solar Absorptance
-    0.2000000;               !- Visible Absorptance
+    221.38,                  !- Conductivity {W/m-K}
+    2739.15,                 !- Density {kg/m3}
+    890.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.2,                     !- Solar Absorptance
+    0.2;                     !- Visible Absorptance
 
   Material,
     Aluminum - 6mm,          !- Name
     Smooth,                  !- Roughness
     0.006,                   !- Thickness {m}
-    221.3800,                !- Conductivity {W/m-K}
-    2739.150,                !- Density {kg/m3}
-    890.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.2000000,               !- Solar Absorptance
-    0.2000000;               !- Visible Absorptance
+    221.38,                  !- Conductivity {W/m-K}
+    2739.15,                 !- Density {kg/m3}
+    890.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.2,                     !- Solar Absorptance
+    0.2;                     !- Visible Absorptance
 
   Material,
     Aluminum - 8mm,          !- Name
     Smooth,                  !- Roughness
     0.008,                   !- Thickness {m}
-    221.3800,                !- Conductivity {W/m-K}
-    2739.150,                !- Density {kg/m3}
-    890.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.2000000,               !- Solar Absorptance
-    0.2000000;               !- Visible Absorptance
+    221.38,                  !- Conductivity {W/m-K}
+    2739.15,                 !- Density {kg/m3}
+    890.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.2,                     !- Solar Absorptance
+    0.2;                     !- Visible Absorptance
 
   Material,
     Aluminum - 10mm,         !- Name
     Smooth,                  !- Roughness
     0.01,                    !- Thickness {m}
-    221.3800,                !- Conductivity {W/m-K}
-    2739.150,                !- Density {kg/m3}
-    890.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.2000000,               !- Solar Absorptance
-    0.2000000;               !- Visible Absorptance
+    221.38,                  !- Conductivity {W/m-K}
+    2739.15,                 !- Density {kg/m3}
+    890.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.2,                     !- Solar Absorptance
+    0.2;                     !- Visible Absorptance
 
   Material,
     Aluminum - 10cm,         !- Name
     Smooth,                  !- Roughness
     0.1,                     !- Thickness {m}
-    221.3800,                !- Conductivity {W/m-K}
-    2739.150,                !- Density {kg/m3}
-    890.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.2000000,               !- Solar Absorptance
-    0.2000000;               !- Visible Absorptance
+    221.38,                  !- Conductivity {W/m-K}
+    2739.15,                 !- Density {kg/m3}
+    890.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.2,                     !- Solar Absorptance
+    0.2;                     !- Visible Absorptance
 
   Material:AirGap,
     Air - 1cm,               !- Name
-    0.3400000;               !- Thermal Resistance {m2-K/W}
+    0.34;                    !- Thermal Resistance {m2-K/W}
 
   Material:AirGap,
     Air - 2cm,               !- Name
-    0.6800000;               !- Thermal Resistance {m2-K/W}
+    0.68;                    !- Thermal Resistance {m2-K/W}
 
   Material:AirGap,
     Air - 3cm,               !- Name
-    1.0200000;               !- Thermal Resistance {m2-K/W}
+    1.02;                    !- Thermal Resistance {m2-K/W}
 
   Material:AirGap,
     Air - 5cm,               !- Name
-    1.700000;                !- Thermal Resistance {m2-K/W}
+    1.7;                     !- Thermal Resistance {m2-K/W}
 
   Material:AirGap,
     Air - 10cm,              !- Name
-    3.400000;                !- Thermal Resistance {m2-K/W}
+    3.4;                     !- Thermal Resistance {m2-K/W}
 
 ! ID 3
 
@@ -630,8 +630,8 @@
     0.071,                   !- Front Side Solar Reflectance at Normal Incidence
     0.071,                   !- Back Side Solar Reflectance at Normal Incidence
     0.881,                   !- Visible Transmittance at Normal Incidence
-    0.080,                   !- Front Side Visible Reflectance at Normal Incidence
-    0.080,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Front Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
     0.84,                    !- Front Side Infrared Hemispherical Emissivity
     0.84,                    !- Back Side Infrared Hemispherical Emissivity
@@ -646,8 +646,8 @@
     0.071,                   !- Front Side Solar Reflectance at Normal Incidence
     0.071,                   !- Back Side Solar Reflectance at Normal Incidence
     0.881,                   !- Visible Transmittance at Normal Incidence
-    0.080,                   !- Front Side Visible Reflectance at Normal Incidence
-    0.080,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Front Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
     0.84,                    !- Front Side Infrared Hemispherical Emissivity
     0.84,                    !- Back Side Infrared Hemispherical Emissivity
@@ -662,8 +662,8 @@
     0.071,                   !- Front Side Solar Reflectance at Normal Incidence
     0.071,                   !- Back Side Solar Reflectance at Normal Incidence
     0.881,                   !- Visible Transmittance at Normal Incidence
-    0.080,                   !- Front Side Visible Reflectance at Normal Incidence
-    0.080,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Front Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
     0.84,                    !- Front Side Infrared Hemispherical Emissivity
     0.84,                    !- Back Side Infrared Hemispherical Emissivity
@@ -678,8 +678,8 @@
     0.071,                   !- Front Side Solar Reflectance at Normal Incidence
     0.071,                   !- Back Side Solar Reflectance at Normal Incidence
     0.881,                   !- Visible Transmittance at Normal Incidence
-    0.080,                   !- Front Side Visible Reflectance at Normal Incidence
-    0.080,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Front Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
     0.84,                    !- Front Side Infrared Hemispherical Emissivity
     0.84,                    !- Back Side Infrared Hemispherical Emissivity
@@ -694,8 +694,8 @@
     0.071,                   !- Front Side Solar Reflectance at Normal Incidence
     0.071,                   !- Back Side Solar Reflectance at Normal Incidence
     0.881,                   !- Visible Transmittance at Normal Incidence
-    0.080,                   !- Front Side Visible Reflectance at Normal Incidence
-    0.080,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Front Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
     0.84,                    !- Front Side Infrared Hemispherical Emissivity
     0.84,                    !- Back Side Infrared Hemispherical Emissivity
@@ -703,17 +703,17 @@
 
   WindowMaterial:Gas,
     WindowGas:Air - 1cm,     !- Name
-    AIR,                     !- Gas Type
+    Air,                     !- Gas Type
     0.01;                    !- Thickness {m}
 
   WindowMaterial:Gas,
     WindowGas:Air - 1.5cm,   !- Name
-    AIR,                     !- Gas Type
+    Air,                     !- Gas Type
     0.015;                   !- Thickness {m}
 
   WindowMaterial:Gas,
     WindowGas:Air - 2cm,     !- Name
-    AIR,                     !- Gas Type
+    Air,                     !- Gas Type
     0.02;                    !- Thickness {m}
 
   Construction,
@@ -736,16 +736,16 @@
 
   Zone,
     ZONA,                    !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1;                       !- Multiplier
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    ClockWise,               !- Vertex Entry Direction
+    Clockwise,               !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   BuildingSurface:Detailed,
@@ -760,10 +760,10 @@
     WindExposed,             !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,5,4,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,4,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,5,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,5.0,4.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,4.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONAS,                   !- Name
@@ -777,10 +777,10 @@
     WindExposed,             !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,4,  !- X,Y,Z ==> Vertex 1 {m}
-    6,0,4,  !- X,Y,Z ==> Vertex 2 {m}
-    6,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,4.0,  !- X,Y,Z ==> Vertex 1 {m}
+    6.0,0.0,4.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONAE,                   !- Name
@@ -794,10 +794,10 @@
     WindExposed,             !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6,0,4,  !- X,Y,Z ==> Vertex 1 {m}
-    6,5,4,  !- X,Y,Z ==> Vertex 2 {m}
-    6,5,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    6.0,0.0,4.0,  !- X,Y,Z ==> Vertex 1 {m}
+    6.0,5.0,4.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONAN,                   !- Name
@@ -811,10 +811,10 @@
     WindExposed,             !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6,5,4,  !- X,Y,Z ==> Vertex 1 {m}
-    0,5,4,  !- X,Y,Z ==> Vertex 2 {m}
-    0,5,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6,5,0;  !- X,Y,Z ==> Vertex 4 {m}
+    6.0,5.0,4.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,5.0,4.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.0,5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONAF,                   !- Name
@@ -828,14 +828,14 @@
     NoWind,                  !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    6,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6,5,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,5,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    6.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONAC,                   !- Name
-    ceiling,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     RoofConst,               !- Construction Name
     ZONA,                    !- Zone Name
     ,                        !- Space Name
@@ -845,14 +845,14 @@
     WindExposed,             !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6,0,4,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,4,  !- X,Y,Z ==> Vertex 2 {m}
-    0,5,4,  !- X,Y,Z ==> Vertex 3 {m}
-    6,5,4;  !- X,Y,Z ==> Vertex 4 {m}
+    6.0,0.0,4.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,4.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,5.0,4.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.0,5.0,4.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     ZONAWwin,                !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     WindowConst,             !- Construction Name
     ZONAW,                   !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -860,14 +860,14 @@
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0,3,2.5,  !- X,Y,Z ==> Vertex 1 {m}
-    0,2,2.5,  !- X,Y,Z ==> Vertex 2 {m}
-    0,2,1.5,  !- X,Y,Z ==> Vertex 3 {m}
-    0,3,1.5;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,3.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,2.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,2.0,1.5,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,3.0,1.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     ZONAEwin,                !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     WindowConst,             !- Construction Name
     ZONAE,                   !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
@@ -875,33 +875,33 @@
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
-    6,2,2.5,  !- X,Y,Z ==> Vertex 1 {m}
-    6,3,2.5,  !- X,Y,Z ==> Vertex 2 {m}
-    6,3,1.5,  !- X,Y,Z ==> Vertex 3 {m}
-    6,2,1.5;  !- X,Y,Z ==> Vertex 4 {m}
+    6.0,2.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}
+    6.0,3.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}
+    6.0,3.0,1.5,  !- X,Y,Z ==> Vertex 3 {m}
+    6.0,2.0,1.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   RoomAirModelType,
     cv,                      !- Name
     zona,                    !- Zone Name
     CrossVentilation,        !- Room-Air Modeling Type
-    DIRECT;                  !- Air Temperature Coupling Strategy
+    Direct;                  !- Air Temperature Coupling Strategy
 
   RoomAirSettings:CrossVentilation,
     ZONA,                    !- Zone Name
     GANHOS,                  !- Gain Distribution Schedule Name
-    JET;                     !- Airflow Region Used for Thermal Comfort Evaluation
+    Jet;                     !- Airflow Region Used for Thermal Comfort Evaluation
 
   ScheduleTypeLimits,
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Real,                    !- Name
     ,                        !- Lower Limit Value
     ,                        !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   Schedule:Compact,
     ON,                      !- Name
@@ -922,7 +922,7 @@
     ZONA,                    !- Zone or ZoneList or Space or SpaceList Name
     ON,                      !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    5000,                    !- Lighting Level {W}
+    5000.0,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     ,                        !- Return Air Fraction
@@ -935,7 +935,7 @@
     ZONA,                    !- Zone or ZoneList or Space or SpaceList Name
     ON,                      !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    3000,                    !- Design Level {W}
+    3000.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.0,                     !- Fraction Latent
@@ -945,13 +945,13 @@
   AirflowNetwork:SimulationControl,
     VENT,                    !- Name
     MultizoneWithoutDistribution,  !- AirflowNetwork Control
-    INPUT,                   !- Wind Pressure Coefficient Type
+    Input,                   !- Wind Pressure Coefficient Type
     ExternalNode,            !- Height Selection for Local Wind Pressure Calculation
-    LOWRISE,                 !- Building Type
+    LowRise,                 !- Building Type
     500,                     !- Maximum Number of Iterations {dimensionless}
     ZeroNodePressures,       !- Initialization Type
-    1.0E-05,                 !- Relative Airflow Convergence Tolerance {dimensionless}
-    1.0E-06,                 !- Absolute Airflow Convergence Tolerance {kg/s}
+    1e-05,                   !- Relative Airflow Convergence Tolerance {dimensionless}
+    1e-06,                   !- Absolute Airflow Convergence Tolerance {kg/s}
     -0.5,                    !- Convergence Acceleration Limit {dimensionless}
     90.0,                    !- Azimuth Angle of Long Axis of Building {deg}
     0.833,                   !- Ratio of Building Width Along Short Axis to Width Along Long Axis
@@ -962,9 +962,9 @@
 
   AirflowNetwork:MultiZone:Zone,
     ZONA,                    !- Zone Name
-    CONSTANT,                !- Ventilation Control Mode
+    Constant,                !- Ventilation Control Mode
     WindowVentSched,         !- Ventilation Control Zone Temperature Setpoint Schedule Name
-    1,                       !- Minimum Venting Open Factor {dimensionless}
+    1.0,                     !- Minimum Venting Open Factor {dimensionless}
     0.0,                     !- Indoor and Outdoor Temperature Difference Lower Limit For Maximum Venting Open Factor {deltaC}
     100.0,                   !- Indoor and Outdoor Temperature Difference Upper Limit for Minimum Venting Open Factor {deltaC}
     0.0,                     !- Indoor and Outdoor Enthalpy Difference Lower Limit For Maximum Venting Open Factor {deltaJ/kg}
@@ -985,49 +985,49 @@
 
   AirflowNetwork:MultiZone:Component:DetailedOpening,
     DCD,                     !- Name
-    1,                       !- Air Mass Flow Coefficient When Opening is Closed {kg/s-m}
-    1,                       !- Air Mass Flow Exponent When Opening is Closed {dimensionless}
+    1.0,                     !- Air Mass Flow Coefficient When Opening is Closed {kg/s-m}
+    1.0,                     !- Air Mass Flow Exponent When Opening is Closed {dimensionless}
     NonPivoted,              !- Type of Rectangular Large Vertical Opening (LVO)
     0.0,                     !- Extra Crack Length or Height of Pivoting Axis {m}
     2,                       !- Number of Sets of Opening Factor Data
-    0,                       !- Opening Factor 1 {dimensionless}
+    0.0,                     !- Opening Factor 1 {dimensionless}
     0.7,                     !- Discharge Coefficient for Opening Factor 1 {dimensionless}
-    1,                       !- Width Factor for Opening Factor 1 {dimensionless}
+    1.0,                     !- Width Factor for Opening Factor 1 {dimensionless}
     0.85,                    !- Height Factor for Opening Factor 1 {dimensionless}
     0.01,                    !- Start Height Factor for Opening Factor 1 {dimensionless}
-    1,                       !- Opening Factor 2 {dimensionless}
+    1.0,                     !- Opening Factor 2 {dimensionless}
     0.7,                     !- Discharge Coefficient for Opening Factor 2 {dimensionless}
-    1,                       !- Width Factor for Opening Factor 2 {dimensionless}
+    1.0,                     !- Width Factor for Opening Factor 2 {dimensionless}
     0.9,                     !- Height Factor for Opening Factor 2 {dimensionless}
     0.01,                    !- Start Height Factor for Opening Factor 2 {dimensionless}
-    0,                       !- Opening Factor 3 {dimensionless}
-    0,                       !- Discharge Coefficient for Opening Factor 3 {dimensionless}
-    0,                       !- Width Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Height Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Start Height Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Opening Factor 4 {dimensionless}
-    0,                       !- Discharge Coefficient for Opening Factor 4 {dimensionless}
-    0,                       !- Width Factor for Opening Factor 4 {dimensionless}
-    0,                       !- Height Factor for Opening Factor 4 {dimensionless}
-    0;                       !- Start Height Factor for Opening Factor 4 {dimensionless}
+    0.0,                     !- Opening Factor 3 {dimensionless}
+    0.0,                     !- Discharge Coefficient for Opening Factor 3 {dimensionless}
+    0.0,                     !- Width Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Height Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Start Height Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Opening Factor 4 {dimensionless}
+    0.0,                     !- Discharge Coefficient for Opening Factor 4 {dimensionless}
+    0.0,                     !- Width Factor for Opening Factor 4 {dimensionless}
+    0.0,                     !- Height Factor for Opening Factor 4 {dimensionless}
+    0.0;                     !- Start Height Factor for Opening Factor 4 {dimensionless}
 
   AirflowNetwork:MultiZone:ReferenceCrackConditions,
-    ReferenceCrackConditions,!- Name
+    ReferenceCrackConditions,  !- Name
     20.0,                    !- Reference Temperature {C}
-    100000,                  !- Reference Barometric Pressure {Pa}
-    0.010;                   !- Reference Humidity Ratio {kgWater/kgDryAir}
+    100000.0,                !- Reference Barometric Pressure {Pa}
+    0.01;                    !- Reference Humidity Ratio {kgWater/kgDryAir}
 
   AirflowNetwork:MultiZone:Surface:Crack,
     ZonaCrack,               !- Name
     1.0,                     !- Air Mass Flow Coefficient at Reference Conditions {kg/s}
     0.5,                     !- Air Mass Flow Exponent {dimensionless}
-    ReferenceCrackConditions;!- Reference Crack Conditions
+    ReferenceCrackConditions;  !- Reference Crack Conditions
 
   AirflowNetwork:MultiZone:Surface:Crack,
     ZonaCrack2,              !- Name
     0.8,                     !- Air Mass Flow Coefficient at Reference Conditions {kg/s}
     0.5,                     !- Air Mass Flow Exponent {dimensionless}
-    ReferenceCrackConditions;!- Reference Crack Conditions
+    ReferenceCrackConditions;  !- Reference Crack Conditions
 
   AirflowNetwork:MultiZone:ExternalNode,
     NoExt1,                  !- Name
@@ -1041,79 +1041,78 @@
 
   AirflowNetwork:MultiZone:WindPressureCoefficientArray,
     CPM,                     !- Name
-    0,                       !- Wind Direction 1 {deg}
-    90,                      !- Wind Direction 2 {deg}
-    180,                     !- Wind Direction 3 {deg}
-    270,                     !- Wind Direction 4 {deg}
-    360;                     !- Wind Direction 5 {deg}
+    0.0,                     !- Wind Direction 1 {deg}
+    90.0,                    !- Wind Direction 2 {deg}
+    180.0,                   !- Wind Direction 3 {deg}
+    270.0,                   !- Wind Direction 4 {deg}
+    360.0;                   !- Wind Direction 5 {deg}
 
   AirflowNetwork:MultiZone:WindPressureCoefficientValues,
     NoExt1_WPCValue,         !- Name
     CPM,                     !- AirflowNetwork:MultiZone:WindPressureCoefficientArray Name
-    1,                       !- Wind Pressure Coefficient Value 1 {dimensionless}
-    1,                       !- Wind Pressure Coefficient Value 2 {dimensionless}
-    1,                       !- Wind Pressure Coefficient Value 3 {dimensionless}
-    1,                       !- Wind Pressure Coefficient Value 4 {dimensionless}
-    1;                       !- Wind Pressure Coefficient Value 5 {dimensionless}
+    1.0,                     !- Wind Pressure Coefficient Value 1 {dimensionless}
+    1.0,                     !- Wind Pressure Coefficient Value 2 {dimensionless}
+    1.0,                     !- Wind Pressure Coefficient Value 3 {dimensionless}
+    1.0,                     !- Wind Pressure Coefficient Value 4 {dimensionless}
+    1.0;                     !- Wind Pressure Coefficient Value 5 {dimensionless}
 
   AirflowNetwork:MultiZone:WindPressureCoefficientValues,
     NoExt2_WPCValue,         !- Name
     CPM,                     !- AirflowNetwork:MultiZone:WindPressureCoefficientArray Name
-    0,                       !- Wind Pressure Coefficient Value 1 {dimensionless}
-    0,                       !- Wind Pressure Coefficient Value 2 {dimensionless}
-    0,                       !- Wind Pressure Coefficient Value 3 {dimensionless}
-    0,                       !- Wind Pressure Coefficient Value 4 {dimensionless}
-    0;                       !- Wind Pressure Coefficient Value 5 {dimensionless}
+    0.0,                     !- Wind Pressure Coefficient Value 1 {dimensionless}
+    0.0,                     !- Wind Pressure Coefficient Value 2 {dimensionless}
+    0.0,                     !- Wind Pressure Coefficient Value 3 {dimensionless}
+    0.0,                     !- Wind Pressure Coefficient Value 4 {dimensionless}
+    0.0;                     !- Wind Pressure Coefficient Value 5 {dimensionless}
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;
 
-  Output:Variable,*,Zone Mean Air Temperature,timestep;
+  Output:Variable,*,Zone Mean Air Temperature,Timestep;
 
-  Output:Variable,*,Room Air Zone Jet Region Temperature,timestep;
+  Output:Variable,*,Room Air Zone Jet Region Temperature,Timestep;
 
-  Output:Variable,*,Room Air Zone Recirculation Region Temperature,timestep;
+  Output:Variable,*,Room Air Zone Recirculation Region Temperature,Timestep;
 
-  Output:Variable,*,Room Air Zone Jet Region Average Air Velocity,timestep;
+  Output:Variable,*,Room Air Zone Jet Region Average Air Velocity,Timestep;
 
-  Output:Variable,*,Room Air Zone Recirculation Region Average Air Velocity,timestep;
+  Output:Variable,*,Room Air Zone Recirculation Region Average Air Velocity,Timestep;
 
-  Output:Variable,*,Room Air Zone Inflow Opening Area,timestep;
+  Output:Variable,*,Room Air Zone Inflow Opening Area,Timestep;
 
-  Output:Variable,*,Room Air Zone Room Length,timestep;
+  Output:Variable,*,Room Air Zone Room Length,Timestep;
 
-  Output:Variable,*,Room Air Zone Recirculation and Inflow Rate Ratio,timestep;
+  Output:Variable,*,Room Air Zone Recirculation and Inflow Rate Ratio,Timestep;
 
-  Output:Variable,*,Room Air Zone Is Mixing Status,timestep;
+  Output:Variable,*,Room Air Zone Is Mixing Status,Timestep;
 
-  Output:Variable,*,AFN Linkage Node 2 to Node 1 Volume Flow Rate,timestep;
+  Output:Variable,*,AFN Linkage Node 2 to Node 1 Volume Flow Rate,Timestep;
 
-  Output:Variable,*,AFN Linkage Node 1 to Node 2 Volume Flow Rate,timestep;
+  Output:Variable,*,AFN Linkage Node 1 to Node 2 Volume Flow Rate,Timestep;
 
-  Output:Variable,*,Site Wind Speed,timestep;
+  Output:Variable,*,Site Wind Speed,Timestep;
 
-  Output:Variable,*,Site Wind Direction,timestep;
+  Output:Variable,*,Site Wind Direction,Timestep;
 
-  Output:Variable,*,Zone Mean Radiant Temperature,timestep;
+  Output:Variable,*,Zone Mean Radiant Temperature,Timestep;
 
   Output:Variable,*,Room Air Zone Is Recirculating Status;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Building,Monthly;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,monthly;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Building,RunPeriod;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,runperiod;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,RunPeriod;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
-

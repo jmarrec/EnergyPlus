@@ -20,20 +20,20 @@
 
   Building,
     Building,                !- Name
-    0.0000,                  !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     City,                    !- Terrain
-    0.0400,                  !- Loads Convergence Tolerance Value {W}
-    0.2000,                  !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    0.04,                    !- Loads Convergence Tolerance Value {W}
+    0.2,                     !- Temperature Convergence Tolerance Value {deltaC}
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
   Site:Location,
     CHICAGO_IL_USA TMY2-94846,  !- Name
-    41.78000,                !- Latitude {deg}
-    -87.75000,               !- Longitude {deg}
-    -6.000000,               !- Time Zone {hr}
-    190.0000;                !- Elevation {m}
+    41.78,                   !- Latitude {deg}
+    -87.75,                  !- Longitude {deg}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
 ! CHICAGO_IL_USA Annual Heating 99.6%, MaxDB=-20.6°C
 
@@ -46,15 +46,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -20.6,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -63,7 +63,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
 ! CHICAGO_IL_USA Annual Cooling (DB=>MWB) .4%, MaxDB=33.2°C MWB=23.8°C
 
@@ -76,15 +76,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.8,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -93,11 +93,10 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
   PythonPlugin:Instance,
     Heating Setpoint Override,  !- Name
     Yes,                     !- Run During Warmup Days
     mcve_gil,                !- Python Module Name
     HeatingSetPoint;         !- Plugin Class Name
-

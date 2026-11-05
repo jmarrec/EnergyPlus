@@ -17,7 +17,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -25,15 +25,15 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     Chicago,                 !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
   SizingPeriod:DesignDay,
     Chicago Summer 1%,       !- Name
@@ -44,15 +44,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     ,                        !- Rain Indicator
     ,                        !- Snow Indicator
     ,                        !- Daylight Saving Time Indicator
@@ -68,19 +68,19 @@
     1,                       !- Month
     21,                      !- Day of Month
     WinterDesignDay,         !- Day Type
-    -20,                     !- Maximum Dry-Bulb Temperature {C}
+    -20.0,                   !- Maximum Dry-Bulb Temperature {C}
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -20,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    -20.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98934.,                  !- Barometric Pressure {Pa}
+    98934.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     ,                        !- Rain Indicator
     ,                        !- Snow Indicator
     ,                        !- Daylight Saving Time Indicator
@@ -105,13 +105,13 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
     Discrete;                !- Numeric Type
 
   Schedule:Constant,Heating Coil Load Loop Setpoint Temperature Schedule,Any Number,65.0;
 
-  Schedule:Constant,AlwaysOnSchedule,On/Off,1;
+  Schedule:Constant,AlwaysOnSchedule,On/Off,1.0;
 
 ! Simulate a winter time, overnight hours load, but the pump is always running in that season
 
@@ -154,15 +154,15 @@
 
   PlantLoop,
     Heating Coil Load Loop,  !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     Heating Coil Load Loop Operation,  !- Plant Equipment Operation Scheme Name
     Heating Coil Load Loop Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.005,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    2,                       !- Plant Loop Volume {m3}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    2.0,                     !- Plant Loop Volume {m3}
     Heating Coil Load Loop Supply Inlet Node,  !- Plant Side Inlet Node Name
     Heating Coil Load Loop Supply Outlet Node,  !- Plant Side Outlet Node Name
     Heating Coil Load Loop Supply Branches,  !- Plant Side Branch List Name
@@ -180,9 +180,9 @@
 
   Sizing:Plant,
     Heating Coil Load Loop,  !- Plant or Condenser Loop Name
-    heating,                 !- Loop Type
-    82.,                     !- Design Loop Exit Temperature {C}
-    11;                      !- Loop Design Temperature Difference {deltaC}
+    Heating,                 !- Loop Type
+    82.0,                    !- Design Loop Exit Temperature {C}
+    11.0;                    !- Loop Design Temperature Difference {deltaC}
 
   SetpointManager:Scheduled,
     Heating Coil Load Loop Setpoint Manager,  !- Name
@@ -198,8 +198,8 @@
 
   PlantEquipmentOperation:HeatingLoad,
     Heating Coil Load Loop Heating Operation,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Heating Coil Load Loop Heating Equipment;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -228,16 +228,16 @@
     Heating Coil Load Loop Supply Inlet Node,  !- Inlet Node Name
     Heating Coil Load Loop Intermediate Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    3000,                    !- Design Pump Head {Pa}
-    22,                      !- Design Power Consumption {W}
+    3000.0,                  !- Design Pump Head {Pa}
+    22.0,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   HeatPump:AirToWater,
     test_AWHP,               !- Name
@@ -247,12 +247,12 @@
     SingleMode,              !- Operating Mode Control Option for Multiple Unit
     ,                        !- Operating Mode Control Schedule Name
     ,                        !- Minimum Part Load Ratio
-    20,                      !- Rated Inlet Air Temperature in Heating Mode {C}
-    autosize,                !- Rated Air Flow Rate in Heating Mode {m3/s}
-    50,                      !- Rated Leaving Water Temperature in Heating Mode {C}
-    autosize,                !- Rated Water Flow Rate in Heating Mode {m3/s}
-    -20,                     !- Minimum Outdoor Air Temperature in Heating Mode {C}
-    25,                      !- Maximum Outdoor Air Temperature in Heating Mode {C}
+    20.0,                    !- Rated Inlet Air Temperature in Heating Mode {C}
+    Autosize,                !- Rated Air Flow Rate in Heating Mode {m3/s}
+    50.0,                    !- Rated Leaving Water Temperature in Heating Mode {C}
+    Autosize,                !- Rated Water Flow Rate in Heating Mode {m3/s}
+    -20.0,                   !- Minimum Outdoor Air Temperature in Heating Mode {C}
+    25.0,                    !- Maximum Outdoor Air Temperature in Heating Mode {C}
     ,                        !- Minimum Leaving Water Temperature Curve Name in Heating Mode
     ,                        !- Maximum Leaving Water Temperature Curve Name in Heating Mode
     1.0,                     !- Sizing Factor for Heating
@@ -266,7 +266,7 @@
     ,                        !- Maximum Leaving Water Temperature Curve Name in Cooling Mode
     ,                        !- Sizing Factor for Cooling
     Outdoor Air Inlet Node,  !- Air Inlet Node Name
-    Outdoor Air Outlet Node, !- Air Outlet Node Name
+    Outdoor Air Outlet Node,  !- Air Outlet Node Name
     Heating Coil Load Loop Intermediate Node,  !- Hot Water Inlet Node Name
     Heating Coil Load Loop Supply Outlet Node,  !- Hot Water Outlet Node Name
     ,                        !- Chilled Water Inlet Node Name
@@ -274,20 +274,20 @@
     ,                        !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation
     Timed,                   !- Heat Pump Defrost Control
     0.2,                     !- Heat Pump Defrost Time Period Fraction
-    150,                     !- Resistive Defrost Heater Capacity {W}
+    150.0,                   !- Resistive Defrost Heater Capacity {W}
     ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
     2,                       !- Heat Pump Multiplier
     FixedSpeed,              !- Control Type
-    100,                     !- Crankcase Heater Capacity {W}
+    100.0,                   !- Crankcase Heater Capacity {W}
     CrankCaseHeaterPowerCurve,  !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5,                       !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
+    5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
     2,                       !- Number of Speeds for Heating
-    20000,                   !- Rated Heating Capacity at Speed 1 {W}
+    20000.0,                 !- Rated Heating Capacity at Speed 1 {W}
     3.49,                    !- Rated COP for Heating at Speed 1 {W/W}
     CapCurveFuncTempHT,      !- Normalized Heating Capacity Function of Temperature Curve Name at Speed 1
     EIRCurveFuncTempHT,      !- Heating Energy Input Ratio Function of Temperature Curve Name at Speed 1
     EIRCurveFuncPLR,         !- Heating Energy Input Ratio Function of PLR Curve Name at Speed 1
-    autosize,                !- Rated Heating Capacity at Speed 2 {W}
+    Autosize,                !- Rated Heating Capacity at Speed 2 {W}
     3.51,                    !- Rated COP for Heating at Speed 2 {W/W}
     CapCurveFuncTempHT2,     !- Normalized Heating Capacity Function of Temperature Curve Name at Speed 2
     EIRCurveFuncTempHT2,     !- Heating Energy Input Ratio Function of Temperature Curve Name at Speed 2
@@ -354,10 +354,10 @@
     0.0185,                  !- Coefficient4 y
     -0.0108,                 !- Coefficient5 y**2
     0.000617,                !- Coefficient6 x*y
-    30,                      !- Minimum Value of x
-    50,                      !- Maximum Value of x
-    -7,                      !- Minimum Value of y
-    20,                      !- Maximum Value of y
+    30.0,                    !- Minimum Value of x
+    50.0,                    !- Maximum Value of x
+    -7.0,                    !- Minimum Value of y
+    20.0,                    !- Maximum Value of y
     0.5,                     !- Minimum Curve Output
     1.3,                     !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -371,11 +371,11 @@
     -0.00027,                !- Coefficient3 x**2
     -0.0108,                 !- Coefficient4 y
     0.0145,                  !- Coefficient5 y**2
-    -0.000230,               !- Coefficient6 x*y
-    30,                      !- Minimum Value of x
-    50,                      !- Maximum Value of x
-    -7,                      !- Minimum Value of y
-    20,                      !- Maximum Value of y
+    -0.00023,                !- Coefficient6 x*y
+    30.0,                    !- Minimum Value of x
+    50.0,                    !- Maximum Value of x
+    -7.0,                    !- Minimum Value of y
+    20.0,                    !- Maximum Value of y
     0.7,                     !- Minimum Curve Output
     1.5,                     !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -395,8 +395,8 @@
     1.0,                     !- Coefficient1 Constant
     0.01,                    !- Coefficient2 x
     0.0,                     !- Coefficient3 x**2
-    -30,                     !- Minimum Value of x
-    30;                      !- Maximum Value of x
+    -30.0,                   !- Minimum Value of x
+    30.0;                    !- Maximum Value of x
 
   BranchList,
     Heating Coil Load Loop Demand Branches,  !- Name
@@ -422,15 +422,15 @@
   Curve:Biquadratic,
     CapCurveFuncTempHT2,     !- Name
     0.885,                   !- Coefficient1 Constant
-    -0.00040,                !- Coefficient2 x
+    -0.0004,                 !- Coefficient2 x
     0.00019,                 !- Coefficient3 x**2
     0.0202,                  !- Coefficient4 y
     -0.0096,                 !- Coefficient5 y**2
-    0.000580,                !- Coefficient6 x*y
-    30,                      !- Minimum Value of x
-    50,                      !- Maximum Value of x
-    -7,                      !- Minimum Value of y
-    20,                      !- Maximum Value of y
+    0.00058,                 !- Coefficient6 x*y
+    30.0,                    !- Minimum Value of x
+    50.0,                    !- Maximum Value of x
+    -7.0,                    !- Minimum Value of y
+    20.0,                    !- Maximum Value of y
     0.5,                     !- Minimum Curve Output
     1.3,                     !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -444,11 +444,11 @@
     -0.00027,                !- Coefficient3 x**2
     -0.0108,                 !- Coefficient4 y
     0.0145,                  !- Coefficient5 y**2
-    -0.000230,               !- Coefficient6 x*y
-    30,                      !- Minimum Value of x
-    50,                      !- Maximum Value of x
-    -7,                      !- Minimum Value of y
-    20,                      !- Maximum Value of y
+    -0.00023,                !- Coefficient6 x*y
+    30.0,                    !- Minimum Value of x
+    50.0,                    !- Maximum Value of x
+    -7.0,                    !- Minimum Value of y
+    20.0,                    !- Maximum Value of y
     0.7,                     !- Minimum Curve Output
     1.5,                     !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -468,63 +468,63 @@
 
   Output:VariableDictionary,IDF;
 
-  Output:Variable,*,Heat Pump Load Side Heat Transfer Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Heat Transfer Rate in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Load Side Heat Transfer Energy in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Heat Transfer Energy in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Source Side Heat Transfer Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Heat Transfer Rate in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Source Side Heat Transfer Energy in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Heat Transfer Energy in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Load Side Inlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Inlet Temperature in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Load Side Outlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Outlet Temperature in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Source Side Inlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Inlet Temperature in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Source Side Outlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Outlet Temperature in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Electricity Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Electricity Rate in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Electricity Energy in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Electricity Energy in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Load Side Mass Flow Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Mass Flow Rate in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Source Side Mass Flow Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Mass Flow Rate in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Number Of Heating Unit On,detailed;
+  Output:Variable,*,Heat Pump Number Of Heating Unit On,Detailed;
 
-  Output:Variable,*,Heat Pump Crankcase Heater Electricity Rate,detailed;
+  Output:Variable,*,Heat Pump Crankcase Heater Electricity Rate,Detailed;
 
-  Output:Variable,*,Heat Pump Crankcase Heater Electricity Energy,detailed;
+  Output:Variable,*,Heat Pump Crankcase Heater Electricity Energy,Detailed;
 
-  Output:Variable,*,Heat Pump Heating COP,detailed;
+  Output:Variable,*,Heat Pump Heating COP,Detailed;
 
-  Output:Variable,*,Heat Pump Total Heating Rate,detailed;
+  Output:Variable,*,Heat Pump Total Heating Rate,Detailed;
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,detailed;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Detailed;
 
-  Output:Variable,*,Heat Pump Defrost Electricity Rate,detailed;
+  Output:Variable,*,Heat Pump Defrost Electricity Rate,Detailed;
 
-  Output:Variable,*,Heat Pump Defrost Electricity Energy,detailed;
+  Output:Variable,*,Heat Pump Defrost Electricity Energy,Detailed;
 
-  Output:Variable,Heating Coil Load Loop,Plant Supply Side Heating Demand Rate,detailed;
+  Output:Variable,Heating Coil Load Loop,Plant Supply Side Heating Demand Rate,Detailed;
 
-  Output:Variable,*,Plant Load Profile Heat Transfer Rate,detailed;
+  Output:Variable,*,Plant Load Profile Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Heat Pump Speed Level in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Speed Level in Heating Mode,Detailed;
 
-  Output:Variable,*,Heat Pump Speed Ratio in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Speed Ratio in Heating Mode,Detailed;
 
-  Output:Variable,*,EMS Defrost Flag,detailed;
+  Output:Variable,*,EMS Defrost Flag,Detailed;
 
-  Output:Variable,*,Heat Pump Load Due To Defrost,detailed;
+  Output:Variable,*,Heat Pump Load Due To Defrost,Detailed;
 
-  Output:Variable,*,Heat Pump Fractional Defrost Time,detailed;
+  Output:Variable,*,Heat Pump Fractional Defrost Time,Detailed;
 
-  Output:Variable,*,Heat Pump Defrost Electricity Rate,detailed;
+  Output:Variable,*,Heat Pump Defrost Electricity Rate,Detailed;
 
-  Output:Variable,*,Outdoor Temp,detailed;
+  Output:Variable,*,Outdoor Temp,Detailed;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -549,7 +549,7 @@
     EMS Defrost Flag,        !- Name
     defrost_on,              !- EMS Variable Name
     Averaged,                !- Type of Data in Variable
-    SystemTimeStep,          !- Update Frequency
+    SystemTimestep,          !- Update Frequency
     ,                        !- EMS Program or Subroutine Name
     ;                        !- Units
 
@@ -557,7 +557,7 @@
     Outdoor Temp,            !- Name
     OutdoorTemp,             !- EMS Variable Name
     Averaged,                !- Type of Data in Variable
-    SystemTimeStep,          !- Update Frequency
+    SystemTimestep,          !- Update Frequency
     ,                        !- EMS Program or Subroutine Name
     ;                        !- Units
 
@@ -588,17 +588,17 @@
     ControlDefrost,          !- Name
     IF DefrostOn == 0.0,     !- Program Line 1
     SET DefrostTimer = DefrostTimer + SystemTimeStep * 3600,  !- Program Line 2
-    IF (OutdoorTemp < 5.0) * (DefrostTimer >= 2400.0),  !- <none>
-    SET DefrostOn = 1.0,     !- <none>
-    SET DefrostTimer = 0.0,  !- <none>
-    ENDIF,                   !- <none>
-    ELSE,                    !- <none>
-    SET DefrostTimer = DefrostTimer + SystemTimeStep * 3600,  !- <none>
-    IF DefrostTimer >= 3600.0,  !- <none>
-    SET DefrostOn = 0.0,     !- <none>
-    SET DefrostTimer = 0.0,  !- <none>
-    ENDIF,                   !- <none>
-    ENDIF;                   !- <none>
+    IF (OutdoorTemp < 5.0) * (DefrostTimer >= 2400.0),  !- Program Line 3
+    SET DefrostOn = 1.0,     !- Program Line 4
+    SET DefrostTimer = 0.0,  !- Program Line 5
+    ENDIF,                   !- Program Line 6
+    ELSE,                    !- Program Line 7
+    SET DefrostTimer = DefrostTimer + SystemTimeStep * 3600,  !- Program Line 8
+    IF DefrostTimer >= 3600.0,  !- Program Line 9
+    SET DefrostOn = 0.0,     !- Program Line 10
+    SET DefrostTimer = 0.0,  !- Program Line 11
+    ENDIF,                   !- Program Line 12
+    ENDIF;                   !- Program Line 13
 
 ! Assign defrost mode to the actuator
 
@@ -613,4 +613,3 @@
     AfterPredictorAfterHVACManagers,  !- EnergyPlus Model Calling Point
     ControlDefrost,          !- Program Name 1
     SetDefrostActuator;      !- Program Name 2
-

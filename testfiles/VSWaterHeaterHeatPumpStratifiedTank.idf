@@ -17,7 +17,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -25,15 +25,15 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     CHICAGO_IL_USA_WMO_725300,  !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
 ! CHICAGO_IL_USA Annual Heating 99%, MaxDB=-17.3°C
 
@@ -46,15 +46,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063,                   !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -76,15 +76,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063,                   !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -111,16 +111,16 @@
     Yes;                     !- Use Weather File Snow Indicators
 
   SimulationControl,
-    NO,                      !- Do Zone Sizing Calculation
-    NO,                      !- Do System Sizing Calculation
-    NO,                      !- Do Plant Sizing Calculation
-    NO,                      !- Run Simulation for Sizing Periods
-    YES,                     !- Run Simulation for Weather File Run Periods
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    No,                      !- Run Simulation for Sizing Periods
+    Yes,                     !- Run Simulation for Weather File Run Periods
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
   Site:WaterMainsTemperature,
-    CORRELATION,             !- Calculation Method
+    Correlation,             !- Calculation Method
     ,                        !- Temperature Schedule Name
     9.69,                    !- Annual Average Outdoor Air Temperature {C}
     28.1;                    !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
@@ -160,21 +160,21 @@
 
   Sizing:Plant,
     DHW Loop,                !- Plant or Condenser Loop Name
-    HEATING,                 !- Loop Type
-    82.,                     !- Design Loop Exit Temperature {C}
-    11;                      !- Loop Design Temperature Difference {deltaC}
+    Heating,                 !- Loop Type
+    82.0,                    !- Design Loop Exit Temperature {C}
+    11.0;                    !- Loop Design Temperature Difference {deltaC}
 
   PlantLoop,
     DHW Loop,                !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     DHW Loop Operation,      !- Plant Equipment Operation Scheme Name
     Water Heater Use Loop Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
-    AUTOSIZE,                !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    AUTOSIZE,                !- Plant Loop Volume {m3}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    Autocalculate,           !- Plant Loop Volume {m3}
     Water Heater Use Loop Inlet Node,  !- Plant Side Inlet Node Name
     Water Heater Use Loop Outlet Node,  !- Plant Side Outlet Node Name
     Water Heater Use Branches,  !- Plant Side Branch List Name
@@ -183,7 +183,7 @@
     Demand Outlet Node,      !- Demand Side Outlet Node Name
     Demand Branches,         !- Demand Side Branch List Name
     Demand Connectors,       !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   PlantEquipmentOperationSchemes,
     DHW Loop Operation,      !- Name
@@ -193,14 +193,14 @@
 
   PlantEquipmentOperation:HeatingLoad,
     DHW Control Scheme,      !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     DHW Plant Equipment;     !- Range 1 Equipment List Name
 
   PlantEquipmentList,
     DHW Plant Equipment,     !- Name
     WaterHeater:HeatPump:PumpedCondenser,  !- Equipment 1 Object Type
-    PlantHeatPumpWaterHeater;!- Equipment 1 Name
+    PlantHeatPumpWaterHeater;  !- Equipment 1 Name
 
   SetpointManager:Scheduled,
     DHW Loop Set Point Manager,  !- Name
@@ -213,7 +213,7 @@
   BranchList,
     Water Heater Use Branches,  !- Name
     Water Heater Use Inlet Branch,  !- Branch 1 Name
-    Water Heater Use Branch, !- Branch 2 Name
+    Water Heater Use Branch,  !- Branch 2 Name
     Water Heater Use Outlet Branch;  !- Branch 3 Name
 
   ConnectorList,
@@ -226,12 +226,12 @@
   Connector:Splitter,
     Water Heater Use Splitter,  !- Name
     Water Heater Use Inlet Branch,  !- Inlet Branch Name
-    Water Heater Use Branch; !- Outlet Branch 1 Name
+    Water Heater Use Branch;  !- Outlet Branch 1 Name
 
   Connector:Mixer,
     Water Heater Use Mixer,  !- Name
     Water Heater Use Outlet Branch,  !- Outlet Branch Name
-    Water Heater Use Branch; !- Inlet Branch 1 Name
+    Water Heater Use Branch;  !- Inlet Branch 1 Name
 
   Branch,
     Water Heater Use Inlet Branch,  !- Name
@@ -247,28 +247,28 @@
     DHW Pump,                !- Name
     Water Heater Use Loop Inlet Node,  !- Inlet Node Name
     DHW Pump Outlet Node,    !- Outlet Node Name
-    AUTOSIZE,                !- Design Maximum Flow Rate {m3/s}
-    0,                       !- Design Pump Head {Pa}
-    AUTOSIZE,                !- Design Power Consumption {W}
+    Autosize,                !- Design Maximum Flow Rate {m3/s}
+    0.0,                     !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     1.0,                     !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
-    Water Heater Use Branch, !- Name
+    Water Heater Use Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     WaterHeater:HeatPump:PumpedCondenser,  !- Component 1 Object Type
-    PlantHeatPumpWaterHeater,!- Component 1 Name
+    PlantHeatPumpWaterHeater,  !- Component 1 Name
     Water Heater Use Inlet Node,  !- Component 1 Inlet Node Name
     Water Heater Use Outlet Node;  !- Component 1 Outlet Node Name
 
   WaterHeater:HeatPump:PumpedCondenser,
-    PlantHeatPumpWaterHeater,!- Name
+    PlantHeatPumpWaterHeater,  !- Name
     PlantHPWHSch,            !- Availability Schedule Name
     PlantHPWHTempSch,        !- Compressor Setpoint Temperature Schedule Name
     2.0,                     !- Dead Band Temperature Difference {deltaC}
@@ -317,23 +317,23 @@
     MasterSlave,             !- Heater Priority Control
     Hot Water Set Point Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    4500,                    !- Heater 1 Capacity {W}
+    4500.0,                  !- Heater 1 Capacity {W}
     1.0,                     !- Heater 1 Height {m}
     Hot Water Set Point Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     5.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    4500,                    !- Heater 2 Capacity {W}
+    4500.0,                  !- Heater 2 Capacity {W}
     0.0,                     !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.98,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     ,                        !- Off Cycle Parasitic Height {m}
-    10,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     ,                        !- On Cycle Parasitic Height {m}
-    SCHEDULE,                !- Ambient Temperature Indicator
+    Schedule,                !- Ambient Temperature Indicator
     Ambient Temp Schedule,   !- Ambient Temperature Schedule Name
     ,                        !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
@@ -354,8 +354,8 @@
     ,                        !- Source Side Effectiveness
     ,                        !- Source Side Inlet Height {m}
     ,                        !- Source Side Outlet Height {m}
-    FIXED,                   !- Inlet Mode
-    autosize,                !- Use Side Design Flow Rate {m3/s}
+    Fixed,                   !- Inlet Mode
+    Autosize,                !- Use Side Design Flow Rate {m3/s}
     0.00115525,              !- Source Side Design Flow Rate {m3/s}
     ,                        !- Indirect Water Heating Recovery Time {hr}
     6,                       !- Number of Nodes
@@ -382,7 +382,7 @@
     No,                      !- Condenser Pump Power Included in Rated COP
     No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
     0.1,                     !- Fraction of Condenser Pump Heat to Water
-    HPPlantFanAirOutletNode, !- Evaporator Air Inlet Node Name
+    HPPlantFanAirOutletNode,  !- Evaporator Air Inlet Node Name
     HPPlantAirOutletNode,    !- Evaporator Air Outlet Node Name
     HPPlantWaterInletNode,   !- Condenser Water Inlet Node Name
     HPPlantWaterOutletNode,  !- Condenser Water Outlet Node Name
@@ -391,11 +391,11 @@
     5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
     WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
     HPWHPLFFPLR,             !- Part Load Fraction Correlation Curve Name
-    400.00,                  !- Speed 1 Rated Water Heating Capacity {W}
+    400.0,                   !- Speed 1 Rated Water Heating Capacity {W}
     5.0,                     !- Speed 1 Rated Water Heating COP {W/W}
-    0.80,                    !- Speed 1 Rated Sensible Heat Ratio
-    0.020140,                !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
-    0.000018,                !- Speed 1 Reference Unit Rated Water Flow Rate {m3/s}
+    0.8,                     !- Speed 1 Rated Sensible Heat Ratio
+    0.02014,                 !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
+    1.8e-05,                 !- Speed 1 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 1 Reference Unit Water Pump Input Power At Rated Conditions {W}
     HPWHHeatingCapFTemp,     !- Speed 1 Total WH Capacity Function of Temperature Curve Name
     ConstantCubic,           !- Speed 1 Total WH Capacity Function of Air Flow Fraction Curve Name
@@ -403,11 +403,11 @@
     HPWHHeatingCOPFTemp,     !- Speed 1 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 1 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 1 COP Function of Water Flow Fraction Curve Name
-    800.00,                  !- Speed 2 Rated Water Heating Capacity {W}
+    800.0,                   !- Speed 2 Rated Water Heating Capacity {W}
     4.8,                     !- Speed 2 Rated Water Heating COP {W/W}
     0.79,                    !- Speed 2 Rated Sensible Heat Ratio
-    0.040280,                !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
-    0.000036,                !- Speed 2 Reference Unit Rated Water Flow Rate {m3/s}
+    0.04028,                 !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
+    3.6e-05,                 !- Speed 2 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 2 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 2 Total WH Capacity Function of Temperature Curve Name
     ConstantCubic,           !- Speed 2 Total WH Capacity Function of Air Flow Fraction Curve Name
@@ -415,11 +415,11 @@
     HPWHHeatingCOPFTemp,     !- Speed 2 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 2 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 2 COP Function of Water Flow Fraction Curve Name
-    1200.00,                 !- Speed 3 Rated Water Heating Capacity {W}
+    1200.0,                  !- Speed 3 Rated Water Heating Capacity {W}
     4.4,                     !- Speed 3 Rated Water Heating COP {W/W}
     0.78,                    !- Speed 3 Rated Sensible Heat Ratio
-    0.060420,                !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}
-    0.000054,                !- Speed 3 Reference Unit Rated Water Flow Rate {m3/s}
+    0.06042,                 !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}
+    5.4e-05,                 !- Speed 3 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 3 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 3 Total WH Capacity Function of Temperature Curve Name
     ConstantCubic,           !- Speed 3 Total WH Capacity Function of Air Flow Fraction Curve Name
@@ -427,11 +427,11 @@
     HPWHHeatingCOPFTemp,     !- Speed 3 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 3 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 3 COP Function of Water Flow Fraction Curve Name
-    1600.00,                 !- Speed 4 Rated Water Heating Capacity {W}
+    1600.0,                  !- Speed 4 Rated Water Heating Capacity {W}
     4.0,                     !- Speed 4 Rated Water Heating COP {W/W}
     0.77,                    !- Speed 4 Rated Sensible Heat Ratio
-    0.080560,                !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}
-    0.000072,                !- Speed 4 Reference Unit Rated Water Flow Rate {m3/s}
+    0.08056,                 !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}
+    7.2e-05,                 !- Speed 4 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 4 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 4 Total WH Capacity Function of Temperature Curve Name
     ConstantCubic,           !- Speed 4 Total WH Capacity Function of Air Flow Fraction Curve Name
@@ -439,11 +439,11 @@
     HPWHHeatingCOPFTemp,     !- Speed 4 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 4 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 4 COP Function of Water Flow Fraction Curve Name
-    2000.00,                 !- Speed 5 Rated Water Heating Capacity {W}
+    2000.0,                  !- Speed 5 Rated Water Heating Capacity {W}
     3.8,                     !- Speed 5 Rated Water Heating COP {W/W}
     0.76,                    !- Speed 5 Rated Sensible Heat Ratio
-    0.100700,                !- Speed 5 Reference Unit Rated Air Flow Rate {m3/s}
-    0.000090,                !- Speed 5 Reference Unit Rated Water Flow Rate {m3/s}
+    0.1007,                  !- Speed 5 Reference Unit Rated Air Flow Rate {m3/s}
+    9e-05,                   !- Speed 5 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 5 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 5 Total WH Capacity Function of Temperature Curve Name
     ConstantCubic,           !- Speed 5 Total WH Capacity Function of Air Flow Fraction Curve Name
@@ -451,10 +451,10 @@
     HPWHHeatingCOPFTemp,     !- Speed 5 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 5 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 5 COP Function of Water Flow Fraction Curve Name
-    2400.00,                 !- Speed 6 Rated Water Heating Capacity {W}
+    2400.0,                  !- Speed 6 Rated Water Heating Capacity {W}
     3.4,                     !- Speed 6 Rated Water Heating COP {W/W}
     0.75,                    !- Speed 6 Rated Sensible Heat Ratio
-    0.120840,                !- Speed 6 Reference Unit Rated Air Flow Rate {m3/s}
+    0.12084,                 !- Speed 6 Reference Unit Rated Air Flow Rate {m3/s}
     0.000108,                !- Speed 6 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 6 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 6 Total WH Capacity Function of Temperature Curve Name
@@ -463,10 +463,10 @@
     HPWHHeatingCOPFTemp,     !- Speed 6 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 6 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 6 COP Function of Water Flow Fraction Curve Name
-    2800.00,                 !- Speed 7 Rated Water Heating Capacity {W}
+    2800.0,                  !- Speed 7 Rated Water Heating Capacity {W}
     3.0,                     !- Speed 7 Rated Water Heating COP {W/W}
     0.74,                    !- Speed 7 Rated Sensible Heat Ratio
-    0.140980,                !- Speed 7 Reference Unit Rated Air Flow Rate {m3/s}
+    0.14098,                 !- Speed 7 Reference Unit Rated Air Flow Rate {m3/s}
     0.000126,                !- Speed 7 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 7 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 7 Total WH Capacity Function of Temperature Curve Name
@@ -475,10 +475,10 @@
     HPWHHeatingCOPFTemp,     !- Speed 7 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 7 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 7 COP Function of Water Flow Fraction Curve Name
-    3200.00,                 !- Speed 8 Rated Water Heating Capacity {W}
+    3200.0,                  !- Speed 8 Rated Water Heating Capacity {W}
     2.6,                     !- Speed 8 Rated Water Heating COP {W/W}
     0.73,                    !- Speed 8 Rated Sensible Heat Ratio
-    0.161120,                !- Speed 8 Reference Unit Rated Air Flow Rate {m3/s}
+    0.16112,                 !- Speed 8 Reference Unit Rated Air Flow Rate {m3/s}
     0.000144,                !- Speed 8 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 8 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 8 Total WH Capacity Function of Temperature Curve Name
@@ -487,10 +487,10 @@
     HPWHHeatingCOPFTemp,     !- Speed 8 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 8 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 8 COP Function of Water Flow Fraction Curve Name
-    3600.00,                 !- Speed 9 Rated Water Heating Capacity {W}
+    3600.0,                  !- Speed 9 Rated Water Heating Capacity {W}
     2.3,                     !- Speed 9 Rated Water Heating COP {W/W}
     0.72,                    !- Speed 9 Rated Sensible Heat Ratio
-    0.181260,                !- Speed 9 Reference Unit Rated Air Flow Rate {m3/s}
+    0.18126,                 !- Speed 9 Reference Unit Rated Air Flow Rate {m3/s}
     0.000162,                !- Speed 9 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 9 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 9 Total WH Capacity Function of Temperature Curve Name
@@ -499,10 +499,10 @@
     HPWHHeatingCOPFTemp,     !- Speed 9 COP Function of Temperature Curve Name
     ConstantCubic,           !- Speed 9 COP Function of Air Flow Fraction Curve Name
     ConstantCubic,           !- Speed 9 COP Function of Water Flow Fraction Curve Name
-    4000.00,                 !- Speed 10 Rated Water Heating Capacity {W}
+    4000.0,                  !- Speed 10 Rated Water Heating Capacity {W}
     2.0,                     !- Speed 10 Rated Water Heating COP {W/W}
-    0.70,                    !- Speed 10 Rated Sensible Heat Ratio
-    0.201400,                !- Speed 10 Reference Unit Rated Air Flow Rate {m3/s}
+    0.7,                     !- Speed 10 Rated Sensible Heat Ratio
+    0.2014,                  !- Speed 10 Reference Unit Rated Air Flow Rate {m3/s}
     0.000179,                !- Speed 10 Reference Unit Rated Water Flow Rate {m3/s}
     10.0,                    !- Speed 10 Reference Unit Water Pump Input Power At Rated Conditions {dimensionless}
     HPWHHeatingCapFTemp,     !- Speed 10 Total WH Capacity Function of Temperature Curve Name
@@ -518,7 +518,7 @@
     0.043341,                !- Coefficient2 x
     -0.00023,                !- Coefficient3 x**2
     0.000466,                !- Coefficient4 y
-    0.000026,                !- Coefficient5 y**2
+    2.6e-05,                 !- Coefficient5 y**2
     -0.00027,                !- Coefficient6 x*y
     0.0,                     !- Minimum Value of x
     40.0,                    !- Maximum Value of x
@@ -534,7 +534,7 @@
     HPWHHeatingCOPFTemp,     !- Name
     1.19713,                 !- Coefficient1 Constant
     0.077849,                !- Coefficient2 x
-    -0.0000016,              !- Coefficient3 x**2
+    -1.6e-06,                !- Coefficient3 x**2
     -0.02675,                !- Coefficient4 y
     0.000296,                !- Coefficient5 y**2
     -0.00112,                !- Coefficient6 x*y
@@ -558,12 +558,12 @@
 
   Curve:Cubic,
     ConstantCubic,           !- Name
-    1,                       !- Coefficient1 Constant
-    0,                       !- Coefficient2 x
-    0,                       !- Coefficient3 x**2
-    0,                       !- Coefficient4 x**3
-    -100,                    !- Minimum Value of x
-    100;                     !- Maximum Value of x
+    1.0,                     !- Coefficient1 Constant
+    0.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Coefficient4 x**3
+    -100.0,                  !- Minimum Value of x
+    100.0;                   !- Maximum Value of x
 
   Fan:OnOff,
     HPWHPlantFan,            !- Name
@@ -574,7 +574,7 @@
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     HPPlantAirInletNode,     !- Air Inlet Node Name
-    HPPlantFanAirOutletNode; !- Air Outlet Node Name
+    HPPlantFanAirOutletNode;  !- Air Outlet Node Name
 
   OutdoorAir:Node,
     HPPlantAirInletNode;     !- Name
@@ -660,7 +660,7 @@
     ,                        !- Reclamation Water Storage Tank Name
     ,                        !- Hot Water Supply Temperature Schedule Name
     ,                        !- Cold Water Supply Temperature Schedule Name
-    NONE,                    !- Drain Water Heat Exchanger Type
+    None,                    !- Drain Water Heat Exchanger Type
     ,                        !- Drain Water Heat Exchanger Destination
     ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
     Sinks,                   !- Water Use Equipment 1 Name
@@ -752,71 +752,70 @@
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
 
-  Output:Variable,*,Site Mains Water Temperature,hourly;
+  Output:Variable,*,Site Mains Water Temperature,Hourly;
 
-  Output:Variable,*,Water Use Equipment Mixed Water Temperature,hourly;
+  Output:Variable,*,Water Use Equipment Mixed Water Temperature,Hourly;
 
-  Output:Variable,*,Water Use Connections Hot Water Volume Flow Rate,hourly;
+  Output:Variable,*,Water Use Connections Hot Water Volume Flow Rate,Hourly;
 
-  Output:Variable,*,Water Use Connections Total Volume Flow Rate,hourly;
+  Output:Variable,*,Water Use Connections Total Volume Flow Rate,Hourly;
 
-  Output:Variable,*,Water Heater Tank Temperature,hourly;
+  Output:Variable,*,Water Heater Tank Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Temperature Node 1,hourly;
+  Output:Variable,*,Water Heater Temperature Node 1,Hourly;
 
-  Output:Variable,*,Water Heater Temperature Node 2,hourly;
+  Output:Variable,*,Water Heater Temperature Node 2,Hourly;
 
-  Output:Variable,*,Water Heater Temperature Node 3,hourly;
+  Output:Variable,*,Water Heater Temperature Node 3,Hourly;
 
-  Output:Variable,*,Water Heater Temperature Node 4,hourly;
+  Output:Variable,*,Water Heater Temperature Node 4,Hourly;
 
-  Output:Variable,*,Water Heater Temperature Node 5,hourly;
+  Output:Variable,*,Water Heater Temperature Node 5,Hourly;
 
-  Output:Variable,*,Water Heater Temperature Node 6,hourly;
+  Output:Variable,*,Water Heater Temperature Node 6,Hourly;
 
-  Output:Variable,*,Water Heater Use Side Heat Transfer Rate,hourly;
+  Output:Variable,*,Water Heater Use Side Heat Transfer Rate,Hourly;
 
-  Output:Variable,*,Water Heater Heat Loss Rate,hourly;
+  Output:Variable,*,Water Heater Heat Loss Rate,Hourly;
 
-  Output:Variable,*,Water Heater Heating Rate,hourly;
+  Output:Variable,*,Water Heater Heating Rate,Hourly;
 
-  Output:Variable,*,Water Heater Cycle On Count,hourly;
+  Output:Variable,*,Water Heater Cycle On Count,Hourly;
 
-  Output:Variable,*,Water Heater Heater 1 Cycle On Count,hourly;
+  Output:Variable,*,Water Heater Heater 1 Cycle On Count,Hourly;
 
-  Output:Variable,*,Water Heater Heater 2 Cycle On Count,hourly;
+  Output:Variable,*,Water Heater Heater 2 Cycle On Count,Hourly;
 
-  Output:Variable,*,Water Heater Runtime Fraction,hourly;
+  Output:Variable,*,Water Heater Runtime Fraction,Hourly;
 
-  Output:Variable,*,Water Heater Heater 1 Runtime Fraction,hourly;
+  Output:Variable,*,Water Heater Heater 1 Runtime Fraction,Hourly;
 
-  Output:Variable,*,Water Heater Heater 2 Runtime Fraction,hourly;
+  Output:Variable,*,Water Heater Heater 2 Runtime Fraction,Hourly;
 
-  Output:Variable,*,Water Heater Electricity Rate,hourly;
+  Output:Variable,*,Water Heater Electricity Rate,Hourly;
 
-  Output:Variable,*,Water Heater Off Cycle Parasitic Electricity Rate,hourly;
+  Output:Variable,*,Water Heater Off Cycle Parasitic Electricity Rate,Hourly;
 
-  Output:Variable,*,Water Heater On Cycle Parasitic Electricity Rate,hourly;
+  Output:Variable,*,Water Heater On Cycle Parasitic Electricity Rate,Hourly;
 
-  Output:Variable,*,Cooling Coil Water Heating Electricity Rate,hourly;
+  Output:Variable,*,Cooling Coil Water Heating Electricity Rate,Hourly;
 
-  Output:Variable,*,Cooling Coil Total Water Heating Rate,hourly;
+  Output:Variable,*,Cooling Coil Total Water Heating Rate,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Mass Flow Rate,hourly;
+  Output:Variable,*,Water Heater Source Side Mass Flow Rate,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Inlet Temperature,hourly;
+  Output:Variable,*,Water Heater Source Side Inlet Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Outlet Temperature,hourly;
+  Output:Variable,*,Water Heater Source Side Outlet Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Heat Transfer Rate,hourly;
+  Output:Variable,*,Water Heater Source Side Heat Transfer Rate,Hourly;
 
-  Output:Variable,HPPlantWaterOutletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,HPPlantWaterOutletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,HPPlantWaterOutletNode,System Node Temperature,hourly;
+  Output:Variable,HPPlantWaterOutletNode,System Node Temperature,Hourly;
 
-  Output:Variable,HPPlantWaterInletNode,System Node Temperature,hourly;
+  Output:Variable,HPPlantWaterInletNode,System Node Temperature,Hourly;
 
-  Output:Variable,HPPlantWaterOutletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,HPPlantWaterOutletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;
-
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;

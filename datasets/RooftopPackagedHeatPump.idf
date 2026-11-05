@@ -60,7 +60,7 @@
     Air Loop Outlet Node,    !- Air Outlet Node Name
     0.944,                   !- Cooling Supply Air Flow Rate {m3/s}
     0.944,                   !- Heating Supply Air Flow Rate {m3/s}
-    0,                       !- No Load Supply Air Flow Rate {m3/s}
+    0.0,                     !- No Load Supply Air Flow Rate {m3/s}
     ZoneName,                !- Controlling Zone or Thermostat Location
     Fan:OnOff,               !- Supply Air Fan Object Type
     SupplyFan,               !- Supply Air Fan Name
@@ -70,8 +70,8 @@
     JCI J05XP Cooling,       !- Cooling Coil Name
     Coil:Heating:Fuel,       !- Supplemental Heating Coil Object Type
     Supp Heating Coil,       !- Supplemental Heating Coil Name
-    50,                      !- Maximum Supply Air Temperature from Supplemental Heater {C}
-    21,                      !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
+    50.0,                    !- Maximum Supply Air Temperature from Supplemental Heater {C}
+    21.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
     BlowThrough;             !- Fan Placement
 
 ! Manufacturer = JCI, Model Line = Series 5 (Heat pump -- J05XP)
@@ -94,9 +94,9 @@
     DXCoilAirInletNode,      !- Air Inlet Node Name
     DXCoilAirOutletNode,     !- Air Outlet Node Name
     JCI J05XP Cooling CapFTemp,  !- Total Cooling Capacity Function of Temperature Curve Name
-    JCI J05XP Cooling CapFFF,!- Total Cooling Capacity Function of Flow Fraction Curve Name
+    JCI J05XP Cooling CapFFF,  !- Total Cooling Capacity Function of Flow Fraction Curve Name
     JCI J05XP Cooling EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
-    JCI J05XP Cooling EIRFFF,!- Energy Input Ratio Function of Flow Fraction Curve Name
+    JCI J05XP Cooling EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
     JCI J05XP Cooling PLFFPLR,  !- Part Load Fraction Correlation Curve Name
     ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
     ,                        !- Nominal Time for Condensate Removal to Begin {s}
@@ -111,10 +111,10 @@
     -0.0212987715,           !- Coefficient2 x
     0.0016851965,            !- Coefficient3 x**2
     -0.0051869146,           !- Coefficient4 y
-    0.0000249729,            !- Coefficient5 y**2
+    2.49729e-05,             !- Coefficient5 y**2
     -0.0004993062,           !- Coefficient6 x*y
     13.89,                   !- Minimum Value of x
-    25,                      !- Maximum Value of x
+    25.0,                    !- Maximum Value of x
     23.89,                   !- Minimum Value of y
     51.67,                   !- Maximum Value of y
     0.7265,                  !- Minimum Curve Output
@@ -135,7 +135,7 @@
     0.0005905554,            !- Coefficient5 y**2
     -0.0007673769,           !- Coefficient6 x*y
     13.89,                   !- Minimum Value of x
-    25,                      !- Maximum Value of x
+    25.0,                    !- Maximum Value of x
     23.89,                   !- Minimum Value of y
     51.67,                   !- Maximum Value of y
     0.6068,                  !- Minimum Curve Output
@@ -148,7 +148,7 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J05XP Cooling CAPFFF,!- Name
+    JCI J05XP Cooling CAPFFF,  !- Name
     0.7230407155,            !- Coefficient1 Constant
     0.4200517769,            !- Coefficient2 x
     -0.1430924924,           !- Coefficient3 x**2
@@ -163,7 +163,7 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J05XP Cooling EIRFFF,!- Name
+    JCI J05XP Cooling EIRFFF,  !- Name
     1.3099053414,            !- Coefficient1 Constant
     -0.4816501891,           !- Coefficient2 x
     0.1717448477,            !- Coefficient3 x**2
@@ -197,9 +197,9 @@
     DXCoilAirInletNode,      !- Air Inlet Node Name
     DXCoilAirOutletNode,     !- Air Outlet Node Name
     JCI J05XP Heating CapFTemp,  !- Heating Capacity Function of Temperature Curve Name
-    JCI J05XP Heating CapFFF,!- Heating Capacity Function of Flow Fraction Curve Name
+    JCI J05XP Heating CapFFF,  !- Heating Capacity Function of Flow Fraction Curve Name
     JCI J05XP Heating EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
-    JCI J05XP Heating EIRFFF,!- Energy Input Ratio Function of Flow Fraction Curve Name
+    JCI J05XP Heating EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
     JCI J05XP Heating PLFFPLR,  !- Part Load Fraction Correlation Curve Name
     ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
     ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
@@ -225,10 +225,10 @@
     JCI J05XP Heating CAPFTemp,  !- Name
     0.8772069061,            !- Coefficient1 Constant
     -0.00399089,             !- Coefficient2 x
-    0.0000821453,            !- Coefficient3 x**2
+    8.21453e-05,             !- Coefficient3 x**2
     0.0204534912,            !- Coefficient4 y
-    -0.0000003623,           !- Coefficient5 y**2
-    0.0000000806,            !- Coefficient6 x*y
+    -3.623e-07,              !- Coefficient5 y**2
+    8.06e-08,                !- Coefficient6 x*y
     12.78,                   !- Minimum Value of x
     26.67,                   !- Maximum Value of x
     -23.33,                  !- Minimum Value of y
@@ -264,7 +264,7 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J05XP Heating CAPFFF,!- Name
+    JCI J05XP Heating CAPFFF,  !- Name
     0.7510431154,            !- Coefficient1 Constant
     0.3240611961,            !- Coefficient2 x
     -0.0751043115,           !- Coefficient3 x**2
@@ -279,7 +279,7 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J05XP Heating EIRFFF,!- Name
+    JCI J05XP Heating EIRFFF,  !- Name
     1.102501344,             !- Coefficient1 Constant
     -0.1819810978,           !- Coefficient2 x
     0.0794797538,            !- Coefficient3 x**2
@@ -324,9 +324,9 @@
     DXCoilAirInletNode,      !- Air Inlet Node Name
     DXCoilAirOutletNode,     !- Air Outlet Node Name
     JCI J10XP Cooling CapFTemp,  !- Total Cooling Capacity Function of Temperature Curve Name
-    JCI J10XP Cooling CapFFF,!- Total Cooling Capacity Function of Flow Fraction Curve Name
+    JCI J10XP Cooling CapFFF,  !- Total Cooling Capacity Function of Flow Fraction Curve Name
     JCI J10XP Cooling EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
-    JCI J10XP Cooling EIRFFF,!- Energy Input Ratio Function of Flow Fraction Curve Name
+    JCI J10XP Cooling EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
     JCI J10XP Cooling PLFFPLR,  !- Part Load Fraction Correlation Curve Name
     ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
     ,                        !- Nominal Time for Condensate Removal to Begin {s}
@@ -341,10 +341,10 @@
     -0.0293676065,           !- Coefficient2 x
     0.0016140268,            !- Coefficient3 x**2
     -0.0045082608,           !- Coefficient4 y
-    -0.0000733937,           !- Coefficient5 y**2
+    -7.33937e-05,            !- Coefficient5 y**2
     -0.0002208294,           !- Coefficient6 x*y
     13.89,                   !- Minimum Value of x
-    25,                      !- Maximum Value of x
+    25.0,                    !- Maximum Value of x
     23.89,                   !- Minimum Value of y
     51.67,                   !- Maximum Value of y
     0.6886,                  !- Minimum Curve Output
@@ -365,7 +365,7 @@
     0.0008293829,            !- Coefficient5 y**2
     -0.0011050307,           !- Coefficient6 x*y
     13.89,                   !- Minimum Value of x
-    25,                      !- Maximum Value of x
+    25.0,                    !- Maximum Value of x
     23.89,                   !- Minimum Value of y
     51.67,                   !- Maximum Value of y
     0.5764,                  !- Minimum Curve Output
@@ -378,7 +378,7 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J10XP Cooling CAPFFF,!- Name
+    JCI J10XP Cooling CAPFFF,  !- Name
     0.5876206167,            !- Coefficient1 Constant
     0.6063073664,            !- Coefficient2 x
     -0.1939279831,           !- Coefficient3 x**2
@@ -393,7 +393,7 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J10XP Cooling EIRFFF,!- Name
+    JCI J10XP Cooling EIRFFF,  !- Name
     1.4204535096,            !- Coefficient1 Constant
     -0.6181635177,           !- Coefficient2 x
     0.1977100081,            !- Coefficient3 x**2
@@ -427,9 +427,9 @@
     DXCoilAirInletNode,      !- Air Inlet Node Name
     DXCoilAirOutletNode,     !- Air Outlet Node Name
     JCI J10XP Heating CapFTemp,  !- Heating Capacity Function of Temperature Curve Name
-    JCI J10XP Heating CapFFF,!- Heating Capacity Function of Flow Fraction Curve Name
+    JCI J10XP Heating CapFFF,  !- Heating Capacity Function of Flow Fraction Curve Name
     JCI J10XP Heating EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
-    JCI J10XP Heating EIRFFF,!- Energy Input Ratio Function of Flow Fraction Curve Name
+    JCI J10XP Heating EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
     JCI J10XP Heating PLFFPLR,  !- Part Load Fraction Correlation Curve Name
     ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
     ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
@@ -457,8 +457,8 @@
     0.000533039,             !- Coefficient2 x
     -0.000128972,            !- Coefficient3 x**2
     0.0252655211,            !- Coefficient4 y
-    0.0000003899,            !- Coefficient5 y**2
-    -0.000000058,            !- Coefficient6 x*y
+    3.899e-07,               !- Coefficient5 y**2
+    -5.8e-08,                !- Coefficient6 x*y
     12.78,                   !- Minimum Value of x
     26.67,                   !- Maximum Value of x
     -23.33,                  !- Minimum Value of y
@@ -494,14 +494,14 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J10XP Heating CAPFFF,!- Name
+    JCI J10XP Heating CAPFFF,  !- Name
     -0.1432077788,           !- Coefficient1 Constant
     2.1604833381,            !- Coefficient2 x
     -1.0172755593,           !- Coefficient3 x**2
     0.75,                    !- Minimum Value of x
     1.25,                    !- Maximum Value of x
     0.9049,                  !- Minimum Curve Output
-    1,                       !- Maximum Curve Output
+    1.0,                     !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for X
     Dimensionless;           !- Output Unit Type
 
@@ -509,7 +509,7 @@
 ! x = Flow Fraction
 
   Curve:Quadratic,
-    JCI J10XP Heating EIRFFF,!- Name
+    JCI J10XP Heating EIRFFF,  !- Name
     2.4239231707,            !- Coefficient1 Constant
     -2.4508074211,           !- Coefficient2 x
     1.0268842504,            !- Coefficient3 x**2
@@ -542,7 +542,7 @@
 ! Refrigerant = R-22
 
   Coil:Cooling:DX:SingleSpeed,
-    Carrier 50TFQ006 Cooling,!- Name
+    Carrier 50TFQ006 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     17789.3,                 !- Gross Rated Total Cooling Capacity {W}
     0.69,                    !- Gross Rated Sensible Heat Ratio
@@ -570,8 +570,8 @@
     0.0431651147,            !- Coefficient2 x
     -0.0004807631,           !- Coefficient3 x**2
     -0.0033004769,           !- Coefficient4 y
-    -0.0000686804,           !- Coefficient5 y**2
-    0.0000441517,            !- Coefficient6 x*y
+    -6.86804e-05,            !- Coefficient5 y**2
+    4.41517e-05,             !- Coefficient6 x*y
     16.67,                   !- Minimum Value of x
     22.22,                   !- Maximum Value of x
     23.89,                   !- Minimum Value of y
@@ -646,7 +646,7 @@
     1.0;                     !- Maximum Value of x
 
   Coil:Heating:DX:SingleSpeed,
-    Carrier 50TFQ006 Heating,!- Name
+    Carrier 50TFQ006 Heating,  !- Name
     HeatingCoilAvailSched,   !- Availability Schedule Name
     14888.069,               !- Gross Rated Heating Capacity {W}
     2.92,                    !- Gross Rated Heating COP {W/W}
@@ -684,10 +684,10 @@
     Carrier 50TFQ006 Heating CAPFTemp,  !- Name
     0.8422242976,            !- Coefficient1 Constant
     -0.0022456353,           !- Coefficient2 x
-    0.0000042519,            !- Coefficient3 x**2
+    4.2519e-06,              !- Coefficient3 x**2
     0.0235890493,            !- Coefficient4 y
     0.0001897141,            !- Coefficient5 y**2
-    -0.0000367281,           !- Coefficient6 x*y
+    -3.67281e-05,            !- Coefficient6 x*y
     12.78,                   !- Minimum Value of x
     26.67,                   !- Maximum Value of x
     -17.78,                  !- Minimum Value of y
@@ -771,7 +771,7 @@
 ! Refrigerant = R-22
 
   Coil:Cooling:DX:SingleSpeed,
-    Carrier 50HJQ012 Cooling,!- Name
+    Carrier 50HJQ012 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     34992.558,               !- Gross Rated Total Cooling Capacity {W}
     0.75,                    !- Gross Rated Sensible Heat Ratio
@@ -800,7 +800,7 @@
     0.0011939698,            !- Coefficient3 x**2
     -0.0022167983,           !- Coefficient4 y
     -0.0001007897,           !- Coefficient5 y**2
-    0.0000651256,            !- Coefficient6 x*y
+    6.51256e-05,             !- Coefficient6 x*y
     16.67,                   !- Minimum Value of x
     22.22,                   !- Maximum Value of x
     23.89,                   !- Minimum Value of y
@@ -818,7 +818,7 @@
     Carrier 50HJQ012 Cooling EIRFTemp,  !- Name
     0.3420143985,            !- Coefficient1 Constant
     0.0183309439,            !- Coefficient2 x
-    0.0000395191,            !- Coefficient3 x**2
+    3.95191e-05,             !- Coefficient3 x**2
     0.0203634277,            !- Coefficient4 y
     0.0005375361,            !- Coefficient5 y**2
     -0.0015936873,           !- Coefficient6 x*y
@@ -875,7 +875,7 @@
     1.0;                     !- Maximum Value of x
 
   Coil:Heating:DX:SingleSpeed,
-    Carrier 50HJQ012 Heating,!- Name
+    Carrier 50HJQ012 Heating,  !- Name
     HeatingCoilAvailSched,   !- Availability Schedule Name
     31476.156,               !- Gross Rated Heating Capacity {W}
     3.54,                    !- Gross Rated Heating COP {W/W}
@@ -913,10 +913,10 @@
     Carrier 50HJQ012 Heating CAPFTemp,  !- Name
     0.8315833373,            !- Coefficient1 Constant
     -0.0005884494,           !- Coefficient2 x
-    -0.0000522898,           !- Coefficient3 x**2
+    -5.22898e-05,            !- Coefficient3 x**2
     0.0237989677,            !- Coefficient4 y
-    0.0000626989,            !- Coefficient5 y**2
-    0.0000083281,            !- Coefficient6 x*y
+    6.26989e-05,             !- Coefficient5 y**2
+    8.3281e-06,              !- Coefficient6 x*y
     12.78,                   !- Minimum Value of x
     26.67,                   !- Maximum Value of x
     -17.78,                  !- Minimum Value of y
@@ -1000,7 +1000,7 @@
 ! Refrigerant = R-410 A
 
   Coil:Cooling:DX:SingleSpeed,
-    Carrier 50EZ060 Cooling, !- Name
+    Carrier 50EZ060 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     17716.3372,              !- Gross Rated Total Cooling Capacity {W}
     0.75,                    !- Gross Rated Sensible Heat Ratio
@@ -1027,8 +1027,8 @@
     1.5925938003,            !- Coefficient1 Constant
     -0.0627877976,           !- Coefficient2 x
     0.0027564091,            !- Coefficient3 x**2
-    0.0000704,               !- Coefficient4 y
-    -0.0000564877,           !- Coefficient5 y**2
+    7.04e-05,                !- Coefficient4 y
+    -5.64877e-05,            !- Coefficient5 y**2
     -0.0005100941,           !- Coefficient6 x*y
     13.89,                   !- Minimum Value of x
     22.22,                   !- Maximum Value of x
@@ -1104,7 +1104,7 @@
     1.0;                     !- Maximum Value of x
 
   Coil:Heating:DX:SingleSpeed,
-    Carrier 50EZ060 Heating, !- Name
+    Carrier 50EZ060 Heating,  !- Name
     HeatingCoilAvailSched,   !- Availability Schedule Name
     17303.1085,              !- Gross Rated Heating Capacity {W}
     4.5,                     !- Gross Rated Heating COP {W/W}
@@ -1142,10 +1142,10 @@
     Carrier 50EZ060 Heating CAPFTemp,  !- Name
     0.8236855295,            !- Coefficient1 Constant
     -0.0007774239,           !- Coefficient2 x
-    -0.0000576211,           !- Coefficient3 x**2
+    -5.76211e-05,            !- Coefficient3 x**2
     0.0238675778,            !- Coefficient4 y
     0.0002866082,            !- Coefficient5 y**2
-    -0.0000022314,           !- Coefficient6 x*y
+    -2.2314e-06,             !- Coefficient6 x*y
     18.33,                   !- Minimum Value of x
     23.89,                   !- Maximum Value of x
     -23.33,                  !- Minimum Value of y
@@ -1243,7 +1243,7 @@
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1 Coil Performance Object Type
     Lennox LHA120H Stage 1,  !- Normal Mode Stage 1 Coil Performance Name
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1+2 Coil Performance Object Type
-    Lennox LHA120H Stage 1&2;!- Normal Mode Stage 1+2 Coil Performance Name
+    Lennox LHA120H Stage 1&2;  !- Normal Mode Stage 1+2 Coil Performance Name
 
 ! Stage 1 normal mode, 51% of total capacity, face-split coil, 49% of flow bypassed around active section of coil
 
@@ -1263,7 +1263,7 @@
 ! Stages 1 and 2 normal mode, 100% of total capacity
 
   CoilPerformance:DX:Cooling,
-    Lennox LHA120H Stage 1&2,!- Name
+    Lennox LHA120H Stage 1&2,  !- Name
     36340.68,                !- Gross Rated Total Cooling Capacity {W}
     0.72,                    !- Gross Rated Sensible Heat Ratio
     3.8,                     !- Gross Rated Cooling COP {W/W}
@@ -1284,12 +1284,12 @@
     -0.016891097,            !- Coefficient2 x
     0.0012877583,            !- Coefficient3 x**2
     -0.0010063593,           !- Coefficient4 y
-    -0.0000171701,           !- Coefficient5 y**2
+    -1.71701e-05,            !- Coefficient5 y**2
     -0.0002317965,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.9507,                  !- Minimum Curve Output
     1.1781,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -1310,7 +1310,7 @@
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.6366,                  !- Minimum Curve Output
     1.0458,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -1356,7 +1356,7 @@
     -0.0200177419,           !- Coefficient2 x
     0.0013881048,            !- Coefficient3 x**2
     0.0007669355,            !- Coefficient4 y
-    -0.000041371,            !- Coefficient5 y**2
+    -4.1371e-05,             !- Coefficient5 y**2
     -0.0002482258,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
@@ -1471,7 +1471,7 @@
     0.7820076913,            !- Coefficient1 Constant
     0.0249973476,            !- Coefficient2 x
     0.0001366717,            !- Coefficient3 x**2
-    0.0000003283,            !- Coefficient4 x**3
+    3.283e-07,               !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.2003,                  !- Minimum Curve Output
@@ -1487,7 +1487,7 @@
     1.2281320233,            !- Coefficient1 Constant
     -0.0277623563,           !- Coefficient2 x
     0.000892888,             !- Coefficient3 x**2
-    -0.0000320297,           !- Coefficient4 x**3
+    -3.20297e-05,            !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.8339,                  !- Minimum Curve Output
@@ -1561,7 +1561,7 @@
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1 Coil Performance Object Type
     Lennox LHA240H Stage 1,  !- Normal Mode Stage 1 Coil Performance Name
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1+2 Coil Performance Object Type
-    Lennox LHA240H Stage 1&2;!- Normal Mode Stage 1+2 Coil Performance Name
+    Lennox LHA240H Stage 1&2;  !- Normal Mode Stage 1+2 Coil Performance Name
 
 ! Stage 1 normal mode, 48.5% of total capacity, face-split coil, 51.5% of flow bypassed around active section of coil
 
@@ -1581,7 +1581,7 @@
 ! Stages 1 and 2 normal mode, 100% of total capacity
 
   CoilPerformance:DX:Cooling,
-    Lennox LHA240H Stage 1&2,!- Name
+    Lennox LHA240H Stage 1&2,  !- Name
     67171.644,               !- Gross Rated Total Cooling Capacity {W}
     0.76,                    !- Gross Rated Sensible Heat Ratio
     3.5,                     !- Gross Rated Cooling COP {W/W}
@@ -1602,12 +1602,12 @@
     -0.0128944644,           !- Coefficient2 x
     0.0011391764,            !- Coefficient3 x**2
     0.0004576958,            !- Coefficient4 y
-    -0.0000558956,           !- Coefficient5 y**2
+    -5.58956e-05,            !- Coefficient5 y**2
     -0.0001676868,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.9487,                  !- Minimum Curve Output
     1.1647,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -1628,7 +1628,7 @@
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.6953,                  !- Minimum Curve Output
     1.0408,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -1674,7 +1674,7 @@
     -0.0136938809,           !- Coefficient2 x
     0.0012258671,            !- Coefficient3 x**2
     0.0023995419,            !- Coefficient4 y
-    -0.0000612565,           !- Coefficient5 y**2
+    -6.12565e-05,            !- Coefficient5 y**2
     -0.0002491492,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
@@ -1789,7 +1789,7 @@
     0.7160389146,            !- Coefficient1 Constant
     0.0329377708,            !- Coefficient2 x
     0.0002084138,            !- Coefficient3 x**2
-    -0.0000086288,           !- Coefficient4 x**3
+    -8.6288e-06,             !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.1491,                  !- Minimum Curve Output
@@ -1805,7 +1805,7 @@
     1.4235221072,            !- Coefficient1 Constant
     -0.0715849278,           !- Coefficient2 x
     0.0018175586,            !- Coefficient3 x**2
-    0.0000092666,            !- Coefficient4 x**3
+    9.2666e-06,              !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.7668,                  !- Minimum Curve Output
@@ -1866,9 +1866,9 @@
 ! Refrigerant = R-22
 
   Coil:Cooling:DX:SingleSpeed,
-    Lennox THA060S2 Cooling, !- Name
+    Lennox THA060S2 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
-    18903,                   !- Gross Rated Total Cooling Capacity {W}
+    18903.0,                 !- Gross Rated Total Cooling Capacity {W}
     0.74,                    !- Gross Rated Sensible Heat Ratio
     4.1,                     !- Gross Rated Cooling COP {W/W}
     0.944,                   !- Rated Air Flow Rate {m3/s}
@@ -1894,7 +1894,7 @@
     -0.0083947674,           !- Coefficient2 x
     0.0012950581,            !- Coefficient3 x**2
     0.0028313953,            !- Coefficient4 y
-    -0.0000376744,           !- Coefficient5 y**2
+    -3.76744e-05,            !- Coefficient5 y**2
     -0.0004206977,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
@@ -1970,7 +1970,7 @@
     1.0;                     !- Maximum Value of x
 
   Coil:Heating:DX:SingleSpeed,
-    Lennox THA060S2 Cooling, !- Name
+    Lennox THA060S2 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     16443.2,                 !- Gross Rated Heating Capacity {W}
     4.2,                     !- Gross Rated Heating COP {W/W}
@@ -2009,7 +2009,7 @@
     0.7414834834,            !- Coefficient1 Constant
     0.0291699781,            !- Coefficient2 x
     0.0002487638,            !- Coefficient3 x**2
-    -0.0000031828,           !- Coefficient4 x**3
+    -3.1828e-06,             !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.1857,                  !- Minimum Curve Output
@@ -2025,7 +2025,7 @@
     1.3263423013,            !- Coefficient1 Constant
     -0.0437543499,           !- Coefficient2 x
     0.0010379137,            !- Coefficient3 x**2
-    -0.0000120602,           !- Coefficient4 x**3
+    -1.20602e-05,            !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.8067,                  !- Minimum Curve Output
@@ -2099,7 +2099,7 @@
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1 Coil Performance Object Type
     Lennox THA120S Stage 1,  !- Normal Mode Stage 1 Coil Performance Name
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1+2 Coil Performance Object Type
-    Lennox THA120S Stage 1&2;!- Normal Mode Stage 1+2 Coil Performance Name
+    Lennox THA120S Stage 1&2;  !- Normal Mode Stage 1+2 Coil Performance Name
 
 ! Stage 1 normal mode, 51% of total capacity, face-split coil, 49% of flow bypassed around active section of coil
 
@@ -2119,9 +2119,9 @@
 ! Stages 1 and 2 normal mode, 100% of total capacity
 
   CoilPerformance:DX:Cooling,
-    Lennox THA120S Stage 1&2,!- Name
+    Lennox THA120S Stage 1&2,  !- Name
     36340.68,                !- Gross Rated Total Cooling Capacity {W}
-    .74,                     !- Gross Rated Sensible Heat Ratio
+    0.74,                    !- Gross Rated Sensible Heat Ratio
     3.7,                     !- Gross Rated Cooling COP {W/W}
     1.888,                   !- Rated Air Flow Rate {m3/s}
     0.0,                     !- Fraction of Air Flow Bypassed Around Coil
@@ -2139,13 +2139,13 @@
     1.0540127922,            !- Coefficient1 Constant
     -0.0181949523,           !- Coefficient2 x
     0.0013280008,            !- Coefficient3 x**2
-    0.0000536566,            !- Coefficient4 y
-    -0.0000343402,           !- Coefficient5 y**2
+    5.36566e-05,             !- Coefficient4 y
+    -3.43402e-05,            !- Coefficient5 y**2
     -0.0002382353,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.9507,                  !- Minimum Curve Output
     1.1781,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -2166,7 +2166,7 @@
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.6358,                  !- Minimum Curve Output
     1.0439,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -2212,7 +2212,7 @@
     -0.0184055444,           !- Coefficient2 x
     0.0013676915,            !- Coefficient3 x**2
     0.0004566532,            !- Coefficient4 y
-    -0.0000326613,           !- Coefficient5 y**2
+    -3.26613e-05,            !- Coefficient5 y**2
     -0.0002710887,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
@@ -2327,7 +2327,7 @@
     0.7814977148,            !- Coefficient1 Constant
     0.025055832,             !- Coefficient2 x
     0.0001369914,            !- Coefficient3 x**2
-    0.000000329,             !- Coefficient4 x**3
+    3.29e-07,                !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.1984,                  !- Minimum Curve Output
@@ -2343,7 +2343,7 @@
     1.1758490511,            !- Coefficient1 Constant
     -0.0184100999,           !- Coefficient2 x
     0.0007416818,            !- Coefficient3 x**2
-    -0.0000381972,           !- Coefficient4 x**3
+    -3.81972e-05,            !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.8677,                  !- Minimum Curve Output
@@ -2404,11 +2404,11 @@
 ! Refrigerant = R-410A
 
   Coil:Cooling:DX:SingleSpeed,
-    Lennox KHA060S4 Cooling, !- Name
+    Lennox KHA060S4 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     18023.8,                 !- Gross Rated Total Cooling Capacity {W}
     0.76,                    !- Gross Rated Sensible Heat Ratio
-    385,                     !- Gross Rated Cooling COP {W/W}
+    385.0,                   !- Gross Rated Cooling COP {W/W}
     0.944,                   !- Rated Air Flow Rate {m3/s}
     ,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
@@ -2432,7 +2432,7 @@
     -0.001295122,            !- Coefficient2 x
     0.001152439,             !- Coefficient3 x**2
     0.0025658537,            !- Coefficient4 y
-    -0.0000526829,           !- Coefficient5 y**2
+    -5.26829e-05,            !- Coefficient5 y**2
     -0.0004741463,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
@@ -2508,7 +2508,7 @@
     1.0;                     !- Maximum Value of x
 
   Coil:Heating:DX:SingleSpeed,
-    Lennox KHA060S4 Cooling, !- Name
+    Lennox KHA060S4 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     16684.2,                 !- Gross Rated Heating Capacity {W}
     4.1,                     !- Gross Rated Heating COP {W/W}
@@ -2547,7 +2547,7 @@
     0.7724556263,            !- Coefficient1 Constant
     0.0257435779,            !- Coefficient2 x
     0.0001847388,            !- Coefficient3 x**2
-    0.0000003205,            !- Coefficient4 x**3
+    3.205e-07,               !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.1988,                  !- Minimum Curve Output
@@ -2563,7 +2563,7 @@
     1.2584013173,            !- Coefficient1 Constant
     -0.0293122649,           !- Coefficient2 x
     0.0008308523,            !- Coefficient3 x**2
-    -0.0000312404,           !- Coefficient4 x**3
+    -3.12404e-05,            !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.8238,                  !- Minimum Curve Output
@@ -2625,7 +2625,7 @@
 ! Refrigerant = R410-A
 
   Coil:Cooling:DX:TwoStageWithHumidityControlMode,
-    Lennox KHA120S4 Cooling, !- Name
+    Lennox KHA120S4 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     DXCoilAirInletNode,      !- Air Inlet Node Name
     DXCoilAirOutletNode,     !- Air Outlet Node Name
@@ -2635,14 +2635,14 @@
     2,                       !- Number of Capacity Stages
     0,                       !- Number of Enhanced Dehumidification Modes
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1 Coil Performance Object Type
-    Lennox KHA120S4 Stage 1, !- Normal Mode Stage 1 Coil Performance Name
+    Lennox KHA120S4 Stage 1,  !- Normal Mode Stage 1 Coil Performance Name
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1+2 Coil Performance Object Type
     Lennox KHA120S4 Stage 1&2;  !- Normal Mode Stage 1+2 Coil Performance Name
 
 ! Stage 1 normal mode, 49% of total capacity, face-split coil, 51% of flow bypassed around active section of coil
 
   CoilPerformance:DX:Cooling,
-    Lennox KHA120S4 Stage 1, !- Name
+    Lennox KHA120S4 Stage 1,  !- Name
     17818.7,                 !- Gross Rated Total Cooling Capacity {W}
     0.73,                    !- Gross Rated Sensible Heat Ratio
     3.53,                    !- Gross Rated Cooling COP {W/W}
@@ -2652,14 +2652,14 @@
     Lennox KHA120S4 Stage 1 CapFFF,  !- Total Cooling Capacity Function of Flow Fraction Curve Name
     Lennox KHA120S4 Stage 1 EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
     Lennox KHA120S4 Stage 1 EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
-    Lennox KHA120S4 PLFFPLR; !- Part Load Fraction Correlation Curve Name
+    Lennox KHA120S4 PLFFPLR;  !- Part Load Fraction Correlation Curve Name
 
 ! Stages 1 and 2 normal mode, 100% of total capacity
 
   CoilPerformance:DX:Cooling,
     Lennox KHA120S4 Stage 1&2,  !- Name
     36340.68,                !- Gross Rated Total Cooling Capacity {W}
-    .75,                     !- Gross Rated Sensible Heat Ratio
+    0.75,                    !- Gross Rated Sensible Heat Ratio
     3.9,                     !- Gross Rated Cooling COP {W/W}
     1.888,                   !- Rated Air Flow Rate {m3/s}
     0.0,                     !- Fraction of Air Flow Bypassed Around Coil
@@ -2667,7 +2667,7 @@
     Lennox KHA120S4 Stage 1&2 CapFFF,  !- Total Cooling Capacity Function of Flow Fraction Curve Name
     Lennox KHA120S4 Stage 1&2 EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
     Lennox KHA120S4 Stage 1&2 EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
-    Lennox KHA120S4 PLFFPLR; !- Part Load Fraction Correlation Curve Name
+    Lennox KHA120S4 PLFFPLR;  !- Part Load Fraction Correlation Curve Name
 
 ! Cooling Capacity Function of Temperature Curve
 ! x = Entering Wet-bulb Temp and y = Outdoor Dry-bulb Temp
@@ -2678,12 +2678,12 @@
     0.0214360609,            !- Coefficient2 x
     0.0002914268,            !- Coefficient3 x**2
     -0.0005686678,           !- Coefficient4 y
-    -0.0000754934,           !- Coefficient5 y**2
+    -7.54934e-05,            !- Coefficient5 y**2
     -0.0002331414,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.949,                   !- Minimum Curve Output
     1.2155,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -2704,7 +2704,7 @@
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.6157,                  !- Minimum Curve Output
     1.0454,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -2750,7 +2750,7 @@
     0.0115285282,            !- Coefficient2 x
     0.0005919859,            !- Coefficient3 x**2
     0.0004590726,            !- Coefficient4 y
-    -0.0000718548,           !- Coefficient5 y**2
+    -7.18548e-05,            !- Coefficient5 y**2
     -0.0002841532,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
@@ -2769,7 +2769,7 @@
     Lennox KHA120S4 Stage 1&2 EIRFTemp,  !- Name
     0.6658968116,            !- Coefficient1 Constant
     0.0083968829,            !- Coefficient2 x
-    -0.0000566422,           !- Coefficient3 x**2
+    -5.66422e-05,            !- Coefficient3 x**2
     -0.004519212,            !- Coefficient4 y
     0.000717709,             !- Coefficient5 y**2
     -0.0007769755,           !- Coefficient6 x*y
@@ -2818,7 +2818,7 @@
 ! x = Part Load Ratio
 
   Curve:Quadratic,
-    Lennox KHA120S4 PLFFPLR, !- Name
+    Lennox KHA120S4 PLFFPLR,  !- Name
     0.85,                    !- Coefficient1 Constant
     0.15,                    !- Coefficient2 x
     0.0,                     !- Coefficient3 x**2
@@ -2826,7 +2826,7 @@
     1.0;                     !- Maximum Value of x
 
   Coil:Heating:DX:SingleSpeed,
-    Lennox KHA120S4 Heating, !- Name
+    Lennox KHA120S4 Heating,  !- Name
     HeatingCoilAvailSched,   !- Availability Schedule Name
     32563.43,                !- Gross Rated Heating Capacity {W}
     3.68,                    !- Gross Rated Heating COP {W/W}
@@ -2865,7 +2865,7 @@
     0.7927005462,            !- Coefficient1 Constant
     0.0238144989,            !- Coefficient2 x
     0.0001174681,            !- Coefficient3 x**2
-    0.0000011885,            !- Coefficient4 x**3
+    1.1885e-06,              !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.2134,                  !- Minimum Curve Output
@@ -2881,7 +2881,7 @@
     1.1822697855,            !- Coefficient1 Constant
     -0.0202393917,           !- Coefficient2 x
     0.0007261699,            !- Coefficient3 x**2
-    -0.0000337703,           !- Coefficient4 x**3
+    -3.37703e-05,            !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.8605,                  !- Minimum Curve Output
@@ -2943,7 +2943,7 @@
 ! Refrigerant = R-410A
 
   Coil:Cooling:DX:TwoStageWithHumidityControlMode,
-    Lennox KHA240S4 Cooling, !- Name
+    Lennox KHA240S4 Cooling,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     DXCoilAirInletNode,      !- Air Inlet Node Name
     DXCoilAirOutletNode,     !- Air Outlet Node Name
@@ -2953,14 +2953,14 @@
     2,                       !- Number of Capacity Stages
     0,                       !- Number of Enhanced Dehumidification Modes
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1 Coil Performance Object Type
-    Lennox KHA240S4 Stage 1, !- Normal Mode Stage 1 Coil Performance Name
+    Lennox KHA240S4 Stage 1,  !- Normal Mode Stage 1 Coil Performance Name
     CoilPerformance:DX:Cooling,  !- Normal Mode Stage 1+2 Coil Performance Object Type
     Lennox KHA240S4 Stage 1&2;  !- Normal Mode Stage 1+2 Coil Performance Name
 
 ! Stage 1 normal mode, 51.8% of total capacity, face-split coil, 48.2% of flow bypassed around active section of coil
 
   CoilPerformance:DX:Cooling,
-    Lennox KHA240S4 Stage 1, !- Name
+    Lennox KHA240S4 Stage 1,  !- Name
     34699.5,                 !- Gross Rated Total Cooling Capacity {W}
     0.76,                    !- Gross Rated Sensible Heat Ratio
     3.54,                    !- Gross Rated Cooling COP {W/W}
@@ -2970,7 +2970,7 @@
     Lennox KHA240S4 Stage 1 CapFFF,  !- Total Cooling Capacity Function of Flow Fraction Curve Name
     Lennox KHA240S4 Stage 1 EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
     Lennox KHA240S4 Stage 1 EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
-    Lennox KHA240S4 PLFFPLR; !- Part Load Fraction Correlation Curve Name
+    Lennox KHA240S4 PLFFPLR;  !- Part Load Fraction Correlation Curve Name
 
 ! Stages 1 and 2 normal mode, 100% of total capacity
 
@@ -2985,7 +2985,7 @@
     Lennox KHA240S4 Stage 1&2 CapFFF,  !- Total Cooling Capacity Function of Flow Fraction Curve Name
     Lennox KHA240S4 Stage 1&2 EIRFTemp,  !- Energy Input Ratio Function of Temperature Curve Name
     Lennox KHA240S4 Stage 1&2 EIRFFF,  !- Energy Input Ratio Function of Flow Fraction Curve Name
-    Lennox KHA240S4 PLFFPLR; !- Part Load Fraction Correlation Curve Name
+    Lennox KHA240S4 PLFFPLR;  !- Part Load Fraction Correlation Curve Name
 
 ! Cooling Capacity Function of Temperature Curve
 ! x = Entering Wet-bulb Temp and y = Outdoor Dry-bulb Temp
@@ -2996,12 +2996,12 @@
     0.0367458826,            !- Coefficient2 x
     -0.000106894,            !- Coefficient3 x**2
     -0.002595228,            !- Coefficient4 y
-    -0.0000342061,           !- Coefficient5 y**2
+    -3.42061e-05,            !- Coefficient5 y**2
     -0.0002154983,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.9443,                  !- Minimum Curve Output
     1.2078,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -3022,7 +3022,7 @@
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
     18.33,                   !- Minimum Value of y
-    35,                      !- Maximum Value of y
+    35.0,                    !- Maximum Value of y
     0.6404,                  !- Minimum Curve Output
     1.0471,                  !- Maximum Curve Output
     Temperature,             !- Input Unit Type for X
@@ -3068,7 +3068,7 @@
     0.0300283917,            !- Coefficient2 x
     0.0001440098,            !- Coefficient3 x**2
     0.0028769147,            !- Coefficient4 y
-    -0.0000898031,           !- Coefficient5 y**2
+    -8.98031e-05,            !- Coefficient5 y**2
     -0.0003208096,           !- Coefficient6 x*y
     17.22,                   !- Minimum Value of x
     21.67,                   !- Maximum Value of x
@@ -3136,7 +3136,7 @@
 ! x = Part Load Ratio
 
   Curve:Quadratic,
-    Lennox KHA240S4 PLFFPLR, !- Name
+    Lennox KHA240S4 PLFFPLR,  !- Name
     0.85,                    !- Coefficient1 Constant
     0.15,                    !- Coefficient2 x
     0.0,                     !- Coefficient3 x**2
@@ -3144,7 +3144,7 @@
     1.0;                     !- Maximum Value of x
 
   Coil:Heating:DX:SingleSpeed,
-    Lennox KHA240S4 Heating, !- Name
+    Lennox KHA240S4 Heating,  !- Name
     HeatingCoilAvailSched,   !- Availability Schedule Name
     61025.4,                 !- Gross Rated Heating Capacity {W}
     3.78,                    !- Gross Rated Heating COP {W/W}
@@ -3182,8 +3182,8 @@
     Lennox KHA240S4 Heating CAPFTemp,  !- Name
     0.7583629503,            !- Coefficient1 Constant
     0.0254356641,            !- Coefficient2 x
-    0.0000392753,            !- Coefficient3 x**2
-    -0.0000042152,           !- Coefficient4 x**3
+    3.92753e-05,             !- Coefficient3 x**2
+    -4.2152e-06,             !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.1884,                  !- Minimum Curve Output
@@ -3199,7 +3199,7 @@
     1.2542569573,            !- Coefficient1 Constant
     -0.0251830707,           !- Coefficient2 x
     0.0009262455,            !- Coefficient3 x**2
-    -0.0000397581,           !- Coefficient4 x**3
+    -3.97581e-05,            !- Coefficient4 x**3
     -26.11,                  !- Minimum Value of x
     18.33,                   !- Maximum Value of x
     0.8845,                  !- Minimum Curve Output
@@ -3248,4 +3248,3 @@
     0.0,                     !- Coefficient3 x**2
     0.0,                     !- Minimum Value of x
     1.0;                     !- Maximum Value of x
-

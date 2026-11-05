@@ -98,7 +98,7 @@
 
   Building,
     Simple One Zone w Windows,  !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.004,                   !- Temperature Convergence Tolerance Value {deltaC}
@@ -113,7 +113,7 @@
   SurfaceConvectionAlgorithm:Outside,DOE-2;
 
   SimulationControl,
-    YES,                     !- Do Zone Sizing Calculation
+    Yes,                     !- Do Zone Sizing Calculation
     No,                      !- Do System Sizing Calculation
     No,                      !- Do Plant Sizing Calculation
     Yes,                     !- Run Simulation for Sizing Periods
@@ -140,8 +140,8 @@
     Atlanta Hartsfield Intl Ap_GA_USA Design_Conditions,  !- Name
     33.63,                   !- Latitude {deg}
     -84.43,                  !- Longitude {deg}
-    -5.00,                   !- Time Zone {hr}
-    308.00;                  !- Elevation {m}
+    -5.0,                    !- Time Zone {hr}
+    308.0;                   !- Elevation {m}
 
   SizingPeriod:DesignDay,
     Atlanta Hartsfield Intl Ap Ann Htg 99.6% Condns DB,  !- Name
@@ -152,15 +152,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -6.3,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    97679.,                  !- Barometric Pressure {Pa}
+    97679.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    320,                     !- Wind Direction {deg}
+    320.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -169,7 +169,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
   SizingPeriod:DesignDay,
     Atlanta Hartsfield Intl Ap Ann Clg .4% Condns DB=>MWB,  !- Name
@@ -180,15 +180,15 @@
     9.5,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    97679.,                  !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    300,                     !- Wind Direction {deg}
+    97679.0,                 !- Barometric Pressure {Pa}
+    4.0,                     !- Wind Speed {m/s}
+    300.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -207,13 +207,13 @@
   Material,
     FbrGlsBatt,              !- Name
     MediumRough,             !- Roughness
-    0.110,                   !- Thickness {m}
+    0.11,                    !- Thickness {m}
     0.039,                   !- Conductivity {W/m-K}
     19.0,                    !- Density {kg/m3}
     960.0,                   !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.8000000,               !- Solar Absorptance
-    0.8000000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.8,                     !- Solar Absorptance
+    0.8;                     !- Visible Absorptance
 
   Material,
     Framed,                  !- Name
@@ -222,9 +222,9 @@
     0.043,                   !- Conductivity {W/m-K}
     67.1,                    !- Density {kg/m3}
     1437.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Construction,
     FLOOR,                   !- Name
@@ -236,23 +236,23 @@
     OakFloor,                !- Name
     MediumRough,             !- Roughness
     0.008,                   !- Thickness {m}
-    0.170,                   !- Conductivity {W/m-K}
+    0.17,                    !- Conductivity {W/m-K}
     720.0,                   !- Density {kg/m3}
     1650.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6000000,               !- Solar Absorptance
-    0.6000000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
   Material,
     PlyWood 20mm,            !- Name
     MediumRough,             !- Roughness
-    0.020,                   !- Thickness {m}
-    0.140,                   !- Conductivity {W/m-K}
+    0.02,                    !- Thickness {m}
+    0.14,                    !- Conductivity {W/m-K}
     550.0,                   !- Density {kg/m3}
     1500.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     Framed 149mm,            !- Name
@@ -261,9 +261,9 @@
     0.047,                   !- Conductivity {W/m-K}
     67.1,                    !- Density {kg/m3}
     1437.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.0000100,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    1e-05,                   !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Construction,
     R13WALL,                 !- Name
@@ -276,12 +276,12 @@
     GypBoard,                !- Name
     MediumRough,             !- Roughness
     0.013,                   !- Thickness {m}
-    0.160,                   !- Conductivity {W/m-K}
+    0.16,                    !- Conductivity {W/m-K}
     800.0,                   !- Density {kg/m3}
     1090.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.4500000,               !- Solar Absorptance
-    0.4500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.45,                    !- Solar Absorptance
+    0.45;                    !- Visible Absorptance
 
   Material,
     Framed 89mm,             !- Name
@@ -290,31 +290,31 @@
     0.061,                   !- Conductivity {W/m-K}
     139.2,                   !- Density {kg/m3}
     1535.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     PlyWood 19mm,            !- Name
     MediumRough,             !- Roughness
     0.019,                   !- Thickness {m}
-    0.140,                   !- Conductivity {W/m-K}
+    0.14,                    !- Conductivity {W/m-K}
     550.0,                   !- Density {kg/m3}
     1500.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     FrameWood 17mm,          !- Name
     MediumRough,             !- Roughness
     0.017,                   !- Thickness {m}
-    0.120,                   !- Conductivity {W/m-K}
+    0.12,                    !- Conductivity {W/m-K}
     500.0,                   !- Density {kg/m3}
     1600.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6000000,               !- Solar Absorptance
-    0.6000000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
   InternalMass,
     ZONE ONE IM,             !- Name
@@ -331,21 +331,21 @@
     FrameWood 12mm,          !- Name
     MediumRough,             !- Roughness
     0.012,                   !- Thickness {m}
-    0.120,                   !- Conductivity {W/m-K}
+    0.12,                    !- Conductivity {W/m-K}
     500.0,                   !- Density {kg/m3}
     1600.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.4500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.45,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Site:GroundTemperature:BuildingSurface,18.89,18.92,19.02,19.12,19.21,19.23,19.07,19.32,19.09,19.21,19.13,18.96;
 
   Zone,
     ZONE ONE,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     2.4385788,               !- Ceiling Height {m}
@@ -355,11 +355,11 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
   BuildingSurface:Detailed,
@@ -372,12 +372,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    7.3157365,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    7.3157365,0,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    7.3157365,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    7.3157365,0.0,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win001,    !- Name
@@ -385,14 +385,14 @@
     CLR AIRGAP CLR,          !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    1.0,0,2.2000,  !- X,Y,Z ==> Vertex 1 {m}
-    1.0,0,1.0000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.0,0,1.0000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.0,0,2.2000;  !- X,Y,Z ==> Vertex 4 {m}
+    1.0,0.0,2.2,  !- X,Y,Z ==> Vertex 1 {m}
+    1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.0,0.0,2.2;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win002,    !- Name
@@ -400,14 +400,14 @@
     Clr ShadeX Clr,          !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    3.5,0,2.2000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.5,0,1.0000,  !- X,Y,Z ==> Vertex 2 {m}
-    5.5,0,1.0000,  !- X,Y,Z ==> Vertex 3 {m}
-    5.5,0,2.2000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.5,0.0,2.2,  !- X,Y,Z ==> Vertex 1 {m}
+    3.5,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    5.5,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}
+    5.5,0.0,2.2;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall002,           !- Name
@@ -419,12 +419,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,5.7902,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,5.7902,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,5.7902,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,5.7902,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win003,    !- Name
@@ -432,14 +432,14 @@
     Six Layers Window,       !- Construction Name
     Zn001:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.0,2.5,2.2000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.0,2.5,1.0000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.0,4.5,1.0000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.0,4.5,2.2000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,2.5,2.2,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,2.5,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,4.5,1.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,4.5,2.2;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall003,           !- Name
@@ -451,12 +451,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     7.3157365,5.7902,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
-    7.3157365,5.7902,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,5.7902,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,5.7902,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
+    7.3157365,5.7902,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,5.7902,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,5.7902,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall004,           !- Name
@@ -468,12 +468,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     7.3157365,5.7902,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
-    7.3157365,5.7902,0,  !- X,Y,Z ==> Vertex 2 {m}
-    7.3157365,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    7.3157365,0,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
+    7.3157365,5.7902,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    7.3157365,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    7.3157365,0.0,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Flr001,            !- Name
@@ -485,11 +485,11 @@
     Zn001:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    7.3157365,0.000000,0.0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,5.7902,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    7.3157365,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,5.7902,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     7.3157365,5.7902,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
@@ -502,11 +502,11 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,5.7902,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,2.4385788,  !- X,Y,Z ==> Vertex 2 {m}
-    7.3157365,0.000000,2.4385788,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,5.7902,2.4385788,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,2.4385788,  !- X,Y,Z ==> Vertex 2 {m}
+    7.3157365,0.0,2.4385788,  !- X,Y,Z ==> Vertex 3 {m}
     7.3157365,5.7902,2.4385788;  !- X,Y,Z ==> Vertex 4 {m}
 
   Sizing:Zone,
@@ -515,7 +515,7 @@
     13.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -535,8 +535,8 @@
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -547,7 +547,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ ZONE ONE,             !- Name
-    sum,                     !- Outdoor Air Method
+    Sum,                     !- Outdoor Air Method
     0.0,                     !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
@@ -594,17 +594,17 @@
 ! Output:Variable,*,Surface Window Inside Face Other Convection Heat Gain Rate,Hourly;
 ! Output:Variable,*,Surface Window Inside Face Gap between Shade and Glazing Zone Convection Heat Gain Rate,Hourly;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
+  Output:Surfaces:Drawing,DXF;
 
-  Output:Surfaces:List,details;
+  Output:Surfaces:List,Details;
 
   Output:Constructions,Constructions;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Building,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Building,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,Hourly;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -622,11 +622,11 @@
 
   ScheduleTypeLimits,
     ControlType,             !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ZONE CONTROL TYPE SCHEDULE,  !- Name
     CONTROLTYPE,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
@@ -662,9 +662,9 @@
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ZoneHVAC:EquipmentConnections,
@@ -691,15 +691,15 @@
     ZONE ONE INLET,          !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
-    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
+    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
-    autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
     NoLimit,                 !- Cooling Limit
-    autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
     ,                        !- Maximum Total Cooling Capacity {W}
     ,                        !- Heating Availability Schedule Name
     ,                        !- Cooling Availability Schedule Name
@@ -757,8 +757,8 @@
 
   WindowMaterial:Gap:EquivalentLayer,
     Air GAP Sealed 12mm,     !- Name
-    Air,                     !- Gas Type
-    0.0120,                  !- Thickness {m}
+    AIR,                     !- Gas Type
+    0.012,                   !- Thickness {m}
     Sealed;                  !- Gap Vent Type
 
 ! *** Equivalent Layer Window 2
@@ -766,33 +766,33 @@
   Construction:WindowEquivalentLayer,
     Clr ShadeX Clr,          !- Name
     GLZCLR,                  !- Outside Layer
-    Air GAP SealedOut 12.7mm,!- Layer 2
+    Air GAP SealedOut 12.7mm,  !- Layer 2
     ShadeX,                  !- Layer 3
-    Air GAP SealedIn 12.7mm, !- Layer 4
+    Air GAP SealedIn 12.7mm,  !- Layer 4
     GLZCLR;                  !- Layer 5
 
   WindowMaterial:Gap:EquivalentLayer,
-    Air GAP SealedOut 12.7mm,!- Name
-    Air,                     !- Gas Type
-    0.020,                   !- Thickness {m}
+    Air GAP SealedOut 12.7mm,  !- Name
+    AIR,                     !- Gas Type
+    0.02,                    !- Thickness {m}
     Sealed;                  !- Gap Vent Type
 
   WindowMaterial:Shade:EquivalentLayer,
     ShadeX,                  !- Name
     0.017,                   !- Shade Beam-Beam Solar Transmittance {dimensionless}
-    0.180,                   !- Front Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
-    0.180,                   !- Back Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
+    0.18,                    !- Front Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
+    0.18,                    !- Back Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
     0.499,                   !- Front Side Shade Beam-Diffuse Solar Reflectance {dimensionless}
-    0.530,                   !- Back Side Shade Beam-Diffuse Solar Reflectance {dimensionless}
+    0.53,                    !- Back Side Shade Beam-Diffuse Solar Reflectance {dimensionless}
     0.0,                     !- Shade Beam-Beam Visible Transmittance at Normal Incidence {dimensionless}
     0.0,                     !- Shade Beam-Diffuse Visible Transmittance at Normal Incidence {dimensionless}
     0.0,                     !- Shade Beam-Diffuse Visible Reflectance at Normal Incidence {dimensionless}
-    0.10,                    !- Shade Material Infrared Transmittance {dimensionless}
+    0.1,                     !- Shade Material Infrared Transmittance {dimensionless}
     0.84,                    !- Front Side Shade Material Infrared Emissivity {dimensionless}
     0.82;                    !- Back Side Shade Material Infrared Emissivity {dimensionless}
 
   WindowMaterial:Gap:EquivalentLayer,
-    Air GAP SealedIn 12.7mm, !- Name
+    Air GAP SealedIn 12.7mm,  !- Name
     ARGON,                   !- Gas Type
     0.0127,                  !- Thickness {m}
     Sealed;                  !- Gap Vent Type
@@ -804,9 +804,9 @@
     INSCRN,                  !- Outside Layer
     Air GAP Outdoor 12.7mm,  !- Layer 2
     GLZGRY,                  !- Layer 3
-    Argon GAP Sealed 12.7mm, !- Layer 4
+    Argon GAP Sealed 12.7mm,  !- Layer 4
     FEP,                     !- Layer 5
-    Xenon GAP Sealed 12.7mm, !- Layer 6
+    Xenon GAP Sealed 12.7mm,  !- Layer 6
     LOF1436,                 !- Layer 7
     Krypton GAP Sealed 12.7mm,  !- Layer 8
     GLZCLR,                  !- Layer 9
@@ -847,8 +847,8 @@
     0.0,                     !- Front Side Beam-Diffuse Visible Solar Reflectance {dimensionless}
     0.0,                     !- Back Side Beam-Diffuse Visible Solar Reflectance {dimensionless}
     0.38,                    !- Diffuse-Diffuse Solar Transmittance {dimensionless}
-    0.10,                    !- Front Side Diffuse-Diffuse Solar Reflectance {dimensionless}
-    0.10,                    !- Back Side Diffuse-Diffuse Solar Reflectance {dimensionless}
+    0.1,                     !- Front Side Diffuse-Diffuse Solar Reflectance {dimensionless}
+    0.1,                     !- Back Side Diffuse-Diffuse Solar Reflectance {dimensionless}
     0.0,                     !- Diffuse-Diffuse Visible Solar Transmittance {dimensionless}
     0.0,                     !- Front Side Diffuse-Diffuse Visible Solar Reflectance {dimensionless}
     0.0,                     !- Back Side Diffuse-Diffuse Visible Solar Reflectance {dimensionless}
@@ -907,7 +907,7 @@
     0.0,                     !- Front Side Beam-Diffuse Visible Solar Reflectance {dimensionless}
     0.0,                     !- Back Side Beam-Diffuse Visible Solar Reflectance {dimensionless}
     0.6134,                  !- Diffuse-Diffuse Solar Transmittance {dimensionless}
-    0.2370,                  !- Front Side Diffuse-Diffuse Solar Reflectance {dimensionless}
+    0.237,                   !- Front Side Diffuse-Diffuse Solar Reflectance {dimensionless}
     0.2214,                  !- Back Side Diffuse-Diffuse Solar Reflectance {dimensionless}
     0.0,                     !- Diffuse-Diffuse Visible Solar Transmittance {dimensionless}
     0.0,                     !- Front Side Diffuse-Diffuse Visible Solar Reflectance {dimensionless}
@@ -918,45 +918,44 @@
 
   WindowMaterial:Shade:EquivalentLayer,
     ShadeTrns,               !- Name
-    0.20,                    !- Shade Beam-Beam Solar Transmittance {dimensionless}
-    0.400,                   !- Front Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
-    0.400,                   !- Back Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
-    0.300,                   !- Front Side Shade Beam-Diffuse Solar Reflectance {dimensionless}
-    0.300,                   !- Back Side Shade Beam-Diffuse Solar Reflectance {dimensionless}
+    0.2,                     !- Shade Beam-Beam Solar Transmittance {dimensionless}
+    0.4,                     !- Front Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
+    0.4,                     !- Back Side Shade Beam-Diffuse Solar Transmittance {dimensionless}
+    0.3,                     !- Front Side Shade Beam-Diffuse Solar Reflectance {dimensionless}
+    0.3,                     !- Back Side Shade Beam-Diffuse Solar Reflectance {dimensionless}
     0.0,                     !- Shade Beam-Beam Visible Transmittance at Normal Incidence {dimensionless}
     0.0,                     !- Shade Beam-Diffuse Visible Transmittance at Normal Incidence {dimensionless}
     0.0,                     !- Shade Beam-Diffuse Visible Reflectance at Normal Incidence {dimensionless}
-    0.20,                    !- Shade Material Infrared Transmittance {dimensionless}
-    0.60,                    !- Front Side Shade Material Infrared Emissivity {dimensionless}
-    0.60;                    !- Back Side Shade Material Infrared Emissivity {dimensionless}
+    0.2,                     !- Shade Material Infrared Transmittance {dimensionless}
+    0.6,                     !- Front Side Shade Material Infrared Emissivity {dimensionless}
+    0.6;                     !- Back Side Shade Material Infrared Emissivity {dimensionless}
 
   WindowMaterial:Gap:EquivalentLayer,
     Air GAP Outdoor 12.7mm,  !- Name
-    Air,                     !- Gas Type
+    AIR,                     !- Gas Type
     0.022,                   !- Thickness {m}
     Sealed;                  !- Gap Vent Type
 
   WindowMaterial:Gap:EquivalentLayer,
-    Argon GAP Sealed 12.7mm, !- Name
-    Argon,                   !- Gas Type
-    0.0120,                  !- Thickness {m}
+    Argon GAP Sealed 12.7mm,  !- Name
+    ARGON,                   !- Gas Type
+    0.012,                   !- Thickness {m}
     Sealed;                  !- Gap Vent Type
 
   WindowMaterial:Gap:EquivalentLayer,
-    Xenon GAP Sealed 12.7mm, !- Name
-    Xenon,                   !- Gas Type
-    0.0170,                  !- Thickness {m}
+    Xenon GAP Sealed 12.7mm,  !- Name
+    XENON,                   !- Gas Type
+    0.017,                   !- Thickness {m}
     Sealed;                  !- Gap Vent Type
 
   WindowMaterial:Gap:EquivalentLayer,
     Krypton GAP Sealed 12.7mm,  !- Name
-    Krypton,                 !- Gas Type
+    KRYPTON,                 !- Gas Type
     0.009,                   !- Thickness {m}
     Sealed;                  !- Gap Vent Type
 
   WindowMaterial:Gap:EquivalentLayer,
     Air GAP Indoor 12.7mm,   !- Name
-    Air,                     !- Gas Type
+    AIR,                     !- Gas Type
     0.0127,                  !- Thickness {m}
     Sealed;                  !- Gap Vent Type
-

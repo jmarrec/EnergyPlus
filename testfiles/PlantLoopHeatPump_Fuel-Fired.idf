@@ -16,7 +16,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -24,15 +24,15 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     Chicago,                 !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
   SizingPeriod:DesignDay,
     Chicago Summer 1%,       !- Name
@@ -43,15 +43,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     ,                        !- Rain Indicator
     ,                        !- Snow Indicator
     ,                        !- Daylight Saving Time Indicator
@@ -67,19 +67,19 @@
     1,                       !- Month
     21,                      !- Day of Month
     WinterDesignDay,         !- Day Type
-    -20,                     !- Maximum Dry-Bulb Temperature {C}
+    -20.0,                   !- Maximum Dry-Bulb Temperature {C}
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -20,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    -20.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98934.,                  !- Barometric Pressure {Pa}
+    98934.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     ,                        !- Rain Indicator
     ,                        !- Snow Indicator
     ,                        !- Daylight Saving Time Indicator
@@ -104,17 +104,17 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
     Discrete;                !- Numeric Type
 
   Schedule:Constant,Heating Coil Load Loop Setpoint Temperature Schedule,Any Number,65.0;
 
-  Schedule:Constant,Cooling Coil Load Loop Setpoint Temperature Schedule,Any Number,20;
+  Schedule:Constant,Cooling Coil Load Loop Setpoint Temperature Schedule,Any Number,20.0;
 
-  Schedule:Constant,AlwaysOnSchedule,On/Off,1;
+  Schedule:Constant,AlwaysOnSchedule,On/Off,1.0;
 
-  ! Simulate a winter time, overnight hours load, but the pump is always running in that season
+! Simulate a winter time, overnight hours load, but the pump is always running in that season
 
   Schedule:Compact,
     Heating Coil Load Profile Load Schedule,  !- Name
@@ -150,7 +150,7 @@
     FOR: AllDays,            !- Field 10
     UNTIL: 24:00,1.0;        !- Field 11
 
-  ! Simulate a summer time, daytime hours load, but the pump is always running in that season
+! Simulate a summer time, daytime hours load, but the pump is always running in that season
 
   Schedule:Compact,
     Cooling Coil Load Profile Load Schedule,  !- Name
@@ -184,15 +184,15 @@
 
   PlantLoop,
     Heating Coil Load Loop,  !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     Heating Coil Load Loop Operation,  !- Plant Equipment Operation Scheme Name
     Heating Coil Load Loop Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.005,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    1,                       !- Plant Loop Volume {m3}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    1.0,                     !- Plant Loop Volume {m3}
     Heating Coil Load Loop Supply Inlet Node,  !- Plant Side Inlet Node Name
     Heating Coil Load Loop Supply Outlet Node,  !- Plant Side Outlet Node Name
     Heating Coil Load Loop Supply Branches,  !- Plant Side Branch List Name
@@ -217,8 +217,8 @@
 
   PlantEquipmentOperation:HeatingLoad,
     Heating Coil Load Loop Heating Operation,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Heating Coil Load Loop Heating Equipment;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -247,16 +247,16 @@
     Heating Coil Load Loop Supply Inlet Node,  !- Inlet Node Name
     Heating Coil Load Loop Intermediate Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    3000,                    !- Design Pump Head {Pa}
-    22,                      !- Design Power Consumption {W}
+    3000.0,                  !- Design Pump Head {Pa}
+    22.0,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   HeatPump:AirToWater:FuelFired:Heating,
     Heating Coil,            !- Name
@@ -266,17 +266,17 @@
     Cooling Coil,            !- Companion Cooling Heat Pump Name
     NaturalGas,              !- Fuel Type
     Fuel-Fired_Heat_Pump,    !- End-Use Subcategory
-    80000,                   !- Nominal Heating Capacity {W}
+    80000.0,                 !- Nominal Heating Capacity {W}
     1.5,                     !- Nominal COP {W/W}
     0.005,                   !- Design Flow Rate {m3/s}
-    60,                      !- Design Supply Temperature {C}
-    13,                      !- Design Temperature Lift {deltaC}
+    60.0,                    !- Design Supply Temperature {C}
+    13.0,                    !- Design Temperature Lift {deltaC}
     1.0,                     !- Sizing Factor
     NotModulated,            !- Flow Mode
     DryBulb,                 !- Outdoor Air Temperature Curve Input Variable
     EnteringCondenser,       !- Water Temperature Curve Input Variable
-    HeatingCapCurveFuncTemp, !- Normalized Capacity Function of Temperature Curve Name
-    HeatingEIRCurveFuncTemp, !- Fuel Energy Input Ratio Function of Temperature Curve Name
+    HeatingCapCurveFuncTemp,  !- Normalized Capacity Function of Temperature Curve Name
+    HeatingEIRCurveFuncTemp,  !- Fuel Energy Input Ratio Function of Temperature Curve Name
     EIRCurveFuncPLR,         !- Fuel Energy Input Ratio Function of PLR Curve Name
     0.2,                     !- Minimum Part Load Ratio
     1.0,                     !- Maximum Part Load Ratio
@@ -286,65 +286,65 @@
     0.0,                     !- Resistive Defrost Heater Capacity {W}
     3.0,                     !- Maximum Outdoor Dry-bulb Temperature for Defrost Operation {C}
     CRFCurve,                !- Cycling Ratio Factor Curve Name
-    500,                     !- Nominal Auxiliary Electric Power {W}
+    500.0,                   !- Nominal Auxiliary Electric Power {W}
     auxElecEIRCurveFuncTempCurve,  !- Auxiliary Electric Energy Input Ratio Function of Temperature Curve Name
     auxElecEIRFoPLRCurve,    !- Auxiliary Electric Energy Input Ratio Function of PLR Curve Name
-    20;                      !- Standby Electric Power {W}
+    20.0;                    !- Standby Electric Power {W}
 
   Curve:Quadratic,
     EIRDefrostFoTCurve,      !- Name
     1.0317,                  !- Coefficient1 Constant
     -0.006,                  !- Coefficient2 x
     -0.0011,                 !- Coefficient3 x**2
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
     1.0,                     !- Minimum Curve Output
     10.0;                    !- Maximum Curve Output
 
   Curve:Quadratic,
     CRFCurve,                !- Name
-    1,                       !- Coefficient1 Constant
-    0,                       !- Coefficient2 x
-    0,                       !- Coefficient3 x**2
-    0,                       !- Minimum Value of x
-    100,                     !- Maximum Value of x
-    0,                       !- Minimum Curve Output
+    1.0,                     !- Coefficient1 Constant
+    0.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    0.0,                     !- Minimum Curve Output
     10.0;                    !- Maximum Curve Output
 
   Curve:Biquadratic,
     auxElecEIRCurveFuncTempCurve,  !- Name
-    1,                       !- Coefficient1 Constant
-    0,                       !- Coefficient2 x
-    0,                       !- Coefficient3 x**2
-    0,                       !- Coefficient4 y
-    0,                       !- Coefficient5 y**2
-    0,                       !- Coefficient6 x*y
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
-    -100,                    !- Minimum Value of y
-    100;                     !- Maximum Value of y
+    1.0,                     !- Coefficient1 Constant
+    0.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Coefficient4 y
+    0.0,                     !- Coefficient5 y**2
+    0.0,                     !- Coefficient6 x*y
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    -100.0,                  !- Minimum Value of y
+    100.0;                   !- Maximum Value of y
 
   Curve:Cubic,
     auxElecEIRFoPLRCurve,    !- Name
-    1,                       !- Coefficient1 Constant
-    0,                       !- Coefficient2 x
-    0,                       !- Coefficient3 x**2
-    0,                       !- Coefficient4 x**3
-    -100,                    !- Minimum Value of x
-    100;                     !- Maximum Value of x
+    1.0,                     !- Coefficient1 Constant
+    0.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Coefficient4 x**3
+    -100.0,                  !- Minimum Value of x
+    100.0;                   !- Maximum Value of x
 
 !- From Table 3 in "Pathways to Decarbonization of Residential Heating", Fridlyand et al. (2021)
 
   Curve:Biquadratic,
-    HeatingCapCurveFuncTemp, !- Name
+    HeatingCapCurveFuncTemp,  !- Name
     1.011452,                !- Coefficient1 Constant
     0.004093,                !- Coefficient2 x
     -0.00014,                !- Coefficient3 x**2
     0.00428,                 !- Coefficient4 y
-    -0.000086,               !- Coefficient5 y**2
-    0.00000226,              !- Coefficient6 x*y
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
+    -8.6e-05,                !- Coefficient5 y**2
+    2.26e-06,                !- Coefficient6 x*y
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
     -30.0,                   !- Minimum Value of y
     10.0,                    !- Maximum Value of y
     ,                        !- Minimum Curve Output
@@ -376,15 +376,15 @@
 !- The curve from Table 3 has been renormalized at the ANSI rating conditions of 95°F return and 47°F ambient to represent an EIR modifier
 
   Curve:Biquadratic,
-    HeatingEIRCurveFuncTemp, !- Name
+    HeatingEIRCurveFuncTemp,  !- Name
     0.559888009625229,       !- Coefficient1 Constant
     0.0171957698511524,      !- Coefficient2 x
-    -0.0000891729967627554,  !- Coefficient3 x**2
+    -8.91729967627554e-05,   !- Coefficient3 x**2
     -0.00464869065091091,    !- Coefficient4 y
-    0.00009648225879249,     !- Coefficient5 y**2
-    -0.0000701689154854473,  !- Coefficient6 x*y
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
+    9.648225879249e-05,      !- Coefficient5 y**2
+    -7.01689154854473e-05,   !- Coefficient6 x*y
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
     -30.0,                   !- Minimum Value of y
     10.0,                    !- Maximum Value of y
     ,                        !- Minimum Curve Output
@@ -444,15 +444,15 @@
 
   PlantLoop,
     Cooling Coil Load Loop,  !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     Cooling Coil Load Loop Operation,  !- Plant Equipment Operation Scheme Name
     Cooling Coil Load Loop Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.005,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    1,                       !- Plant Loop Volume {m3}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    1.0,                     !- Plant Loop Volume {m3}
     Cooling Coil Load Loop Supply Inlet Node,  !- Plant Side Inlet Node Name
     Cooling Coil Load Loop Supply Outlet Node,  !- Plant Side Outlet Node Name
     Cooling Coil Load Loop Supply Branches,  !- Plant Side Branch List Name
@@ -477,8 +477,8 @@
 
   PlantEquipmentOperation:CoolingLoad,
     Cooling Coil Load Loop Cooling Operation,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Cooling Coil Load Loop Cooling Equipment;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -507,16 +507,16 @@
     Cooling Coil Load Loop Supply Inlet Node,  !- Inlet Node Name
     Cooling Coil Load Loop Intermediate Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    3000,                    !- Design Pump Head {Pa}
-    22,                      !- Design Power Consumption {W}
+    3000.0,                  !- Design Pump Head {Pa}
+    22.0,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   HeatPump:AirToWater:FuelFired:Cooling,
     Cooling Coil,            !- Name
@@ -526,10 +526,10 @@
     Heating Coil,            !- Companion Heating Heat Pump Name
     NaturalGas,              !- Fuel Type
     Fuel-Fired_Heat_Pump,    !- End-Use Subcategory
-    400000,                  !- Nominal Cooling Capacity {W}
+    400000.0,                !- Nominal Cooling Capacity {W}
     2.0,                     !- Nominal COP {W/W}
     0.005,                   !- Design Flow Rate {m3/s}
-    7,                       !- Design Supply Temperature {C}
+    7.0,                     !- Design Supply Temperature {C}
     11.1,                    !- Design Temperature Lift {deltaC}
     1.0,                     !- Sizing Factor
     NotModulated,            !- Flow Mode
@@ -541,10 +541,10 @@
     0.2,                     !- Minimum Part Load Ratio
     1.0,                     !- Maximum Part Load Ratio
     CRFCurve,                !- Cycling Ratio Factor Curve Name
-    500,                     !- Nominal Auxiliary Electric Power {W}
+    500.0,                   !- Nominal Auxiliary Electric Power {W}
     auxElecEIRCurveFuncTempCurve,  !- Auxiliary Electric Energy Input Ratio Function of Temperature Curve Name
     auxElecEIRFoPLRCurve,    !- Auxiliary Electric Energy Input Ratio Function of PLR Curve Name
-    20;                      !- Standby Electric Power {W}
+    20.0;                    !- Standby Electric Power {W}
 
   Curve:Biquadratic,
     CapCurveFuncTemp2,       !- Name
@@ -645,4 +645,3 @@
   Output:Variable,*,Fuel-fired Absorption HeatPump Mass Flow Rate,Hourly;
 
   Output:Variable,*,Fuel-fired Absorption HeatPump Volumetric Flow Rate,Hourly;
-

@@ -108,4 +108,3 @@
     0.5,                     !- Left-Side Opening Multiplier
     0.5,                     !- Right-Side Opening Multiplier
     0.0;                     !- Airflow Permeability {dimensionless}
-

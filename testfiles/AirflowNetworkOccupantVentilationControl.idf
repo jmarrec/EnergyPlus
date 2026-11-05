@@ -132,10 +132,10 @@
 
   Building,
     AirflowNetwork 3 Zone Building,  !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
-    3.9999999E-02,           !- Loads Convergence Tolerance Value {W}
-    0.4000000,               !- Temperature Convergence Tolerance Value {deltaC}
+    0.039999999,             !- Loads Convergence Tolerance Value {W}
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
     MinimalShadowing,        !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
@@ -148,9 +148,7 @@
 
   HeatBalanceAlgorithm,ConductionTransferFunction;
 
-  ZoneAirHeatBalanceAlgorithm,
-    AnalyticalSolution,      !- Algorithm
-    ;                        !- Do Space Heat Balance for Sizing
+  ZoneAirHeatBalanceAlgorithm,AnalyticalSolution;
 
   SimulationControl,
     No,                      !- Do Zone Sizing Calculation
@@ -180,8 +178,8 @@
     CHICAGO_IL_USA TMY2-94846,  !- Name
     41.78,                   !- Latitude {deg}
     -87.75,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
 ! CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
 
@@ -194,15 +192,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -224,15 +222,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -243,18 +241,18 @@
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
     1.0;                     !- Sky Clearness
 
-  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.30,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.20;
+  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.3,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.2;
 
   Material,
     A1 - 1 IN STUCCO,        !- Name
     Smooth,                  !- Roughness
-    2.5389841E-02,           !- Thickness {m}
+    0.025389841,             !- Thickness {m}
     0.6918309,               !- Conductivity {W/m-K}
     1858.142,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     C4 - 4 IN COMMON BRICK,  !- Name
@@ -262,21 +260,21 @@
     0.1014984,               !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1922.216,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7600000,               !- Solar Absorptance
-    0.7600000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.76,                    !- Solar Absorptance
+    0.76;                    !- Visible Absorptance
 
   Material,
     E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    1.905E-02,               !- Thickness {m}
+    0.01905,                 !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1601.846,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     C6 - 8 IN CLAY TILE,     !- Name
@@ -284,10 +282,10 @@
     0.2033016,               !- Thickness {m}
     0.5707605,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.8200000,               !- Solar Absorptance
-    0.8200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.82,                    !- Solar Absorptance
+    0.82;                    !- Visible Absorptance
 
   Material,
     C10 - 8 IN HW CONCRETE,  !- Name
@@ -295,72 +293,72 @@
     0.2033016,               !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E2 - 1 / 2 IN SLAG OR STONE,  !- Name
     Rough,                   !- Roughness
-    1.2710161E-02,           !- Thickness {m}
+    0.012710161,             !- Thickness {m}
     1.435549,                !- Conductivity {W/m-K}
     881.0155,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5500000,               !- Solar Absorptance
-    0.5500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.55,                    !- Solar Absorptance
+    0.55;                    !- Visible Absorptance
 
   Material,
     E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
     Rough,                   !- Roughness
-    9.5402403E-03,           !- Thickness {m}
+    0.0095402403,            !- Thickness {m}
     0.1902535,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     B5 - 1 IN DENSE INSULATION,  !- Name
     VeryRough,               !- Roughness
-    2.5389841E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.025389841,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     91.30524,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C12 - 2 IN HW CONCRETE,  !- Name
     MediumRough,             !- Roughness
-    5.0901599E-02,           !- Thickness {m}
+    0.050901599,             !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     1.375in-Solid-Core,      !- Name
     Smooth,                  !- Roughness
-    3.4925E-02,              !- Thickness {m}
-    0.1525000,               !- Conductivity {W/m-K}
-    614.5000,                !- Density {kg/m3}
-    1630.0000,               !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.034925,                !- Thickness {m}
+    0.1525,                  !- Conductivity {W/m-K}
+    614.5,                   !- Density {kg/m3}
+    1630.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   WindowMaterial:Glazing,
     WIN-LAY-GLASS-LIGHT,     !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
     0.0025,                  !- Thickness {m}
-    0.850,                   !- Solar Transmittance at Normal Incidence
+    0.85,                    !- Solar Transmittance at Normal Incidence
     0.075,                   !- Front Side Solar Reflectance at Normal Incidence
     0.075,                   !- Back Side Solar Reflectance at Normal Incidence
     0.901,                   !- Visible Transmittance at Normal Incidence
@@ -404,42 +402,42 @@
 
   Zone,
     WEST_ZONE,               !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate;           !- Ceiling Height {m}
+    Autocalculate;           !- Ceiling Height {m}
 
   Zone,
     EAST_ZONE,               !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate;           !- Ceiling Height {m}
+    Autocalculate;           !- Ceiling Height {m}
 
   Zone,
     NORTH_ZONE,              !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate;           !- Ceiling Height {m}
+    Autocalculate;           !- Ceiling Height {m}
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
   BuildingSurface:Detailed,
     Surface_1,               !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     EXTWALL80,               !- Construction Name
     WEST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -447,16 +445,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_2,               !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     EXTWALL80,               !- Construction Name
     WEST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -464,16 +462,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_3,               !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     PARTITION06,             !- Construction Name
     WEST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -481,16 +479,16 @@
     Surface_17,              !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_4,               !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     PARTITION06,             !- Construction Name
     WEST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -498,16 +496,16 @@
     Surface_10,              !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_5,               !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR SLAB 8 IN,         !- Construction Name
     WEST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -515,16 +513,16 @@
     Surface_5,               !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_6,               !- Name
-    ROOF,                    !- Surface Type
+    Roof,                    !- Surface Type
     ROOF34,                  !- Construction Name
     WEST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -532,16 +530,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_8,               !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     EXTWALL80,               !- Construction Name
     EAST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -549,16 +547,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_9,               !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     EXTWALL80,               !- Construction Name
     EAST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -566,16 +564,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_10,              !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     PARTITION06,             !- Construction Name
     EAST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -583,16 +581,16 @@
     Surface_4,               !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096001,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096001,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_11,              !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     PARTITION06,             !- Construction Name
     EAST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -600,16 +598,16 @@
     Surface_18,              !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_12,              !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR SLAB 8 IN,         !- Construction Name
     EAST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -617,16 +615,16 @@
     Surface_12,              !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_13,              !- Name
-    ROOF,                    !- Surface Type
+    Roof,                    !- Surface Type
     ROOF34,                  !- Construction Name
     EAST_ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -634,16 +632,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_14,              !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     EXTWALL80,               !- Construction Name
     NORTH_ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -651,16 +649,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_15,              !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     EXTWALL80,               !- Construction Name
     NORTH_ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -668,16 +666,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_16,              !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     EXTWALL80,               !- Construction Name
     NORTH_ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -685,16 +683,16 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_17,              !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     PARTITION06,             !- Construction Name
     NORTH_ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -702,16 +700,16 @@
     Surface_3,               !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000,6.096,0.000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096,6.096,0.000,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_18,              !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     PARTITION06,             !- Construction Name
     NORTH_ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -719,16 +717,16 @@
     Surface_11,              !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_19,              !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR SLAB 8 IN,         !- Construction Name
     NORTH_ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -736,16 +734,16 @@
     Surface_19,              !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Surface_20,              !- Name
-    ROOF,                    !- Surface Type
+    Roof,                    !- Surface Type
     ROOF34,                  !- Construction Name
     NORTH_ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -753,72 +751,72 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     WINDOW1,                 !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     WIN-CON-LIGHT,           !- Construction Name
     Surface_1,               !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    1.00000,0,2.500000,  !- X,Y,Z ==> Vertex 1 {m}
-    1.00000,0,1.0000000,  !- X,Y,Z ==> Vertex 2 {m}
-    5.000000,0,1.0000000,  !- X,Y,Z ==> Vertex 3 {m}
-    5.000000,0,2.500000;  !- X,Y,Z ==> Vertex 4 {m}
+    1.0,0.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}
+    1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    5.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}
+    5.0,0.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     DoorInSurface_3,         !- Name
-    DOOR,                    !- Surface Type
+    Door,                    !- Surface Type
     DOOR-CON,                !- Construction Name
     Surface_3,               !- Building Surface Name
     DoorInSurface_17,        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    3.500,6.096000,2.0,  !- X,Y,Z ==> Vertex 1 {m}
-    3.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    2.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    2.500,6.096000,2.0;  !- X,Y,Z ==> Vertex 4 {m}
+    3.5,6.096,2.0,  !- X,Y,Z ==> Vertex 1 {m}
+    3.5,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    2.5,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    2.5,6.096,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     WINDOW2,                 !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     WIN-CON-LIGHT,           !- Construction Name
     Surface_15,              !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    6.000000,12.19200,2.333000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.000000,12.19200,1.000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.000000,12.19200,1.000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.000000,12.19200,2.333000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.0,12.192,2.333,  !- X,Y,Z ==> Vertex 1 {m}
+    6.0,12.192,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.0,12.192,1.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.0,12.192,2.333;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     DoorInSurface_17,        !- Name
-    DOOR,                    !- Surface Type
+    Door,                    !- Surface Type
     DOOR-CON,                !- Construction Name
     Surface_17,              !- Building Surface Name
     DoorInSurface_3,         !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    2.500,6.096000,2.0,  !- X,Y,Z ==> Vertex 1 {m}
-    2.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    3.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    3.500,6.096000,2.0;  !- X,Y,Z ==> Vertex 4 {m}
+    2.5,6.096,2.0,  !- X,Y,Z ==> Vertex 1 {m}
+    2.5,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.5,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.5,6.096,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   ScheduleTypeLimits,
     Any Number;              !- Name
@@ -827,20 +825,20 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     Activity Sch,            !- Name
@@ -874,13 +872,13 @@
     WindowVentSched,         !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Wednesday Thursday Friday Saturday, !- Field 2
+    For: Wednesday Thursday Friday Saturday,  !- Field 2
     Until: 24:00,21.11,      !- Field 3
-    For: Holiday SummerDesignDay, !- Field 5
+    For: Holiday SummerDesignDay,  !- Field 5
     Until: 24:00,21.11,      !- Field 6
-    For: Sunday Monday Tuesday, !- Field 8
+    For: Sunday Monday Tuesday,  !- Field 8
     Until: 24:00,25.55,      !- Field 9
-    For: WinterDesignDay CustomDay1 CustomDay2, !- Field 11
+    For: WinterDesignDay CustomDay1 CustomDay2,  !- Field 11
     Until: 24:00,25.55;      !- Field 12
 
   Schedule:Compact,
@@ -928,14 +926,14 @@
     WEST_ZONE People,        !- Name
     WEST_ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    3.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -944,20 +942,20 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   People,
     EAST_ZONE People,        !- Name
     EAST_ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    3.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -966,20 +964,20 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   People,
     NORTH_ZONE People,       !- Name
     NORTH_ZONE,              !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    4.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    4.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -988,7 +986,7 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   Lights,
     EAST_ZONE Lights,        !- Name
@@ -998,10 +996,10 @@
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Return Air Fraction
+    0.2,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   Lights,
@@ -1012,10 +1010,10 @@
     878.6252,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Return Air Fraction
+    0.2,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
@@ -1026,9 +1024,9 @@
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   ElectricEquipment,
     EAST_ZONE Equip,         !- Name
@@ -1038,9 +1036,9 @@
     1464.375,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   ElectricEquipment,
     NORTH_ZONE Equip,        !- Name
@@ -1050,20 +1048,20 @@
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   AirflowNetwork:SimulationControl,
     NaturalVentilation,      !- Name
     MultizoneWithoutDistribution,  !- AirflowNetwork Control
-    INPUT,                   !- Wind Pressure Coefficient Type
+    Input,                   !- Wind Pressure Coefficient Type
     ExternalNode,            !- Height Selection for Local Wind Pressure Calculation
-    LOWRISE,                 !- Building Type
+    LowRise,                 !- Building Type
     500,                     !- Maximum Number of Iterations {dimensionless}
     ZeroNodePressures,       !- Initialization Type
-    1.0E-05,                 !- Relative Airflow Convergence Tolerance {dimensionless}
-    1.0E-06,                 !- Absolute Airflow Convergence Tolerance {kg/s}
+    1e-05,                   !- Relative Airflow Convergence Tolerance {dimensionless}
+    1e-06,                   !- Absolute Airflow Convergence Tolerance {kg/s}
     -0.5,                    !- Convergence Acceleration Limit {dimensionless}
     0.0,                     !- Azimuth Angle of Long Axis of Building {deg}
     1.0,                     !- Ratio of Building Width Along Short Axis to Width Along Long Axis
@@ -1241,16 +1239,16 @@
     1.0,                     !- Width Factor for Opening Factor 2 {dimensionless}
     1.0,                     !- Height Factor for Opening Factor 2 {dimensionless}
     0.0,                     !- Start Height Factor for Opening Factor 2 {dimensionless}
-    0,                       !- Opening Factor 3 {dimensionless}
-    0,                       !- Discharge Coefficient for Opening Factor 3 {dimensionless}
-    0,                       !- Width Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Height Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Start Height Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Opening Factor 4 {dimensionless}
-    0,                       !- Discharge Coefficient for Opening Factor 4 {dimensionless}
-    0,                       !- Width Factor for Opening Factor 4 {dimensionless}
-    0,                       !- Height Factor for Opening Factor 4 {dimensionless}
-    0;                       !- Start Height Factor for Opening Factor 4 {dimensionless}
+    0.0,                     !- Opening Factor 3 {dimensionless}
+    0.0,                     !- Discharge Coefficient for Opening Factor 3 {dimensionless}
+    0.0,                     !- Width Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Height Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Start Height Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Opening Factor 4 {dimensionless}
+    0.0,                     !- Discharge Coefficient for Opening Factor 4 {dimensionless}
+    0.0,                     !- Width Factor for Opening Factor 4 {dimensionless}
+    0.0,                     !- Height Factor for Opening Factor 4 {dimensionless}
+    0.0;                     !- Start Height Factor for Opening Factor 4 {dimensionless}
 
   AirflowNetwork:MultiZone:Component:DetailedOpening,
     DrOpen,                  !- Name
@@ -1269,34 +1267,34 @@
     1.0,                     !- Width Factor for Opening Factor 2 {dimensionless}
     1.0,                     !- Height Factor for Opening Factor 2 {dimensionless}
     0.0,                     !- Start Height Factor for Opening Factor 2 {dimensionless}
-    0,                       !- Opening Factor 3 {dimensionless}
-    0,                       !- Discharge Coefficient for Opening Factor 3 {dimensionless}
-    0,                       !- Width Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Height Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Start Height Factor for Opening Factor 3 {dimensionless}
-    0,                       !- Opening Factor 4 {dimensionless}
-    0,                       !- Discharge Coefficient for Opening Factor 4 {dimensionless}
-    0,                       !- Width Factor for Opening Factor 4 {dimensionless}
-    0,                       !- Height Factor for Opening Factor 4 {dimensionless}
-    0;                       !- Start Height Factor for Opening Factor 4 {dimensionless}
+    0.0,                     !- Opening Factor 3 {dimensionless}
+    0.0,                     !- Discharge Coefficient for Opening Factor 3 {dimensionless}
+    0.0,                     !- Width Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Height Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Start Height Factor for Opening Factor 3 {dimensionless}
+    0.0,                     !- Opening Factor 4 {dimensionless}
+    0.0,                     !- Discharge Coefficient for Opening Factor 4 {dimensionless}
+    0.0,                     !- Width Factor for Opening Factor 4 {dimensionless}
+    0.0,                     !- Height Factor for Opening Factor 4 {dimensionless}
+    0.0;                     !- Start Height Factor for Opening Factor 4 {dimensionless}
 
   AirflowNetwork:MultiZone:ReferenceCrackConditions,
-    ReferenceCrackConditions,!- Name
+    ReferenceCrackConditions,  !- Name
     20.0,                    !- Reference Temperature {C}
-    101320,                  !- Reference Barometric Pressure {Pa}
+    101320.0,                !- Reference Barometric Pressure {Pa}
     0.005;                   !- Reference Humidity Ratio {kgWater/kgDryAir}
 
   AirflowNetwork:MultiZone:Surface:Crack,
     CR-1,                    !- Name
     0.01,                    !- Air Mass Flow Coefficient at Reference Conditions {kg/s}
     0.667,                   !- Air Mass Flow Exponent {dimensionless}
-    ReferenceCrackConditions;!- Reference Crack Conditions
+    ReferenceCrackConditions;  !- Reference Crack Conditions
 
   AirflowNetwork:MultiZone:Surface:Crack,
     CRcri,                   !- Name
     0.05,                    !- Air Mass Flow Coefficient at Reference Conditions {kg/s}
     0.667,                   !- Air Mass Flow Exponent {dimensionless}
-    ReferenceCrackConditions;!- Reference Crack Conditions
+    ReferenceCrackConditions;  !- Reference Crack Conditions
 
   AirflowNetwork:MultiZone:ExternalNode,
     NFacade,                 !- Name
@@ -1320,23 +1318,23 @@
 
   AirflowNetwork:MultiZone:WindPressureCoefficientArray,
     Every 30 Degrees,        !- Name
-    0,                       !- Wind Direction 1 {deg}
-    30,                      !- Wind Direction 2 {deg}
-    60,                      !- Wind Direction 3 {deg}
-    90,                      !- Wind Direction 4 {deg}
-    120,                     !- Wind Direction 5 {deg}
-    150,                     !- Wind Direction 6 {deg}
-    180,                     !- Wind Direction 7 {deg}
-    210,                     !- Wind Direction 8 {deg}
-    240,                     !- Wind Direction 9 {deg}
-    270,                     !- Wind Direction 10 {deg}
-    300,                     !- Wind Direction 11 {deg}
-    330;                     !- Wind Direction 12 {deg}
+    0.0,                     !- Wind Direction 1 {deg}
+    30.0,                    !- Wind Direction 2 {deg}
+    60.0,                    !- Wind Direction 3 {deg}
+    90.0,                    !- Wind Direction 4 {deg}
+    120.0,                   !- Wind Direction 5 {deg}
+    150.0,                   !- Wind Direction 6 {deg}
+    180.0,                   !- Wind Direction 7 {deg}
+    210.0,                   !- Wind Direction 8 {deg}
+    240.0,                   !- Wind Direction 9 {deg}
+    270.0,                   !- Wind Direction 10 {deg}
+    300.0,                   !- Wind Direction 11 {deg}
+    330.0;                   !- Wind Direction 12 {deg}
 
   AirflowNetwork:MultiZone:WindPressureCoefficientValues,
     NFacade_WPCValue,        !- Name
     Every 30 Degrees,        !- AirflowNetwork:MultiZone:WindPressureCoefficientArray Name
-    0.60,                    !- Wind Pressure Coefficient Value 1 {dimensionless}
+    0.6,                     !- Wind Pressure Coefficient Value 1 {dimensionless}
     0.48,                    !- Wind Pressure Coefficient Value 2 {dimensionless}
     0.04,                    !- Wind Pressure Coefficient Value 3 {dimensionless}
     -0.56,                   !- Wind Pressure Coefficient Value 4 {dimensionless}
@@ -1355,7 +1353,7 @@
     -0.56,                   !- Wind Pressure Coefficient Value 1 {dimensionless}
     0.04,                    !- Wind Pressure Coefficient Value 2 {dimensionless}
     0.48,                    !- Wind Pressure Coefficient Value 3 {dimensionless}
-    0.60,                    !- Wind Pressure Coefficient Value 4 {dimensionless}
+    0.6,                     !- Wind Pressure Coefficient Value 4 {dimensionless}
     0.48,                    !- Wind Pressure Coefficient Value 5 {dimensionless}
     0.04,                    !- Wind Pressure Coefficient Value 6 {dimensionless}
     -0.56,                   !- Wind Pressure Coefficient Value 7 {dimensionless}
@@ -1374,7 +1372,7 @@
     -0.56,                   !- Wind Pressure Coefficient Value 4 {dimensionless}
     0.04,                    !- Wind Pressure Coefficient Value 5 {dimensionless}
     0.48,                    !- Wind Pressure Coefficient Value 6 {dimensionless}
-    0.60,                    !- Wind Pressure Coefficient Value 7 {dimensionless}
+    0.6,                     !- Wind Pressure Coefficient Value 7 {dimensionless}
     0.48,                    !- Wind Pressure Coefficient Value 8 {dimensionless}
     0.04,                    !- Wind Pressure Coefficient Value 9 {dimensionless}
     -0.56,                   !- Wind Pressure Coefficient Value 10 {dimensionless}
@@ -1393,7 +1391,7 @@
     -0.56,                   !- Wind Pressure Coefficient Value 7 {dimensionless}
     0.04,                    !- Wind Pressure Coefficient Value 8 {dimensionless}
     0.48,                    !- Wind Pressure Coefficient Value 9 {dimensionless}
-    0.60,                    !- Wind Pressure Coefficient Value 10 {dimensionless}
+    0.6,                     !- Wind Pressure Coefficient Value 10 {dimensionless}
     0.48,                    !- Wind Pressure Coefficient Value 11 {dimensionless}
     0.04;                    !- Wind Pressure Coefficient Value 12 {dimensionless}
 
@@ -1425,13 +1423,12 @@
 
   Output:Variable,WINDOW1,AFN Linkage Node 2 to Node 1 Mass Flow Rate,Timestep;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
+  Output:Surfaces:Drawing,DXF;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
-

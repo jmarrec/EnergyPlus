@@ -233,19 +233,19 @@
 ! U=4.513  SHGC=0.781  TSOL=0.75  TVIS=0.85
 
   Construction,
-    Sgl LoE (e2=.4) Clr 3mm, !- Name
+    Sgl LoE (e2=.4) Clr 3mm,  !- Name
     PYR A CLEAR 3MM;         !- Outside Layer
 
 ! U=3.835  SHGC=0.768  TSOL=0.741  TVIS=0.821
 
   Construction,
-    Sgl LoE (e2=.2) Clr 3mm, !- Name
+    Sgl LoE (e2=.2) Clr 3mm,  !- Name
     PYR B CLEAR 3MM;         !- Outside Layer
 
 ! U=3.779  SHGC=0.72  TSOL=0.68  TVIS=0.811
 
   Construction,
-    Sgl LoE (e2=.2) Clr 6mm, !- Name
+    Sgl LoE (e2=.2) Clr 6mm,  !- Name
     PYR B CLEAR 6MM;         !- Outside Layer
 
 ! U=5.778  SHGC=0.842  TSOL=0.814  TVIS=0.847
@@ -257,7 +257,7 @@
 ! U=5.778  SHGC=0.328  TSOL=0.111  TVIS=0.128
 
   Construction,
-    Sgl Elec Abs Colored 6mm,!- Name
+    Sgl Elec Abs Colored 6mm,  !- Name
     ECABS-1 COLORED 6MM;     !- Outside Layer
 
 ! U=5.778  SHGC=0.733  TSOL=0.694  TVIS=0.818
@@ -269,7 +269,7 @@
 ! U=5.778  SHGC=0.306  TSOL=0.099  TVIS=0.155
 
   Construction,
-    Sgl Elec Ref Colored 6mm,!- Name
+    Sgl Elec Ref Colored 6mm,  !- Name
     ECREF-1 COLORED 6MM;     !- Outside Layer
 
 ! U=3.122  SHGC=0.762  TSOL=0.705  TVIS=0.812
@@ -379,7 +379,7 @@
 ! U=2.72  SHGC=0.625  TSOL=0.542  TVIS=0.618
 
   Construction,
-    Dbl Bronze 3mm/13mm Air, !- Name
+    Dbl Bronze 3mm/13mm Air,  !- Name
     BRONZE 3MM,              !- Outside Layer
     AIR 13MM,                !- Layer 2
     CLEAR 3MM;               !- Layer 3
@@ -387,7 +387,7 @@
 ! U=2.556  SHGC=0.623  TSOL=0.542  TVIS=0.618
 
   Construction,
-    Dbl Bronze 3mm/13mm Arg, !- Name
+    Dbl Bronze 3mm/13mm Arg,  !- Name
     BRONZE 3MM,              !- Outside Layer
     ARGON 13MM,              !- Layer 2
     CLEAR 3MM;               !- Layer 3
@@ -403,7 +403,7 @@
 ! U=2.67  SHGC=0.498  TSOL=0.375  TVIS=0.473
 
   Construction,
-    Dbl Bronze 6mm/13mm Air, !- Name
+    Dbl Bronze 6mm/13mm Air,  !- Name
     BRONZE 6MM,              !- Outside Layer
     AIR 13MM,                !- Layer 2
     CLEAR 6MM;               !- Layer 3
@@ -411,7 +411,7 @@
 ! U=2.511  SHGC=0.495  TSOL=0.375  TVIS=0.473
 
   Construction,
-    Dbl Bronze 6mm/13mm Arg, !- Name
+    Dbl Bronze 6mm/13mm Arg,  !- Name
     BRONZE 6MM,              !- Outside Layer
     ARGON 13MM,              !- Layer 2
     CLEAR 6MM;               !- Layer 3
@@ -595,7 +595,7 @@
 ! U=2.416  SHGC=0.234  TSOL=0.127  TVIS=0.181
 
   Construction,
-    Dbl Ref-A-H 6mm/13mm Air,!- Name
+    Dbl Ref-A-H 6mm/13mm Air,  !- Name
     REF A CLEAR HI 6MM,      !- Outside Layer
     AIR 13MM,                !- Layer 2
     CLEAR 6MM;               !- Layer 3

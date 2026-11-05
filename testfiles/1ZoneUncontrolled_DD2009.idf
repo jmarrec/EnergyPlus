@@ -94,10 +94,10 @@
 
   Building,
     Simple One Zone (no roof-no floor),  !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
-    .04,                     !- Loads Convergence Tolerance Value {W}
-    .4,                      !- Temperature Convergence Tolerance Value {deltaC}
+    0.04,                    !- Loads Convergence Tolerance Value {W}
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
     MinimalShadowing,        !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
@@ -136,8 +136,8 @@
     Atlanta,                 !- Name
     33.64,                   !- Latitude {deg}
     -84.43,                  !- Longitude {deg}
-    -5,                      !- Time Zone {hr}
-    313;                     !- Elevation {m}
+    -5.0,                    !- Time Zone {hr}
+    313.0;                   !- Elevation {m}
 
 !-   ===========  ALL OBJECTS IN CLASS: DESIGNDAY ===========
 ! Design days, ASHRAE 2009 HOF Atlanta 5% cooling conditions, all months
@@ -161,8 +161,8 @@
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    8,                       !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    8.0,                     !- Daily Wet-Bulb Temperature Range {deltaC}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -171,7 +171,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .325,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.325,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.461;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -189,7 +189,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     7.2,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -198,7 +198,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .349,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.349,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.316;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -216,7 +216,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     6.6,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -225,7 +225,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .383,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.383,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.176;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -243,7 +243,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     5.5,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -252,7 +252,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .395,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.395,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.175;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -270,7 +270,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     4.4,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -279,7 +279,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .448,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.448,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.028;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -297,7 +297,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     3.7,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -306,7 +306,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .505,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.505,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     1.892;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -324,7 +324,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     3.5,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -333,7 +333,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .556,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.556,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     1.779;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -351,7 +351,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     3.5,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -360,7 +360,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .556,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.556,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     1.779;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -378,7 +378,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     3.5,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -387,7 +387,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .556,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.556,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     1.779;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
 ! identical to default profile, results s/b same
@@ -395,30 +395,30 @@
   Schedule:Day:Hourly,
     TDefaultProfile,         !- Name
     Fraction,                !- Schedule Type Limits Name
-    .88,                     !- Hour 1
-    .92,                     !- Hour 2
-    .95,                     !- Hour 3
-    .98,                     !- Hour 4
+    0.88,                    !- Hour 1
+    0.92,                    !- Hour 2
+    0.95,                    !- Hour 3
+    0.98,                    !- Hour 4
     1.0,                     !- Hour 5
-    .98,                     !- Hour 6
-    .91,                     !- Hour 7
-    .74,                     !- Hour 8
-    .55,                     !- Hour 9
-    .38,                     !- Hour 10
-    .23,                     !- Hour 11
-    .13,                     !- Hour 12
-    .05,                     !- Hour 13
-    0,                       !- Hour 14
-    0,                       !- Hour 15
-    .06,                     !- Hour 16
-    .14,                     !- Hour 17
-    .24,                     !- Hour 18
-    .39,                     !- Hour 19
-    .50,                     !- Hour 20
-    .59,                     !- Hour 21
-    .68,                     !- Hour 22
-    .75,                     !- Hour 23
-    .82;                     !- Hour 24
+    0.98,                    !- Hour 6
+    0.91,                    !- Hour 7
+    0.74,                    !- Hour 8
+    0.55,                    !- Hour 9
+    0.38,                    !- Hour 10
+    0.23,                    !- Hour 11
+    0.13,                    !- Hour 12
+    0.05,                    !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.06,                    !- Hour 16
+    0.14,                    !- Hour 17
+    0.24,                    !- Hour 18
+    0.39,                    !- Hour 19
+    0.5,                     !- Hour 20
+    0.59,                    !- Hour 21
+    0.68,                    !- Hour 22
+    0.75,                    !- Hour 23
+    0.82;                    !- Hour 24
 
   SizingPeriod:DesignDay,
     Atlanta Jul 24 WB diff schedule,  !- Name
@@ -434,8 +434,8 @@
     WBDifProfile,            !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    8,                       !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    8.0,                     !- Daily Wet-Bulb Temperature Range {deltaC}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -444,36 +444,36 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .556,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.556,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     1.779;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   Schedule:Day:Hourly,
     WBDifProfile,            !- Name
     Any Number,              !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    1,                       !- Hour 2
-    2,                       !- Hour 3
-    3,                       !- Hour 4
-    4,                       !- Hour 5
-    5,                       !- Hour 6
-    6,                       !- Hour 7
-    7,                       !- Hour 8
-    8,                       !- Hour 9
-    9,                       !- Hour 10
-    10,                      !- Hour 11
-    11,                      !- Hour 12
-    12,                      !- Hour 13
-    11,                      !- Hour 14
-    10,                      !- Hour 15
-    9,                       !- Hour 16
-    8,                       !- Hour 17
-    7,                       !- Hour 18
-    6,                       !- Hour 19
-    5,                       !- Hour 20
-    4,                       !- Hour 21
-    3,                       !- Hour 22
-    2,                       !- Hour 23
-    1;                       !- Hour 24
+    0.0,                     !- Hour 1
+    1.0,                     !- Hour 2
+    2.0,                     !- Hour 3
+    3.0,                     !- Hour 4
+    4.0,                     !- Hour 5
+    5.0,                     !- Hour 6
+    6.0,                     !- Hour 7
+    7.0,                     !- Hour 8
+    8.0,                     !- Hour 9
+    9.0,                     !- Hour 10
+    10.0,                    !- Hour 11
+    11.0,                    !- Hour 12
+    12.0,                    !- Hour 13
+    11.0,                    !- Hour 14
+    10.0,                    !- Hour 15
+    9.0,                     !- Hour 16
+    8.0,                     !- Hour 17
+    7.0,                     !- Hour 18
+    6.0,                     !- Hour 19
+    5.0,                     !- Hour 20
+    4.0,                     !- Hour 21
+    3.0,                     !- Hour 22
+    2.0,                     !- Hour 23
+    1.0;                     !- Hour 24
 
   SizingPeriod:DesignDay,
     Atlanta Aug 21 cooling,  !- Name
@@ -490,7 +490,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     3.4,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -499,7 +499,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .593,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.593,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     1.679;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -517,7 +517,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     3.7,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -526,7 +526,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .431,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.431,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.151;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -544,7 +544,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     4.9,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -553,7 +553,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .373,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.373,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.317;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -571,7 +571,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     6.4,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -580,7 +580,7 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .339,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.339,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.422;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   SizingPeriod:DesignDay,
@@ -598,7 +598,7 @@
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     7.4,                     !- Daily Wet-Bulb Temperature Range {deltaC}
-    97620,                   !- Barometric Pressure {Pa}
+    97620.0,                 !- Barometric Pressure {Pa}
     0.0,                     !- Wind Speed {m/s}
     0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
@@ -607,14 +607,14 @@
     ASHRAETau,               !- Solar Model Indicator
     ,                        !- Beam Solar Day Schedule Name
     ,                        !- Diffuse Solar Day Schedule Name
-    .320,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    0.32,                    !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     2.514;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
 
   ScheduleTypeLimits,
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Any Number;              !- Name
@@ -623,28 +623,28 @@
     Percent,                 !- Name
     0.0,                     !- Lower Limit Value
     100.0,                   !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
   Material:NoMass,
     R13LAYER,                !- Name
     Rough,                   !- Roughness
     2.290965,                !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     Heavyish,                !- Name
     Rough,                   !- Roughness
     0.2,                     !- Thickness {m}
     1.4,                     !- Conductivity {W/m-K}
-    2000,                    !- Density {kg/m3}
-    1000,                    !- Specific Heat {J/kg-K}
+    2000.0,                  !- Density {kg/m3}
+    1000.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.8,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -659,14 +659,14 @@
 
   Zone,
     ZONE ONE,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate,           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate,           !- Volume {m3}
     232.26;                  !- Floor Area {m2}
 
   BuildingSurface:Detailed,
@@ -679,12 +679,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall002,           !- Name
@@ -696,12 +696,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    15.24000,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall003,           !- Name
@@ -713,12 +713,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    15.24000,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall004,           !- Name
@@ -730,12 +730,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Ceiling,           !- Name
@@ -747,12 +747,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.0000000,               !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24,0,4.572,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 2 {m}
     15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 3 {m}
-    0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Floor,             !- Name
@@ -764,12 +764,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.0000000,               !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,15.24,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24,15.24,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 !        (0,15.24,0)                 (15.24,15.24,0)
 !              _____________________________
@@ -815,17 +815,17 @@
 
   Output:Variable,*,Site Direct Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,*,Zone Mean Air Temperature,hourly;
+  Output:Variable,*,Zone Mean Air Temperature,Hourly;
 
-  Output:Variable,*,Surface Inside Face Convection Heat Transfer Coefficient,hourly;
+  Output:Variable,*,Surface Inside Face Convection Heat Transfer Coefficient,Hourly;
 
-  Output:Variable,*,Surface Outside Face Convection Heat Transfer Coefficient,hourly;
+  Output:Variable,*,Surface Outside Face Convection Heat Transfer Coefficient,Hourly;
 
-  Output:Variable,*,Surface Outside Face Incident Solar Radiation Rate per Area,hourly;
+  Output:Variable,*,Surface Outside Face Incident Solar Radiation Rate per Area,Hourly;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
+  Output:Surfaces:Drawing,DXF;
 
   Output:Constructions,Constructions;
 
@@ -833,13 +833,12 @@
 
   Output:Schedules,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Building,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Building,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,Hourly;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
-

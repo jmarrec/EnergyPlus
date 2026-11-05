@@ -27,7 +27,7 @@
     0.0,                     !- Slat Infrared Hemispherical Transmittance
     0.9,                     !- Front Side Slat Infrared Hemispherical Emissivity
     0.9,                     !- Back Side Slat Infrared Hemispherical Emissivity
-    0.050,                   !- Blind to Glass Distance {m}
+    0.05,                    !- Blind to Glass Distance {m}
     0.5,                     !- Blind Top Opening Multiplier
     0.5,                     !- Blind Bottom Opening Multiplier
     0.5,                     !- Blind Left Side Opening Multiplier
@@ -58,7 +58,7 @@
     0.0,                     !- Slat Infrared Hemispherical Transmittance
     0.9,                     !- Front Side Slat Infrared Hemispherical Emissivity
     0.9,                     !- Back Side Slat Infrared Hemispherical Emissivity
-    0.050,                   !- Blind to Glass Distance {m}
+    0.05,                    !- Blind to Glass Distance {m}
     0.5,                     !- Blind Top Opening Multiplier
     0.5,                     !- Blind Bottom Opening Multiplier
     0.5,                     !- Blind Left Side Opening Multiplier
@@ -89,11 +89,10 @@
     0.0,                     !- Slat Infrared Hemispherical Transmittance
     0.9,                     !- Front Side Slat Infrared Hemispherical Emissivity
     0.9,                     !- Back Side Slat Infrared Hemispherical Emissivity
-    0.050,                   !- Blind to Glass Distance {m}
+    0.05,                    !- Blind to Glass Distance {m}
     0.5,                     !- Blind Top Opening Multiplier
     0.5,                     !- Blind Bottom Opening Multiplier
     0.5,                     !- Blind Left Side Opening Multiplier
     0.5,                     !- Blind Right Side Opening Multiplier
     ,                        !- Minimum Slat Angle {deg}
     ;                        !- Maximum Slat Angle {deg}
-

@@ -32,7 +32,7 @@
 
   Building,
     Building 71T Rm 102,     !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -62,13 +62,7 @@
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONECAPACITANCEMULTIPLIER:RESEARCHSPECIAL ===========
 
-  ZoneCapacitanceMultiplier:ResearchSpecial,
-    Multiplier,              !- Name
-    ,                        !- Zone or ZoneList Name
-    1,                       !- Temperature Capacity Multiplier
-    1,                       !- Humidity Capacity Multiplier
-    1,                       !- Carbon Dioxide Capacity Multiplier
-    ;                        !- Generic Contaminant Capacity Multiplier
+  ZoneCapacitanceMultiplier:ResearchSpecial,Multiplier,,1.0,1.0,1.0;
 
 !-   ===========  ALL OBJECTS IN CLASS: TIMESTEP ===========
 
@@ -83,8 +77,8 @@
     CHICAGO_IL_USA TMY2-94846,  !- Name
     41.78,                   !- Latitude {deg}
     -87.75,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
   RunPeriod,
     Run Period 1,            !- Name
@@ -110,19 +104,19 @@
     1,                       !- Month
     21,                      !- Day of Month
     WinterDesignDay,         !- Day Type
-    -20,                     !- Maximum Dry-Bulb Temperature {C}
+    -20.0,                   !- Maximum Dry-Bulb Temperature {C}
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -20,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    -20.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98934.,                  !- Barometric Pressure {Pa}
+    98934.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -131,7 +125,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
 ! Chicago Ohare Intl Ap Annual Cooling Design Conditions Wind Speed=5.2m/s Wind Dir=230
 ! Hottest Month=JUL
@@ -146,15 +140,15 @@
     10.5,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.7,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98934.,                  !- Barometric Pressure {Pa}
+    98934.0,                 !- Barometric Pressure {Pa}
     5.2,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -169,61 +163,61 @@
   RunPeriodControl:SpecialDays,
     New Years Day,           !- Name
     1 January,               !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Martin Luther King Day,  !- Name
     3rd Monday in January,   !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Washington's Birthday,   !- Name
     3rd Monday in February,  !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Memorial Day,            !- Name
     Last Monday in May,      !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Independence Day,        !- Name
     4 July,                  !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Labor Day,               !- Name
-    1st Monday in September, !- Start Date
-    1,                       !- Duration {days}
+    1st Monday in September,  !- Start Date
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Veteran's Day,           !- Name
     11 November,             !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Thanksgiving Day,        !- Name
-    4th Thursday in November,!- Start Date
-    1,                       !- Duration {days}
+    4th Thursday in November,  !- Start Date
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Christmas Day,           !- Name
     25 December,             !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     New Year's Eve,          !- Name
     31 December,             !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
 !-   ===========  ALL OBJECTS IN CLASS: MATERIAL ===========
@@ -233,9 +227,9 @@
     MediumSmooth,            !- Roughness
     0.57,                    !- Thickness {m}
     0.115,                   !- Conductivity {W/m-K}
-    513,                     !- Density {kg/m3}
-    1381,                    !- Specific Heat {J/kg-K}
-    0.90,                    !- Thermal Absorptance
+    513.0,                   !- Density {kg/m3}
+    1381.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.75;                    !- Visible Absorptance
 
@@ -245,7 +239,7 @@
     0.133,                   !- Thickness {m}
     0.047,                   !- Conductivity {W/m-K}
     93.84,                   !- Density {kg/m3}
-    1006,                    !- Specific Heat {J/kg-K}
+    1006.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -255,8 +249,8 @@
     Smooth,                  !- Roughness
     0.015875,                !- Thickness {m}
     0.17,                    !- Conductivity {W/m-K}
-    800,                     !- Density {kg/m3}
-    1090,                    !- Specific Heat {J/kg-K}
+    800.0,                   !- Density {kg/m3}
+    1090.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.3;                     !- Visible Absorptance
@@ -266,8 +260,8 @@
     Smooth,                  !- Roughness
     0.009525,                !- Thickness {m}
     0.12,                    !- Conductivity {W/m-K}
-    540,                     !- Density {kg/m3}
-    1210,                    !- Specific Heat {J/kg-K}
+    540.0,                   !- Density {kg/m3}
+    1210.0,                  !- Specific Heat {J/kg-K}
     ,                        !- Thermal Absorptance
     0.7;                     !- Solar Absorptance
 
@@ -276,8 +270,8 @@
     Smooth,                  !- Roughness
     0.01905,                 !- Thickness {m}
     0.12,                    !- Conductivity {W/m-K}
-    540,                     !- Density {kg/m3}
-    1210,                    !- Specific Heat {J/kg-K}
+    540.0,                   !- Density {kg/m3}
+    1210.0,                  !- Specific Heat {J/kg-K}
     ,                        !- Thermal Absorptance
     0.7;                     !- Solar Absorptance
 
@@ -286,8 +280,8 @@
     Smooth,                  !- Roughness
     0.0127,                  !- Thickness {m}
     0.12,                    !- Conductivity {W/m-K}
-    540,                     !- Density {kg/m3}
-    1210,                    !- Specific Heat {J/kg-K}
+    540.0,                   !- Density {kg/m3}
+    1210.0,                  !- Specific Heat {J/kg-K}
     ,                        !- Thermal Absorptance
     0.7;                     !- Solar Absorptance
 
@@ -306,8 +300,8 @@
     MediumSmooth,            !- Roughness
     0.01905,                 !- Thickness {m}
     0.15,                    !- Conductivity {W/m-K}
-    608,                     !- Density {kg/m3}
-    1630,                    !- Specific Heat {J/kg-K}
+    608.0,                   !- Density {kg/m3}
+    1630.0,                  !- Specific Heat {J/kg-K}
     ,                        !- Thermal Absorptance
     0.7;                     !- Solar Absorptance
 
@@ -374,10 +368,10 @@
 
   Zone,
     Room 102,                !- Name
-    180,                     !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    180.0,                   !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     3.352799892,             !- Ceiling Height {m}
@@ -388,13 +382,13 @@
   ZoneControl:Thermostat,
     Main Termostat,          !- Name
     Room 102,                !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
     DualThermostat;          !- Control 1 Name
 
   Schedule:Compact,
-    Zone Control Type Sched, !- Name
+    Zone Control Type Sched,  !- Name
     Number,                  !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
@@ -438,12 +432,12 @@
     Room 102 INLETS,         !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    26,                      !- Maximum Heating Supply Air Temperature {C}
-    15,                      !- Minimum Cooling Supply Air Temperature {C}
+    26.0,                    !- Maximum Heating Supply Air Temperature {C}
+    15.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.01,                    !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.0156,                  !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
-    autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
     NoLimit,                 !- Cooling Limit
     ,                        !- Maximum Cooling Air Flow Rate {m3/s}
@@ -493,7 +487,7 @@
 
   BuildingSurface:Detailed,
     Room102 South Wall,      !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Room Wall - South,       !- Construction Name
     Room 102,                !- Zone Name
     ,                        !- Space Name
@@ -503,14 +497,14 @@
     WindExposed,             !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,4.572000000000,3.352800000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,4.572000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000000000,4.572000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000000000,4.572000000000,3.352800000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,4.572,3.3528,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,4.572,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,4.572,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,4.572,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Room102 Floor,           !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     Room Floor,              !- Construction Name
     Room 102,                !- Zone Name
     ,                        !- Space Name
@@ -518,16 +512,16 @@
     ,                        !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1,                       !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000000000,4.572000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,4.572000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,0.000000000000,0.000000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,4.572,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,4.572,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Room102 West Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Room Wall - East West,   !- Construction Name
     Room 102,                !- Zone Name
     ,                        !- Space Name
@@ -535,16 +529,16 @@
     Room102 West Wall,       !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,0.000000000000,3.352800000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,4.572000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,4.572000000000,3.352800000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,0.0,3.3528,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,4.572,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,4.572,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Room102 North Wall,      !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Room Wall - North,       !- Construction Name
     Room 102,                !- Zone Name
     ,                        !- Space Name
@@ -552,16 +546,16 @@
     Room102 North Wall,      !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000000000,0.000000000000,3.352800000000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,0.000000000000,3.352800000000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,3.3528,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,0.0,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Room102 East Wall,       !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     Room Wall - East West,   !- Construction Name
     Room 102,                !- Zone Name
     ,                        !- Space Name
@@ -569,16 +563,16 @@
     Room102 East Wall,       !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000000000,4.572000000000,3.352800000000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000000000,4.572000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000000000,0.000000000000,3.352800000000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,4.572,3.3528,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,4.572,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Room102 Ceiling,         !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     Room Ceiling,            !- Construction Name
     Room 102,                !- Zone Name
     ,                        !- Space Name
@@ -586,12 +580,12 @@
     Room102 Ceiling,         !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,0.000000000000,3.352800000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,4.572000000000,3.352800000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000000000,4.572000000000,3.352800000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000000000,0.000000000000,3.352800000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,0.0,3.3528,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,4.572,3.3528,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,4.572,3.3528,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.3528;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Room 102 Window,         !- Name
@@ -603,10 +597,10 @@
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
-    2.880518750000,4.572000000000,3.260725000000,  !- X,Y,Z ==> Vertex 1 {m}
-    2.880518750000,4.572000000000,0.231775000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.167481250000,4.572000000000,0.231775000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.167481250000,4.572000000000,3.260725000000;  !- X,Y,Z ==> Vertex 4 {m}
+    2.88051875,4.572,3.260725,  !- X,Y,Z ==> Vertex 1 {m}
+    2.88051875,4.572,0.231775,  !- X,Y,Z ==> Vertex 2 {m}
+    0.16748125,4.572,0.231775,  !- X,Y,Z ==> Vertex 3 {m}
+    0.16748125,4.572,3.260725;  !- X,Y,Z ==> Vertex 4 {m}
 
   Output:Variable,*,Zone Mean Air Temperature,Timestep;
 
@@ -672,50 +666,50 @@
     ,                        !- Window Glass Spectral Data Set Name
     0.003048,                !- Thickness {m}
     0.833848,                !- Solar Transmittance at Normal Incidence
-    7.476376e-002,           !- Front Side Solar Reflectance at Normal Incidence
-    7.485449e-002,           !- Back Side Solar Reflectance at Normal Incidence
-    0.899260,                !- Visible Transmittance at Normal Incidence
+    0.07476376,              !- Front Side Solar Reflectance at Normal Incidence
+    0.07485449,              !- Back Side Solar Reflectance at Normal Incidence
+    0.89926,                 !- Visible Transmittance at Normal Incidence
     0.082563,                !- Front Side Visible Reflectance at Normal Incidence
     0.082564,                !- Back Side Visible Reflectance at Normal Incidence
-    0.000000,                !- Infrared Transmittance at Normal Incidence
-    0.840000,                !- Front Side Infrared Hemispherical Emissivity
-    0.840000,                !- Back Side Infrared Hemispherical Emissivity
-    1.000000;                !- Conductivity {W/m-K}
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    1.0;                     !- Conductivity {W/m-K}
 
 !-----------------------------------------------------
 !       Window Construction
 !-----------------------------------------------------
 
-  CONSTRUCTION,
+  Construction,
     GlzSys_1,                !- Name
     Glass_102_LayerAvg;      !- Outside Layer
 
-  CONSTRUCTION,
+  Construction,
     GlzSys_1_withShade,      !- Name
     Glass_102_LayerAvg,      !- Outside Layer
     VenBlind_ShdDvc_25;      !- Layer 2
 
   WindowMaterial:Blind,
     VenBlind_ShdDvc_25,      !- Name
-    HORIZONTAL,              !- Slat Orientation
+    Horizontal,              !- Slat Orientation
     0.016,                   !- Slat Width {m}
     0.012,                   !- Slat Separation {m}
     0.0006,                  !- Slat Thickness {m}
-    135,                     !- Slat Angle {deg}
-    160,                     !- Slat Conductivity {W/m-K}
-    0,                       !- Slat Beam Solar Transmittance
+    135.0,                   !- Slat Angle {deg}
+    160.0,                   !- Slat Conductivity {W/m-K}
+    0.0,                     !- Slat Beam Solar Transmittance
     0.7,                     !- Front Side Slat Beam Solar Reflectance
     0.7,                     !- Back Side Slat Beam Solar Reflectance
-    0,                       !- Slat Diffuse Solar Transmittance
+    0.0,                     !- Slat Diffuse Solar Transmittance
     0.7,                     !- Front Side Slat Diffuse Solar Reflectance
     0.7,                     !- Back Side Slat Diffuse Solar Reflectance
-    0,                       !- Slat Beam Visible Transmittance
+    0.0,                     !- Slat Beam Visible Transmittance
     0.7,                     !- Front Side Slat Beam Visible Reflectance
     0.7,                     !- Back Side Slat Beam Visible Reflectance
-    0,                       !- Slat Diffuse Visible Transmittance
+    0.0,                     !- Slat Diffuse Visible Transmittance
     0.7,                     !- Front Side Slat Diffuse Visible Reflectance
     0.7,                     !- Back Side Slat Diffuse Visible Reflectance
-    0,                       !- Slat Infrared Hemispherical Transmittance
+    0.0,                     !- Slat Infrared Hemispherical Transmittance
     0.9,                     !- Front Side Slat Infrared Hemispherical Emissivity
     0.9,                     !- Back Side Slat Infrared Hemispherical Emissivity
     0.0127,                  !- Blind to Glass Distance {m}
@@ -723,25 +717,24 @@
     0.0,                     !- Blind Bottom Opening Multiplier
     0.0,                     !- Blind Left Side Opening Multiplier
     0.0,                     !- Blind Right Side Opening Multiplier
-    0,                       !- Minimum Slat Angle {deg}
-    0;                       !- Maximum Slat Angle {deg}
+    0.0,                     !- Minimum Slat Angle {deg}
+    0.0;                     !- Maximum Slat Angle {deg}
 
   WindowShadingControl,
-    ShdSys_Control-Room 102, !- Name
+    ShdSys_Control-Room 102,  !- Name
     Room 102,                !- Zone Name
     1,                       !- Shading Control Sequence Number
     InteriorBlind,           !- Shading Type
     GlzSys_1_withShade,      !- Construction with Shading Name
     AlwaysOn,                !- Shading Control Type
     ,                        !- Schedule Name
-    0,                       !- Setpoint {W/m2, W or deg C}
-    NO,                      !- Shading Control Is Scheduled
-    NO,                      !- Glare Control Is Active
+    0.0,                     !- Setpoint {W/m2, W or deg C}
+    No,                      !- Shading Control Is Scheduled
+    No,                      !- Glare Control Is Active
     ,                        !- Shading Device Material Name
     FixedSlatAngle,          !- Type of Slat Angle Control for Blinds
     ,                        !- Slat Angle Schedule Name
-    0,                       !- Setpoint 2 {W/m2, deg C or cd/m2}
+    0.0,                     !- Setpoint 2 {W/m2, deg C or cd/m2}
     ,                        !- Daylighting Control Object Name
     Sequential,              !- Multiple Surface Control Type
     Room 102 Window;         !- Fenestration Surface 1 Name
-

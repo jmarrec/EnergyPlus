@@ -25,7 +25,7 @@
     City,                    !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -50,28 +50,28 @@
     Yes,                     !- Use Weather File Rain Indicators
     Yes;                     !- Use Weather File Snow Indicators
 
- ! Denver Stapleton Intl Arpt CO USA Annual Heating Design Conditions Wind Speed=2.3m/s Wind Dir=180
- ! Coldest Month=December
- ! Denver Stapleton Intl Arpt CO USA Annual Heating 99%, MaxDB=-16°C
+! Denver Stapleton Intl Arpt CO USA Annual Heating Design Conditions Wind Speed=2.3m/s Wind Dir=180
+! Coldest Month=December
+! Denver Stapleton Intl Arpt CO USA Annual Heating 99%, MaxDB=-16°C
 
   SizingPeriod:DesignDay,
     Denver Stapleton Intl Arpt Ann Htg 99% Condns DB,  !- Name
     12,                      !- Month
     21,                      !- Day of Month
     WinterDesignDay,         !- Day Type
-    -16,                     !- Maximum Dry-Bulb Temperature {C}
+    -16.0,                   !- Maximum Dry-Bulb Temperature {C}
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -16,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    -16.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    83411.,                  !- Barometric Pressure {Pa}
+    83411.0,                 !- Barometric Pressure {Pa}
     2.3,                     !- Wind Speed {m/s}
-    180,                     !- Wind Direction {deg}
+    180.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -80,11 +80,11 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
- ! Denver Stapleton Intl Arpt Annual Cooling Design Conditions Wind Speed=4m/s Wind Dir=120
- ! Hottest Month=July
- ! Denver Stapleton Intl Arpt CO USA Annual Cooling (DB=>MWB) 1%, MaxDB=32.6°C MWB=15.6°C
+! Denver Stapleton Intl Arpt Annual Cooling Design Conditions Wind Speed=4m/s Wind Dir=120
+! Hottest Month=July
+! Denver Stapleton Intl Arpt CO USA Annual Cooling (DB=>MWB) 1%, MaxDB=32.6°C MWB=15.6°C
 
   SizingPeriod:DesignDay,
     Denver Stapleton Intl Arpt Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -95,15 +95,15 @@
     15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     15.6,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    83411.,                  !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
+    83411.0,                 !- Barometric Pressure {Pa}
+    4.0,                     !- Wind Speed {m/s}
+    120.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -112,68 +112,68 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
 !-   ===========  ALL OBJECTS IN CLASS: RUNPERIODCONTROL:SPECIALDAYS ===========
 
   RunPeriodControl:SpecialDays,
     New Years Day,           !- Name
     January 1,               !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Veterans Day,            !- Name
     November 11,             !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Christmas,               !- Name
     December 25,             !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Independence Day,        !- Name
     July 4,                  !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     MLK Day,                 !- Name
     3rd Monday in January,   !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Presidents Day,          !- Name
     3rd Monday in February,  !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Memorial Day,            !- Name
     Last Monday in May,      !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Labor Day,               !- Name
-    1st Monday in September, !- Start Date
-    1,                       !- Duration {days}
+    1st Monday in September,  !- Start Date
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Columbus Day,            !- Name
     2nd Monday in October,   !- Start Date
-    1,                       !- Duration {days}
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
   RunPeriodControl:SpecialDays,
     Thanksgiving,            !- Name
-    4th Thursday in November,!- Start Date
-    1,                       !- Duration {days}
+    4th Thursday in November,  !- Start Date
+    1.0,                     !- Duration {days}
     Holiday;                 !- Special Day Type
 
 !-   ===========  ALL OBJECTS IN CLASS: RUNPERIODCONTROL:DAYLIGHTSAVINGTIME ===========
@@ -185,7 +185,7 @@
 
 !-   ===========  ALL OBJECTS IN CLASS: SITE:GROUNDTEMPERATURE:BUILDINGSURFACE ===========
 
-  Site:GroundTemperature:BuildingSurface,0,50,50,50,50,50,50,50,50,50,50,50;
+  Site:GroundTemperature:BuildingSurface,0.0,50.0,50.0,50.0,50.0,50.0,50.0,50.0,50.0,50.0,50.0,50.0;
 
 !-   ===========  ALL OBJECTS IN CLASS: SCHEDULETYPELIMITS ===========
 
@@ -196,31 +196,31 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     Humidity,                !- Name
-    10,                      !- Lower Limit Value
-    90,                      !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    10.0,                    !- Lower Limit Value
+    90.0,                    !- Upper Limit Value
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Number;                  !- Name
@@ -248,16 +248,16 @@
     MediumRough,             !- Roughness
     0.0508,                  !- Thickness {m}
     0.03,                    !- Conductivity {W/m-K}
-    43,                      !- Density {kg/m3}
-    1210;                    !- Specific Heat {J/kg-K}
+    43.0,                    !- Density {kg/m3}
+    1210.0;                  !- Specific Heat {J/kg-K}
 
   Material,
     Interior,                !- Name
     MediumRough,             !- Roughness
     0.2032,                  !- Thickness {m}
     1.95,                    !- Conductivity {W/m-K}
-    2240,                    !- Density {kg/m3}
-    900;                     !- Specific Heat {J/kg-K}
+    2240.0,                  !- Density {kg/m3}
+    900.0;                   !- Specific Heat {J/kg-K}
 
 !-   ===========  ALL OBJECTS IN CLASS: CONSTRUCTION ===========
 
@@ -301,10 +301,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000000000,3.048000000000,0.000000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,3.048,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,3.048,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallN1,                  !- Name
@@ -318,10 +318,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,3.048000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000000000,3.048000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,3.048,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,3.048,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallW1,                  !- Name
@@ -335,10 +335,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000000000,3.048000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000000000,0.000000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,3.048,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallS2,                  !- Name
@@ -352,10 +352,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,0.000000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000000000,0.000000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallE2,                  !- Name
@@ -369,10 +369,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000000000,0.000000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000000000,3.048000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,3.048,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Roof1,                   !- Name
@@ -386,10 +386,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000000000,3.048000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000000000,0.000000000000,3.048000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,0.000000000000,3.048000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,3.048000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallS1,                  !- Name
@@ -403,10 +403,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000000000,0.000000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,0.000000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Roof2,                   !- Name
@@ -420,10 +420,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,3.048000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,0.000000000000,3.048000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000000000,0.000000000000,3.048000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000000000,3.048000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallN2,                  !- Name
@@ -437,10 +437,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000000000,3.048000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,3.048000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,3.048,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,3.048,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallMass,                !- Name
@@ -454,10 +454,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,3.048000000000,3.048000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,0.000000000000,3.048000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,3.048,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Floor2,                  !- Name
@@ -471,10 +471,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000000000,3.048000000000,0.000000000000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,0.000000000000,0.000000000000,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,3.048000000000,0.000000000000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,3.048,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,3.048,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     WallMass2,               !- Name
@@ -488,10 +488,10 @@
     NoWind,                  !- Wind Exposure
     0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    3.048000000000,3.048000000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    3.048000000000,3.048000000000,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-    3.048000000000,0.000000000000,3.048,  !- X,Y,Z ==> Vertex 3 {m}
-    3.048000000000,0.000000000000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    3.048,3.048,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    3.048,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    3.048,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    3.048,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 !-   ===========  ALL OBJECTS IN CLASS: OUTPUT:VARIABLEDICTIONARY ===========
 
@@ -502,4 +502,3 @@
   Output:Variable,*,Site Ground Temperature,Hourly,Always On;
 
   Output:Variable,*,Zone Mean Air Temperature,Hourly,Always On;
-

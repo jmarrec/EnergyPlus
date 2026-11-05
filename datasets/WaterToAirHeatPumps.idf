@@ -17,15 +17,15 @@
     8.40143349039666,        !- Coefficient2 w
     -2.97470509183746,       !- Coefficient3 x
     0.113818689945602,       !- Coefficient4 y
-    -2.27333596650235E-02,   !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.0227333596650235,     !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.04905,                 !- Maximum Value of w
-    1,                       !- Minimum Value of x
+    1.0,                     !- Minimum Value of x
     1.13734,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.56395,                 !- Minimum Curve Output
     1.45038,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -39,15 +39,15 @@
     0.680084935528983,       !- Coefficient2 w
     5.19850393235417,        !- Coefficient3 x
     0.224834987554375,       !- Coefficient4 y
-    1.38388725588713E-02,    !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    0.0138388725588713,      !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.04905,                 !- Maximum Value of w
-    1,                       !- Minimum Value of x
+    1.0,                     !- Minimum Value of x
     1.13734,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.61368,                 !- Minimum Curve Output
     1.50814,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -62,17 +62,17 @@
     -21.0716684589034,       !- Coefficient3 w
     -1.30747438097172,       !- Coefficient4 x
     0.428394572203064,       !- Coefficient5 y
-    -2.83169336714023E-02,   !- Coefficient6 z
+    -0.0283169336714023,     !- Coefficient6 z
     1.019621,                !- Minimum Value of v
     1.088292,                !- Maximum Value of v
-    1,                       !- Minimum Value of w
+    1.0,                     !- Minimum Value of w
     1.049051,                !- Maximum Value of w
-    1,                       !- Minimum Value of x
+    1.0,                     !- Minimum Value of x
     1.137344,                !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.42933,                 !- Minimum Curve Output
     1.473766,                !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for v
@@ -87,15 +87,15 @@
     -1.33549673075959,       !- Coefficient2 w
     4.75386134919654,        !- Coefficient3 x
     0.192902631218611,       !- Coefficient4 y
-    -1.56211986958708E-02,   !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.0156211986958708,     !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.05886,                 !- Maximum Value of w
     1.01962,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.85589,                 !- Minimum Curve Output
     1.32563,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -108,16 +108,16 @@
     -4.99206122881612,       !- Coefficient1 Constant
     4.33547500723789,        !- Coefficient2 w
     1.49104218370188,        !- Coefficient3 x
-    -4.35296499429704E-02,   !- Coefficient4 y
-    3.29875612447162E-03,    !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.0435296499429704,     !- Coefficient4 y
+    0.00329875612447162,     !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.05886,                 !- Maximum Value of w
     1.01962,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.81669,                 !- Minimum Curve Output
     1.20658,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -140,15 +140,15 @@
     7.99362700294768,        !- Coefficient2 w
     -1.99924543272637,       !- Coefficient3 x
     0.108293918463945,       !- Coefficient4 y
-    1.13445683300515E-02,    !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    0.0113445683300515,      !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.04905,                 !- Maximum Value of w
     0.98038,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.60294,                 !- Minimum Curve Output
     1.2656,                  !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -164,15 +164,15 @@
     0.738322041870955,       !- Coefficient2 w
     5.18281900607258,        !- Coefficient3 x
     0.244088081389502,       !- Coefficient4 y
-    7.70602605587734E-02,    !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    0.0770602605587734,      !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.04905,                 !- Maximum Value of w
     0.98038,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.74042,                 !- Minimum Curve Output
     1.44969,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -187,19 +187,19 @@
     1.40770061352287,        !- Coefficient1 Constant
     20.0973296168688,        !- Coefficient2 v
     -20.7679046673415,       !- Coefficient3 w
-    -.682869359638429,       !- Coefficient4 x
+    -0.682869359638429,      !- Coefficient4 x
     0.422180841717626,       !- Coefficient5 y
-    -1.08856225000861E-02,   !- Coefficient6 z
+    -0.0108856225000861,     !- Coefficient6 z
     1.019621,                !- Minimum Value of v
     1.088292,                !- Maximum Value of v
-    1,                       !- Minimum Value of w
+    1.0,                     !- Minimum Value of w
     1.049051,                !- Maximum Value of w
     0.980379,                !- Minimum Value of x
     1.078482,                !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.453526,                !- Minimum Curve Output
     1.392017,                !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for v
@@ -216,15 +216,15 @@
     -1.42968976715512,       !- Coefficient2 w
     6.02804222042272,        !- Coefficient3 x
     0.206508119082914,       !- Coefficient4 y
-    -3.73756925120887E-02,   !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.0373756925120887,     !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.05886,                 !- Maximum Value of w
     0.96076,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.70938,                 !- Minimum Curve Output
     1.62826,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -239,16 +239,16 @@
     -4.87442592004265,       !- Coefficient1 Constant
     4.3724439122695,         !- Coefficient2 w
     1.38571909370655,        !- Coefficient3 x
-    -4.39008303769742E-02,   !- Coefficient4 y
-    5.7422748243065E-03,     !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.0439008303769742,     !- Coefficient4 y
+    0.0057422748243065,      !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.05886,                 !- Maximum Value of w
     0.96076,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.79638,                 !- Minimum Curve Output
     1.26847,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -271,15 +271,15 @@
     7.95908762160623,        !- Coefficient2 w
     -2.81781371834254,       !- Coefficient3 x
     0.107825995086305,       !- Coefficient4 y
-    -9.96686960975482E-03,   !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.00996686960975482,    !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.04905,                 !- Maximum Value of w
-    1,                       !- Minimum Value of x
+    1.0,                     !- Minimum Value of x
     1.13734,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.53576,                 !- Minimum Curve Output
     1.36948,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -295,15 +295,15 @@
     0.751024641964602,       !- Coefficient2 w
     5.74078006772573,        !- Coefficient3 x
     0.248287540581677,       !- Coefficient4 y
-    3.53588794377984E-03,    !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    0.00353588794377984,     !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.04905,                 !- Maximum Value of w
-    1,                       !- Minimum Value of x
+    1.0,                     !- Minimum Value of x
     1.13734,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.68205,                 !- Minimum Curve Output
     1.65919,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -320,17 +320,17 @@
     -20.5959548710656,       !- Coefficient3 w
     -1.27792630754908,       !- Coefficient4 x
     0.418717615265851,       !- Coefficient5 y
-    -2.21480067402119E-02,   !- Coefficient6 z
+    -0.0221480067402119,     !- Coefficient6 z
     1.019621,                !- Minimum Value of v
     1.088292,                !- Maximum Value of v
-    1,                       !- Minimum Value of w
+    1.0,                     !- Minimum Value of w
     1.049051,                !- Maximum Value of w
-    1,                       !- Minimum Value of x
+    1.0,                     !- Minimum Value of x
     1.137344,                !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.419642,                !- Minimum Curve Output
     1.440509,                !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for v
@@ -347,15 +347,15 @@
     -1.80505473458221,       !- Coefficient2 w
     7.61053388144077,        !- Coefficient3 x
     0.260726814057021,       !- Coefficient4 y
-    -2.22820319308267E-02,   !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.0222820319308267,     !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.05886,                 !- Maximum Value of w
     0.96076,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.89883,                 !- Minimum Curve Output
     2.04584,                 !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
@@ -370,20 +370,19 @@
     -5.12615627602834,       !- Coefficient1 Constant
     4.59939579763495,        !- Coefficient2 w
     1.45764440263458,        !- Coefficient3 x
-    -4.61795048261089E-02,   !- Coefficient4 y
-    4.3384414360512E-03,     !- Coefficient5 z
-    1,                       !- Minimum Value of w
+    -0.0461795048261089,     !- Coefficient4 y
+    0.0043384414360512,      !- Coefficient5 z
+    1.0,                     !- Minimum Value of w
     1.05886,                 !- Maximum Value of w
     0.96076,                 !- Minimum Value of x
     1.07848,                 !- Maximum Value of x
     0.75,                    !- Minimum Value of y
     1.25,                    !- Maximum Value of y
     0.5,                     !- Minimum Value of z
-    1,                       !- Maximum Value of z
+    1.0,                     !- Maximum Value of z
     0.83998,                 !- Minimum Curve Output
     1.3282,                  !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for w
     Dimensionless,           !- Input Unit Type for x
     Dimensionless,           !- Input Unit Type for y
     Dimensionless;           !- Input Unit Type for z
-

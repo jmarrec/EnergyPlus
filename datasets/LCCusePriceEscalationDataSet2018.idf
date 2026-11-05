@@ -38,17 +38,17 @@
     1.2766,                  !- Year 15 Escalation
     1.2803,                  !- Year 16 Escalation
     1.2836,                  !- Year 17 Escalation
-    1.2900,                  !- Year 18 Escalation
+    1.29,                    !- Year 18 Escalation
     1.2947,                  !- Year 19 Escalation
     1.3002,                  !- Year 20 Escalation
     1.3058,                  !- Year 21 Escalation
     1.3099,                  !- Year 22 Escalation
     1.3165,                  !- Year 23 Escalation
     1.3184,                  !- Year 24 Escalation
-    1.3210,                  !- Year 25 Escalation
+    1.321,                   !- Year 25 Escalation
     1.3239,                  !- Year 26 Escalation
     1.3239,                  !- Year 27 Escalation
-    1.3200,                  !- Year 28 Escalation
+    1.32,                    !- Year 28 Escalation
     1.3182,                  !- Year 29 Escalation
     1.3204;                  !- Year 30 Escalation
 
@@ -57,20 +57,20 @@
     FuelOilNo1,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0420,                  !- Year 1 Escalation
+    1.042,                   !- Year 1 Escalation
     1.1833,                  !- Year 2 Escalation
     1.2965,                  !- Year 3 Escalation
     1.3555,                  !- Year 4 Escalation
     1.4012,                  !- Year 5 Escalation
     1.4256,                  !- Year 6 Escalation
-    1.4400,                  !- Year 7 Escalation
+    1.44,                    !- Year 7 Escalation
     1.4458,                  !- Year 8 Escalation
-    1.4580,                  !- Year 9 Escalation
-    1.4740,                  !- Year 10 Escalation
-    1.4920,                  !- Year 11 Escalation
+    1.458,                   !- Year 9 Escalation
+    1.474,                   !- Year 10 Escalation
+    1.492,                   !- Year 11 Escalation
     1.5058,                  !- Year 12 Escalation
     1.5228,                  !- Year 13 Escalation
-    1.5340,                  !- Year 14 Escalation
+    1.534,                   !- Year 14 Escalation
     1.5468,                  !- Year 15 Escalation
     1.5622,                  !- Year 16 Escalation
     1.5717,                  !- Year 17 Escalation
@@ -98,8 +98,8 @@
     1.1084,                  !- Year 3 Escalation
     1.1348,                  !- Year 4 Escalation
     1.1703,                  !- Year 5 Escalation
-    1.1840,                  !- Year 6 Escalation
-    1.1940,                  !- Year 7 Escalation
+    1.184,                   !- Year 6 Escalation
+    1.194,                   !- Year 7 Escalation
     1.1985,                  !- Year 8 Escalation
     1.2049,                  !- Year 9 Escalation
     1.2067,                  !- Year 10 Escalation
@@ -136,7 +136,7 @@
     1.0884,                  !- Year 5 Escalation
     1.0972,                  !- Year 6 Escalation
     1.1019,                  !- Year 7 Escalation
-    1.1050,                  !- Year 8 Escalation
+    1.105,                   !- Year 8 Escalation
     1.1076,                  !- Year 9 Escalation
     1.1117,                  !- Year 10 Escalation
     1.1232,                  !- Year 11 Escalation
@@ -152,7 +152,7 @@
     1.2391,                  !- Year 21 Escalation
     1.2464,                  !- Year 22 Escalation
     1.2557,                  !- Year 23 Escalation
-    1.2640,                  !- Year 24 Escalation
+    1.264,                   !- Year 24 Escalation
     1.2744,                  !- Year 25 Escalation
     1.2827,                  !- Year 26 Escalation
     1.2931,                  !- Year 27 Escalation
@@ -179,13 +179,13 @@
     1.1428,                  !- Year 12 Escalation
     1.1456,                  !- Year 13 Escalation
     1.1439,                  !- Year 14 Escalation
-    1.1450,                  !- Year 15 Escalation
+    1.145,                   !- Year 15 Escalation
     1.1456,                  !- Year 16 Escalation
     1.1467,                  !- Year 17 Escalation
     1.1529,                  !- Year 18 Escalation
     1.1556,                  !- Year 19 Escalation
     1.1596,                  !- Year 20 Escalation
-    1.1640,                  !- Year 21 Escalation
+    1.164,                   !- Year 21 Escalation
     1.1674,                  !- Year 22 Escalation
     1.1704,                  !- Year 23 Escalation
     1.1693,                  !- Year 24 Escalation
@@ -209,7 +209,7 @@
     1.3466,                  !- Year 6 Escalation
     1.3609,                  !- Year 7 Escalation
     1.3663,                  !- Year 8 Escalation
-    1.3800,                  !- Year 9 Escalation
+    1.38,                    !- Year 9 Escalation
     1.3961,                  !- Year 10 Escalation
     1.4163,                  !- Year 11 Escalation
     1.4318,                  !- Year 12 Escalation
@@ -222,15 +222,15 @@
     1.5348,                  !- Year 19 Escalation
     1.5473,                  !- Year 20 Escalation
     1.5587,                  !- Year 21 Escalation
-    1.5700,                  !- Year 22 Escalation
+    1.57,                    !- Year 22 Escalation
     1.5813,                  !- Year 23 Escalation
     1.5849,                  !- Year 24 Escalation
     1.5867,                  !- Year 25 Escalation
     1.5873,                  !- Year 26 Escalation
-    1.5890,                  !- Year 27 Escalation
+    1.589,                   !- Year 27 Escalation
     1.5855,                  !- Year 28 Escalation
-    1.5890,                  !- Year 29 Escalation
-    1.5950;                  !- Year 30 Escalation
+    1.589,                   !- Year 29 Escalation
+    1.595;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     NorthEast Commercial-Residual Oil,  !- LCC Price Escalation Name
@@ -257,16 +257,16 @@
     1.9132,                  !- Year 18 Escalation
     1.9552,                  !- Year 19 Escalation
     1.9818,                  !- Year 20 Escalation
-    2.0070,                  !- Year 21 Escalation
+    2.007,                   !- Year 21 Escalation
     2.0308,                  !- Year 22 Escalation
     2.0532,                  !- Year 23 Escalation
     2.0672,                  !- Year 24 Escalation
-    2.0770,                  !- Year 25 Escalation
+    2.077,                   !- Year 25 Escalation
     2.0784,                  !- Year 26 Escalation
     2.0826,                  !- Year 27 Escalation
     2.0854,                  !- Year 28 Escalation
     2.0896,                  !- Year 29 Escalation
-    2.0980;                  !- Year 30 Escalation
+    2.098;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     NorthEast Commercial-Natural Gas,  !- LCC Price Escalation Name
@@ -283,9 +283,9 @@
     1.2169,                  !- Year 8 Escalation
     1.2207,                  !- Year 9 Escalation
     1.2194,                  !- Year 10 Escalation
-    1.2270,                  !- Year 11 Escalation
-    1.2270,                  !- Year 12 Escalation
-    1.2270,                  !- Year 13 Escalation
+    1.227,                   !- Year 11 Escalation
+    1.227,                   !- Year 12 Escalation
+    1.227,                   !- Year 13 Escalation
     1.2282,                  !- Year 14 Escalation
     1.2295,                  !- Year 15 Escalation
     1.2308,                  !- Year 16 Escalation
@@ -296,7 +296,7 @@
     1.2484,                  !- Year 21 Escalation
     1.2497,                  !- Year 22 Escalation
     1.2535,                  !- Year 23 Escalation
-    1.2610,                  !- Year 24 Escalation
+    1.261,                   !- Year 24 Escalation
     1.2623,                  !- Year 25 Escalation
     1.2636,                  !- Year 26 Escalation
     1.2699,                  !- Year 27 Escalation
@@ -345,17 +345,17 @@
     Electricity,             !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    0.9900,                  !- Year 1 Escalation
-    1.0190,                  !- Year 2 Escalation
+    0.99,                    !- Year 1 Escalation
+    1.019,                   !- Year 2 Escalation
     1.0219,                  !- Year 3 Escalation
     1.0174,                  !- Year 4 Escalation
     1.0161,                  !- Year 5 Escalation
-    1.0200,                  !- Year 6 Escalation
+    1.02,                    !- Year 6 Escalation
     1.0338,                  !- Year 7 Escalation
     1.0383,                  !- Year 8 Escalation
     1.0441,                  !- Year 9 Escalation
     1.0483,                  !- Year 10 Escalation
-    1.0490,                  !- Year 11 Escalation
+    1.049,                   !- Year 11 Escalation
     1.0506,                  !- Year 12 Escalation
     1.0502,                  !- Year 13 Escalation
     1.0467,                  !- Year 14 Escalation
@@ -363,14 +363,14 @@
     1.0428,                  !- Year 16 Escalation
     1.0425,                  !- Year 17 Escalation
     1.0461,                  !- Year 18 Escalation
-    1.0480,                  !- Year 19 Escalation
+    1.048,                   !- Year 19 Escalation
     1.0499,                  !- Year 20 Escalation
     1.0535,                  !- Year 21 Escalation
     1.0544,                  !- Year 22 Escalation
     1.0554,                  !- Year 23 Escalation
     1.0548,                  !- Year 24 Escalation
     1.0557,                  !- Year 25 Escalation
-    1.0580,                  !- Year 26 Escalation
+    1.058,                   !- Year 26 Escalation
     1.0573,                  !- Year 27 Escalation
     1.0531,                  !- Year 28 Escalation
     1.0509,                  !- Year 29 Escalation
@@ -381,13 +381,13 @@
     FuelOilNo1,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0280,                  !- Year 1 Escalation
+    1.028,                   !- Year 1 Escalation
     1.1641,                  !- Year 2 Escalation
     1.2669,                  !- Year 3 Escalation
     1.3088,                  !- Year 4 Escalation
-    1.3350,                  !- Year 5 Escalation
+    1.335,                   !- Year 5 Escalation
     1.3562,                  !- Year 6 Escalation
-    1.3720,                  !- Year 7 Escalation
+    1.372,                   !- Year 7 Escalation
     1.3787,                  !- Year 8 Escalation
     1.3927,                  !- Year 9 Escalation
     1.4103,                  !- Year 10 Escalation
@@ -403,14 +403,14 @@
     1.5678,                  !- Year 20 Escalation
     1.5799,                  !- Year 21 Escalation
     1.5909,                  !- Year 22 Escalation
-    1.6030,                  !- Year 23 Escalation
+    1.603,                   !- Year 23 Escalation
     1.6061,                  !- Year 24 Escalation
     1.6085,                  !- Year 25 Escalation
     1.6085,                  !- Year 26 Escalation
     1.6109,                  !- Year 27 Escalation
     1.6079,                  !- Year 28 Escalation
     1.6109,                  !- Year 29 Escalation
-    1.6170;                  !- Year 30 Escalation
+    1.617;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     NorthEast Industrial-Residual Oil,  !- LCC Price Escalation Name
@@ -436,17 +436,17 @@
     1.9668,                  !- Year 17 Escalation
     1.9812,                  !- Year 18 Escalation
     2.0231,                  !- Year 19 Escalation
-    2.0520,                  !- Year 20 Escalation
-    2.0780,                  !- Year 21 Escalation
+    2.052,                   !- Year 20 Escalation
+    2.078,                   !- Year 21 Escalation
     2.1012,                  !- Year 22 Escalation
     2.1243,                  !- Year 23 Escalation
     2.1402,                  !- Year 24 Escalation
     2.1503,                  !- Year 25 Escalation
     2.1517,                  !- Year 26 Escalation
     2.1561,                  !- Year 27 Escalation
-    2.1590,                  !- Year 28 Escalation
+    2.159,                   !- Year 28 Escalation
     2.1633,                  !- Year 29 Escalation
-    2.1720;                  !- Year 30 Escalation
+    2.172;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     NorthEast Industrial-Natural Gas,  !- LCC Price Escalation Name
@@ -476,7 +476,7 @@
     1.1808,                  !- Year 21 Escalation
     1.1846,                  !- Year 22 Escalation
     1.1904,                  !- Year 23 Escalation
-    1.2000,                  !- Year 24 Escalation
+    1.2,                     !- Year 24 Escalation
     1.2058,                  !- Year 25 Escalation
     1.2135,                  !- Year 26 Escalation
     1.2212,                  !- Year 27 Escalation
@@ -540,19 +540,19 @@
     1.0984,                  !- Year 13 Escalation
     1.1001,                  !- Year 14 Escalation
     1.1003,                  !- Year 15 Escalation
-    1.0990,                  !- Year 16 Escalation
+    1.099,                   !- Year 16 Escalation
     1.0968,                  !- Year 17 Escalation
     1.0944,                  !- Year 18 Escalation
-    1.0920,                  !- Year 19 Escalation
+    1.092,                   !- Year 19 Escalation
     1.0896,                  !- Year 20 Escalation
-    1.0880,                  !- Year 21 Escalation
+    1.088,                   !- Year 21 Escalation
     1.0869,                  !- Year 22 Escalation
     1.0845,                  !- Year 23 Escalation
     1.0816,                  !- Year 24 Escalation
     1.0778,                  !- Year 25 Escalation
     1.0728,                  !- Year 26 Escalation
     1.0701,                  !- Year 27 Escalation
-    1.0690,                  !- Year 28 Escalation
+    1.069,                   !- Year 28 Escalation
     1.0663,                  !- Year 29 Escalation
     1.0637;                  !- Year 30 Escalation
 
@@ -629,7 +629,7 @@
     1.2879;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
-    MidWest Residential-LPG, !- LCC Price Escalation Name
+    MidWest Residential-LPG,  !- LCC Price Escalation Name
     Propane,                 !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
@@ -640,7 +640,7 @@
     1.0884,                  !- Year 5 Escalation
     1.0972,                  !- Year 6 Escalation
     1.1019,                  !- Year 7 Escalation
-    1.1050,                  !- Year 8 Escalation
+    1.105,                   !- Year 8 Escalation
     1.1076,                  !- Year 9 Escalation
     1.1117,                  !- Year 10 Escalation
     1.1232,                  !- Year 11 Escalation
@@ -656,7 +656,7 @@
     1.2391,                  !- Year 21 Escalation
     1.2464,                  !- Year 22 Escalation
     1.2557,                  !- Year 23 Escalation
-    1.2640,                  !- Year 24 Escalation
+    1.264,                   !- Year 24 Escalation
     1.2744,                  !- Year 25 Escalation
     1.2827,                  !- Year 26 Escalation
     1.2931,                  !- Year 27 Escalation
@@ -677,23 +677,23 @@
     1.0359,                  !- Year 6 Escalation
     1.0326,                  !- Year 7 Escalation
     1.0293,                  !- Year 8 Escalation
-    1.0250,                  !- Year 9 Escalation
+    1.025,                   !- Year 9 Escalation
     1.0216,                  !- Year 10 Escalation
     1.0176,                  !- Year 11 Escalation
-    1.0130,                  !- Year 12 Escalation
+    1.013,                   !- Year 12 Escalation
     1.0133,                  !- Year 13 Escalation
     1.0113,                  !- Year 14 Escalation
     1.0077,                  !- Year 15 Escalation
-    1.0040,                  !- Year 16 Escalation
-    1.0000,                  !- Year 17 Escalation
+    1.004,                   !- Year 16 Escalation
+    1.0,                     !- Year 17 Escalation
     0.9967,                  !- Year 18 Escalation
     0.9937,                  !- Year 19 Escalation
     0.9903,                  !- Year 20 Escalation
     0.9884,                  !- Year 21 Escalation
     0.9864,                  !- Year 22 Escalation
     0.9824,                  !- Year 23 Escalation
-    0.9780,                  !- Year 24 Escalation
-    0.9730,                  !- Year 25 Escalation
+    0.978,                   !- Year 24 Escalation
+    0.973,                   !- Year 25 Escalation
     0.9671,                  !- Year 26 Escalation
     0.9634,                  !- Year 27 Escalation
     0.9614,                  !- Year 28 Escalation
@@ -705,8 +705,8 @@
     FuelOilNo1,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0000,                  !- Year 1 Escalation
-    1.1030,                  !- Year 2 Escalation
+    1.0,                     !- Year 1 Escalation
+    1.103,                   !- Year 2 Escalation
     1.1698,                  !- Year 3 Escalation
     1.1704,                  !- Year 4 Escalation
     1.1554,                  !- Year 5 Escalation
@@ -718,8 +718,8 @@
     1.2397,                  !- Year 11 Escalation
     1.2553,                  !- Year 12 Escalation
     1.2753,                  !- Year 13 Escalation
-    1.2890,                  !- Year 14 Escalation
-    1.3040,                  !- Year 15 Escalation
+    1.289,                   !- Year 14 Escalation
+    1.304,                   !- Year 15 Escalation
     1.3215,                  !- Year 16 Escalation
     1.3352,                  !- Year 17 Escalation
     1.3452,                  !- Year 18 Escalation
@@ -733,7 +733,7 @@
     1.4245,                  !- Year 26 Escalation
     1.4263,                  !- Year 27 Escalation
     1.4232,                  !- Year 28 Escalation
-    1.4270,                  !- Year 29 Escalation
+    1.427,                   !- Year 29 Escalation
     1.4332;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
@@ -749,21 +749,21 @@
     2.1002,                  !- Year 6 Escalation
     2.1054,                  !- Year 7 Escalation
     2.1371,                  !- Year 8 Escalation
-    2.1740,                  !- Year 9 Escalation
+    2.174,                   !- Year 9 Escalation
     2.2039,                  !- Year 10 Escalation
     2.2496,                  !- Year 11 Escalation
     2.2882,                  !- Year 12 Escalation
     2.3322,                  !- Year 13 Escalation
-    2.3620,                  !- Year 14 Escalation
+    2.362,                   !- Year 14 Escalation
     2.3954,                  !- Year 15 Escalation
     2.4253,                  !- Year 16 Escalation
     2.4587,                  !- Year 17 Escalation
     2.4763,                  !- Year 18 Escalation
-    2.5290,                  !- Year 19 Escalation
+    2.529,                   !- Year 19 Escalation
     2.5641,                  !- Year 20 Escalation
-    2.5940,                  !- Year 21 Escalation
+    2.594,                   !- Year 21 Escalation
     2.6239,                  !- Year 22 Escalation
-    2.6520,                  !- Year 23 Escalation
+    2.652,                   !- Year 23 Escalation
     2.6696,                  !- Year 24 Escalation
     2.6819,                  !- Year 25 Escalation
     2.6837,                  !- Year 26 Escalation
@@ -777,27 +777,27 @@
     NaturalGas,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0360,                  !- Year 1 Escalation
+    1.036,                   !- Year 1 Escalation
     1.0821,                  !- Year 2 Escalation
     1.1095,                  !- Year 3 Escalation
     1.1326,                  !- Year 4 Escalation
-    1.1700,                  !- Year 5 Escalation
+    1.17,                    !- Year 5 Escalation
     1.1844,                  !- Year 6 Escalation
     1.1988,                  !- Year 7 Escalation
     1.2032,                  !- Year 8 Escalation
     1.2104,                  !- Year 9 Escalation
     1.2089,                  !- Year 10 Escalation
-    1.2190,                  !- Year 11 Escalation
-    1.2190,                  !- Year 12 Escalation
-    1.2190,                  !- Year 13 Escalation
+    1.219,                   !- Year 11 Escalation
+    1.219,                   !- Year 12 Escalation
+    1.219,                   !- Year 13 Escalation
     1.2219,                  !- Year 14 Escalation
     1.2233,                  !- Year 15 Escalation
     1.2262,                  !- Year 16 Escalation
     1.2277,                  !- Year 17 Escalation
     1.2363,                  !- Year 18 Escalation
-    1.2450,                  !- Year 19 Escalation
+    1.245,                   !- Year 19 Escalation
     1.2507,                  !- Year 20 Escalation
-    1.2550,                  !- Year 21 Escalation
+    1.255,                   !- Year 21 Escalation
     1.2579,                  !- Year 22 Escalation
     1.2637,                  !- Year 23 Escalation
     1.2738,                  !- Year 24 Escalation
@@ -806,10 +806,10 @@
     1.2925,                  !- Year 27 Escalation
     1.3012,                  !- Year 28 Escalation
     1.3098,                  !- Year 29 Escalation
-    1.3170;                  !- Year 30 Escalation
+    1.317;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
-    MidWest Commercial-Coal, !- LCC Price Escalation Name
+    MidWest Commercial-Coal,  !- LCC Price Escalation Name
     Coal,                    !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
@@ -835,7 +835,7 @@
     0.9912,                  !- Year 20 Escalation
     0.9942,                  !- Year 21 Escalation
     0.9971,                  !- Year 22 Escalation
-    1.0000,                  !- Year 23 Escalation
+    1.0,                     !- Year 23 Escalation
     1.0029,                  !- Year 24 Escalation
     1.0058,                  !- Year 25 Escalation
     1.0088,                  !- Year 26 Escalation
@@ -858,10 +858,10 @@
     1.0154,                  !- Year 7 Escalation
     1.0135,                  !- Year 8 Escalation
     1.0098,                  !- Year 9 Escalation
-    1.0070,                  !- Year 10 Escalation
+    1.007,                   !- Year 10 Escalation
     1.0033,                  !- Year 11 Escalation
     0.9995,                  !- Year 12 Escalation
-    1.0000,                  !- Year 13 Escalation
+    1.0,                     !- Year 13 Escalation
     0.9977,                  !- Year 14 Escalation
     0.9935,                  !- Year 15 Escalation
     0.9897,                  !- Year 16 Escalation
@@ -876,7 +876,7 @@
     0.9669,                  !- Year 25 Escalation
     0.9617,                  !- Year 26 Escalation
     0.9594,                  !- Year 27 Escalation
-    0.9580,                  !- Year 28 Escalation
+    0.958,                   !- Year 28 Escalation
     0.9547,                  !- Year 29 Escalation
     0.9533;                  !- Year 30 Escalation
 
@@ -928,7 +928,7 @@
     2.2447,                  !- Year 5 Escalation
     2.2849,                  !- Year 6 Escalation
     2.2906,                  !- Year 7 Escalation
-    2.3250,                  !- Year 8 Escalation
+    2.325,                   !- Year 8 Escalation
     2.3652,                  !- Year 9 Escalation
     2.3977,                  !- Year 10 Escalation
     2.4474,                  !- Year 11 Escalation
@@ -937,7 +937,7 @@
     2.5698,                  !- Year 14 Escalation
     2.6061,                  !- Year 15 Escalation
     2.6386,                  !- Year 16 Escalation
-    2.6750,                  !- Year 17 Escalation
+    2.675,                   !- Year 17 Escalation
     2.6941,                  !- Year 18 Escalation
     2.7514,                  !- Year 19 Escalation
     2.7897,                  !- Year 20 Escalation
@@ -948,8 +948,8 @@
     2.9178,                  !- Year 25 Escalation
     2.9197,                  !- Year 26 Escalation
     2.9254,                  !- Year 27 Escalation
-    2.9120,                  !- Year 28 Escalation
-    2.9120,                  !- Year 29 Escalation
+    2.912,                   !- Year 28 Escalation
+    2.912,                   !- Year 29 Escalation
     2.9369;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
@@ -963,10 +963,10 @@
     1.1371,                  !- Year 4 Escalation
     1.1608,                  !- Year 5 Escalation
     1.1844,                  !- Year 6 Escalation
-    1.2080,                  !- Year 7 Escalation
+    1.208,                   !- Year 7 Escalation
     1.2199,                  !- Year 8 Escalation
-    1.2270,                  !- Year 9 Escalation
-    1.2270,                  !- Year 10 Escalation
+    1.227,                   !- Year 9 Escalation
+    1.227,                   !- Year 10 Escalation
     1.2364,                  !- Year 11 Escalation
     1.2388,                  !- Year 12 Escalation
     1.2388,                  !- Year 13 Escalation
@@ -989,7 +989,7 @@
     1.3877;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
-    MidWest Industrial-Coal, !- LCC Price Escalation Name
+    MidWest Industrial-Coal,  !- LCC Price Escalation Name
     Coal,                    !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
@@ -1001,8 +1001,8 @@
     1.0504,                  !- Year 6 Escalation
     1.0543,                  !- Year 7 Escalation
     1.0581,                  !- Year 8 Escalation
-    1.0620,                  !- Year 9 Escalation
-    1.0620,                  !- Year 10 Escalation
+    1.062,                   !- Year 9 Escalation
+    1.062,                   !- Year 10 Escalation
     1.0659,                  !- Year 11 Escalation
     1.0698,                  !- Year 12 Escalation
     1.0698,                  !- Year 13 Escalation
@@ -1015,7 +1015,7 @@
     1.0853,                  !- Year 20 Escalation
     1.0891,                  !- Year 21 Escalation
     1.0891,                  !- Year 22 Escalation
-    1.0930,                  !- Year 23 Escalation
+    1.093,                   !- Year 23 Escalation
     1.0969,                  !- Year 24 Escalation
     1.1008,                  !- Year 25 Escalation
     1.1047,                  !- Year 26 Escalation
@@ -1033,10 +1033,10 @@
     1.0678,                  !- Year 2 Escalation
     1.0761,                  !- Year 3 Escalation
     1.0739,                  !- Year 4 Escalation
-    1.0730,                  !- Year 5 Escalation
+    1.073,                   !- Year 5 Escalation
     1.0748,                  !- Year 6 Escalation
     1.0812,                  !- Year 7 Escalation
-    1.0840,                  !- Year 8 Escalation
+    1.084,                   !- Year 8 Escalation
     1.0849,                  !- Year 9 Escalation
     1.0858,                  !- Year 10 Escalation
     1.0873,                  !- Year 11 Escalation
@@ -1044,7 +1044,7 @@
     1.0916,                  !- Year 13 Escalation
     1.0925,                  !- Year 14 Escalation
     1.0925,                  !- Year 15 Escalation
-    1.0910,                  !- Year 16 Escalation
+    1.091,                   !- Year 16 Escalation
     1.0885,                  !- Year 17 Escalation
     1.0861,                  !- Year 18 Escalation
     1.0849,                  !- Year 19 Escalation
@@ -1070,14 +1070,14 @@
     1.3189,                  !- Year 3 Escalation
     1.3748,                  !- Year 4 Escalation
     1.4126,                  !- Year 5 Escalation
-    1.4290,                  !- Year 6 Escalation
+    1.429,                   !- Year 6 Escalation
     1.4362,                  !- Year 7 Escalation
     1.4389,                  !- Year 8 Escalation
     1.4504,                  !- Year 9 Escalation
     1.4636,                  !- Year 10 Escalation
     1.4822,                  !- Year 11 Escalation
     1.4959,                  !- Year 12 Escalation
-    1.5140,                  !- Year 13 Escalation
+    1.514,                   !- Year 13 Escalation
     1.5282,                  !- Year 14 Escalation
     1.5425,                  !- Year 15 Escalation
     1.5578,                  !- Year 16 Escalation
@@ -1144,17 +1144,17 @@
     1.0896,                  !- Year 5 Escalation
     1.0986,                  !- Year 6 Escalation
     1.1036,                  !- Year 7 Escalation
-    1.1070,                  !- Year 8 Escalation
+    1.107,                   !- Year 8 Escalation
     1.1098,                  !- Year 9 Escalation
     1.1137,                  !- Year 10 Escalation
     1.1261,                  !- Year 11 Escalation
     1.1333,                  !- Year 12 Escalation
     1.1434,                  !- Year 13 Escalation
-    1.1580,                  !- Year 14 Escalation
-    1.1720,                  !- Year 15 Escalation
+    1.158,                   !- Year 14 Escalation
+    1.172,                   !- Year 15 Escalation
     1.1832,                  !- Year 16 Escalation
     1.1955,                  !- Year 17 Escalation
-    1.2090,                  !- Year 18 Escalation
+    1.209,                   !- Year 18 Escalation
     1.2162,                  !- Year 19 Escalation
     1.2331,                  !- Year 20 Escalation
     1.2448,                  !- Year 21 Escalation
@@ -1185,12 +1185,12 @@
     1.0389,                  !- Year 10 Escalation
     1.0393,                  !- Year 11 Escalation
     1.0396,                  !- Year 12 Escalation
-    1.0400,                  !- Year 13 Escalation
+    1.04,                    !- Year 13 Escalation
     1.0393,                  !- Year 14 Escalation
     1.0372,                  !- Year 15 Escalation
     1.0347,                  !- Year 16 Escalation
     1.0315,                  !- Year 17 Escalation
-    1.0290,                  !- Year 18 Escalation
+    1.029,                   !- Year 18 Escalation
     1.0273,                  !- Year 19 Escalation
     1.0276,                  !- Year 20 Escalation
     1.0276,                  !- Year 21 Escalation
@@ -1201,7 +1201,7 @@
     1.0195,                  !- Year 26 Escalation
     1.0173,                  !- Year 27 Escalation
     1.0124,                  !- Year 28 Escalation
-    1.0120,                  !- Year 29 Escalation
+    1.012,                   !- Year 29 Escalation
     1.0163;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
@@ -1212,25 +1212,25 @@
     1.0269,                  !- Year 1 Escalation
     1.1644,                  !- Year 2 Escalation
     1.2675,                  !- Year 3 Escalation
-    1.3050,                  !- Year 4 Escalation
+    1.305,                   !- Year 4 Escalation
     1.3263,                  !- Year 5 Escalation
     1.3456,                  !- Year 6 Escalation
     1.3606,                  !- Year 7 Escalation
     1.3669,                  !- Year 8 Escalation
     1.3806,                  !- Year 9 Escalation
     1.3988,                  !- Year 10 Escalation
-    1.4200,                  !- Year 11 Escalation
+    1.42,                    !- Year 11 Escalation
     1.4363,                  !- Year 12 Escalation
     1.4563,                  !- Year 13 Escalation
-    1.4700,                  !- Year 14 Escalation
-    1.4850,                  !- Year 15 Escalation
+    1.47,                    !- Year 14 Escalation
+    1.485,                   !- Year 15 Escalation
     1.5031,                  !- Year 16 Escalation
     1.5144,                  !- Year 17 Escalation
     1.5219,                  !- Year 18 Escalation
     1.5469,                  !- Year 19 Escalation
     1.5606,                  !- Year 20 Escalation
     1.5731,                  !- Year 21 Escalation
-    1.5850,                  !- Year 22 Escalation
+    1.585,                   !- Year 22 Escalation
     1.5975,                  !- Year 23 Escalation
     1.6013,                  !- Year 24 Escalation
     1.6038,                  !- Year 25 Escalation
@@ -1256,21 +1256,21 @@
     2.0043,                  !- Year 9 Escalation
     2.0304,                  !- Year 10 Escalation
     2.0696,                  !- Year 11 Escalation
-    2.1000,                  !- Year 12 Escalation
+    2.1,                     !- Year 12 Escalation
     2.1362,                  !- Year 13 Escalation
     2.1623,                  !- Year 14 Escalation
     2.1899,                  !- Year 15 Escalation
     2.2145,                  !- Year 16 Escalation
-    2.2420,                  !- Year 17 Escalation
+    2.242,                   !- Year 17 Escalation
     2.2565,                  !- Year 18 Escalation
-    2.3000,                  !- Year 19 Escalation
-    2.3290,                  !- Year 20 Escalation
+    2.3,                     !- Year 19 Escalation
+    2.329,                   !- Year 20 Escalation
     2.3536,                  !- Year 21 Escalation
     2.3783,                  !- Year 22 Escalation
     2.4014,                  !- Year 23 Escalation
     2.4174,                  !- Year 24 Escalation
     2.4261,                  !- Year 25 Escalation
-    2.4290,                  !- Year 26 Escalation
+    2.429,                   !- Year 26 Escalation
     2.4333,                  !- Year 27 Escalation
     2.4348,                  !- Year 28 Escalation
     2.4377,                  !- Year 29 Escalation
@@ -1287,8 +1287,8 @@
     1.1178,                  !- Year 4 Escalation
     1.1571,                  !- Year 5 Escalation
     1.1706,                  !- Year 6 Escalation
-    1.1840,                  !- Year 7 Escalation
-    1.1890,                  !- Year 8 Escalation
+    1.184,                   !- Year 7 Escalation
+    1.189,                   !- Year 8 Escalation
     1.1939,                  !- Year 9 Escalation
     1.1926,                  !- Year 10 Escalation
     1.2012,                  !- Year 11 Escalation
@@ -1302,14 +1302,14 @@
     1.2172,                  !- Year 19 Escalation
     1.2221,                  !- Year 20 Escalation
     1.2245,                  !- Year 21 Escalation
-    1.2270,                  !- Year 22 Escalation
+    1.227,                   !- Year 22 Escalation
     1.2307,                  !- Year 23 Escalation
     1.2393,                  !- Year 24 Escalation
     1.2429,                  !- Year 25 Escalation
     1.2454,                  !- Year 26 Escalation
     1.2528,                  !- Year 27 Escalation
     1.2589,                  !- Year 28 Escalation
-    1.2650,                  !- Year 29 Escalation
+    1.265,                   !- Year 29 Escalation
     1.2712;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
@@ -1321,7 +1321,7 @@
     1.0079,                  !- Year 2 Escalation
     1.0079,                  !- Year 3 Escalation
     1.0026,                  !- Year 4 Escalation
-    1.0000,                  !- Year 5 Escalation
+    1.0,                     !- Year 5 Escalation
     1.0052,                  !- Year 6 Escalation
     1.0105,                  !- Year 7 Escalation
     1.0183,                  !- Year 8 Escalation
@@ -1338,7 +1338,7 @@
     1.0157,                  !- Year 19 Escalation
     1.0236,                  !- Year 20 Escalation
     1.0314,                  !- Year 21 Escalation
-    1.0340,                  !- Year 22 Escalation
+    1.034,                   !- Year 22 Escalation
     1.0393,                  !- Year 23 Escalation
     1.0419,                  !- Year 24 Escalation
     1.0471,                  !- Year 25 Escalation
@@ -1354,15 +1354,15 @@
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
     1.0187,                  !- Year 1 Escalation
-    1.0380,                  !- Year 2 Escalation
+    1.038,                   !- Year 2 Escalation
     1.0358,                  !- Year 3 Escalation
-    1.0270,                  !- Year 4 Escalation
+    1.027,                   !- Year 4 Escalation
     1.0226,                  !- Year 5 Escalation
     1.0243,                  !- Year 6 Escalation
-    1.0320,                  !- Year 7 Escalation
+    1.032,                   !- Year 7 Escalation
     1.0358,                  !- Year 8 Escalation
     1.0375,                  !- Year 9 Escalation
-    1.0380,                  !- Year 10 Escalation
+    1.038,                   !- Year 10 Escalation
     1.0408,                  !- Year 11 Escalation
     1.0424,                  !- Year 12 Escalation
     1.0441,                  !- Year 13 Escalation
@@ -1370,9 +1370,9 @@
     1.0441,                  !- Year 15 Escalation
     1.0419,                  !- Year 16 Escalation
     1.0391,                  !- Year 17 Escalation
-    1.0380,                  !- Year 18 Escalation
+    1.038,                   !- Year 18 Escalation
     1.0375,                  !- Year 19 Escalation
-    1.0380,                  !- Year 20 Escalation
+    1.038,                   !- Year 20 Escalation
     1.0391,                  !- Year 21 Escalation
     1.0386,                  !- Year 22 Escalation
     1.0386,                  !- Year 23 Escalation
@@ -1382,7 +1382,7 @@
     1.0358,                  !- Year 27 Escalation
     1.0331,                  !- Year 28 Escalation
     1.0325,                  !- Year 29 Escalation
-    1.0380;                  !- Year 30 Escalation
+    1.038;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     South Industrial-Distillate Oil,  !- LCC Price Escalation Name
@@ -1393,7 +1393,7 @@
     1.1757,                  !- Year 2 Escalation
     1.2861,                  !- Year 3 Escalation
     1.3335,                  !- Year 4 Escalation
-    1.3650,                  !- Year 5 Escalation
+    1.365,                   !- Year 5 Escalation
     1.3878,                  !- Year 6 Escalation
     1.4038,                  !- Year 7 Escalation
     1.4106,                  !- Year 8 Escalation
@@ -1404,7 +1404,7 @@
     1.4994,                  !- Year 13 Escalation
     1.5123,                  !- Year 14 Escalation
     1.5271,                  !- Year 15 Escalation
-    1.5450,                  !- Year 16 Escalation
+    1.545,                   !- Year 16 Escalation
     1.5561,                  !- Year 17 Escalation
     1.5641,                  !- Year 18 Escalation
     1.5882,                  !- Year 19 Escalation
@@ -1413,10 +1413,10 @@
     1.6258,                  !- Year 22 Escalation
     1.6375,                  !- Year 23 Escalation
     1.6412,                  !- Year 24 Escalation
-    1.6430,                  !- Year 25 Escalation
+    1.643,                   !- Year 25 Escalation
     1.6436,                  !- Year 26 Escalation
     1.6461,                  !- Year 27 Escalation
-    1.6430,                  !- Year 28 Escalation
+    1.643,                   !- Year 28 Escalation
     1.6461,                  !- Year 29 Escalation
     1.6523;                  !- Year 30 Escalation
 
@@ -1429,7 +1429,7 @@
     1.5082,                  !- Year 2 Escalation
     1.8096,                  !- Year 3 Escalation
     1.9655,                  !- Year 4 Escalation
-    2.0780,                  !- Year 5 Escalation
+    2.078,                   !- Year 5 Escalation
     2.1169,                  !- Year 6 Escalation
     2.1214,                  !- Year 7 Escalation
     2.1484,                  !- Year 8 Escalation
@@ -1467,7 +1467,7 @@
     1.1685,                  !- Year 4 Escalation
     1.1966,                  !- Year 5 Escalation
     1.2275,                  !- Year 6 Escalation
-    1.2640,                  !- Year 7 Escalation
+    1.264,                   !- Year 7 Escalation
     1.2809,                  !- Year 8 Escalation
     1.2921,                  !- Year 9 Escalation
     1.2978,                  !- Year 10 Escalation
@@ -1500,7 +1500,7 @@
     1.0049,                  !- Year 1 Escalation
     1.0147,                  !- Year 2 Escalation
     1.0246,                  !- Year 3 Escalation
-    1.0270,                  !- Year 4 Escalation
+    1.027,                   !- Year 4 Escalation
     1.0295,                  !- Year 5 Escalation
     1.0319,                  !- Year 6 Escalation
     1.0344,                  !- Year 7 Escalation
@@ -1517,7 +1517,7 @@
     1.0123,                  !- Year 18 Escalation
     1.0172,                  !- Year 19 Escalation
     1.0197,                  !- Year 20 Escalation
-    1.0270,                  !- Year 21 Escalation
+    1.027,                   !- Year 21 Escalation
     1.0295,                  !- Year 22 Escalation
     1.0344,                  !- Year 23 Escalation
     1.0418,                  !- Year 24 Escalation
@@ -1540,13 +1540,13 @@
     1.0222,                  !- Year 5 Escalation
     1.0402,                  !- Year 6 Escalation
     1.0599,                  !- Year 7 Escalation
-    1.0840,                  !- Year 8 Escalation
+    1.084,                   !- Year 8 Escalation
     1.0978,                  !- Year 9 Escalation
     1.1069,                  !- Year 10 Escalation
     1.1168,                  !- Year 11 Escalation
     1.1284,                  !- Year 12 Escalation
     1.1427,                  !- Year 13 Escalation
-    1.1540,                  !- Year 14 Escalation
+    1.154,                   !- Year 14 Escalation
     1.1626,                  !- Year 15 Escalation
     1.1693,                  !- Year 16 Escalation
     1.1752,                  !- Year 17 Escalation
@@ -1558,10 +1558,10 @@
     1.2053,                  !- Year 23 Escalation
     1.2112,                  !- Year 24 Escalation
     1.2176,                  !- Year 25 Escalation
-    1.2220,                  !- Year 26 Escalation
+    1.222,                   !- Year 26 Escalation
     1.2277,                  !- Year 27 Escalation
     1.2339,                  !- Year 28 Escalation
-    1.2390,                  !- Year 29 Escalation
+    1.239,                   !- Year 29 Escalation
     1.2432;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
@@ -1572,7 +1572,7 @@
     1.0516,                  !- Year 1 Escalation
     1.2003,                  !- Year 2 Escalation
     1.3145,                  !- Year 3 Escalation
-    1.3650,                  !- Year 4 Escalation
+    1.365,                   !- Year 4 Escalation
     1.3957,                  !- Year 5 Escalation
     1.4155,                  !- Year 6 Escalation
     1.4243,                  !- Year 7 Escalation
@@ -1582,7 +1582,7 @@
     1.4731,                  !- Year 11 Escalation
     1.4852,                  !- Year 12 Escalation
     1.5038,                  !- Year 13 Escalation
-    1.5170,                  !- Year 14 Escalation
+    1.517,                   !- Year 14 Escalation
     1.5324,                  !- Year 15 Escalation
     1.5467,                  !- Year 16 Escalation
     1.5554,                  !- Year 17 Escalation
@@ -1605,7 +1605,7 @@
     NaturalGas,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0110,                  !- Year 1 Escalation
+    1.011,                   !- Year 1 Escalation
     1.0238,                  !- Year 2 Escalation
     1.0201,                  !- Year 3 Escalation
     1.0101,                  !- Year 4 Escalation
@@ -1614,12 +1614,12 @@
     1.1464,                  !- Year 7 Escalation
     1.1528,                  !- Year 8 Escalation
     1.1592,                  !- Year 9 Escalation
-    1.1610,                  !- Year 10 Escalation
+    1.161,                   !- Year 10 Escalation
     1.1802,                  !- Year 11 Escalation
     1.1866,                  !- Year 12 Escalation
     1.1876,                  !- Year 13 Escalation
     1.1912,                  !- Year 14 Escalation
-    1.1940,                  !- Year 15 Escalation
+    1.194,                   !- Year 15 Escalation
     1.1976,                  !- Year 16 Escalation
     1.2004,                  !- Year 17 Escalation
     1.2077,                  !- Year 18 Escalation
@@ -1630,7 +1630,7 @@
     1.2315,                  !- Year 23 Escalation
     1.2388,                  !- Year 24 Escalation
     1.2434,                  !- Year 25 Escalation
-    1.2470,                  !- Year 26 Escalation
+    1.247,                   !- Year 26 Escalation
     1.2534,                  !- Year 27 Escalation
     1.2598,                  !- Year 28 Escalation
     1.2653,                  !- Year 29 Escalation
@@ -1677,13 +1677,13 @@
     Electricity,             !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    0.9720,                  !- Year 1 Escalation
+    0.972,                   !- Year 1 Escalation
     0.9535,                  !- Year 2 Escalation
     0.9527,                  !- Year 3 Escalation
     0.9764,                  !- Year 4 Escalation
     0.9986,                  !- Year 5 Escalation
     1.0079,                  !- Year 6 Escalation
-    1.0310,                  !- Year 7 Escalation
+    1.031,                   !- Year 7 Escalation
     1.0495,                  !- Year 8 Escalation
     1.0554,                  !- Year 9 Escalation
     1.0573,                  !- Year 10 Escalation
@@ -1713,7 +1713,7 @@
     FuelOilNo1,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0310,                  !- Year 1 Escalation
+    1.031,                   !- Year 1 Escalation
     1.1621,                  !- Year 2 Escalation
     1.2627,                  !- Year 3 Escalation
     1.3031,                  !- Year 4 Escalation
@@ -1736,13 +1736,13 @@
     1.6501,                  !- Year 21 Escalation
     1.6612,                  !- Year 22 Escalation
     1.6729,                  !- Year 23 Escalation
-    1.6770,                  !- Year 24 Escalation
+    1.677,                   !- Year 24 Escalation
     1.6793,                  !- Year 25 Escalation
     1.6817,                  !- Year 26 Escalation
     1.6864,                  !- Year 27 Escalation
     1.6846,                  !- Year 28 Escalation
     1.6875,                  !- Year 29 Escalation
-    1.6940;                  !- Year 30 Escalation
+    1.694;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     West Commercial-Residual Oil,  !- LCC Price Escalation Name
@@ -1755,7 +1755,7 @@
     1.5169,                  !- Year 4 Escalation
     1.5558,                  !- Year 5 Escalation
     1.5701,                  !- Year 6 Escalation
-    1.5740,                  !- Year 7 Escalation
+    1.574,                   !- Year 7 Escalation
     1.5961,                  !- Year 8 Escalation
     1.6247,                  !- Year 9 Escalation
     1.6468,                  !- Year 10 Escalation
@@ -1778,7 +1778,7 @@
     2.0052,                  !- Year 27 Escalation
     1.9948,                  !- Year 28 Escalation
     1.9948,                  !- Year 29 Escalation
-    2.0130;                  !- Year 30 Escalation
+    2.013;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     West Commercial-Natural Gas,  !- LCC Price Escalation Name
@@ -1792,7 +1792,7 @@
     1.1305,                  !- Year 5 Escalation
     1.2574,                  !- Year 6 Escalation
     1.3116,                  !- Year 7 Escalation
-    1.3190,                  !- Year 8 Escalation
+    1.319,                   !- Year 8 Escalation
     1.3264,                  !- Year 9 Escalation
     1.3288,                  !- Year 10 Escalation
     1.3522,                  !- Year 11 Escalation
@@ -1804,7 +1804,7 @@
     1.3768,                  !- Year 17 Escalation
     1.3855,                  !- Year 18 Escalation
     1.3929,                  !- Year 19 Escalation
-    1.3990,                  !- Year 20 Escalation
+    1.399,                   !- Year 20 Escalation
     1.4052,                  !- Year 21 Escalation
     1.4113,                  !- Year 22 Escalation
     1.4175,                  !- Year 23 Escalation
@@ -1830,13 +1830,13 @@
     0.9049,                  !- Year 7 Escalation
     0.8932,                  !- Year 8 Escalation
     0.8796,                  !- Year 9 Escalation
-    0.8680,                  !- Year 10 Escalation
+    0.868,                   !- Year 10 Escalation
     0.8544,                  !- Year 11 Escalation
     0.9748,                  !- Year 12 Escalation
     1.0175,                  !- Year 13 Escalation
     1.0136,                  !- Year 14 Escalation
     1.0136,                  !- Year 15 Escalation
-    1.0000,                  !- Year 16 Escalation
+    1.0,                     !- Year 16 Escalation
     1.0039,                  !- Year 17 Escalation
     1.0097,                  !- Year 18 Escalation
     1.0214,                  !- Year 19 Escalation
@@ -1845,9 +1845,9 @@
     1.0175,                  !- Year 22 Escalation
     1.0155,                  !- Year 23 Escalation
     1.0291,                  !- Year 24 Escalation
-    1.0350,                  !- Year 25 Escalation
-    1.0350,                  !- Year 26 Escalation
-    1.0330,                  !- Year 27 Escalation
+    1.035,                   !- Year 25 Escalation
+    1.035,                   !- Year 26 Escalation
+    1.033,                   !- Year 27 Escalation
     1.0311,                  !- Year 28 Escalation
     1.0291,                  !- Year 29 Escalation
     1.0291;                  !- Year 30 Escalation
@@ -1860,20 +1860,20 @@
     0.9292,                  !- Year 1 Escalation
     0.9009,                  !- Year 2 Escalation
     0.8956,                  !- Year 3 Escalation
-    0.9230,                  !- Year 4 Escalation
+    0.923,                   !- Year 4 Escalation
     0.9414,                  !- Year 5 Escalation
-    0.9480,                  !- Year 6 Escalation
+    0.948,                   !- Year 6 Escalation
     0.9758,                  !- Year 7 Escalation
-    0.9910,                  !- Year 8 Escalation
+    0.991,                   !- Year 8 Escalation
     0.9959,                  !- Year 9 Escalation
     0.9984,                  !- Year 10 Escalation
-    1.0020,                  !- Year 11 Escalation
-    1.0090,                  !- Year 12 Escalation
+    1.002,                   !- Year 11 Escalation
+    1.009,                   !- Year 12 Escalation
     1.0172,                  !- Year 13 Escalation
     1.0197,                  !- Year 14 Escalation
     1.0192,                  !- Year 15 Escalation
     1.0188,                  !- Year 16 Escalation
-    1.0180,                  !- Year 17 Escalation
+    1.018,                   !- Year 17 Escalation
     1.0164,                  !- Year 18 Escalation
     1.0131,                  !- Year 19 Escalation
     1.0119,                  !- Year 20 Escalation
@@ -1899,7 +1899,7 @@
     1.3333,                  !- Year 4 Escalation
     1.3674,                  !- Year 5 Escalation
     1.3913,                  !- Year 6 Escalation
-    1.4080,                  !- Year 7 Escalation
+    1.408,                   !- Year 7 Escalation
     1.4194,                  !- Year 8 Escalation
     1.4343,                  !- Year 9 Escalation
     1.4522,                  !- Year 10 Escalation
@@ -1908,7 +1908,7 @@
     1.5048,                  !- Year 13 Escalation
     1.5173,                  !- Year 14 Escalation
     1.5317,                  !- Year 15 Escalation
-    1.5490,                  !- Year 16 Escalation
+    1.549,                   !- Year 16 Escalation
     1.5597,                  !- Year 17 Escalation
     1.5675,                  !- Year 18 Escalation
     1.5902,                  !- Year 19 Escalation
@@ -1916,11 +1916,11 @@
     1.6141,                  !- Year 21 Escalation
     1.6249,                  !- Year 22 Escalation
     1.6362,                  !- Year 23 Escalation
-    1.6410,                  !- Year 24 Escalation
+    1.641,                   !- Year 24 Escalation
     1.6428,                  !- Year 25 Escalation
     1.6446,                  !- Year 26 Escalation
     1.6487,                  !- Year 27 Escalation
-    1.6470,                  !- Year 28 Escalation
+    1.647,                   !- Year 28 Escalation
     1.6499,                  !- Year 29 Escalation
     1.6553;                  !- Year 30 Escalation
 
@@ -1949,10 +1949,10 @@
     1.3746,                  !- Year 18 Escalation
     1.4039,                  !- Year 19 Escalation
     1.4234,                  !- Year 20 Escalation
-    1.4410,                  !- Year 21 Escalation
+    1.441,                   !- Year 21 Escalation
     1.4566,                  !- Year 22 Escalation
     1.4722,                  !- Year 23 Escalation
-    1.4820,                  !- Year 24 Escalation
+    1.482,                   !- Year 24 Escalation
     1.4888,                  !- Year 25 Escalation
     1.4907,                  !- Year 26 Escalation
     1.4937,                  !- Year 27 Escalation
@@ -1970,26 +1970,26 @@
     1.1316,                  !- Year 3 Escalation
     1.1382,                  !- Year 4 Escalation
     1.1623,                  !- Year 5 Escalation
-    1.1820,                  !- Year 6 Escalation
+    1.182,                   !- Year 6 Escalation
     1.2105,                  !- Year 7 Escalation
     1.2281,                  !- Year 8 Escalation
-    1.2390,                  !- Year 9 Escalation
+    1.239,                   !- Year 9 Escalation
     1.2434,                  !- Year 10 Escalation
     1.2522,                  !- Year 11 Escalation
     1.2566,                  !- Year 12 Escalation
     1.2544,                  !- Year 13 Escalation
     1.2588,                  !- Year 14 Escalation
-    1.2610,                  !- Year 15 Escalation
+    1.261,                   !- Year 15 Escalation
     1.2654,                  !- Year 16 Escalation
     1.2675,                  !- Year 17 Escalation
     1.2851,                  !- Year 18 Escalation
     1.2939,                  !- Year 19 Escalation
     1.3048,                  !- Year 20 Escalation
-    1.3180,                  !- Year 21 Escalation
+    1.318,                   !- Year 21 Escalation
     1.3268,                  !- Year 22 Escalation
     1.3377,                  !- Year 23 Escalation
     1.3531,                  !- Year 24 Escalation
-    1.3640,                  !- Year 25 Escalation
+    1.364,                   !- Year 25 Escalation
     1.3772,                  !- Year 26 Escalation
     1.3904,                  !- Year 27 Escalation
     1.4035,                  !- Year 28 Escalation
@@ -2001,9 +2001,9 @@
     Coal,                    !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0000,                  !- Year 1 Escalation
-    1.0000,                  !- Year 2 Escalation
-    1.0000,                  !- Year 3 Escalation
+    1.0,                     !- Year 1 Escalation
+    1.0,                     !- Year 2 Escalation
+    1.0,                     !- Year 3 Escalation
     0.9938,                  !- Year 4 Escalation
     0.9876,                  !- Year 5 Escalation
     0.9876,                  !- Year 6 Escalation
@@ -2058,7 +2058,7 @@
     1.1124,                  !- Year 19 Escalation
     1.1124,                  !- Year 20 Escalation
     1.1127,                  !- Year 21 Escalation
-    1.1130,                  !- Year 22 Escalation
+    1.113,                   !- Year 22 Escalation
     1.1132,                  !- Year 23 Escalation
     1.1122,                  !- Year 24 Escalation
     1.1103,                  !- Year 25 Escalation
@@ -2066,7 +2066,7 @@
     1.1076,                  !- Year 27 Escalation
     1.1049,                  !- Year 28 Escalation
     1.1041,                  !- Year 29 Escalation
-    1.1060;                  !- Year 30 Escalation
+    1.106;                   !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     U.S. Avg Residential-Distillate Oil,  !- LCC Price Escalation Name
@@ -2083,9 +2083,9 @@
     1.4235,                  !- Year 8 Escalation
     1.4358,                  !- Year 9 Escalation
     1.4508,                  !- Year 10 Escalation
-    1.4690,                  !- Year 11 Escalation
+    1.469,                   !- Year 11 Escalation
     1.4829,                  !- Year 12 Escalation
-    1.5000,                  !- Year 13 Escalation
+    1.5,                     !- Year 13 Escalation
     1.5118,                  !- Year 14 Escalation
     1.5246,                  !- Year 15 Escalation
     1.5401,                  !- Year 16 Escalation
@@ -2093,7 +2093,7 @@
     1.5567,                  !- Year 18 Escalation
     1.5775,                  !- Year 19 Escalation
     1.5898,                  !- Year 20 Escalation
-    1.6000,                  !- Year 21 Escalation
+    1.6,                     !- Year 21 Escalation
     1.6107,                  !- Year 22 Escalation
     1.6214,                  !- Year 23 Escalation
     1.6246,                  !- Year 24 Escalation
@@ -2109,7 +2109,7 @@
     NaturalGas,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0200,                  !- Year 1 Escalation
+    1.02,                    !- Year 1 Escalation
     1.0487,                  !- Year 2 Escalation
     1.0639,                  !- Year 3 Escalation
     1.0735,                  !- Year 4 Escalation
@@ -2135,13 +2135,13 @@
     1.2347,                  !- Year 24 Escalation
     1.2395,                  !- Year 25 Escalation
     1.2433,                  !- Year 26 Escalation
-    1.2510,                  !- Year 27 Escalation
+    1.251,                   !- Year 27 Escalation
     1.2576,                  !- Year 28 Escalation
     1.2634,                  !- Year 29 Escalation
-    1.2700;                  !- Year 30 Escalation
+    1.27;                    !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
-    U.S. Avg Residential-LPG,!- LCC Price Escalation Name
+    U.S. Avg Residential-LPG,  !- LCC Price Escalation Name
     Propane,                 !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
@@ -2155,17 +2155,17 @@
     1.1175,                  !- Year 8 Escalation
     1.1205,                  !- Year 9 Escalation
     1.1247,                  !- Year 10 Escalation
-    1.1380,                  !- Year 11 Escalation
+    1.138,                   !- Year 11 Escalation
     1.1464,                  !- Year 12 Escalation
     1.1566,                  !- Year 13 Escalation
     1.1711,                  !- Year 14 Escalation
     1.1849,                  !- Year 15 Escalation
     1.1964,                  !- Year 16 Escalation
-    1.2090,                  !- Year 17 Escalation
+    1.209,                   !- Year 17 Escalation
     1.2229,                  !- Year 18 Escalation
     1.2307,                  !- Year 19 Escalation
     1.2476,                  !- Year 20 Escalation
-    1.2590,                  !- Year 21 Escalation
+    1.259,                   !- Year 21 Escalation
     1.2669,                  !- Year 22 Escalation
     1.2765,                  !- Year 23 Escalation
     1.2855,                  !- Year 24 Escalation
@@ -2192,12 +2192,12 @@
     1.0518,                  !- Year 9 Escalation
     1.0528,                  !- Year 10 Escalation
     1.0534,                  !- Year 11 Escalation
-    1.0550,                  !- Year 12 Escalation
+    1.055,                   !- Year 12 Escalation
     1.0566,                  !- Year 13 Escalation
     1.0559,                  !- Year 14 Escalation
-    1.0540,                  !- Year 15 Escalation
+    1.054,                   !- Year 15 Escalation
     1.0518,                  !- Year 16 Escalation
-    1.0490,                  !- Year 17 Escalation
+    1.049,                   !- Year 17 Escalation
     1.0474,                  !- Year 18 Escalation
     1.0455,                  !- Year 19 Escalation
     1.0448,                  !- Year 20 Escalation
@@ -2207,10 +2207,10 @@
     1.0378,                  !- Year 24 Escalation
     1.0346,                  !- Year 25 Escalation
     1.0315,                  !- Year 26 Escalation
-    1.0280,                  !- Year 27 Escalation
+    1.028,                   !- Year 27 Escalation
     1.0232,                  !- Year 28 Escalation
-    1.0200,                  !- Year 29 Escalation
-    1.0200;                  !- Year 30 Escalation
+    1.02,                    !- Year 29 Escalation
+    1.02;                    !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
     U.S. Avg Commercial-Distillate Oil,  !- LCC Price Escalation Name
@@ -2242,7 +2242,7 @@
     1.5719,                  !- Year 23 Escalation
     1.5756,                  !- Year 24 Escalation
     1.5774,                  !- Year 25 Escalation
-    1.5780,                  !- Year 26 Escalation
+    1.578,                   !- Year 26 Escalation
     1.5804,                  !- Year 27 Escalation
     1.5774,                  !- Year 28 Escalation
     1.5804,                  !- Year 29 Escalation
@@ -2293,7 +2293,7 @@
     1.0752,                  !- Year 2 Escalation
     1.1051,                  !- Year 3 Escalation
     1.1297,                  !- Year 4 Escalation
-    1.1660,                  !- Year 5 Escalation
+    1.166,                   !- Year 5 Escalation
     1.2023,                  !- Year 6 Escalation
     1.2231,                  !- Year 7 Escalation
     1.2283,                  !- Year 8 Escalation
@@ -2321,7 +2321,7 @@
     1.3346;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
-    U.S. Avg Commercial-Coal,!- LCC Price Escalation Name
+    U.S. Avg Commercial-Coal,  !- LCC Price Escalation Name
     Coal,                    !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
@@ -2336,7 +2336,7 @@
     0.9533,                  !- Year 9 Escalation
     0.9459,                  !- Year 10 Escalation
     0.9386,                  !- Year 11 Escalation
-    0.9730,                  !- Year 12 Escalation
+    0.973,                   !- Year 12 Escalation
     0.9877,                  !- Year 13 Escalation
     0.9877,                  !- Year 14 Escalation
     0.9877,                  !- Year 15 Escalation
@@ -2344,7 +2344,7 @@
     0.9877,                  !- Year 17 Escalation
     0.9902,                  !- Year 18 Escalation
     0.9951,                  !- Year 19 Escalation
-    1.0000,                  !- Year 20 Escalation
+    1.0,                     !- Year 20 Escalation
     1.0025,                  !- Year 21 Escalation
     1.0025,                  !- Year 22 Escalation
     1.0049,                  !- Year 23 Escalation
@@ -2379,7 +2379,7 @@
     1.0177,                  !- Year 16 Escalation
     1.0159,                  !- Year 17 Escalation
     1.0149,                  !- Year 18 Escalation
-    1.0140,                  !- Year 19 Escalation
+    1.014,                   !- Year 19 Escalation
     1.0135,                  !- Year 20 Escalation
     1.0131,                  !- Year 21 Escalation
     1.0117,                  !- Year 22 Escalation
@@ -2388,7 +2388,7 @@
     1.0056,                  !- Year 25 Escalation
     1.0042,                  !- Year 26 Escalation
     1.0028,                  !- Year 27 Escalation
-    1.0000,                  !- Year 28 Escalation
+    1.0,                     !- Year 28 Escalation
     0.9977,                  !- Year 29 Escalation
     0.9986;                  !- Year 30 Escalation
 
@@ -2398,7 +2398,7 @@
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
     1.0207,                  !- Year 1 Escalation
-    1.1470,                  !- Year 2 Escalation
+    1.147,                   !- Year 2 Escalation
     1.2406,                  !- Year 3 Escalation
     1.2722,                  !- Year 4 Escalation
     1.2886,                  !- Year 5 Escalation
@@ -2408,23 +2408,23 @@
     1.3463,                  !- Year 9 Escalation
     1.3645,                  !- Year 10 Escalation
     1.3852,                  !- Year 11 Escalation
-    1.4010,                  !- Year 12 Escalation
+    1.401,                   !- Year 12 Escalation
     1.4204,                  !- Year 13 Escalation
     1.4332,                  !- Year 14 Escalation
     1.4478,                  !- Year 15 Escalation
     1.4654,                  !- Year 16 Escalation
     1.4775,                  !- Year 17 Escalation
-    1.4860,                  !- Year 18 Escalation
+    1.486,                   !- Year 18 Escalation
     1.5097,                  !- Year 19 Escalation
     1.5237,                  !- Year 20 Escalation
     1.5352,                  !- Year 21 Escalation
     1.5468,                  !- Year 22 Escalation
     1.5589,                  !- Year 23 Escalation
     1.5626,                  !- Year 24 Escalation
-    1.5650,                  !- Year 25 Escalation
-    1.5650,                  !- Year 26 Escalation
-    1.5680,                  !- Year 27 Escalation
-    1.5650,                  !- Year 28 Escalation
+    1.565,                   !- Year 25 Escalation
+    1.565,                   !- Year 26 Escalation
+    1.568,                   !- Year 27 Escalation
+    1.565,                   !- Year 28 Escalation
     1.5687,                  !- Year 29 Escalation
     1.5747;                  !- Year 30 Escalation
 
@@ -2441,14 +2441,14 @@
     2.0121,                  !- Year 6 Escalation
     2.0181,                  !- Year 7 Escalation
     2.0453,                  !- Year 8 Escalation
-    2.0770,                  !- Year 9 Escalation
+    2.077,                   !- Year 9 Escalation
     2.1027,                  !- Year 10 Escalation
-    2.1420,                  !- Year 11 Escalation
+    2.142,                   !- Year 11 Escalation
     2.1737,                  !- Year 12 Escalation
-    2.2100,                  !- Year 13 Escalation
+    2.21,                    !- Year 13 Escalation
     2.2356,                  !- Year 14 Escalation
     2.2628,                  !- Year 15 Escalation
-    2.2900,                  !- Year 16 Escalation
+    2.29,                    !- Year 16 Escalation
     2.3157,                  !- Year 17 Escalation
     2.3278,                  !- Year 18 Escalation
     2.3716,                  !- Year 19 Escalation
@@ -2458,7 +2458,7 @@
     2.4758,                  !- Year 23 Escalation
     2.4909,                  !- Year 24 Escalation
     2.5015,                  !- Year 25 Escalation
-    2.5060,                  !- Year 26 Escalation
+    2.506,                   !- Year 26 Escalation
     2.5106,                  !- Year 27 Escalation
     2.5045,                  !- Year 28 Escalation
     2.5045,                  !- Year 29 Escalation
@@ -2469,39 +2469,39 @@
     NaturalGas,              !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
-    1.0650,                  !- Year 1 Escalation
-    1.1300,                  !- Year 2 Escalation
-    1.1400,                  !- Year 3 Escalation
+    1.065,                   !- Year 1 Escalation
+    1.13,                    !- Year 2 Escalation
+    1.14,                    !- Year 3 Escalation
     1.1425,                  !- Year 4 Escalation
-    1.1700,                  !- Year 5 Escalation
+    1.17,                    !- Year 5 Escalation
     1.1925,                  !- Year 6 Escalation
     1.2225,                  !- Year 7 Escalation
     1.2375,                  !- Year 8 Escalation
     1.2475,                  !- Year 9 Escalation
-    1.2500,                  !- Year 10 Escalation
+    1.25,                    !- Year 10 Escalation
     1.2625,                  !- Year 11 Escalation
-    1.2650,                  !- Year 12 Escalation
-    1.2650,                  !- Year 13 Escalation
+    1.265,                   !- Year 12 Escalation
+    1.265,                   !- Year 13 Escalation
     1.2675,                  !- Year 14 Escalation
     1.2675,                  !- Year 15 Escalation
-    1.2700,                  !- Year 16 Escalation
-    1.2700,                  !- Year 17 Escalation
-    1.2850,                  !- Year 18 Escalation
-    1.2950,                  !- Year 19 Escalation
+    1.27,                    !- Year 16 Escalation
+    1.27,                    !- Year 17 Escalation
+    1.285,                   !- Year 18 Escalation
+    1.295,                   !- Year 19 Escalation
     1.3075,                  !- Year 20 Escalation
-    1.3200,                  !- Year 21 Escalation
+    1.32,                    !- Year 21 Escalation
     1.3275,                  !- Year 22 Escalation
-    1.3350,                  !- Year 23 Escalation
+    1.335,                   !- Year 23 Escalation
     1.3475,                  !- Year 24 Escalation
-    1.3600,                  !- Year 25 Escalation
-    1.3700,                  !- Year 26 Escalation
+    1.36,                    !- Year 25 Escalation
+    1.37,                    !- Year 26 Escalation
     1.3825,                  !- Year 27 Escalation
-    1.3950,                  !- Year 28 Escalation
+    1.395,                   !- Year 28 Escalation
     1.4075,                  !- Year 29 Escalation
     1.4275;                  !- Year 30 Escalation
 
   LifeCycleCost:UsePriceEscalation,
-    U.S. Avg Industrial-Coal,!- LCC Price Escalation Name
+    U.S. Avg Industrial-Coal,  !- LCC Price Escalation Name
     Coal,                    !- Resource
     2019,                    !- Escalation Start Year
     January,                 !- Escalation Start Month
@@ -2529,10 +2529,9 @@
     1.0398,                  !- Year 22 Escalation
     1.0459,                  !- Year 23 Escalation
     1.0489,                  !- Year 24 Escalation
-    1.0550,                  !- Year 25 Escalation
-    1.0550,                  !- Year 26 Escalation
+    1.055,                   !- Year 25 Escalation
+    1.055,                   !- Year 26 Escalation
     1.0612,                  !- Year 27 Escalation
     1.0642,                  !- Year 28 Escalation
     1.0673,                  !- Year 29 Escalation
     1.0703;                  !- Year 30 Escalation
-

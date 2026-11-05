@@ -125,10 +125,10 @@
 
   Building,
     SIMPLE ZONES: VARYING WINDOWS,  !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
-    3.9999999E-02,           !- Loads Convergence Tolerance Value {W}
-    0.4000000,               !- Temperature Convergence Tolerance Value {deltaC}
+    0.039999999,             !- Loads Convergence Tolerance Value {W}
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
     MinimalShadowing,        !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
@@ -182,17 +182,17 @@
     Denver Centennial CO USA WMO=724666,  !- Name
     39.74,                   !- Latitude {deg}
     -105.18,                 !- Longitude {deg}
-    -7.00,                   !- Time Zone {hr}
-    1793.00;                 !- Elevation {m}
+    -7.0,                    !- Time Zone {hr}
+    1793.0;                  !- Elevation {m}
 
- !  WMO=724666 Time Zone=NAM        (GMT-07:00) Mountain Time (US & Canada)
- !  Data Source=ASHRAE 2009 Annual Design Conditions
- ! Using Design Conditions from "Climate Design Data 2009 ASHRAE Handbook"
- ! Denver Centennial CO USA Extreme Annual Wind Speeds, 1%=11.1m/s, 2.5%=9.5m/s, 5%=8.4m/s
- ! Denver Centennial CO USA Extreme Annual Temperatures, Max Drybulb=-22.9°C Min Drybulb=36.1°C
- ! Denver Centennial CO USA Annual Heating Design Conditions Wind Speed=3m/s Wind Dir=340
- ! Coldest Month=December
- ! Denver Centennial CO USA Annual Heating 99.6%, MaxDB=-18.8°C
+!  WMO=724666 Time Zone=NAM        (GMT-07:00) Mountain Time (US & Canada)
+!  Data Source=ASHRAE 2009 Annual Design Conditions
+! Using Design Conditions from "Climate Design Data 2009 ASHRAE Handbook"
+! Denver Centennial CO USA Extreme Annual Wind Speeds, 1%=11.1m/s, 2.5%=9.5m/s, 5%=8.4m/s
+! Denver Centennial CO USA Extreme Annual Temperatures, Max Drybulb=-22.9°C Min Drybulb=36.1°C
+! Denver Centennial CO USA Annual Heating Design Conditions Wind Speed=3m/s Wind Dir=340
+! Coldest Month=December
+! Denver Centennial CO USA Annual Heating 99.6%, MaxDB=-18.8°C
 
   SizingPeriod:DesignDay,
     Denver Centennial Ann Htg 99.6% Condns DB,  !- Name
@@ -203,15 +203,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -18.8,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    81560.,                  !- Barometric Pressure {Pa}
-    3,                       !- Wind Speed {m/s}
-    340,                     !- Wind Direction {deg}
+    81560.0,                 !- Barometric Pressure {Pa}
+    3.0,                     !- Wind Speed {m/s}
+    340.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -220,30 +220,30 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
- ! Denver Centennial Annual Cooling Design Conditions Wind Speed=4.9m/s Wind Dir=0
- ! Hottest Month=July
- ! Denver Centennial CO USA Annual Cooling (DB=>MWB) 1%, MaxDB=32°C MWB=15.5°C
+! Denver Centennial Annual Cooling Design Conditions Wind Speed=4.9m/s Wind Dir=0
+! Hottest Month=July
+! Denver Centennial CO USA Annual Cooling (DB=>MWB) 1%, MaxDB=32°C MWB=15.5°C
 
   SizingPeriod:DesignDay,
     Denver Centennial Ann Clg 1% Condns DB=>MWB,  !- Name
     7,                       !- Month
     21,                      !- Day of Month
     SummerDesignDay,         !- Day Type
-    32,                      !- Maximum Dry-Bulb Temperature {C}
+    32.0,                    !- Maximum Dry-Bulb Temperature {C}
     15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    81560.,                  !- Barometric Pressure {Pa}
+    81560.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    0,                       !- Wind Direction {deg}
+    0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -252,129 +252,129 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
   Material,
     A2 - 4 IN DENSE FACE BRICK,  !- Name
     Rough,                   !- Roughness
     0.1014984,               !- Thickness {m}
     1.245296,                !- Conductivity {W/m-K}
-    2082.400,                !- Density {kg/m3}
-    920.4800,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9300000,               !- Solar Absorptance
-    0.9300000;               !- Visible Absorptance
+    2082.4,                  !- Density {kg/m3}
+    920.48,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.93,                    !- Solar Absorptance
+    0.93;                    !- Visible Absorptance
 
   Material,
     B3 - 2 IN INSULATION,    !- Name
     VeryRough,               !- Roughness
-    5.0901599E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.050901599,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     32.03693,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C2 - 4 IN LW CONCRETE BLOCK,  !- Name
     MediumRough,             !- Roughness
     0.1014984,               !- Thickness {m}
-    0.3805070,               !- Conductivity {W/m-K}
+    0.380507,                !- Conductivity {W/m-K}
     608.7016,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    1.9050000E-02,           !- Thickness {m}
+    0.01905,                 !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1601.846,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   WindowMaterial:Glazing,
     GLASS - CLEAR PLATE 1 / 4 IN,  !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    6.0000001E-03,           !- Thickness {m}
-    0.7750000,               !- Solar Transmittance at Normal Incidence
-    7.1000002E-02,           !- Front Side Solar Reflectance at Normal Incidence
-    7.1000002E-02,           !- Back Side Solar Reflectance at Normal Incidence
-    0.8810000,               !- Visible Transmittance at Normal Incidence
-    7.9999998E-02,           !- Front Side Visible Reflectance at Normal Incidence
-    7.9999998E-02,           !- Back Side Visible Reflectance at Normal Incidence
-    0,                       !- Infrared Transmittance at Normal Incidence
-    0.8400000,               !- Front Side Infrared Hemispherical Emissivity
-    0.8400000,               !- Back Side Infrared Hemispherical Emissivity
-    0.9000000;               !- Conductivity {W/m-K}
+    0.0060000001,            !- Thickness {m}
+    0.775,                   !- Solar Transmittance at Normal Incidence
+    0.071000002,             !- Front Side Solar Reflectance at Normal Incidence
+    0.071000002,             !- Back Side Solar Reflectance at Normal Incidence
+    0.881,                   !- Visible Transmittance at Normal Incidence
+    0.079999998,             !- Front Side Visible Reflectance at Normal Incidence
+    0.079999998,             !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   Material,
     E5 - ACOUSTIC TILE,      !- Name
     MediumSmooth,            !- Roughness
-    1.9050000E-02,           !- Thickness {m}
-    6.0535200E-02,           !- Conductivity {W/m-K}
+    0.01905,                 !- Thickness {m}
+    0.0605352,               !- Conductivity {W/m-K}
     480.5539,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.3200000,               !- Solar Absorptance
-    0.3200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.32,                    !- Solar Absorptance
+    0.32;                    !- Visible Absorptance
 
   Material:AirGap,
     E4 - CEILING AIRSPACE,   !- Name
-    0.1762280;               !- Thermal Resistance {m2-K/W}
+    0.176228;                !- Thermal Resistance {m2-K/W}
 
   Material,
     C12 - 2 IN HW CONCRETE,  !- Name
     MediumRough,             !- Roughness
-    5.0901599E-02,           !- Thickness {m}
+    0.050901599,             !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E2 - 1 / 2 IN SLAG OR STONE,  !- Name
     Rough,                   !- Roughness
-    1.2710161E-02,           !- Thickness {m}
+    0.012710161,             !- Thickness {m}
     1.435549,                !- Conductivity {W/m-K}
     881.0155,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5500000,               !- Solar Absorptance
-    0.5500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.55,                    !- Solar Absorptance
+    0.55;                    !- Visible Absorptance
 
   Material,
     E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
     Rough,                   !- Roughness
-    9.5402403E-03,           !- Thickness {m}
+    0.0095402403,            !- Thickness {m}
     0.1902535,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     B6 - 2 IN DENSE INSULATION,  !- Name
     VeryRough,               !- Roughness
-    5.0901599E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.050901599,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     91.30524,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   WindowMaterial:Screen,
-    BRIGHT ALUMINUM SCREEN 1,!- Name
+    BRIGHT ALUMINUM SCREEN 1,  !- Name
     ModelAsDiffuse,          !- Reflected Beam Transmittance Accounting Method
     0.6,                     !- Diffuse Solar Reflectance {dimensionless}
     0.6,                     !- Diffuse Visible Reflectance {dimensionless}
@@ -392,14 +392,14 @@
   WindowMaterial:Shade,
     DRAPES - CLOSE WEAVE MEDIUM,  !- Name
     0.05,                    !- Solar Transmittance {dimensionless}
-    0.3000000,               !- Solar Reflectance {dimensionless}
+    0.3,                     !- Solar Reflectance {dimensionless}
     0.05,                    !- Visible Transmittance {dimensionless}
-    0.3000000,               !- Visible Reflectance {dimensionless}
-    0.9000000,               !- Infrared Hemispherical Emissivity {dimensionless}
+    0.3,                     !- Visible Reflectance {dimensionless}
+    0.9,                     !- Infrared Hemispherical Emissivity {dimensionless}
     0.0,                     !- Infrared Transmittance {dimensionless}
     0.003,                   !- Thickness {m}
     0.1,                     !- Conductivity {W/m-K}
-    0.050,                   !- Shade to Glass Distance {m}
+    0.05,                    !- Shade to Glass Distance {m}
     1.0,                     !- Top Opening Multiplier
     1.0,                     !- Bottom Opening Multiplier
     0.0,                     !- Left-Side Opening Multiplier
@@ -409,14 +409,14 @@
   WindowMaterial:Shade,
     SHADE ROLL - LIGHT OPAQUE,  !- Name
     0.05,                    !- Solar Transmittance {dimensionless}
-    0.5000000,               !- Solar Reflectance {dimensionless}
+    0.5,                     !- Solar Reflectance {dimensionless}
     0.05,                    !- Visible Transmittance {dimensionless}
-    0.8000000,               !- Visible Reflectance {dimensionless}
-    0.9000000,               !- Infrared Hemispherical Emissivity {dimensionless}
+    0.8,                     !- Visible Reflectance {dimensionless}
+    0.9,                     !- Infrared Hemispherical Emissivity {dimensionless}
     0.0,                     !- Infrared Transmittance {dimensionless}
     0.003,                   !- Thickness {m}
     0.1,                     !- Conductivity {W/m-K}
-    0.050,                   !- Shade to Glass Distance {m}
+    0.05,                    !- Shade to Glass Distance {m}
     1.0,                     !- Top Opening Multiplier
     1.0,                     !- Bottom Opening Multiplier
     0.0,                     !- Left-Side Opening Multiplier
@@ -464,8 +464,8 @@
     0.812;                   !- Visible Transmittance
 
   Construction,
-    DOUBLE PANE WITH SCREEN, !- Name
-    BRIGHT ALUMINUM SCREEN 1,!- Outside Layer
+    DOUBLE PANE WITH SCREEN,  !- Name
+    BRIGHT ALUMINUM SCREEN 1,  !- Outside Layer
     SimpleWindow:DOUBLE PANE WINDOW;  !- Layer 2
 
   Construction,
@@ -473,7 +473,7 @@
     SimpleWindow:DOUBLE PANE WINDOW;  !- Outside Layer
 
   Construction,
-    DOUBLE PANE WITH DRAPES, !- Name
+    DOUBLE PANE WITH DRAPES,  !- Name
     SimpleWindow:DOUBLE PANE WINDOW,  !- Outside Layer
     DRAPES - CLOSE WEAVE MEDIUM;  !- Layer 2
 
@@ -535,12 +535,12 @@
     DPWB,                    !- Zone Name
     1,                       !- Shading Control Sequence Number
     ExteriorScreen,          !- Shading Type
-    DOUBLE PANE WITH SCREEN, !- Construction with Shading Name
+    DOUBLE PANE WITH SCREEN,  !- Construction with Shading Name
     OnIfScheduleAllows,      !- Shading Control Type
     ScreenSchedule,          !- Schedule Name
     20.0,                    !- Setpoint {W/m2, W or deg C}
-    YES,                     !- Shading Control Is Scheduled
-    NO,                      !- Glare Control Is Active
+    Yes,                     !- Shading Control Is Scheduled
+    No,                      !- Glare Control Is Active
     ,                        !- Shading Device Material Name
     ,                        !- Type of Slat Angle Control for Blinds
     ,                        !- Slat Angle Schedule Name
@@ -569,19 +569,19 @@
     Integer,                 !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    Discrete;                !- Numeric Type
 
   WindowShadingControl,
     DOUBLE PANE WITH DRAPES-DPWD,  !- Name
     DPWD,                    !- Zone Name
     1,                       !- Shading Control Sequence Number
     InteriorShade,           !- Shading Type
-    DOUBLE PANE WITH DRAPES, !- Construction with Shading Name
+    DOUBLE PANE WITH DRAPES,  !- Construction with Shading Name
     OnIfHighSolarOnWindow,   !- Shading Control Type
     ,                        !- Schedule Name
     20.0,                    !- Setpoint {W/m2, W or deg C}
-    NO,                      !- Shading Control Is Scheduled
-    NO,                      !- Glare Control Is Active
+    No,                      !- Shading Control Is Scheduled
+    No,                      !- Glare Control Is Active
     ,                        !- Shading Device Material Name
     ,                        !- Type of Slat Angle Control for Blinds
     ,                        !- Slat Angle Schedule Name
@@ -602,8 +602,8 @@
     OnIfHighSolarOnWindow,   !- Shading Control Type
     ,                        !- Schedule Name
     20.0,                    !- Setpoint {W/m2, W or deg C}
-    NO,                      !- Shading Control Is Scheduled
-    NO,                      !- Glare Control Is Active
+    No,                      !- Shading Control Is Scheduled
+    No,                      !- Glare Control Is Active
     ,                        !- Shading Device Material Name
     ,                        !- Type of Slat Angle Control for Blinds
     ,                        !- Slat Angle Schedule Name
@@ -622,102 +622,102 @@
 
   Zone,
     SPHW,                    !- Name
-    0,                       !- Direction of Relative North {deg}
-    6.000000,                !- X Origin {m}
-    6.000000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    6.0,                     !- X Origin {m}
+    6.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     DPW,                     !- Name
-    0,                       !- Direction of Relative North {deg}
-    9.000000,                !- X Origin {m}
-    9.000000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    9.0,                     !- X Origin {m}
+    9.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     DPWB,                    !- Name
-    0,                       !- Direction of Relative North {deg}
-    12.00000,                !- X Origin {m}
-    12.00000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    12.0,                    !- X Origin {m}
+    12.0,                    !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     DPWD,                    !- Name
-    0,                       !- Direction of Relative North {deg}
-    15.00000,                !- X Origin {m}
-    15.00000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    15.0,                    !- X Origin {m}
+    15.0,                    !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     DPWS,                    !- Name
-    0,                       !- Direction of Relative North {deg}
-    18.00000,                !- X Origin {m}
-    18.00000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    18.0,                    !- X Origin {m}
+    18.0,                    !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     TPW,                     !- Name
-    0,                       !- Direction of Relative North {deg}
-    21.00000,                !- X Origin {m}
-    21.00000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    21.0,                    !- X Origin {m}
+    21.0,                    !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     QPW,                     !- Name
-    0,                       !- Direction of Relative North {deg}
-    24.00000,                !- X Origin {m}
-    24.00000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    24.0,                    !- X Origin {m}
+    24.0,                    !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     DPM,                     !- Name
-    0,                       !- Direction of Relative North {deg}
-    27.00000,                !- X Origin {m}
-    27.00000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    27.0,                    !- X Origin {m}
+    27.0,                    !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     SCWINDOW,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    30.00000,                !- X Origin {m}
-    30.00000,                !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    30.0,                    !- X Origin {m}
+    30.0,                    !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   ScheduleTypeLimits,
     Any Number;              !- Name
@@ -726,11 +726,11 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   BuildingSurface:Detailed,
@@ -743,12 +743,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win001,    !- Name
@@ -756,14 +756,14 @@
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall002,           !- Name
@@ -775,12 +775,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall002:Win001,    !- Name
@@ -788,14 +788,14 @@
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall003,           !- Name
@@ -807,12 +807,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall003:Win001,    !- Name
@@ -820,14 +820,14 @@
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall004,           !- Name
@@ -839,12 +839,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall004:Win001,    !- Name
@@ -852,14 +852,14 @@
     SINGLE PANE HW WINDOW,   !- Construction Name
     Zn001:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Flr001,            !- Name
@@ -871,12 +871,12 @@
     Zn001:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Roof001,           !- Name
@@ -888,12 +888,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall001,           !- Name
@@ -905,12 +905,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn002:Wall001:Win001,    !- Name
@@ -918,14 +918,14 @@
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall002,           !- Name
@@ -937,12 +937,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn002:Wall002:Win001,    !- Name
@@ -950,14 +950,14 @@
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall003,           !- Name
@@ -969,12 +969,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn002:Wall003:Win001,    !- Name
@@ -982,14 +982,14 @@
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall004,           !- Name
@@ -1001,12 +1001,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn002:Wall004:Win001,    !- Name
@@ -1014,14 +1014,14 @@
     DOUBLE PANE WINDOW,      !- Construction Name
     Zn002:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Flr001,            !- Name
@@ -1033,12 +1033,12 @@
     Zn002:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Roof001,           !- Name
@@ -1050,12 +1050,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall001,           !- Name
@@ -1067,12 +1067,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn003:Wall001:Win001,    !- Name
@@ -1080,14 +1080,14 @@
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall002,           !- Name
@@ -1099,12 +1099,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn003:Wall002:Win001,    !- Name
@@ -1112,14 +1112,14 @@
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall003,           !- Name
@@ -1131,12 +1131,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn003:Wall003:Win001,    !- Name
@@ -1144,14 +1144,14 @@
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall004,           !- Name
@@ -1163,12 +1163,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn003:Wall004:Win001,    !- Name
@@ -1176,14 +1176,14 @@
     DOUBLE PANE WITH SCREEN:no-shade,  !- Construction Name
     Zn003:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Flr001,            !- Name
@@ -1195,12 +1195,12 @@
     Zn003:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Roof001,           !- Name
@@ -1212,12 +1212,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall001,           !- Name
@@ -1229,12 +1229,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn004:Wall001:Win001,    !- Name
@@ -1242,14 +1242,14 @@
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall002,           !- Name
@@ -1261,12 +1261,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn004:Wall002:Win001,    !- Name
@@ -1274,14 +1274,14 @@
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall003,           !- Name
@@ -1293,12 +1293,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn004:Wall003:Win001,    !- Name
@@ -1306,14 +1306,14 @@
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall004,           !- Name
@@ -1325,12 +1325,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn004:Wall004:Win001,    !- Name
@@ -1338,14 +1338,14 @@
     DOUBLE PANE WITH DRAPES:no-shade,  !- Construction Name
     Zn004:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Flr001,            !- Name
@@ -1357,12 +1357,12 @@
     Zn004:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Roof001,           !- Name
@@ -1374,12 +1374,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn005:Wall001,           !- Name
@@ -1391,12 +1391,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn005:Wall001:Win001,    !- Name
@@ -1404,14 +1404,14 @@
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn005:Wall002,           !- Name
@@ -1423,12 +1423,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn005:Wall002:Win001,    !- Name
@@ -1436,14 +1436,14 @@
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn005:Wall003,           !- Name
@@ -1455,12 +1455,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn005:Wall003:Win001,    !- Name
@@ -1468,14 +1468,14 @@
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn005:Wall004,           !- Name
@@ -1487,12 +1487,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn005:Wall004:Win001,    !- Name
@@ -1500,14 +1500,14 @@
     DOUBLE PANE WITH SHADE:no-shade,  !- Construction Name
     Zn005:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn005:Flr001,            !- Name
@@ -1519,12 +1519,12 @@
     Zn005:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn005:Roof001,           !- Name
@@ -1536,12 +1536,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn006:Wall001,           !- Name
@@ -1553,12 +1553,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn006:Wall001:Win001,    !- Name
@@ -1566,14 +1566,14 @@
     TPW,                     !- Construction Name
     Zn006:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn006:Wall002,           !- Name
@@ -1585,12 +1585,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn006:Wall002:Win001,    !- Name
@@ -1598,14 +1598,14 @@
     TPW,                     !- Construction Name
     Zn006:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn006:Wall003,           !- Name
@@ -1617,12 +1617,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn006:Wall003:Win001,    !- Name
@@ -1630,14 +1630,14 @@
     TPW,                     !- Construction Name
     Zn006:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn006:Wall004,           !- Name
@@ -1649,12 +1649,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn006:Wall004:Win001,    !- Name
@@ -1662,14 +1662,14 @@
     TPW,                     !- Construction Name
     Zn006:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn006:Flr001,            !- Name
@@ -1681,12 +1681,12 @@
     Zn006:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn006:Roof001,           !- Name
@@ -1698,12 +1698,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn007:Wall001,           !- Name
@@ -1715,12 +1715,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn007:Wall001:Win001,    !- Name
@@ -1728,14 +1728,14 @@
     QPW,                     !- Construction Name
     Zn007:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn007:Wall002,           !- Name
@@ -1747,12 +1747,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn007:Wall002:Win001,    !- Name
@@ -1760,14 +1760,14 @@
     QPW,                     !- Construction Name
     Zn007:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn007:Wall003,           !- Name
@@ -1779,12 +1779,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn007:Wall003:Win001,    !- Name
@@ -1792,14 +1792,14 @@
     QPW,                     !- Construction Name
     Zn007:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn007:Wall004,           !- Name
@@ -1811,12 +1811,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn007:Wall004:Win001,    !- Name
@@ -1824,14 +1824,14 @@
     QPW,                     !- Construction Name
     Zn007:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn007:Flr001,            !- Name
@@ -1843,12 +1843,12 @@
     Zn007:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn007:Roof001,           !- Name
@@ -1860,12 +1860,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn008:Wall001,           !- Name
@@ -1877,12 +1877,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn008:Wall001:Win001,    !- Name
@@ -1890,14 +1890,14 @@
     DPM,                     !- Construction Name
     Zn008:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn008:Wall002,           !- Name
@@ -1909,12 +1909,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn008:Wall002:Win001,    !- Name
@@ -1922,14 +1922,14 @@
     DPM,                     !- Construction Name
     Zn008:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn008:Wall003,           !- Name
@@ -1941,12 +1941,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn008:Wall003:Win001,    !- Name
@@ -1954,14 +1954,14 @@
     DPM,                     !- Construction Name
     Zn008:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn008:Wall004,           !- Name
@@ -1973,12 +1973,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn008:Wall004:Win001,    !- Name
@@ -1986,14 +1986,14 @@
     DPM,                     !- Construction Name
     Zn008:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn008:Flr001,            !- Name
@@ -2005,12 +2005,12 @@
     Zn008:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn008:Roof001,           !- Name
@@ -2022,12 +2022,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn009:Wall001,           !- Name
@@ -2039,12 +2039,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn009:Wall001:Win001,    !- Name
@@ -2052,14 +2052,14 @@
     SCWINDOW,                !- Construction Name
     Zn009:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.200000,0.000000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.200000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.900000,0.000000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.900000,0.000000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.2,0.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.2,0.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    9.9,0.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    9.9,0.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn009:Wall002,           !- Name
@@ -2071,12 +2071,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn009:Wall002:Win001,    !- Name
@@ -2084,14 +2084,14 @@
     SCWINDOW,                !- Construction Name
     Zn009:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    10.00000,0.20000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,0.20000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,9.90000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,9.900000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.2,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,0.2,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,9.9,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,9.9,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn009:Wall003,           !- Name
@@ -2103,12 +2103,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    10.00000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn009:Wall003:Win001,    !- Name
@@ -2116,14 +2116,14 @@
     SCWINDOW,                !- Construction Name
     Zn009:Wall003,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    9.80000,10.00000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.80000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.100000,10.00000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.100000,10.00000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.8,10.0,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    9.8,10.0,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.1,10.0,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.1,10.0,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn009:Wall004,           !- Name
@@ -2135,12 +2135,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn009:Wall004:Win001,    !- Name
@@ -2148,14 +2148,14 @@
     SCWINDOW,                !- Construction Name
     Zn009:Wall004,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.000000,9.8000,9.900000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,9.8000,0.1000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,0.10000,0.1000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.000000,0.10000,9.900000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,9.8,9.9,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,9.8,0.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.1,0.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.1,9.9;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn009:Flr001,            !- Name
@@ -2167,12 +2167,12 @@
     Zn009:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0.000000,10.00000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn009:Roof001,           !- Name
@@ -2184,44 +2184,44 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0.000000,10.00000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 2 {m}
-    10.00000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 3 {m}
-    10.00000,10.00000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,10.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,10.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;
 
-  Output:Variable,*,Site Direct Solar Radiation Rate per Area,timestep;
+  Output:Variable,*,Site Direct Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,*,Site Diffuse Solar Radiation Rate per Area,timestep;
+  Output:Variable,*,Site Diffuse Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,*,Site Ground Reflected Solar Radiation Rate per Area,timestep;
+  Output:Variable,*,Site Ground Reflected Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,*,Zone Mean Air Temperature,timestep;
+  Output:Variable,*,Zone Mean Air Temperature,Timestep;
 
-  Output:Variable,*,Zone Mean Radiant Temperature,timestep;
+  Output:Variable,*,Zone Mean Radiant Temperature,Timestep;
 
-  Output:Variable,*,Surface Outside Face Incident Solar Radiation Rate per Area,timestep;
+  Output:Variable,*,Surface Outside Face Incident Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,*,Surface Shading Device Is On Time Fraction,timestep;
+  Output:Variable,*,Surface Shading Device Is On Time Fraction,Timestep;
 
-  Output:Variable,*,Surface Window Transmitted Solar Radiation Rate,timestep;
+  Output:Variable,*,Surface Window Transmitted Solar Radiation Rate,Timestep;
 
-  Output:Variable,*,Surface Window Total Glazing Layers Absorbed Solar Radiation Rate,timestep;
+  Output:Variable,*,Surface Window Total Glazing Layers Absorbed Solar Radiation Rate,Timestep;
 
-  Output:Variable,*,Surface Window Screen Beam to Beam Solar Transmittance,timestep;
+  Output:Variable,*,Surface Window Screen Beam to Beam Solar Transmittance,Timestep;
 
-  Output:Variable,*,Surface Window Screen Beam to Diffuse Solar Transmittance,timestep;
+  Output:Variable,*,Surface Window Screen Beam to Diffuse Solar Transmittance,Timestep;
 
-  Output:Variable,*,Surface Inside Face Convection Heat Transfer Coefficient,timestep;
+  Output:Variable,*,Surface Inside Face Convection Heat Transfer Coefficient,Timestep;
 
-  Output:Variable,*,Surface Inside Face Convection Heat Gain Rate per Area,timestep;
+  Output:Variable,*,Surface Inside Face Convection Heat Gain Rate per Area,Timestep;
 
   Output:VariableDictionary,IDF;
 
-  Output:Surfaces:Drawing,dxf;
+  Output:Surfaces:Drawing,DXF;
 
   Output:Constructions,Constructions;
 
@@ -2301,13 +2301,12 @@
     Enclosure Interior Windows Total Transmitted Beam Solar Radiation Energy,  !- Variable or Meter 7 Name
     SumOrAverage;            !- Aggregation Type for Variable or Meter 7
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Building,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Building,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,hourly;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Building,runperiod;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Building,RunPeriod;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,runperiod;
+  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,RunPeriod;
 
   Output:Surfaces:List,Details;
-

@@ -16,7 +16,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -24,17 +24,17 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     CHICAGO_IL_USA_WMO_725300,  !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
- ! CHICAGO_IL_USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.5°C MWB=23°C
+! CHICAGO_IL_USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.5°C MWB=23°C
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -45,15 +45,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -62,9 +62,9 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
- ! CHICAGO_IL_USA Annual Heating 99%, MaxDB=-17.3°C
+! CHICAGO_IL_USA Annual Heating 99%, MaxDB=-17.3°C
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Htg 99% Condns DB,  !- Name
@@ -75,15 +75,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -92,7 +92,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
   RunPeriod,
     Run Period 1,            !- Name
@@ -110,25 +110,25 @@
     Yes;                     !- Use Weather File Snow Indicators
 
   SimulationControl,
-    NO,                      !- Do Zone Sizing Calculation
-    NO,                      !- Do System Sizing Calculation
-    YES,                     !- Do Plant Sizing Calculation
-    YES,                     !- Run Simulation for Sizing Periods
-    NO,                      !- Run Simulation for Weather File Run Periods
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    Yes,                     !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
+    No,                      !- Run Simulation for Weather File Run Periods
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
   PlantLoop,
     Main Loop,               !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     Main Loop Operation,     !- Plant Equipment Operation Scheme Name
     Supply Outlet Node,      !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.003,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Plant Loop Volume {m3}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    Autocalculate,           !- Plant Loop Volume {m3}
     Supply Inlet Node,       !- Plant Side Inlet Node Name
     Supply Outlet Node,      !- Plant Side Outlet Node Name
     Supply Branches,         !- Plant Side Branch List Name
@@ -137,7 +137,7 @@
     Demand Outlet Node,      !- Demand Side Outlet Node Name
     Demand Branches,         !- Demand Side Branch List Name
     ,                        !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   SetpointManager:Scheduled,
     Main Loop Setpoint Manager,  !- Name
@@ -157,8 +157,8 @@
 
   PlantEquipmentOperation:CoolingLoad,
     Purchased Only,          !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Cooling Plant;           !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -198,23 +198,23 @@
     Pump:VariableSpeed,      !- Component 1 Object Type
     Pump,                    !- Component 1 Name
     Supply Inlet Node,       !- Component 1 Inlet Node Name
-    Supply Pump-Cooling Node;!- Component 1 Outlet Node Name
+    Supply Pump-Cooling Node;  !- Component 1 Outlet Node Name
 
   Pump:VariableSpeed,
     Pump,                    !- Name
     Supply Inlet Node,       !- Inlet Node Name
-    Supply Pump-Cooling Node,!- Outlet Node Name
+    Supply Pump-Cooling Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    300000,                  !- Design Pump Head {Pa}
-    2250,                    !- Design Power Consumption {W}
+    300000.0,                !- Design Pump Head {Pa}
+    2250.0,                  !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
     Cooling Branch,          !- Name
@@ -222,34 +222,34 @@
     PlantComponent:TemperatureSource,  !- Component 1 Object Type
     FluidSource,             !- Component 1 Name
     FluidSource Inlet Node,  !- Component 1 Inlet Node Name
-    FluidSource Outlet Node; !- Component 1 Outlet Node Name
+    FluidSource Outlet Node;  !- Component 1 Outlet Node Name
 
   Sizing:Plant,
     Main Loop,               !- Plant or Condenser Loop Name
     Cooling,                 !- Loop Type
-    10,                      !- Design Loop Exit Temperature {C}
-    4;                       !- Loop Design Temperature Difference {deltaC}
+    10.0,                    !- Design Loop Exit Temperature {C}
+    4.0;                     !- Loop Design Temperature Difference {deltaC}
 
   PlantComponent:TemperatureSource,
     FluidSource,             !- Name
     FluidSource Inlet Node,  !- Inlet Node
-    FluidSource Outlet Node, !- Outlet Node
+    FluidSource Outlet Node,  !- Outlet Node
     Autosize,                !- Design Volume Flow Rate {m3/s}
     Constant,                !- Temperature Specification Type
-    8,                       !- Source Temperature {C}
-    ;                        !- Source Temperature Schedule Name
+    8.0,                     !- Source Temperature {C}
+    ;                        !- Source Temperature Schedule Name {C}
 
   Branch,
     Supply Bypass Branch,    !- Name
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
     Supply Bypass Pipe,      !- Component 1 Name
-    Supply Bypass Inlet Node,!- Component 1 Inlet Node Name
+    Supply Bypass Inlet Node,  !- Component 1 Inlet Node Name
     Supply Bypass Outlet Node;  !- Component 1 Outlet Node Name
 
   Pipe:Adiabatic,
     Supply Bypass Pipe,      !- Name
-    Supply Bypass Inlet Node,!- Inlet Node Name
+    Supply Bypass Inlet Node,  !- Inlet Node Name
     Supply Bypass Outlet Node;  !- Outlet Node Name
 
   Branch,
@@ -257,12 +257,12 @@
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
     Supply Outlet Pipe,      !- Component 1 Name
-    Supply Cooling-Pipe Node,!- Component 1 Inlet Node Name
+    Supply Cooling-Pipe Node,  !- Component 1 Inlet Node Name
     Supply Outlet Node;      !- Component 1 Outlet Node Name
 
   Pipe:Adiabatic,
     Supply Outlet Pipe,      !- Name
-    Supply Cooling-Pipe Node,!- Inlet Node Name
+    Supply Cooling-Pipe Node,  !- Inlet Node Name
     Supply Outlet Node;      !- Outlet Node Name
 
   BranchList,
@@ -291,9 +291,9 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     Main Loop Temp Sch,      !- Name
@@ -340,24 +340,23 @@
 
   Output:Variable,*,Plant Load Profile Heat Transfer Energy,Hourly;
 
-  Output:Variable,*,Plant Temperature Source Component Mass Flow Rate,hourly;
+  Output:Variable,*,Plant Temperature Source Component Mass Flow Rate,Hourly;
 
-  Output:Variable,*,Plant Temperature Source Component Inlet Temperature,hourly;
+  Output:Variable,*,Plant Temperature Source Component Inlet Temperature,Hourly;
 
-  Output:Variable,*,Plant Temperature Source Component Outlet Temperature,hourly;
+  Output:Variable,*,Plant Temperature Source Component Outlet Temperature,Hourly;
 
-  Output:Variable,*,Plant Temperature Source Component Source Temperature,hourly;
+  Output:Variable,*,Plant Temperature Source Component Source Temperature,Hourly;
 
-  Output:Variable,*,Plant Temperature Source Component Heat Transfer Rate,hourly;
+  Output:Variable,*,Plant Temperature Source Component Heat Transfer Rate,Hourly;
 
-  Output:Variable,*,Plant Temperature Source Component Heat Transfer Energy,hourly;
+  Output:Variable,*,Plant Temperature Source Component Heat Transfer Energy,Hourly;
 
-  Output:Variable,*,System Node Maximum Limit Mass Flow Rate,hourly;
+  Output:Variable,*,System Node Maximum Limit Mass Flow Rate,Hourly;
 
-  Output:Variable,*,System Node Maximum Available Mass Flow Rate,hourly;
+  Output:Variable,*,System Node Maximum Available Mass Flow Rate,Hourly;
 
-  Output:Variable,*,System Node Requested Mass Flow Rate,hourly;
+  Output:Variable,*,System Node Requested Mass Flow Rate,Hourly;
 
   Output:Diagnostics,
     DisplayAdvancedReportVariables;  !- Key 1
-

@@ -24,7 +24,7 @@
     0.014963852,             !- Coefficient2 x
     -0.02599835,             !- Coefficient3 x**2
     0.0,                     !- Coefficient4 y
-    -1.40464E-6,             !- Coefficient5 y**2
+    -1.40464e-06,            !- Coefficient5 y**2
     -0.00153624,             !- Coefficient6 x*y
     0.1,                     !- Minimum Value of x
     1.0,                     !- Maximum Value of x
@@ -48,9 +48,9 @@
     -0.000156783,            !- Coefficient5 y**2
     0.009384599,             !- Coefficient6 x*y
     0.234257955,             !- Coefficient7 x**3
-    1.32927E-06,             !- Coefficient8 y**3
+    1.32927e-06,             !- Coefficient8 y**3
     -0.004446701,            !- Coefficient9 x**2*y
-    -1.22498E-05,            !- Coefficient10 x*y**2
+    -1.22498e-05,            !- Coefficient10 x*y**2
     0.1,                     !- Minimum Value of x
     1.0,                     !- Maximum Value of x
     20.0,                    !- Minimum Value of y
@@ -96,7 +96,7 @@
 ! Old style high temperature boiler produced around 1975. Boiler temperature at 75C.
 
   Curve:Cubic,
-    Circa1975HighTempBoiler, !- Name
+    Circa1975HighTempBoiler,  !- Name
     0.626428326,             !- Coefficient1 Constant
     0.645643582,             !- Coefficient2 x
     -0.77720685,             !- Coefficient3 x**2
@@ -128,4 +128,3 @@
     0.047468326,             !- Coefficient4 x**3
     0.1,                     !- Minimum Value of x
     1.0;                     !- Maximum Value of x
-

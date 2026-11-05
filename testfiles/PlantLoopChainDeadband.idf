@@ -21,7 +21,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -29,17 +29,17 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     CHICAGO_IL_USA_WMO_725300,  !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
- ! CHICAGO_IL_USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.5°C MWB=23°C
+! CHICAGO_IL_USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.5°C MWB=23°C
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -50,15 +50,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -67,9 +67,9 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
- ! CHICAGO_IL_USA Annual Heating 99%, MaxDB=-17.3°C
+! CHICAGO_IL_USA Annual Heating 99%, MaxDB=-17.3°C
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Htg 99% Condns DB,  !- Name
@@ -80,15 +80,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -97,7 +97,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
   RunPeriod,
     Annual,                  !- Name
@@ -115,11 +115,11 @@
     Yes;                     !- Use Weather File Snow Indicators
 
   SimulationControl,
-    NO,                      !- Do Zone Sizing Calculation
-    NO,                      !- Do System Sizing Calculation
-    NO,                      !- Do Plant Sizing Calculation
-    YES,                     !- Run Simulation for Sizing Periods
-    NO,                      !- Run Simulation for Weather File Run Periods
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
+    No,                      !- Run Simulation for Weather File Run Periods
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
@@ -127,24 +127,24 @@
 
   PlantLoop,
     Use Heat Loop,           !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
-    Use Heat Loop Operation, !- Plant Equipment Operation Scheme Name
+    Use Heat Loop Operation,  !- Plant Equipment Operation Scheme Name
     Use Heat Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.003,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
     1.0,                     !- Plant Loop Volume {m3}
     Use Heat Supply Inlet Node,  !- Plant Side Inlet Node Name
     Use Heat Supply Outlet Node,  !- Plant Side Outlet Node Name
-    Use Heat Supply Branches,!- Plant Side Branch List Name
+    Use Heat Supply Branches,  !- Plant Side Branch List Name
     Use Heat Supply Connectors,  !- Plant Side Connector List Name
     Use Heat Demand Inlet Node,  !- Demand Side Inlet Node Name
     Use Heat Demand Outlet Node,  !- Demand Side Outlet Node Name
-    Use Heat Demand Branches,!- Demand Side Branch List Name
+    Use Heat Demand Branches,  !- Demand Side Branch List Name
     Use Heat Demand Connectors,  !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   SetpointManager:Scheduled,
     Use Heat Loop Setpoint Manager,  !- Name
@@ -157,7 +157,7 @@
     Use Heat Supply Outlet Node;  !- Node 1 Name
 
   PlantEquipmentOperationSchemes,
-    Use Heat Loop Operation, !- Name
+    Use Heat Loop Operation,  !- Name
     PlantEquipmentOperation:Uncontrolled,  !- Control Scheme 1 Object Type
     USE Heat operation,      !- Control Scheme 1 Name
     AlwaysOnSchedule;        !- Control Scheme 1 Schedule Name
@@ -169,30 +169,30 @@
   PlantEquipmentList,
     TRANSFER to USE Heat HX equip,  !- Name
     HeatExchanger:FluidToFluid,  !- Equipment 1 Object Type
-    TRANSFER to USE Heat HX; !- Equipment 1 Name
+    TRANSFER to USE Heat HX;  !- Equipment 1 Name
 
   BranchList,
-    USE Heat Supply Branches,!- Name
+    USE Heat Supply Branches,  !- Name
     USE Heat Supply Inlet Branch,  !- Branch 1 Name
-    USE Heat Heating Branch, !- Branch 2 Name
+    USE Heat Heating Branch,  !- Branch 2 Name
     USE Heat Supply Outlet Branch;  !- Branch 3 Name
 
   ConnectorList,
     USE Heat Supply Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    USE Heat Supply Splitter,!- Connector 1 Name
+    USE Heat Supply Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     USE Heat Supply Mixer;   !- Connector 2 Name
 
   Connector:Splitter,
-    USE Heat Supply Splitter,!- Name
+    USE Heat Supply Splitter,  !- Name
     USE Heat Supply Inlet Branch,  !- Inlet Branch Name
-    USE Heat Heating Branch; !- Outlet Branch 1 Name
+    USE Heat Heating Branch;  !- Outlet Branch 1 Name
 
   Connector:Mixer,
     USE Heat Supply Mixer,   !- Name
     USE Heat Supply Outlet Branch,  !- Outlet Branch Name
-    USE Heat Heating Branch; !- Inlet Branch 1 Name
+    USE Heat Heating Branch;  !- Inlet Branch 1 Name
 
   Branch,
     USE Heat Supply Inlet Branch,  !- Name
@@ -207,27 +207,27 @@
     USE Heat Supply Inlet Node,  !- Inlet Node Name
     USE Heat Supply Pump-Heating Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    1,                       !- Design Pump Head {Pa}
+    1.0,                     !- Design Pump Head {Pa}
     0.01,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
-    USE Heat Heating Branch, !- Name
+    USE Heat Heating Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     HeatExchanger:FluidToFluid,  !- Component 1 Object Type
-    TRANSFER to USE Heat HX, !- Component 1 Name
+    TRANSFER to USE Heat HX,  !- Component 1 Name
     USE Heat Supply Heating Inlet Node,  !- Component 1 Inlet Node Name
     USE Heat Supply Heating Outlet Node;  !- Component 1 Outlet Node Name
 
   HeatExchanger:FluidToFluid,
-    TRANSFER to USE Heat HX, !- Name
+    TRANSFER to USE Heat HX,  !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     TRANSFER Heat Demand HX Inlet Node,  !- Loop Demand Side Inlet Node Name
     TRANSFER Heat Demand HX Outlet Node,  !- Loop Demand Side Outlet Node Name
@@ -236,8 +236,8 @@
     USE Heat Supply Heating Outlet Node,  !- Loop Supply Side Outlet Node Name
     0.003,                   !- Loop Supply Side Design Flow Rate {m3/s}
     CrossFlowSupplyUnMixedDemandMixed,  !- Heat Exchange Model Type
-    15000,                   !- Heat Exchanger U-Factor Times Area Value {W/K}
-    HeatingSetpointModulated,!- Control Type
+    15000.0,                 !- Heat Exchanger U-Factor Times Area Value {W/K}
+    HeatingSetpointModulated,  !- Control Type
     Use heat Supply Outlet Node,  !- Heat Exchanger Setpoint Node Name
     0.2,                     !- Minimum Temperature Difference to Activate Heat Exchanger {deltaC}
     LoopToLoop;              !- Heat Transfer Metering End Use Type
@@ -256,7 +256,7 @@
     USE Heat Supply Outlet Node;  !- Outlet Node Name
 
   BranchList,
-    USE Heat Demand Branches,!- Name
+    USE Heat Demand Branches,  !- Name
     USE Heat Demand Inlet Branch,  !- Branch 1 Name
     USE Heat Load Profile Branch 1,  !- Branch 2 Name
     USE Heat Demand Outlet Branch;  !- Branch 3 Name
@@ -264,12 +264,12 @@
   ConnectorList,
     USE Heat Demand Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    USE Heat Demand Splitter,!- Connector 1 Name
+    USE Heat Demand Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     USE Heat Demand Mixer;   !- Connector 2 Name
 
   Connector:Splitter,
-    USE Heat Demand Splitter,!- Name
+    USE Heat Demand Splitter,  !- Name
     USE Heat Demand Inlet Branch,  !- Inlet Branch Name
     USE Heat Load Profile Branch 1;  !- Outlet Branch 1 Name
 
@@ -326,24 +326,24 @@
 
   PlantLoop,
     Use Cool Loop,           !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
-    Use Cool Loop Operation, !- Plant Equipment Operation Scheme Name
+    Use Cool Loop Operation,  !- Plant Equipment Operation Scheme Name
     Use Cool Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.003,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
     1.0,                     !- Plant Loop Volume {m3}
     Use Cool Supply Inlet Node,  !- Plant Side Inlet Node Name
     Use Cool Supply Outlet Node,  !- Plant Side Outlet Node Name
-    Use Cool Supply Branches,!- Plant Side Branch List Name
+    Use Cool Supply Branches,  !- Plant Side Branch List Name
     Use Cool Supply Connectors,  !- Plant Side Connector List Name
     Use Cool Demand Inlet Node,  !- Demand Side Inlet Node Name
     Use Cool Demand Outlet Node,  !- Demand Side Outlet Node Name
-    Use Cool Demand Branches,!- Demand Side Branch List Name
+    Use Cool Demand Branches,  !- Demand Side Branch List Name
     Use Cool Demand Connectors,  !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   SetpointManager:Scheduled,
     Use Cool Loop Setpoint Manager,  !- Name
@@ -356,7 +356,7 @@
     Use Cool Supply Outlet Node;  !- Node 1 Name
 
   PlantEquipmentOperationSchemes,
-    Use Cool Loop Operation, !- Name
+    Use Cool Loop Operation,  !- Name
     PlantEquipmentOperation:Uncontrolled,  !- Control Scheme 1 Object Type
     USE Cool operation,      !- Control Scheme 1 Name
     AlwaysOnSchedule;        !- Control Scheme 1 Schedule Name
@@ -368,10 +368,10 @@
   PlantEquipmentList,
     TRANSFER to USE Cool HX equip,  !- Name
     HeatExchanger:FluidToFluid,  !- Equipment 1 Object Type
-    TRANSFER to USE Cool HX; !- Equipment 1 Name
+    TRANSFER to USE Cool HX;  !- Equipment 1 Name
 
   BranchList,
-    USE Cool Supply Branches,!- Name
+    USE Cool Supply Branches,  !- Name
     USE Cool Supply Inlet Branch,  !- Branch 1 Name
     USE Cooling Branch,      !- Branch 2 Name
     USE Cool Supply Outlet Branch;  !- Branch 3 Name
@@ -379,12 +379,12 @@
   ConnectorList,
     USE Cool Supply Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    USE Cool Supply Splitter,!- Connector 1 Name
+    USE Cool Supply Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     USE Cool Supply Mixer;   !- Connector 2 Name
 
   Connector:Splitter,
-    USE Cool Supply Splitter,!- Name
+    USE Cool Supply Splitter,  !- Name
     USE Cool Supply Inlet Branch,  !- Inlet Branch Name
     USE Cooling Branch;      !- Outlet Branch 1 Name
 
@@ -410,23 +410,23 @@
     0.01,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
     USE Cooling Branch,      !- Name
     ,                        !- Pressure Drop Curve Name
     HeatExchanger:FluidToFluid,  !- Component 1 Object Type
-    TRANSFER to USE Cool HX, !- Component 1 Name
+    TRANSFER to USE Cool HX,  !- Component 1 Name
     USE Cool Supply Cooling Inlet Node,  !- Component 1 Inlet Node Name
     USE Cool Supply Cooling Outlet Node;  !- Component 1 Outlet Node Name
 
   HeatExchanger:FluidToFluid,
-    TRANSFER to USE Cool HX, !- Name
+    TRANSFER to USE Cool HX,  !- Name
     AlwaysOnSchedule,        !- Availability Schedule Name
     TRANSFER Demand HX Cool Inlet Node,  !- Loop Demand Side Inlet Node Name
     TRANSFER Demand HX Cool Outlet Node,  !- Loop Demand Side Outlet Node Name
@@ -435,8 +435,8 @@
     USE Cool Supply Cooling Outlet Node,  !- Loop Supply Side Outlet Node Name
     0.003,                   !- Loop Supply Side Design Flow Rate {m3/s}
     CrossFlowBothUnMixed,    !- Heat Exchange Model Type
-    15000,                   !- Heat Exchanger U-Factor Times Area Value {W/K}
-    CoolingSetpointModulated,!- Control Type
+    15000.0,                 !- Heat Exchanger U-Factor Times Area Value {W/K}
+    CoolingSetpointModulated,  !- Control Type
     Use Cool Supply Outlet Node,  !- Heat Exchanger Setpoint Node Name
     0.2,                     !- Minimum Temperature Difference to Activate Heat Exchanger {deltaC}
     LoopToLoop;              !- Heat Transfer Metering End Use Type
@@ -455,7 +455,7 @@
     USE Cool Supply Outlet Node;  !- Outlet Node Name
 
   BranchList,
-    USE Cool Demand Branches,!- Name
+    USE Cool Demand Branches,  !- Name
     USE Cool Demand Inlet Branch,  !- Branch 1 Name
     USE Cool Load Profile Branch 1,  !- Branch 2 Name
     USE Cool Demand Outlet Branch;  !- Branch 3 Name
@@ -463,12 +463,12 @@
   ConnectorList,
     USE Cool Demand Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    USE Cool Demand Splitter,!- Connector 1 Name
+    USE Cool Demand Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     USE Cool Demand Mixer;   !- Connector 2 Name
 
   Connector:Splitter,
-    USE Cool Demand Splitter,!- Name
+    USE Cool Demand Splitter,  !- Name
     USE Cool Demand Inlet Branch,  !- Inlet Branch Name
     USE Cool Load Profile Branch 1;  !- Outlet Branch 1 Name
 
@@ -529,28 +529,28 @@
 
   PlantLoop,
     TRANSFER Loop,           !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
-    TRANSFER Loop Operation, !- Plant Equipment Operation Scheme Name
+    TRANSFER Loop Operation,  !- Plant Equipment Operation Scheme Name
     TRANSFER Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.003,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
     1.0,                     !- Plant Loop Volume {m3}
     TRANSFER Supply Inlet Node,  !- Plant Side Inlet Node Name
     TRANSFER Supply Outlet Node,  !- Plant Side Outlet Node Name
-    TRANSFER Supply Branches,!- Plant Side Branch List Name
+    TRANSFER Supply Branches,  !- Plant Side Branch List Name
     TRANSFER Supply Connectors,  !- Plant Side Connector List Name
     TRANSFER Demand Inlet Node,  !- Demand Side Inlet Node Name
     TRANSFER Demand Outlet Node,  !- Demand Side Outlet Node Name
-    TRANSFER Demand Branches,!- Demand Side Branch List Name
+    TRANSFER Demand Branches,  !- Demand Side Branch List Name
     TRANSFER Demand Connectors,  !- Demand Side Connector List Name
-    OPTIMAL,                 !- Load Distribution Scheme
+    Optimal,                 !- Load Distribution Scheme
     ,                        !- Availability Manager List Name
     DualSetpointDeadband;    !- Plant Loop Demand Calculation Scheme
 
-  SetpointManager:Scheduled:dualSetpoint,
+  SetpointManager:Scheduled:DualSetpoint,
     TRANSFER Loop Dual Setpoint Manager,  !- Name
     Temperature,             !- Control Variable
     TRANSFER Dual Loop Hi Temp Sch,  !- High Setpoint Schedule Name
@@ -562,7 +562,7 @@
     TRANSFER Supply Outlet Node;  !- Node 1 Name
 
   PlantEquipmentOperationSchemes,
-    TRANSFER Loop Operation, !- Name
+    TRANSFER Loop Operation,  !- Name
     PlantEquipmentOperation:Uncontrolled,  !- Control Scheme 1 Object Type
     TRANSFER HX,             !- Control Scheme 1 Name
     AlwaysOnSchedule;        !- Control Scheme 1 Schedule Name
@@ -579,30 +579,30 @@
     SOURCE to TRANSFER Cooling HX;  !- Equipment 2 Name
 
   BranchList,
-    TRANSFER Supply Branches,!- Name
+    TRANSFER Supply Branches,  !- Name
     TRANSFER Supply Inlet Branch,  !- Branch 1 Name
-    TRANSFER Heating Branch, !- Branch 2 Name
-    TRANSFER Cooling Branch, !- Branch 3 Name
+    TRANSFER Heating Branch,  !- Branch 2 Name
+    TRANSFER Cooling Branch,  !- Branch 3 Name
     TRANSFER Supply Outlet Branch;  !- Branch 4 Name
 
   ConnectorList,
     TRANSFER Supply Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    TRANSFER Supply Splitter,!- Connector 1 Name
+    TRANSFER Supply Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     TRANSFER Supply Mixer;   !- Connector 2 Name
 
   Connector:Splitter,
-    TRANSFER Supply Splitter,!- Name
+    TRANSFER Supply Splitter,  !- Name
     TRANSFER Supply Inlet Branch,  !- Inlet Branch Name
-    TRANSFER Heating Branch, !- Outlet Branch 1 Name
-    TRANSFER Cooling Branch; !- Outlet Branch 2 Name
+    TRANSFER Heating Branch,  !- Outlet Branch 1 Name
+    TRANSFER Cooling Branch;  !- Outlet Branch 2 Name
 
   Connector:Mixer,
     TRANSFER Supply Mixer,   !- Name
     TRANSFER Supply Outlet Branch,  !- Outlet Branch Name
-    TRANSFER Heating Branch, !- Inlet Branch 1 Name
-    TRANSFER Cooling Branch; !- Inlet Branch 2 Name
+    TRANSFER Heating Branch,  !- Inlet Branch 1 Name
+    TRANSFER Cooling Branch;  !- Inlet Branch 2 Name
 
   Branch,
     TRANSFER Supply Inlet Branch,  !- Name
@@ -617,19 +617,19 @@
     TRANSFER Supply Inlet Node,  !- Inlet Node Name
     TRANSFER Supply Pump-Heating Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    1,                       !- Design Pump Head {Pa}
+    1.0,                     !- Design Pump Head {Pa}
     0.01,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
-    TRANSFER Heating Branch, !- Name
+    TRANSFER Heating Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     HeatExchanger:FluidToFluid,  !- Component 1 Object Type
     SOURCE to TRANSFER heat HX,  !- Component 1 Name
@@ -646,8 +646,8 @@
     TRANSFER Supply Heating Outlet Node,  !- Loop Supply Side Outlet Node Name
     0.003,                   !- Loop Supply Side Design Flow Rate {m3/s}
     ParallelFlow,            !- Heat Exchange Model Type
-    15000,                   !- Heat Exchanger U-Factor Times Area Value {W/K}
-    HeatingSetpointModulated,!- Control Type
+    15000.0,                 !- Heat Exchanger U-Factor Times Area Value {W/K}
+    HeatingSetpointModulated,  !- Control Type
     TRANSFER Supply Heating Outlet Node,  !- Heat Exchanger Setpoint Node Name
     0.2,                     !- Minimum Temperature Difference to Activate Heat Exchanger {deltaC}
     LoopToLoop;              !- Heat Transfer Metering End Use Type
@@ -659,7 +659,7 @@
     TRANSFER Supply Heating Outlet Node;  !- Setpoint Node or NodeList Name
 
   Branch,
-    TRANSFER Cooling Branch, !- Name
+    TRANSFER Cooling Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     HeatExchanger:FluidToFluid,  !- Component 1 Object Type
     SOURCE to TRANSFER Cooling HX,  !- Component 1 Name
@@ -676,8 +676,8 @@
     TRANSFER Supply Cooling Outlet Node,  !- Loop Supply Side Outlet Node Name
     0.003,                   !- Loop Supply Side Design Flow Rate {m3/s}
     ParallelFlow,            !- Heat Exchange Model Type
-    15000,                   !- Heat Exchanger U-Factor Times Area Value {W/K}
-    CoolingSetpointModulated,!- Control Type
+    15000.0,                 !- Heat Exchanger U-Factor Times Area Value {W/K}
+    CoolingSetpointModulated,  !- Control Type
     TRANSFER Supply Cooling Outlet Node,  !- Heat Exchanger Setpoint Node Name
     0.2,                     !- Minimum Temperature Difference to Activate Heat Exchanger {deltaC}
     LoopToLoop;              !- Heat Transfer Metering End Use Type
@@ -702,7 +702,7 @@
     TRANSFER Supply Outlet Node;  !- Outlet Node Name
 
   BranchList,
-    TRANSFER Demand Branches,!- Name
+    TRANSFER Demand Branches,  !- Name
     TRANSFER Demand Inlet Branch,  !- Branch 1 Name
     TRANSFER Demand HX Branch 1,  !- Branch 2 Name
     TRANSFER Demand HX Branch 2,  !- Branch 3 Name
@@ -711,12 +711,12 @@
   ConnectorList,
     TRANSFER Demand Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    TRANSFER Demand Splitter,!- Connector 1 Name
+    TRANSFER Demand Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     TRANSFER Demand Mixer;   !- Connector 2 Name
 
   Connector:Splitter,
-    TRANSFER Demand Splitter,!- Name
+    TRANSFER Demand Splitter,  !- Name
     TRANSFER Demand Inlet Branch,  !- Inlet Branch Name
     TRANSFER Demand HX Branch 1,  !- Outlet Branch 1 Name
     TRANSFER Demand HX Branch 2;  !- Outlet Branch 2 Name
@@ -744,7 +744,7 @@
     TRANSFER Demand HX Branch 1,  !- Name
     ,                        !- Pressure Drop Curve Name
     HeatExchanger:FluidToFluid,  !- Component 1 Object Type
-    TRANSFER to USE Heat HX, !- Component 1 Name
+    TRANSFER to USE Heat HX,  !- Component 1 Name
     TRANSFER heat Demand HX Inlet Node,  !- Component 1 Inlet Node Name
     TRANSFER heat Demand HX Outlet Node;  !- Component 1 Outlet Node Name
 
@@ -752,7 +752,7 @@
     TRANSFER Demand HX Branch 2,  !- Name
     ,                        !- Pressure Drop Curve Name
     HeatExchanger:FluidToFluid,  !- Component 1 Object Type
-    TRANSFER to USE cool HX, !- Component 1 Name
+    TRANSFER to USE cool HX,  !- Component 1 Name
     TRANSFER Demand HX Cool Inlet Node,  !- Component 1 Inlet Node Name
     TRANSFER Demand HX cool Outlet Node;  !- Component 1 Outlet Node Name
 
@@ -776,14 +776,14 @@
 
   PlantLoop,
     SOURCE Cool Loop,        !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     SOURCE Cool Loop Operation,  !- Plant Equipment Operation Scheme Name
     SOURCE Cool Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.003,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
     1.0,                     !- Plant Loop Volume {m3}
     SOURCE Cool Supply Inlet Node,  !- Plant Side Inlet Node Name
     SOURCE Cool Supply Outlet Node,  !- Plant Side Outlet Node Name
@@ -793,7 +793,7 @@
     SOURCE Cool Demand Outlet Node,  !- Demand Side Outlet Node Name
     SOURCE Cool Demand Branches,  !- Demand Side Branch List Name
     SOURCE Cool Demand Connectors,  !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   SetpointManager:Scheduled,
     SOURCE Cool Loop Setpoint Manager,  !- Name
@@ -813,14 +813,14 @@
 
   PlantEquipmentOperation:CoolingLoad,
     SOURCE Cool Purchased Only,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     SOURCE cooling Plant;    !- Range 1 Equipment List Name
 
   PlantEquipmentList,
     SOURCE cooling Plant,    !- Name
     DistrictCooling,         !- Equipment 1 Object Type
-    SOURCE Purchased Cooling;!- Equipment 1 Name
+    SOURCE Purchased Cooling;  !- Equipment 1 Name
 
   BranchList,
     SOURCE Cool Supply Branches,  !- Name
@@ -833,7 +833,7 @@
     Connector:Splitter,      !- Connector 1 Object Type
     SOURCE Cool Supply Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
-    SOURCE Cool Supply Mixer;!- Connector 2 Name
+    SOURCE Cool Supply Mixer;  !- Connector 2 Name
 
   Connector:Splitter,
     SOURCE Cool Supply Splitter,  !- Name
@@ -841,7 +841,7 @@
     SOURCE Cooling Branch;   !- Outlet Branch 1 Name
 
   Connector:Mixer,
-    SOURCE Cool Supply Mixer,!- Name
+    SOURCE Cool Supply Mixer,  !- Name
     SOURCE Cool Supply Outlet Branch,  !- Outlet Branch Name
     SOURCE Cooling Branch;   !- Inlet Branch 1 Name
 
@@ -858,30 +858,30 @@
     SOURCE Cool Supply Inlet Node,  !- Inlet Node Name
     SOURCE Cool Supply Pump-Cooling Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    1,                       !- Design Pump Head {Pa}
+    1.0,                     !- Design Pump Head {Pa}
     0.01,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
     SOURCE Cooling Branch,   !- Name
     ,                        !- Pressure Drop Curve Name
     DistrictCooling,         !- Component 1 Object Type
-    SOURCE Purchased Cooling,!- Component 1 Name
+    SOURCE Purchased Cooling,  !- Component 1 Name
     SOURCE Supply Cooling Inlet Node,  !- Component 1 Inlet Node Name
     SOURCE Supply Cooling Outlet Node;  !- Component 1 Outlet Node Name
 
   DistrictCooling,
-    SOURCE Purchased Cooling,!- Name
+    SOURCE Purchased Cooling,  !- Name
     SOURCE Supply Cooling Inlet Node,  !- Chilled Water Inlet Node Name
     SOURCE Supply Cooling Outlet Node,  !- Chilled Water Outlet Node Name
-    1000000;                 !- Nominal Capacity {W}
+    1000000.0;               !- Nominal Capacity {W}
 
   Branch,
     SOURCE Cool Supply Outlet Branch,  !- Name
@@ -907,7 +907,7 @@
     Connector:Splitter,      !- Connector 1 Object Type
     SOURCE Cool Demand Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
-    SOURCE Cool Demand Mixer;!- Connector 2 Name
+    SOURCE Cool Demand Mixer;  !- Connector 2 Name
 
   Connector:Splitter,
     SOURCE Cool Demand Splitter,  !- Name
@@ -915,7 +915,7 @@
     SOURCE Cool Demand HX Branch;  !- Outlet Branch 1 Name
 
   Connector:Mixer,
-    SOURCE Cool Demand Mixer,!- Name
+    SOURCE Cool Demand Mixer,  !- Name
     SOURCE Cool Demand Outlet Branch,  !- Outlet Branch Name
     SOURCE Cool Demand HX Branch;  !- Inlet Branch 1 Name
 
@@ -959,14 +959,14 @@
 
   PlantLoop,
     SOURCE Heat Loop,        !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     SOURCE Heat Loop Operation,  !- Plant Equipment Operation Scheme Name
     SOURCE Heat Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.003,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
     1.0,                     !- Plant Loop Volume {m3}
     SOURCE Heat Supply Inlet Node,  !- Plant Side Inlet Node Name
     SOURCE Heat Supply Outlet Node,  !- Plant Side Outlet Node Name
@@ -976,7 +976,7 @@
     SOURCE Heat Demand Outlet Node,  !- Demand Side Outlet Node Name
     SOURCE Heat Demand Branches,  !- Demand Side Branch List Name
     SOURCE Heat Demand Connectors,  !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   SetpointManager:Scheduled,
     SOURCE Heat Loop Setpoint Manager,  !- Name
@@ -996,14 +996,14 @@
 
   PlantEquipmentOperation:HeatingLoad,
     SOURCE Heat Purchased Only,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     SOURCE Heat Heating Plant;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
     SOURCE Heat Heating Plant,  !- Name
     DistrictHeating:Water,   !- Equipment 1 Object Type
-    SOURCE Purchased Heating;!- Equipment 1 Name
+    SOURCE Purchased Heating;  !- Equipment 1 Name
 
   BranchList,
     SOURCE Heat Supply Branches,  !- Name
@@ -1016,7 +1016,7 @@
     Connector:Splitter,      !- Connector 1 Object Type
     SOURCE Heat Supply Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
-    SOURCE Heat Supply Mixer;!- Connector 2 Name
+    SOURCE Heat Supply Mixer;  !- Connector 2 Name
 
   Connector:Splitter,
     SOURCE Heat Supply Splitter,  !- Name
@@ -1024,7 +1024,7 @@
     SOURCE Heating Branch;   !- Outlet Branch 1 Name
 
   Connector:Mixer,
-    SOURCE Heat Supply Mixer,!- Name
+    SOURCE Heat Supply Mixer,  !- Name
     SOURCE Heat Supply Outlet Branch,  !- Outlet Branch Name
     SOURCE Heating Branch;   !- Inlet Branch 1 Name
 
@@ -1041,30 +1041,30 @@
     SOURCE Heat Supply Inlet Node,  !- Inlet Node Name
     SOURCE Supply Pump-Heating Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    1,                       !- Design Pump Head {Pa}
+    1.0,                     !- Design Pump Head {Pa}
     0.01,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
     SOURCE Heating Branch,   !- Name
     ,                        !- Pressure Drop Curve Name
     DistrictHeating:Water,   !- Component 1 Object Type
-    SOURCE Purchased Heating,!- Component 1 Name
+    SOURCE Purchased Heating,  !- Component 1 Name
     SOURCE Supply Heating Inlet Node,  !- Component 1 Inlet Node Name
     SOURCE Supply Heating Outlet Node;  !- Component 1 Outlet Node Name
 
   DistrictHeating:Water,
-    SOURCE Purchased Heating,!- Name
+    SOURCE Purchased Heating,  !- Name
     SOURCE Supply Heating Inlet Node,  !- Hot Water Inlet Node Name
     SOURCE Supply Heating Outlet Node,  !- Hot Water Outlet Node Name
-    1000000;                 !- Nominal Capacity {W}
+    1000000.0;               !- Nominal Capacity {W}
 
   Branch,
     SOURCE Heat Supply Outlet Branch,  !- Name
@@ -1090,7 +1090,7 @@
     Connector:Splitter,      !- Connector 1 Object Type
     SOURCE Heat Demand Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
-    SOURCE Heat Demand Mixer;!- Connector 2 Name
+    SOURCE Heat Demand Mixer;  !- Connector 2 Name
 
   Connector:Splitter,
     SOURCE Heat Demand Splitter,  !- Name
@@ -1098,7 +1098,7 @@
     SOURCE Heat Demand HX Branch;  !- Outlet Branch 1 Name
 
   Connector:Mixer,
-    SOURCE Heat Demand Mixer,!- Name
+    SOURCE Heat Demand Mixer,  !- Name
     SOURCE Heat Demand Outlet Branch,  !- Outlet Branch Name
     SOURCE Heat Demand HX Branch;  !- Inlet Branch 1 Name
 
@@ -1143,9 +1143,9 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     Use Cool Loop Temp Sch,  !- Name
@@ -1256,17 +1256,17 @@
 
   Output:Meter,Heating:DistrictHeatingWater,Daily;
 
-  Output:Meter:MeterFileOnly,Heating:DistrictHeatingWater,monthly;
+  Output:Meter:MeterFileOnly,Heating:DistrictHeatingWater,Monthly;
 
-  Output:Meter:MeterFileOnly,Heating:DistrictHeatingWater,runperiod;
+  Output:Meter:MeterFileOnly,Heating:DistrictHeatingWater,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Plant,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Plant,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Plant,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Plant,RunPeriod;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -1275,7 +1275,7 @@
     AllSummary;              !- Report 1 Name
 
   Output:SQLite,
-    simple;                  !- Option Type
+    Simple;                  !- Option Type
 
   Output:Variable,*,Fluid Heat Exchanger Heat Transfer Rate,Hourly;
 
@@ -1312,4 +1312,3 @@
   Output:Variable,*,District Heating Water Rate,Hourly;
 
   Output:Variable,*,District Cooling Water Rate,Hourly;
-

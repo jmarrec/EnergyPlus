@@ -7,7 +7,7 @@
 
   Building,
     anyplace Load Calc,      !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
     0.03,                    !- Loads Convergence Tolerance Value {W}
     0.3,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -42,8 +42,8 @@
     USA IL-CHICAGO-OHARE,    !- Name
     41.77,                   !- Latitude {deg}
     -87.75,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190;                     !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
 ! CHICAGO_IL_USA Annual Heating 99.6%, MaxDB=-20.6°C
 
@@ -56,15 +56,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -20.6,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -73,7 +73,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
 ! CHICAGO_IL_USA Annual Cooling (WB=>MDB) .4%, MDB=31.2°C WB=25.5°C
 
@@ -86,15 +86,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     25.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -103,31 +103,31 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
-  Site:GroundTemperature:BuildingSurface,20,20,20,20,20,20,20,20,20,20,20,20;
+  Site:GroundTemperature:BuildingSurface,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0;
 
   Material,
     B7 - 1 IN WOOD,          !- Name
     MediumSmooth,            !- Roughness
-    2.0000000E-02,           !- Thickness {m}
-    0.1200000,               !- Conductivity {W/m-K}
-    592.6800,                !- Density {kg/m3}
-    2510.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.02,                    !- Thickness {m}
+    0.12,                    !- Conductivity {W/m-K}
+    592.68,                  !- Density {kg/m3}
+    2510.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     B12 - 3 IN DENSE INSULATION,  !- Name
     VeryRough,               !- Roughness
-    7.0000000E-02,           !- Thickness {m}
-    3.9999999E-02,           !- Conductivity {W/m-K}
-    91.30000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    0.07,                    !- Thickness {m}
+    0.039999999,             !- Conductivity {W/m-K}
+    91.3,                    !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
 !! Or use WindowGlassMaterial -- CLEAR 3MM
 ! (R=.0236,TRANS=.87,VERY SMOOTH,GLASS), from 3mm clear
@@ -136,131 +136,131 @@
     GLASS - CLEAR SHEET 1 / 8 IN,  !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    3.0000000E-03,           !- Thickness {m}
-    0.8370000,               !- Solar Transmittance at Normal Incidence
-    7.5000003E-02,           !- Front Side Solar Reflectance at Normal Incidence
-    7.5000003E-02,           !- Back Side Solar Reflectance at Normal Incidence
-    0.8980000,               !- Visible Transmittance at Normal Incidence
-    8.1000000E-02,           !- Front Side Visible Reflectance at Normal Incidence
-    8.1000000E-02,           !- Back Side Visible Reflectance at Normal Incidence
-    0,                       !- Infrared Transmittance at Normal Incidence
-    0.8400000,               !- Front Side Infrared Hemispherical Emissivity
-    0.8400000,               !- Back Side Infrared Hemispherical Emissivity
-    0.9000000;               !- Conductivity {W/m-K}
+    0.003,                   !- Thickness {m}
+    0.837,                   !- Solar Transmittance at Normal Incidence
+    0.075000003,             !- Front Side Solar Reflectance at Normal Incidence
+    0.075000003,             !- Back Side Solar Reflectance at Normal Incidence
+    0.898,                   !- Visible Transmittance at Normal Incidence
+    0.081,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.081,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   Material,
     BLBD - GYPSUM PLASTER 1 / 2 IN,  !- Name
     MediumSmooth,            !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    800.9200,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.0099999998,            !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    800.92,                  !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     C7 - 8 IN LW CONCRETE BLOCK,  !- Name
     Rough,                   !- Roughness
-    0.2000000,               !- Thickness {m}
-    0.5700000,               !- Conductivity {W/m-K}
-    608.7000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.2,                     !- Thickness {m}
+    0.57,                    !- Conductivity {W/m-K}
+    608.7,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     CB61 - 4 IN LW HOLLOW CBLK,  !- Name
     MediumRough,             !- Roughness
-    0.1000000,               !- Thickness {m}
-    0.3800000,               !- Conductivity {W/m-K}
-    1041.200,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.2000000,               !- Solar Absorptance
-    0.2000000;               !- Visible Absorptance
+    0.1,                     !- Thickness {m}
+    0.38,                    !- Conductivity {W/m-K}
+    1041.2,                  !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.2,                     !- Solar Absorptance
+    0.2;                     !- Visible Absorptance
 
   Material,
     CONCRETE - 120 LB / CU FT 4 IN,  !- Name
     MediumRough,             !- Roughness
-    0.1000000,               !- Thickness {m}
-    0.7400000,               !- Conductivity {W/m-K}
-    1922.210,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.1,                     !- Thickness {m}
+    0.74,                    !- Conductivity {W/m-K}
+    1922.21,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     CONCRETE - 60 LB / CU FT 4 IN,  !- Name
     MediumRough,             !- Roughness
-    0.1000000,               !- Thickness {m}
-    0.2400000,               !- Conductivity {W/m-K}
-    961.1000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.1,                     !- Thickness {m}
+    0.24,                    !- Conductivity {W/m-K}
+    961.1,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    0.7200000,               !- Conductivity {W/m-K}
-    1601.840,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.0099999998,            !- Thickness {m}
+    0.72,                    !- Conductivity {W/m-K}
+    1601.84,                 !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     E5 - ACOUSTIC TILE,      !- Name
     MediumSmooth,            !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    5.9999999E-02,           !- Conductivity {W/m-K}
-    480.5500,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.3200000,               !- Solar Absorptance
-    0.3200000;               !- Visible Absorptance
+    0.0099999998,            !- Thickness {m}
+    0.059999999,             !- Conductivity {W/m-K}
+    480.55,                  !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.32,                    !- Solar Absorptance
+    0.32;                    !- Visible Absorptance
 
   Material,
     E8 - 5 / 8 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    784.9000,                !- Density {kg/m3}
-    830.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.0099999998,            !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    784.9,                   !- Density {kg/m3}
+    830.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     E11 - 1 / 2 IN FIBERBOARD SHEATHING,  !- Name
     Smooth,                  !- Roughness
-    9.9999998E-03,           !- Thickness {m}
-    5.0000001E-02,           !- Conductivity {W/m-K}
-    832.9600,                !- Density {kg/m3}
-    920.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.8900000,               !- Solar Absorptance
-    0.8900000;               !- Visible Absorptance
+    0.0099999998,            !- Thickness {m}
+    0.050000001,             !- Conductivity {W/m-K}
+    832.96,                  !- Density {kg/m3}
+    920.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.89,                    !- Solar Absorptance
+    0.89;                    !- Visible Absorptance
 
   Material,
     INS - GLASS FIBER BONDED 3 IN,  !- Name
     VeryRough,               !- Roughness
-    7.0000000E-02,           !- Thickness {m}
-    2.9999999E-02,           !- Conductivity {W/m-K}
-    96.11000,                !- Density {kg/m3}
-    790.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    0.07,                    !- Thickness {m}
+    0.029999999,             !- Conductivity {W/m-K}
+    96.11,                   !- Density {kg/m3}
+    790.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material:AirGap,
     E4 - CEILING AIRSPACE,   !- Name
-    0.1700000;               !- Thermal Resistance {m2-K/W}
+    0.17;                    !- Thermal Resistance {m2-K/W}
 
   Construction,
     Exterior,                !- Name
@@ -284,18 +284,18 @@
 
   Zone,
     OSCTest,                 !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     4.572,                   !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate;           !- Volume {m3}
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockwise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   BuildingSurface:Detailed,
@@ -310,10 +310,10 @@
     NoWind,                  !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096,0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     OSCTest:East Wall,       !- Name
@@ -327,10 +327,10 @@
     NoWind,                  !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     OSCTest:North Wall,      !- Name
@@ -345,9 +345,9 @@
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     6.096,6.096,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     OSCTest:West Wall,       !- Name
@@ -361,9 +361,9 @@
     WindExposed,             !- Wind Exposure
     0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
     6.096,6.096,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
@@ -376,12 +376,12 @@
     OSCTest:Ceiling,         !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096,0,4.572,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,4.572,  !- X,Y,Z ==> Vertex 2 {m}
     6.095983,6.096017,4.572,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     OSCTest:Floor,           !- Name
@@ -393,15 +393,15 @@
     OSCTest:Floor,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.095992,6.096008,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.095992,6.096008,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   InternalMass,
-    OSCTest:PartitionIntMass,!- Name
+    OSCTest:PartitionIntMass,  !- Name
     InteriorWall,            !- Construction Name
     OSCTest,                 !- Zone or ZoneList Name
     ,                        !- Space or SpaceList Name
@@ -409,26 +409,26 @@
 
   SurfaceProperty:OtherSideCoefficients,
     ExampleOSC,              !- Name
-    0,                       !- Combined Convective/Radiative Film Coefficient {W/m2-K}
-    1,                       !- Constant Temperature {C}
-    1,                       !- Constant Temperature Coefficient
-    0,                       !- External Dry-Bulb Temperature Coefficient
-    0,                       !- Ground Temperature Coefficient
-    0,                       !- Wind Speed Coefficient
-    0,                       !- Zone Air Temperature Coefficient
+    0.0,                     !- Combined Convective/Radiative Film Coefficient {W/m2-K}
+    1.0,                     !- Constant Temperature {C}
+    1.0,                     !- Constant Temperature Coefficient
+    0.0,                     !- External Dry-Bulb Temperature Coefficient
+    0.0,                     !- Ground Temperature Coefficient
+    0.0,                     !- Wind Speed Coefficient
+    0.0,                     !- Zone Air Temperature Coefficient
     GroundTempCompactSched;  !- Constant Temperature Schedule Name
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
     Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
@@ -549,8 +549,8 @@
     OSCTest People 1,        !- Name
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
     OSCTest-PeopleSchedule,  !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    6,                       !- Number of People
+    People,                  !- Number of People Calculation Method
+    6.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.6,                     !- Fraction Radiant
@@ -562,10 +562,10 @@
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
     OSCTest-LightsSchedule,  !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    400,                     !- Lighting Level {W}
+    400.0,                   !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
+    0.0,                     !- Return Air Fraction
     0.4,                     !- Fraction Radiant
     0.0,                     !- Fraction Visible
     0.0,                     !- Fraction Replaceable
@@ -576,10 +576,10 @@
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
     OSCTest-EquipSchedule,   !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    800,                     !- Design Level {W}
+    800.0,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.5,                     !- Fraction Radiant
     0.0;                     !- Fraction Lost
 
@@ -587,8 +587,8 @@
     OSCTest Infil 1,         !- Name
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
     OSCTest-InfiltrationSchedule,  !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    4.716666E-02,            !- Design Flow Rate {m3/s}
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.04716666,              !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
@@ -601,23 +601,23 @@
     OSCTest Ventl 1,         !- Name
     OSCTest,                 !- Zone or ZoneList or Space or SpaceList Name
     OSCTest-VentilationSchedule,  !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    4.716667E-04,            !- Design Flow Rate {m3/s}
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0004716667,            !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Person {m3/s-person}
     ,                        !- Air Changes per Hour {1/hr}
     Exhaust,                 !- Ventilation Type
-    10,                      !- Fan Pressure Rise {Pa}
+    10.0,                    !- Fan Pressure Rise {Pa}
     1.0,                     !- Fan Total Efficiency
     1.0,                     !- Constant Term Coefficient
     0.0,                     !- Temperature Term Coefficient
     0.0,                     !- Velocity Term Coefficient
     0.0,                     !- Velocity Squared Term Coefficient
-    -20.,                    !- Minimum Indoor Temperature {C}
+    -20.0,                   !- Minimum Indoor Temperature {C}
     ,                        !- Minimum Indoor Temperature Schedule Name
     ,                        !- Maximum Indoor Temperature {C}
     ,                        !- Maximum Indoor Temperature Schedule Name
-    1.;                      !- Delta Temperature {deltaC}
+    1.0;                     !- Delta Temperature {deltaC}
 
   NodeList,
     OSCTest-Inlets,          !- Name
@@ -647,10 +647,10 @@
     OSCTest-Inlet,           !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
     12.77778,                !- Minimum Cooling Supply Air Temperature {C}
-    8.263639E-03,            !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
-    8.263639E-03,            !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+    0.008263639,             !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+    0.008263639,             !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     ,                        !- Heating Limit
     ,                        !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
@@ -698,23 +698,22 @@
 
   Output:Variable,*,Surface Outside Face Temperature,Daily;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Building,Monthly;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,monthly;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Building,RunPeriod;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,runperiod;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,RunPeriod;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
-

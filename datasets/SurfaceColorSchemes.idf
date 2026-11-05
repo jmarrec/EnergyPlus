@@ -29,9 +29,9 @@
     5,                       !- Color for Drawing Element 9
     AttachedBuildingShades,  !- Drawing Element 10 Type
     6,                       !- Color for Drawing Element 10
-    DaylightReferencePoint1, !- Drawing Element 11 Type
+    DaylightReferencePoint1,  !- Drawing Element 11 Type
     10,                      !- Color for Drawing Element 11
-    DaylightReferencePoint2, !- Drawing Element 12 Type
+    DaylightReferencePoint2,  !- Drawing Element 12 Type
     5;                       !- Color for Drawing Element 12
 
   OutputControl:SurfaceColorScheme,
@@ -60,10 +60,9 @@
     174,                     !- Color for Drawing Element 11
     TubularDaylightDomes,    !- Drawing Element 12 Type
     143,                     !- Color for Drawing Element 12
-    TubularDaylightDiffusers,!- Drawing Element 13 Type
+    TubularDaylightDiffusers,  !- Drawing Element 13 Type
     143,                     !- Color for Drawing Element 13
-    DaylightReferencePoint1, !- Drawing Element 14 Type
+    DaylightReferencePoint1,  !- Drawing Element 14 Type
     10,                      !- Color for Drawing Element 14
-    DaylightReferencePoint2, !- Drawing Element 15 Type
+    DaylightReferencePoint2,  !- Drawing Element 15 Type
     5;                       !- Color for Drawing Element 15
-

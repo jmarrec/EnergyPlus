@@ -1,8 +1,7 @@
- ! ========================================================================
- ! The following was created by the Basement preprocessor program.
- ! Weather File Location=Chicago Ohare Intl Ap IL USA TMY3
- !
-
+! ========================================================================
+! The following was created by the Basement preprocessor program.
+! Weather File Location=Chicago Ohare Intl Ap IL USA TMY3
+!
 
   SurfaceProperty:OtherSideCoefficients,
     surfPropOthSdCoefBasementAvgWall,  !- Name
@@ -15,7 +14,7 @@
     0.0,                     !- Zone Air Temperature Coefficient
     scheduleOSCBasementWallSurfaceTemp,  !- Constant Temperature Schedule Name
     No,                      !- Sinusoidal Variation of Constant Temperature Coefficient
-    24;                      !- Period of Sinusoidal Variation {hr}
+    24.0;                    !- Period of Sinusoidal Variation {hr}
 
   Schedule:Compact,
     scheduleOSCBasementWallSurfaceTemp,  !- Name
@@ -68,7 +67,7 @@
     0.0,                     !- Zone Air Temperature Coefficient
     scheduleOSCBasementFloorTemp,  !- Constant Temperature Schedule Name
     No,                      !- Sinusoidal Variation of Constant Temperature Coefficient
-    24;                      !- Period of Sinusoidal Variation {hr}
+    24.0;                    !- Period of Sinusoidal Variation {hr}
 
   Schedule:Compact,
     scheduleOSCBasementFloorTemp,  !- Name
@@ -121,7 +120,7 @@
     0.0,                     !- Zone Air Temperature Coefficient
     scheduleOSCBasementUpperWallTemp,  !- Constant Temperature Schedule Name
     No,                      !- Sinusoidal Variation of Constant Temperature Coefficient
-    24;                      !- Period of Sinusoidal Variation {hr}
+    24.0;                    !- Period of Sinusoidal Variation {hr}
 
   Schedule:Compact,
     scheduleOSCBasementUpperWallTemp,  !- Name
@@ -174,7 +173,7 @@
     0.0,                     !- Zone Air Temperature Coefficient
     scheduleOSCBasementLowerWallTemp,  !- Constant Temperature Schedule Name
     No,                      !- Sinusoidal Variation of Constant Temperature Coefficient
-    24;                      !- Period of Sinusoidal Variation {hr}
+    24.0;                    !- Period of Sinusoidal Variation {hr}
 
   Schedule:Compact,
     scheduleOSCBasementLowerWallTemp,  !- Name
@@ -215,4 +214,3 @@
     Through:  12/31,         !- Field 45
     For:AllDays,             !- Field 46
     Until:24:00,19.50;       !- Field 47
-

@@ -56,7 +56,7 @@
     ,                        !- Solar Distribution
     ,                        !- Maximum Number of Warmup Days
     ,                        !- Minimum Number of Warmup Days
-    Default Construction Set;!- Construction Assignment Set Name
+    Default Construction Set;  !- Construction Assignment Set Name
 
   Zone,
     Zone1,                   !- Name
@@ -86,7 +86,7 @@
     ,                        !- Construction Name
     ,                        !- Zone or ZoneList Name
     Space1,                  !- Space or SpaceList Name
-    10;                      !- Surface Area {m2}
+    10.0;                    !- Surface Area {m2}
 
   BuildingSurface:Detailed,
     Space1 Floor,            !- Name
@@ -236,7 +236,7 @@
     0.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    ExteriorDoor - GlassDoor,!- Name
+    ExteriorDoor - GlassDoor,  !- Name
     GlassDoor,               !- Surface Type
     ,                        !- Construction Name
     Space1 Wall 4,           !- Building Surface Name
@@ -457,7 +457,7 @@
     ,                        !- Volume {m3}
     ,                        !- Floor Area {m2}
     ,                        !- Space Type
-    Space3 Construction Set; !- Construction Assignment Set Name
+    Space3 Construction Set;  !- Construction Assignment Set Name
 
   BuildingSurface:Detailed,
     Space3 Floor,            !- Name
@@ -575,7 +575,7 @@
     0.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
-    ExteriorWindow - Window, !- Name
+    ExteriorWindow - Window,  !- Name
     Window,                  !- Surface Type
     ,                        !- Construction Name
     Space3 Wall 3,           !- Building Surface Name
@@ -804,10 +804,10 @@
     Run Period 1,            !- Name
     1,                       !- Begin Month
     1,                       !- Begin Day of Month
-    2009.0,                  !- Begin Year
+    2009,                    !- Begin Year
     12,                      !- End Month
     31,                      !- End Day of Month
-    2009.0,                  !- End Year
+    2009,                    !- End Year
     Thursday,                !- Day of Week for Start Day
     No,                      !- Use Weather File Holidays and Special Days
     No,                      !- Use Weather File Daylight Saving Period
@@ -909,7 +909,7 @@
   Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.3,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.2;
 
   ConstructionAssignmentSet,
-    Default Construction Set,!- Name
+    Default Construction Set,  !- Name
     Exterior Surface Constructions,  !- Exterior Surface Construction Assignments Name
     Interior Surface Constructions,  !- Interior Surface Construction Assignments Name
     Ground Surface Constructions,  !- Ground Contact Surface Construction Assignments Name
@@ -933,8 +933,8 @@
   SurfaceConstructionAssignments,
     Ground Surface Constructions,  !- Name
     Ground Floor Construction,  !- Floor Construction Name
-    Ground Wall Construction,!- Wall Construction Name
-    Ground Roof Construction;!- Roof Ceiling Construction Name
+    Ground Wall Construction,  !- Wall Construction Name
+    Ground Roof Construction;  !- Roof Ceiling Construction Name
 
   SubSurfaceConstructionAssignments,
     Exterior SubSurface Constructions,  !- Name
@@ -959,7 +959,7 @@
     Interior TubularDaylightDiffuser Construction;  !- Tubular Daylight Diffuser Construction Name
 
   ConstructionAssignmentSet,
-    Space3 Construction Set, !- Name
+    Space3 Construction Set,  !- Name
     Space3 Exterior Surface Constructions;  !- Exterior Surface Construction Assignments Name
 
   SurfaceConstructionAssignments,
@@ -1004,12 +1004,12 @@
     R13LAYER;                !- Layer 2
 
   Construction,
-    Ground Wall Construction,!- Name
+    Ground Wall Construction,  !- Name
     C5 - 4 IN HW CONCRETE,   !- Outside Layer
     R13LAYER;                !- Layer 2
 
   Construction,
-    Ground Roof Construction,!- Name
+    Ground Roof Construction,  !- Name
     C5 - 4 IN HW CONCRETE,   !- Outside Layer
     R13LAYER;                !- Layer 2
 
@@ -1145,4 +1145,3 @@
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
-

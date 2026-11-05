@@ -82,37 +82,13 @@
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONECAPACITANCEMULTIPLIER:RESEARCHSPECIAL ===========
 
-  ZoneCapacitanceMultiplier:ResearchSpecial,
-    Multiplier1,             !- Name
-    ZONE 1,                  !- Zone or ZoneList Name
-    ,                        !- Temperature Capacity Multiplier
-    ,                        !- Humidity Capacity Multiplier
-    ,                        !- Carbon Dioxide Capacity Multiplier
-    ;                        !- Generic Contaminant Capacity Multiplier
+  ZoneCapacitanceMultiplier:ResearchSpecial,Multiplier1,ZONE 1;
 
-  ZoneCapacitanceMultiplier:ResearchSpecial,
-    Multiplier2,             !- Name
-    ZONE 2,                  !- Zone or ZoneList Name
-    5,                       !- Temperature Capacity Multiplier
-    ,                        !- Humidity Capacity Multiplier
-    ,                        !- Carbon Dioxide Capacity Multiplier
-    ;                        !- Generic Contaminant Capacity Multiplier
+  ZoneCapacitanceMultiplier:ResearchSpecial,Multiplier2,ZONE 2,5.0;
 
-  ZoneCapacitanceMultiplier:ResearchSpecial,
-    Multiplier3,             !- Name
-    ZONE 3,                  !- Zone or ZoneList Name
-    8,                       !- Temperature Capacity Multiplier
-    ,                        !- Humidity Capacity Multiplier
-    ,                        !- Carbon Dioxide Capacity Multiplier
-    ;                        !- Generic Contaminant Capacity Multiplier
+  ZoneCapacitanceMultiplier:ResearchSpecial,Multiplier3,ZONE 3,8.0;
 
-  ZoneCapacitanceMultiplier:ResearchSpecial,
-    Multiplier4,             !- Name
-    ZONE 4,                  !- Zone or ZoneList Name
-    12,                      !- Temperature Capacity Multiplier
-    ,                        !- Humidity Capacity Multiplier
-    ,                        !- Carbon Dioxide Capacity Multiplier
-    ;                        !- Generic Contaminant Capacity Multiplier
+  ZoneCapacitanceMultiplier:ResearchSpecial,Multiplier4,ZONE 4,12.0;
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONEINFILTRATION:DESIGNFLOWRATE ===========
 
@@ -125,10 +101,10 @@
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     1.0,                     !- Air Changes per Hour {1/hr}
-    1.0000,                  !- Constant Term Coefficient
-    0.0000,                  !- Temperature Term Coefficient
-    0.0000,                  !- Velocity Term Coefficient
-    0.0000;                  !- Velocity Squared Term Coefficient
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   ZoneInfiltration:DesignFlowRate,
     ZONE 2 Infil,            !- Name
@@ -139,10 +115,10 @@
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     1.0,                     !- Air Changes per Hour {1/hr}
-    1.0000,                  !- Constant Term Coefficient
-    0.0000,                  !- Temperature Term Coefficient
-    0.0000,                  !- Velocity Term Coefficient
-    0.0000;                  !- Velocity Squared Term Coefficient
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   ZoneInfiltration:DesignFlowRate,
     ZONE 3 Infil,            !- Name
@@ -153,10 +129,10 @@
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     1.0,                     !- Air Changes per Hour {1/hr}
-    1.0000,                  !- Constant Term Coefficient
-    0.0000,                  !- Temperature Term Coefficient
-    0.0000,                  !- Velocity Term Coefficient
-    0.0000;                  !- Velocity Squared Term Coefficient
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   ZoneInfiltration:DesignFlowRate,
     ZONE 4 Infil,            !- Name
@@ -167,10 +143,10 @@
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     1.0,                     !- Air Changes per Hour {1/hr}
-    1.0000,                  !- Constant Term Coefficient
-    0.0000,                  !- Temperature Term Coefficient
-    0.0000,                  !- Velocity Term Coefficient
-    0.0000;                  !- Velocity Squared Term Coefficient
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   Schedule:Compact,
     INFIL-SCHED,             !- Name
@@ -188,9 +164,9 @@
   HybridModel:Zone,
     ZONE 1 HybridModel,      !- Name
     ZONE 1,                  !- Zone Name
-    YES,                     !- Calculate Zone Internal Thermal Mass
-    NO,                      !- Calculate Zone Air Infiltration Rate
-    NO,                      !- Calculate Zone People Count
+    Yes,                     !- Calculate Zone Internal Thermal Mass
+    No,                      !- Calculate Zone Air Infiltration Rate
+    No,                      !- Calculate Zone People Count
     ZONE 1_MeasuredTemperature,  !- Zone Measured Air Temperature Schedule Name
     ,                        !- Zone Measured Air Humidity Ratio Schedule Name
     ,                        !- Zone Measured Air CO2 Concentration Schedule Name
@@ -210,9 +186,9 @@
   HybridModel:Zone,
     ZONE 2 HybridModel,      !- Name
     ZONE 2,                  !- Zone Name
-    NO,                      !- Calculate Zone Internal Thermal Mass
-    YES,                     !- Calculate Zone Air Infiltration Rate
-    NO,                      !- Calculate Zone People Count
+    No,                      !- Calculate Zone Internal Thermal Mass
+    Yes,                     !- Calculate Zone Air Infiltration Rate
+    No,                      !- Calculate Zone People Count
     ZONE 2_MeasuredTemperature,  !- Zone Measured Air Temperature Schedule Name
     ,                        !- Zone Measured Air Humidity Ratio Schedule Name
     ,                        !- Zone Measured Air CO2 Concentration Schedule Name
@@ -232,9 +208,9 @@
   HybridModel:Zone,
     ZONE 3 HybridModel,      !- Name
     ZONE 3,                  !- Zone Name
-    YES,                     !- Calculate Zone Internal Thermal Mass
-    NO,                      !- Calculate Zone Air Infiltration Rate
-    NO,                      !- Calculate Zone People Count
+    Yes,                     !- Calculate Zone Internal Thermal Mass
+    No,                      !- Calculate Zone Air Infiltration Rate
+    No,                      !- Calculate Zone People Count
     ZONE 3_MeasuredTemperature,  !- Zone Measured Air Temperature Schedule Name
     ,                        !- Zone Measured Air Humidity Ratio Schedule Name
     ,                        !- Zone Measured Air CO2 Concentration Schedule Name
@@ -254,9 +230,9 @@
   HybridModel:Zone,
     ZONE 4 HybridModel,      !- Name
     ZONE 4,                  !- Zone Name
-    YES,                     !- Calculate Zone Internal Thermal Mass
-    NO,                      !- Calculate Zone Air Infiltration Rate
-    NO,                      !- Calculate Zone People Count
+    Yes,                     !- Calculate Zone Internal Thermal Mass
+    No,                      !- Calculate Zone Air Infiltration Rate
+    No,                      !- Calculate Zone People Count
     ZONE 4_MeasuredTemperature,  !- Zone Measured Air Temperature Schedule Name
     ,                        !- Zone Measured Air Humidity Ratio Schedule Name
     ,                        !- Zone Measured Air CO2 Concentration Schedule Name
@@ -337,10 +313,10 @@
 
   Building,
     BUILDING #1,             !- Name
-    0.0000000E+00,           !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
-    3.9999999E-02,           !- Loads Convergence Tolerance Value {W}
-    0.4000000,               !- Temperature Convergence Tolerance Value {deltaC}
+    0.039999999,             !- Loads Convergence Tolerance Value {W}
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
     FullExterior,            !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
@@ -364,15 +340,15 @@
     Chicago Ohare Intl Ap IL USA WMO=725300,  !- Name
     41.99,                   !- Latitude {deg}
     -87.91,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    205.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    205.0;                   !- Elevation {m}
 
- ! Using Design Conditions from "Climate Design Data 2009 ASHRAE Handbook"
- ! Chicago Ohare Intl Ap IL USA Extreme Annual Wind Speeds, 1%=11.1m/s, 2.5%=9.4m/s, 5%=8.6m/s
- ! Chicago Ohare Intl Ap IL USA Extreme Annual Temperatures, Max Drybulb=-23.7°C Min Drybulb=35.9°C
- ! Chicago Ohare Intl Ap IL USA Annual Heating Design Conditions Wind Speed=4.9m/s Wind Dir=270
- ! Coldest Month=January
- ! Chicago Ohare Intl Ap IL USA Annual Heating 99%, MaxDB=-16.6°C
+! Using Design Conditions from "Climate Design Data 2009 ASHRAE Handbook"
+! Chicago Ohare Intl Ap IL USA Extreme Annual Wind Speeds, 1%=11.1m/s, 2.5%=9.4m/s, 5%=8.6m/s
+! Chicago Ohare Intl Ap IL USA Extreme Annual Temperatures, Max Drybulb=-23.7°C Min Drybulb=35.9°C
+! Chicago Ohare Intl Ap IL USA Annual Heating Design Conditions Wind Speed=4.9m/s Wind Dir=270
+! Coldest Month=January
+! Chicago Ohare Intl Ap IL USA Annual Heating 99%, MaxDB=-16.6°C
 
   SizingPeriod:DesignDay,
     Chicago Ohare Intl Ap Ann Htg 99% Condns DB,  !- Name
@@ -383,15 +359,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -16.6,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
+    98886.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -400,9 +376,9 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
- ! Chicago Ohare Intl Ap IL USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.6°C MWB=23°C
+! Chicago Ohare Intl Ap IL USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.6°C MWB=23°C
 
   SizingPeriod:DesignDay,
     Chicago Ohare Intl Ap Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -413,15 +389,15 @@
     10.5,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
+    98886.0,                 !- Barometric Pressure {Pa}
     5.2,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -430,7 +406,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
   RunPeriod,
     Run Period 1,            !- Name
@@ -447,83 +423,83 @@
     Yes,                     !- Use Weather File Rain Indicators
     Yes;                     !- Use Weather File Snow Indicators
 
-  ! No location information present in original BLAST file
+! No location information present in original BLAST file
 
   Material,
     A2 - 4 IN DENSE FACE BRICK,  !- Name
     Rough,                   !- Roughness
     0.1014984,               !- Thickness {m}
     1.245296,                !- Conductivity {W/m-K}
-    2082.400,                !- Density {kg/m3}
-    920.4800,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9300000,               !- Solar Absorptance
-    0.9300000;               !- Visible Absorptance
+    2082.4,                  !- Density {kg/m3}
+    920.48,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.93,                    !- Solar Absorptance
+    0.93;                    !- Visible Absorptance
 
   Material,
     B3 - 2 IN INSULATION,    !- Name
     VeryRough,               !- Roughness
-    5.0901599E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.050901599,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     32.03693,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C2 - 4 IN LW CONCRETE BLOCK,  !- Name
     MediumRough,             !- Roughness
     0.1014984,               !- Thickness {m}
-    0.3805070,               !- Conductivity {W/m-K}
+    0.380507,                !- Conductivity {W/m-K}
     608.7016,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    1.9050000E-02,           !- Thickness {m}
+    0.01905,                 !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1601.846,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
-   ! (R=.0472,TRANS=.80,VERY SMOOTH,GLASS), from 6mm clear
+! (R=.0472,TRANS=.80,VERY SMOOTH,GLASS), from 6mm clear
 
   WindowMaterial:Glazing,
     GLASS - CLEAR PLATE 1 / 4 IN,  !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    6.0000001E-03,           !- Thickness {m}
-    0.7750000,               !- Solar Transmittance at Normal Incidence
-    7.1000002E-02,           !- Front Side Solar Reflectance at Normal Incidence
-    7.1000002E-02,           !- Back Side Solar Reflectance at Normal Incidence
-    0.8810000,               !- Visible Transmittance at Normal Incidence
-    7.9999998E-02,           !- Front Side Visible Reflectance at Normal Incidence
-    7.9999998E-02,           !- Back Side Visible Reflectance at Normal Incidence
-    0.0000000E+00,           !- Infrared Transmittance at Normal Incidence
-    0.8400000,               !- Front Side Infrared Hemispherical Emissivity
-    0.8400000,               !- Back Side Infrared Hemispherical Emissivity
-    0.9000000;               !- Conductivity {W/m-K}
+    0.0060000001,            !- Thickness {m}
+    0.775,                   !- Solar Transmittance at Normal Incidence
+    0.071000002,             !- Front Side Solar Reflectance at Normal Incidence
+    0.071000002,             !- Back Side Solar Reflectance at Normal Incidence
+    0.881,                   !- Visible Transmittance at Normal Incidence
+    0.079999998,             !- Front Side Visible Reflectance at Normal Incidence
+    0.079999998,             !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   Material,
-    WOOD - HARDWOOD 1 / 8 IN,!- Name
+    WOOD - HARDWOOD 1 / 8 IN,  !- Name
     MediumSmooth,            !- Roughness
-    3.1699201E-03,           !- Thickness {m}
+    0.0031699201,            !- Thickness {m}
     0.1591211,               !- Conductivity {W/m-K}
     720.8308,                !- Density {kg/m3}
-    1255.200,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    1255.2,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material:AirGap,
-    B1 - AIRSPACE RESISTANCE,!- Name
+    B1 - AIRSPACE RESISTANCE,  !- Name
     0.1603675;               !- Thermal Resistance {m2-K/W}
 
   Material,
@@ -532,25 +508,25 @@
     0.2033016,               !- Thickness {m}
     0.5707605,               !- Conductivity {W/m-K}
     608.7016,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E5 - ACOUSTIC TILE,      !- Name
     MediumSmooth,            !- Roughness
-    1.9050000E-02,           !- Thickness {m}
-    6.0535200E-02,           !- Conductivity {W/m-K}
+    0.01905,                 !- Thickness {m}
+    0.0605352,               !- Conductivity {W/m-K}
     480.5539,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.3200000,               !- Solar Absorptance
-    0.3200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.32,                    !- Solar Absorptance
+    0.32;                    !- Visible Absorptance
 
   Material:AirGap,
     E4 - CEILING AIRSPACE,   !- Name
-    0.1762280;               !- Thermal Resistance {m2-K/W}
+    0.176228;                !- Thermal Resistance {m2-K/W}
 
   Material,
     C5 - 4 IN HW CONCRETE,   !- Name
@@ -558,10 +534,10 @@
     0.1014984,               !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     C10 - 8 IN HW CONCRETE,  !- Name
@@ -569,54 +545,54 @@
     0.2033016,               !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E2 - 1 / 2 IN SLAG OR STONE,  !- Name
     Rough,                   !- Roughness
-    1.2710161E-02,           !- Thickness {m}
+    0.012710161,             !- Thickness {m}
     1.435549,                !- Conductivity {W/m-K}
     881.0155,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5500000,               !- Solar Absorptance
-    0.5500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.55,                    !- Solar Absorptance
+    0.55;                    !- Visible Absorptance
 
   Material,
     E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
     Rough,                   !- Roughness
-    9.5402403E-03,           !- Thickness {m}
+    0.0095402403,            !- Thickness {m}
     0.1902535,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     B6 - 2 IN DENSE INSULATION,  !- Name
     VeryRough,               !- Roughness
-    5.0901599E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.050901599,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     91.30524,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C12 - 2 IN HW CONCRETE,  !- Name
     MediumRough,             !- Roughness
-    5.0901599E-02,           !- Thickness {m}
+    0.050901599,             !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Construction,
     EXTERIOR,                !- Name
@@ -631,9 +607,9 @@
 
   Construction,
     HOLLOW WOOD DOOR,        !- Name
-    WOOD - HARDWOOD 1 / 8 IN,!- Outside Layer
-    B1 - AIRSPACE RESISTANCE,!- Layer 2
-    WOOD - HARDWOOD 1 / 8 IN;!- Layer 3
+    WOOD - HARDWOOD 1 / 8 IN,  !- Outside Layer
+    B1 - AIRSPACE RESISTANCE,  !- Layer 2
+    WOOD - HARDWOOD 1 / 8 IN;  !- Layer 3
 
   Construction,
     INTERIOR,                !- Name
@@ -667,113 +643,113 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
-  Site:GroundTemperature:BuildingSurface,20,20,20,20,20,20,20,20,20,20,20,20;
+  Site:GroundTemperature:BuildingSurface,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0;
 
   Zone,
     ZONE 1,                  !- Name
-    0.0000000E+00,           !- Direction of Relative North {deg}
-    6.000000,                !- X Origin {m}
-    6.000000,                !- Y Origin {m}
-    0.0000000E+00,           !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    6.0,                     !- X Origin {m}
+    6.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    AutoCalculate,           !- Ceiling Height {m}
-    AutoCalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     ZONE 2,                  !- Name
-    0.0000000E+00,           !- Direction of Relative North {deg}
-    26.00000,                !- X Origin {m}
-    6.000000,                !- Y Origin {m}
-    0.0000000E+00,           !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    26.0,                    !- X Origin {m}
+    6.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    AutoCalculate,           !- Ceiling Height {m}
-    AutoCalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     ZONE 3,                  !- Name
-    0.0000000E+00,           !- Direction of Relative North {deg}
-    6.000000,                !- X Origin {m}
-    6.000000,                !- Y Origin {m}
-    10.00000,                !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    6.0,                     !- X Origin {m}
+    6.0,                     !- Y Origin {m}
+    10.0,                    !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    AutoCalculate,           !- Ceiling Height {m}
-    AutoCalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     ZONE 4,                  !- Name
-    0.0000000E+00,           !- Direction of Relative North {deg}
-    26.00000,                !- X Origin {m}
-    6.000000,                !- Y Origin {m}
-    10.00000,                !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    26.0,                    !- X Origin {m}
+    6.0,                     !- Y Origin {m}
+    10.0,                    !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    AutoCalculate,           !- Ceiling Height {m}
-    AutoCalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative,                !- Coordinate System
     Relative,                !- Daylighting Reference Point Coordinate System
     Relative;                !- Rectangular Surface Coordinate System
 
   Shading:Site,
     Bushes-South,            !- Name
-    180,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    1,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    50,                      !- Length {m}
-    1;                       !- Height {m}
+    180.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    1.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    50.0,                    !- Length {m}
+    1.0;                     !- Height {m}
 
   Shading:Building,
     Bushes-East,             !- Name
-    90,                      !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    51,                      !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    50,                      !- Length {m}
-    1;                       !- Height {m}
+    90.0,                    !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    51.0,                    !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    50.0,                    !- Length {m}
+    1.0;                     !- Height {m}
 
   Shading:Site,
     Bushes-North,            !- Name
-    0,                       !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    51,                      !- Starting X Coordinate {m}
-    50,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    50,                      !- Length {m}
-    1;                       !- Height {m}
+    0.0,                     !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    51.0,                    !- Starting X Coordinate {m}
+    50.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    50.0,                    !- Length {m}
+    1.0;                     !- Height {m}
 
   Shading:Site,
     Bushes-West,             !- Name
-    270,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    1,                       !- Starting X Coordinate {m}
-    50,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    50,                      !- Length {m}
-    1;                       !- Height {m}
+    270.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    1.0,                     !- Starting X Coordinate {m}
+    50.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    50.0,                    !- Length {m}
+    1.0;                     !- Height {m}
 
   Wall:Exterior,
     Zn001:Wall001,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 1,                  !- Zone Name
     ,                        !- Space Name
-    180,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    180.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Window,
     Zn001:Wall001:Win001,    !- Name
@@ -781,104 +757,104 @@
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
-    4,                       !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    4.0,                     !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Door,
     Zn001:Wall001:Door001,   !- Name
     HOLLOW WOOD DOOR,        !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     1,                       !- Multiplier
-    14,                      !- Starting X Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    14.0,                    !- Starting X Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Shading:Overhang,
     Zn001:Wall001:Win001:Shade001,  !- Name
     Zn001:Wall001:Win001,    !- Window or Door Name
-    .7,                      !- Height above Window or Door {m}
-    90,                      !- Tilt Angle from Window/Door {deg}
-    .2,                      !- Left extension from Window/Door Width {m}
-    .2,                      !- Right extension from Window/Door Width {m}
-    3;                       !- Depth {m}
+    0.7,                     !- Height above Window or Door {m}
+    90.0,                    !- Tilt Angle from Window/Door {deg}
+    0.2,                     !- Left extension from Window/Door Width {m}
+    0.2,                     !- Right extension from Window/Door Width {m}
+    3.0;                     !- Depth {m}
 
   Shading:Overhang,
     Zn001:Wall001:Door001:Shade001,  !- Name
     Zn001:Wall001:Door001,   !- Window or Door Name
-    .6,                      !- Height above Window or Door {m}
-    90,                      !- Tilt Angle from Window/Door {deg}
-    0,                       !- Left extension from Window/Door Width {m}
-    0,                       !- Right extension from Window/Door Width {m}
-    3;                       !- Depth {m}
+    0.6,                     !- Height above Window or Door {m}
+    90.0,                    !- Tilt Angle from Window/Door {deg}
+    0.0,                     !- Left extension from Window/Door Width {m}
+    0.0,                     !- Right extension from Window/Door Width {m}
+    3.0;                     !- Depth {m}
 
   Shading:Fin,
     Zn001:Wall001:Shade003,  !- Name
     Zn001:Wall001:Win001,    !- Window or Door Name
-    .1,                      !- Left Extension from Window/Door {m}
-    .1,                      !- Left Distance Above Top of Window {m}
-    .1,                      !- Left Distance Below Bottom of Window {m}
-    90,                      !- Left Tilt Angle from Window/Door {deg}
-    3,                       !- Left Depth {m}
-    .1,                      !- Right Extension from Window/Door {m}
-    .1,                      !- Right Distance Above Top of Window {m}
-    .1,                      !- Right Distance Below Bottom of Window {m}
-    90,                      !- Right Tilt Angle from Window/Door {deg}
-    3;                       !- Right Depth {m}
+    0.1,                     !- Left Extension from Window/Door {m}
+    0.1,                     !- Left Distance Above Top of Window {m}
+    0.1,                     !- Left Distance Below Bottom of Window {m}
+    90.0,                    !- Left Tilt Angle from Window/Door {deg}
+    3.0,                     !- Left Depth {m}
+    0.1,                     !- Right Extension from Window/Door {m}
+    0.1,                     !- Right Distance Above Top of Window {m}
+    0.1,                     !- Right Distance Below Bottom of Window {m}
+    90.0,                    !- Right Tilt Angle from Window/Door {deg}
+    3.0;                     !- Right Depth {m}
 
   Wall:Exterior,
     Zn001:Wall002,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 1,                  !- Zone Name
     ,                        !- Space Name
-    0,                       !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    0.0,                     !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Wall:Exterior,
     Zn001:Wall003,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 1,                  !- Zone Name
     ,                        !- Space Name
-    270,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    270.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Wall:Adiabatic,
     Zn001:Wall004,           !- Name
     INTERIOR,                !- Construction Name
     ZONE 1,                  !- Zone Name
     ,                        !- Space Name
-    90,                      !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    90.0,                    !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Floor:Adiabatic,
     Zn001:Flr001,            !- Name
     FLOOR,                   !- Construction Name
     ZONE 1,                  !- Zone Name
     ,                        !- Space Name
-    90,                      !- Azimuth Angle {deg}
-    180,                     !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    90.0,                    !- Azimuth Angle {deg}
+    180.0,                   !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   Ceiling:Interzone,
     Zn001:Roof001,           !- Name
@@ -886,26 +862,26 @@
     ZONE 1,                  !- Zone Name
     ,                        !- Space Name
     Zn003:Flr001,            !- Outside Boundary Condition Object
-    180,                     !- Azimuth Angle {deg}
-    0,                       !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    10,                      !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    180.0,                   !- Azimuth Angle {deg}
+    0.0,                     !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    10.0,                    !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   Wall:Exterior,
     Zn002:Wall001,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 2,                  !- Zone Name
     ,                        !- Space Name
-    180,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    180.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Window,
     Zn002:Wall001:Win001,    !- Name
@@ -913,19 +889,19 @@
     Zn002:Wall001,           !- Building Surface Name
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
-    4,                       !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    4.0,                     !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Shading:Overhang,
     Zn002:Wall001:Win001:Shade001,  !- Name
     Zn002:Wall001:Win001,    !- Window or Door Name
-    .7,                      !- Height above Window or Door {m}
-    90,                      !- Tilt Angle from Window/Door {deg}
-    0,                       !- Left extension from Window/Door Width {m}
-    0,                       !- Right extension from Window/Door Width {m}
-    3;                       !- Depth {m}
+    0.7,                     !- Height above Window or Door {m}
+    90.0,                    !- Tilt Angle from Window/Door {deg}
+    0.0,                     !- Left extension from Window/Door Width {m}
+    0.0,                     !- Right extension from Window/Door Width {m}
+    3.0;                     !- Depth {m}
 
   Window,
     Zn002:Wall001:Win002,    !- Name
@@ -933,23 +909,23 @@
     Zn002:Wall001,           !- Building Surface Name
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
-    10,                      !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    10.0,                    !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Wall:Exterior,
     Zn002:Wall002,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 2,                  !- Zone Name
     ,                        !- Space Name
-    90,                      !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    90.0,                    !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Window,
     Zn002:Wall002:Win001,    !- Name
@@ -957,72 +933,72 @@
     Zn002:Wall002,           !- Building Surface Name
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
-    9,                       !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    9.0,                     !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Shading:Overhang,
     Zn002:Wall002:Win001:Shade001,  !- Name
     Zn002:Wall002:Win001,    !- Window or Door Name
-    .7,                      !- Height above Window or Door {m}
-    90,                      !- Tilt Angle from Window/Door {deg}
-    0,                       !- Left extension from Window/Door Width {m}
-    0,                       !- Right extension from Window/Door Width {m}
-    3;                       !- Depth {m}
+    0.7,                     !- Height above Window or Door {m}
+    90.0,                    !- Tilt Angle from Window/Door {deg}
+    0.0,                     !- Left extension from Window/Door Width {m}
+    0.0,                     !- Right extension from Window/Door Width {m}
+    3.0;                     !- Depth {m}
 
   Shading:Fin,
     Zn002:Wall002:Shade002,  !- Name
     Zn002:Wall002:Win001,    !- Window or Door Name
-    .1,                      !- Left Extension from Window/Door {m}
-    .1,                      !- Left Distance Above Top of Window {m}
-    .1,                      !- Left Distance Below Bottom of Window {m}
-    90,                      !- Left Tilt Angle from Window/Door {deg}
-    3,                       !- Left Depth {m}
-    .1,                      !- Right Extension from Window/Door {m}
-    .1,                      !- Right Distance Above Top of Window {m}
-    .1,                      !- Right Distance Below Bottom of Window {m}
-    90,                      !- Right Tilt Angle from Window/Door {deg}
-    3;                       !- Right Depth {m}
+    0.1,                     !- Left Extension from Window/Door {m}
+    0.1,                     !- Left Distance Above Top of Window {m}
+    0.1,                     !- Left Distance Below Bottom of Window {m}
+    90.0,                    !- Left Tilt Angle from Window/Door {deg}
+    3.0,                     !- Left Depth {m}
+    0.1,                     !- Right Extension from Window/Door {m}
+    0.1,                     !- Right Distance Above Top of Window {m}
+    0.1,                     !- Right Distance Below Bottom of Window {m}
+    90.0,                    !- Right Tilt Angle from Window/Door {deg}
+    3.0;                     !- Right Depth {m}
 
   Wall:Exterior,
     Zn002:Wall003,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 2,                  !- Zone Name
     ,                        !- Space Name
-    0,                       !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    0.0,                     !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Wall:Adiabatic,
     Zn002:Wall004,           !- Name
     INTERIOR,                !- Construction Name
     ZONE 2,                  !- Zone Name
     ,                        !- Space Name
-    270,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    270.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Floor:Adiabatic,
     Zn002:Flr001,            !- Name
     FLOOR,                   !- Construction Name
     ZONE 2,                  !- Zone Name
     ,                        !- Space Name
-    90,                      !- Azimuth Angle {deg}
-    180,                     !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    90.0,                    !- Azimuth Angle {deg}
+    180.0,                   !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   Ceiling:Interzone,
     Zn002:Roof001,           !- Name
@@ -1030,26 +1006,26 @@
     ZONE 2,                  !- Zone Name
     ,                        !- Space Name
     Zn004:Flr001,            !- Outside Boundary Condition Object
-    180,                     !- Azimuth Angle {deg}
-    0,                       !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    10,                      !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    180.0,                   !- Azimuth Angle {deg}
+    0.0,                     !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    10.0,                    !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   Wall:Exterior,
     Zn003:Wall001,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 3,                  !- Zone Name
     ,                        !- Space Name
-    180,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    180.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Window,
     Zn003:Wall001:Win001,    !- Name
@@ -1057,36 +1033,36 @@
     Zn003:Wall001,           !- Building Surface Name
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
-    8,                       !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    8.0,                     !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Wall:Exterior,
     Zn003:Wall002,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 3,                  !- Zone Name
     ,                        !- Space Name
-    0,                       !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    0.0,                     !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Wall:Exterior,
     Zn003:Wall003,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 3,                  !- Zone Name
     ,                        !- Space Name
-    270,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    270.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Wall:Interzone,
     Zn003:Wall004,           !- Name
@@ -1094,13 +1070,13 @@
     ZONE 3,                  !- Zone Name
     ,                        !- Space Name
     Zn004:Wall004,           !- Outside Boundary Condition Object
-    90,                      !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    90.0,                    !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Window:Interzone,
     Zn003:Wall004:Win001,    !- Name
@@ -1108,10 +1084,10 @@
     Zn003:Wall004,           !- Building Surface Name
     Zn004:Wall004:Win001,    !- Outside Boundary Condition Object
     1,                       !- Multiplier
-    4,                       !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    4.0,                     !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Floor:Interzone,
     Zn003:Flr001,            !- Name
@@ -1119,39 +1095,39 @@
     ZONE 3,                  !- Zone Name
     ,                        !- Space Name
     Zn001:Roof001,           !- Outside Boundary Condition Object
-    90,                      !- Azimuth Angle {deg}
-    180,                     !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    90.0,                    !- Azimuth Angle {deg}
+    180.0,                   !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   Roof,
     Zn003:Roof001,           !- Name
     ROOF31,                  !- Construction Name
     ZONE 3,                  !- Zone Name
     ,                        !- Space Name
-    180,                     !- Azimuth Angle {deg}
-    0,                       !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    10,                      !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    180.0,                   !- Azimuth Angle {deg}
+    0.0,                     !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    10.0,                    !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   Wall:Exterior,
     Zn004:Wall001,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 4,                  !- Zone Name
     ,                        !- Space Name
-    180,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    180.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Window,
     Zn004:Wall001:Win001,    !- Name
@@ -1159,36 +1135,36 @@
     Zn004:Wall001,           !- Building Surface Name
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
-    8,                       !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    8.0,                     !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Wall:Exterior,
     Zn004:Wall002,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 4,                  !- Zone Name
     ,                        !- Space Name
-    90,                      !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    90.0,                    !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Wall:Exterior,
     Zn004:Wall003,           !- Name
     EXTERIOR,                !- Construction Name
     ZONE 4,                  !- Zone Name
     ,                        !- Space Name
-    0,                       !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    20,                      !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    0.0,                     !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    20.0,                    !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Wall:Interzone,
     Zn004:Wall004,           !- Name
@@ -1196,13 +1172,13 @@
     ZONE 4,                  !- Zone Name
     ,                        !- Space Name
     Zn003:Wall004,           !- Outside Boundary Condition Object
-    270,                     !- Azimuth Angle {deg}
-    90,                      !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    20,                      !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    10;                      !- Height {m}
+    270.0,                   !- Azimuth Angle {deg}
+    90.0,                    !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    20.0,                    !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    10.0;                    !- Height {m}
 
   Window:Interzone,
     Zn004:Wall004:Win001,    !- Name
@@ -1210,10 +1186,10 @@
     Zn004:Wall004,           !- Building Surface Name
     Zn003:Wall004:Win001,    !- Outside Boundary Condition Object
     1,                       !- Multiplier
-    13,                      !- Starting X Coordinate {m}
-    3,                       !- Starting Z Coordinate {m}
-    3,                       !- Length {m}
-    5;                       !- Height {m}
+    13.0,                    !- Starting X Coordinate {m}
+    3.0,                     !- Starting Z Coordinate {m}
+    3.0,                     !- Length {m}
+    5.0;                     !- Height {m}
 
   Floor:Interzone,
     Zn004:Flr001,            !- Name
@@ -1221,62 +1197,62 @@
     ZONE 4,                  !- Zone Name
     ,                        !- Space Name
     Zn002:Roof001,           !- Outside Boundary Condition Object
-    90,                      !- Azimuth Angle {deg}
-    180,                     !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    0,                       !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    90.0,                    !- Azimuth Angle {deg}
+    180.0,                   !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    0.0,                     !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   Roof,
     Zn004:Roof001,           !- Name
     ROOF31,                  !- Construction Name
     ZONE 4,                  !- Zone Name
     ,                        !- Space Name
-    180,                     !- Azimuth Angle {deg}
-    0,                       !- Tilt Angle {deg}
-    0,                       !- Starting X Coordinate {m}
-    0,                       !- Starting Y Coordinate {m}
-    10,                      !- Starting Z Coordinate {m}
-    20,                      !- Length {m}
-    20;                      !- Width {m}
+    180.0,                   !- Azimuth Angle {deg}
+    0.0,                     !- Tilt Angle {deg}
+    0.0,                     !- Starting X Coordinate {m}
+    0.0,                     !- Starting Y Coordinate {m}
+    10.0,                    !- Starting Z Coordinate {m}
+    20.0,                    !- Length {m}
+    20.0;                    !- Width {m}
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -100,                    !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    -100.0,                  !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     ControlType,             !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ZONE CONTROL TYPE SCHEDULE,  !- Name
     CONTROLTYPE,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until: 24:00,4;          !- Field 3
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ZONE HEATING SETPOINTS,  !- Name
     TEMPERATURE,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays WinterDesignDay, !- Field 2
+    For: Weekdays WinterDesignDay,  !- Field 2
     Until: 7:00,-100.00,     !- Field 3
     Until: 17:00,-100.00,    !- Field 5
     Until: 24:00,-100.00,    !- Field 7
     For: AllOtherDays,       !- Field 9
     Until: 24:00,-100.00;    !- Field 10
 
-  SCHEDULE:COMPACT,
+  Schedule:Compact,
     ZONE COOLING SETPOINTS,  !- Name
     TEMPERATURE,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay,  !- Field 2
     Until: 7:00,100.00,      !- Field 3
     Until: 17:00,100.00,     !- Field 5
     Until: 24:00,100.00,     !- Field 7
@@ -1320,15 +1296,15 @@
     ZONE 1 INLETS,           !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
-    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
+    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
-    autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
     NoLimit,                 !- Cooling Limit
-    autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
     ,                        !- Maximum Total Cooling Capacity {W}
     ,                        !- Heating Availability Schedule Name
     ,                        !- Cooling Availability Schedule Name
@@ -1384,15 +1360,15 @@
     ZONE 2 INLETS,           !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
-    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
+    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
-    autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
     NoLimit,                 !- Cooling Limit
-    autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
     ,                        !- Maximum Total Cooling Capacity {W}
     ,                        !- Heating Availability Schedule Name
     ,                        !- Cooling Availability Schedule Name
@@ -1448,15 +1424,15 @@
     ZONE 3 INLETS,           !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
-    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
+    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
-    autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
     NoLimit,                 !- Cooling Limit
-    autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
     ,                        !- Maximum Total Cooling Capacity {W}
     ,                        !- Heating Availability Schedule Name
     ,                        !- Cooling Availability Schedule Name
@@ -1512,15 +1488,15 @@
     ZONE 4 INLETS,           !- Zone Supply Air Node Name
     ,                        !- Zone Exhaust Air Node Name
     ,                        !- System Inlet Air Node Name
-    50,                      !- Maximum Heating Supply Air Temperature {C}
-    13,                      !- Minimum Cooling Supply Air Temperature {C}
+    50.0,                    !- Maximum Heating Supply Air Temperature {C}
+    13.0,                    !- Minimum Cooling Supply Air Temperature {C}
     0.015,                   !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.009,                   !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
     NoLimit,                 !- Heating Limit
-    autosize,                !- Maximum Heating Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Heating Air Flow Rate {m3/s}
     ,                        !- Maximum Sensible Heating Capacity {W}
     NoLimit,                 !- Cooling Limit
-    autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Cooling Air Flow Rate {m3/s}
     ,                        !- Maximum Total Cooling Capacity {W}
     ,                        !- Heating Availability Schedule Name
     ,                        !- Cooling Availability Schedule Name
@@ -1538,4 +1514,3 @@
   NodeList,
     ZONE 4 INLETS,           !- Name
     ZONE 4 INLET;            !- Node 1 Name
-

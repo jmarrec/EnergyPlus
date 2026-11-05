@@ -34,7 +34,7 @@
     CHICAGO ILLINOIS,        !- Name
     41.78,                   !- Latitude {deg}
     -87.75,                  !- Longitude {deg}
-    -6,                      !- Time Zone {hr}
+    -6.0,                    !- Time Zone {hr}
     190.0;                   !- Elevation {m}
 
   RunPeriod,
@@ -46,11 +46,11 @@
     2,                       !- End Day of Month
     ,                        !- End Year
     ,                        !- Day of Week for Start Day
-    yes,                     !- Use Weather File Holidays and Special Days
-    yes,                     !- Use Weather File Daylight Saving Period
-    no,                      !- Apply Weekend Holiday Rule
-    yes,                     !- Use Weather File Rain Indicators
-    yes;                     !- Use Weather File Snow Indicators
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
 
 ! CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
 
@@ -63,15 +63,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -93,15 +93,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -115,32 +115,32 @@
   Material,
     CONCRETE BLOCK,          !- Name
     Rough,                   !- Roughness
-    0.2000,                  !- Thickness {m}
-    0.51000,                 !- Conductivity {W/m-K}
-    1400.000,                !- Density {kg/m3}
-    1000.00,                 !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.2,                     !- Thickness {m}
+    0.51,                    !- Conductivity {W/m-K}
+    1400.0,                  !- Density {kg/m3}
+    1000.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
   Material,
     FOAM INSULATION,         !- Name
     Rough,                   !- Roughness
-    0.100,                   !- Thickness {m}
-    0.030,                   !- Conductivity {W/m-K}
-    10.000,                  !- Density {kg/m3}
-    1400.00,                 !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.1,                     !- Thickness {m}
+    0.03,                    !- Conductivity {W/m-K}
+    10.0,                    !- Density {kg/m3}
+    1400.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
   Material:NoMass,
     WOOD SIDING-1,           !- Name
     Rough,                   !- Roughness
     0.06,                    !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
 ! Material layer names follow:
 
@@ -155,40 +155,40 @@
   Material,
     CONCRETE SLAB050,        !- Name
     Rough,                   !- Roughness
-    0.05000,                 !- Thickness {m}
-    1.13000,                 !- Conductivity {W/m-K}
-    1400.000,                !- Density {kg/m3}
+    0.05,                    !- Thickness {m}
+    1.13,                    !- Conductivity {W/m-K}
+    1400.0,                  !- Density {kg/m3}
     1000.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
   Material,
     CONCRETE SLAB180,        !- Name
     Rough,                   !- Roughness
-    0.18000,                 !- Thickness {m}
-    1.13000,                 !- Conductivity {W/m-K}
-    1400.000,                !- Density {kg/m3}
+    0.18,                    !- Thickness {m}
+    1.13,                    !- Conductivity {W/m-K}
+    1400.0,                  !- Density {kg/m3}
     1000.0,                  !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
   Material:NoMass,
     R-1 INSULATION,          !- Name
     Rough,                   !- Roughness
     1.0,                     !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
   Material:NoMass,
     CARPET,                  !- Name
     Rough,                   !- Roughness
     0.125,                   !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
 ! Material layer names follow:
 
@@ -214,13 +214,13 @@
   Material,
     BRICK120,                !- Name
     Rough,                   !- Roughness
-    0.12000,                 !- Thickness {m}
-    1.00000,                 !- Conductivity {W/m-K}
-    2080.000,                !- Density {kg/m3}
+    0.12,                    !- Thickness {m}
+    1.0,                     !- Conductivity {W/m-K}
+    2080.0,                  !- Density {kg/m3}
     790.0,                   !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.600000,                !- Solar Absorptance
-    0.600000;                !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.6,                     !- Solar Absorptance
+    0.6;                     !- Visible Absorptance
 
 ! Material layer names follow:
 
@@ -244,12 +244,12 @@
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
     0.006,                   !- Thickness {m}
-    0.430,                   !- Solar Transmittance at Normal Incidence
-    0.300,                   !- Front Side Solar Reflectance at Normal Incidence
-    0.420,                   !- Back Side Solar Reflectance at Normal Incidence
-    0.770,                   !- Visible Transmittance at Normal Incidence
-    0.070,                   !- Front Side Visible Reflectance at Normal Incidence
-    0.060,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.43,                    !- Solar Transmittance at Normal Incidence
+    0.3,                     !- Front Side Solar Reflectance at Normal Incidence
+    0.42,                    !- Back Side Solar Reflectance at Normal Incidence
+    0.77,                    !- Visible Transmittance at Normal Incidence
+    0.07,                    !- Front Side Visible Reflectance at Normal Incidence
+    0.06,                    !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
     0.84,                    !- Front Side Infrared Hemispherical Emissivity
     0.03,                    !- Back Side Infrared Hemispherical Emissivity
@@ -293,7 +293,7 @@
     0.5,                     !- Bottom Opening Multiplier
     0.5,                     !- Left-Side Opening Multiplier
     0.5,                     !- Right-Side Opening Multiplier
-    0;                       !- Airflow Permeability {dimensionless}
+    0.0;                     !- Airflow Permeability {dimensionless}
 
 ! =====================================================================
 ! Window shading control
@@ -306,7 +306,7 @@
     Double Pane Window Shaded,  !- Construction with Shading Name
     OnIfHighSolarOnWindow,   !- Shading Control Type
     Sch Summer,              !- Schedule Name
-    200,                     !- Setpoint {W/m2, W or deg C}
+    200.0,                   !- Setpoint {W/m2, W or deg C}
     Yes,                     !- Shading Control Is Scheduled
     Yes,                     !- Glare Control Is Active
     ,                        !- Shading Device Material Name
@@ -376,10 +376,10 @@
 
   Building,
     office zone,             !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Country,                 !- Terrain
-    4.0000000E-02,           !- Loads Convergence Tolerance Value {W}
-    4.0000000E-01,           !- Temperature Convergence Tolerance Value {deltaC}
+    0.04,                    !- Loads Convergence Tolerance Value {W}
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
     FullExteriorWithReflections,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
@@ -388,22 +388,16 @@
 
   Zone,
     ZONE ONE,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    2.7000,                  !- Ceiling Height {m}
+    2.7,                     !- Ceiling Height {m}
     259.2;                   !- Volume {m3}
 
-  ZoneCapacitanceMultiplier:ResearchSpecial,
-    Multiplier,              !- Name
-    ,                        !- Zone or ZoneList Name
-    1.2,                     !- Temperature Capacity Multiplier
-    1.2,                     !- Humidity Capacity Multiplier
-    1.2,                     !- Carbon Dioxide Capacity Multiplier
-    1.0;                     !- Generic Contaminant Capacity Multiplier
+  ZoneCapacitanceMultiplier:ResearchSpecial,Multiplier,,1.2,1.2,1.2,1.0;
 
 ! -----------------------------------------------------------------------
 
@@ -422,12 +416,12 @@
     ZONE SURFACE SOUTH,      !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    16.000000,6.000000,2.700000,  !- X,Y,Z ==> Vertex 1 {m}
-    16.000000,6.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.000000,2.700000;  !- X,Y,Z ==> Vertex 4 {m}
+    16.0,6.0,2.7,  !- X,Y,Z ==> Vertex 1 {m}
+    16.0,6.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.0,2.7;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONE SURFACE EAST,       !- Name
@@ -439,12 +433,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    16.000000,0,2.700000,  !- X,Y,Z ==> Vertex 1 {m}
-    16.000000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    16.000000,6.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    16.000000,6.000000,2.700000;  !- X,Y,Z ==> Vertex 4 {m}
+    16.0,0.0,2.7,  !- X,Y,Z ==> Vertex 1 {m}
+    16.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    16.0,6.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    16.0,6.0,2.7;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     ZONE SUBSURFACE 1 EAST WINDOW,  !- Name
@@ -452,24 +446,24 @@
     DOUBLE PANE WINDOW,      !- Construction Name
     ZONE SURFACE EAST,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     WinFrameAndDivider,      !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
-    16.000000,0.000000,2.200000,  !- X,Y,Z ==> Vertex 1 {m}
-    16.000000,0.000000,0.2000000,  !- X,Y,Z ==> Vertex 2 {m}
-    16.000000,3.000000,0.2000000,  !- X,Y,Z ==> Vertex 3 {m}
-    16.000000,3.000000,2.200000;  !- X,Y,Z ==> Vertex 4 {m}
+    16.0,0.0,2.2,  !- X,Y,Z ==> Vertex 1 {m}
+    16.0,0.0,0.2,  !- X,Y,Z ==> Vertex 2 {m}
+    16.0,3.0,0.2,  !- X,Y,Z ==> Vertex 3 {m}
+    16.0,3.0,2.2;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Zone:Detailed,
     EAST WINDOW OVERHANG,    !- Name
     ZONE SURFACE EAST,       !- Base Surface Name
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
-    16.000000,0.000000,2.700000,  !- X,Y,Z ==> Vertex 1 {m}
-    17.0,0.000000,2.700000,  !- X,Y,Z ==> Vertex 2 {m}
-    17.0,3.000000,2.700000,  !- X,Y,Z ==> Vertex 3 {m}
-    16.000000,3.000000,2.700000;  !- X,Y,Z ==> Vertex 4 {m}
+    16.0,0.0,2.7,  !- X,Y,Z ==> Vertex 1 {m}
+    17.0,0.0,2.7,  !- X,Y,Z ==> Vertex 2 {m}
+    17.0,3.0,2.7,  !- X,Y,Z ==> Vertex 3 {m}
+    16.0,3.0,2.7;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONE SURFACE SOUTH,      !- Name
@@ -481,12 +475,12 @@
     ZONE SURFACE NORTH,      !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,2.700000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    16.000000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    16.000000,0,2.700000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,2.7,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    16.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    16.0,0.0,2.7;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONE SURFACE WEST,       !- Name
@@ -498,12 +492,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.000000,2.700000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,2.700000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.0,2.7,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,2.7;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     ZONE SUBSURFACE 2 WEST WINDOW,  !- Name
@@ -511,24 +505,24 @@
     DOUBLE PANE WINDOW,      !- Construction Name
     ZONE SURFACE WEST,       !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     WinFrameAndDivider,      !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0,3.000000,2.200000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,3.000000,0.2000000,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0.000000,0.2000000,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0.000000,2.200000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,3.0,2.2,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,3.0,0.2,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.2,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,2.2;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Zone:Detailed,
     WEST WINDOW OVERHANG,    !- Name
     ZONE SURFACE WEST,       !- Base Surface Name
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
-    0,3.000000,2.700000,  !- X,Y,Z ==> Vertex 1 {m}
-    -1.0,3.000000,2.700000,  !- X,Y,Z ==> Vertex 2 {m}
-    -1.0,0.000000,2.700000,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0.000000,2.700000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,3.0,2.7,  !- X,Y,Z ==> Vertex 1 {m}
+    -1.0,3.0,2.7,  !- X,Y,Z ==> Vertex 2 {m}
+    -1.0,0.0,2.7,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,2.7;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONE SURFACE FLOOR,      !- Name
@@ -540,12 +534,12 @@
     ZONE SURFACE CEILING,    !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.000000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    16.000000,6.000000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    16.000000,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    16.0,6.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    16.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     ZONE SURFACE CEILING,    !- Name
@@ -557,12 +551,12 @@
     ZONE SURFACE FLOOR,      !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.000000,2.700000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,2.700000,  !- X,Y,Z ==> Vertex 2 {m}
-    16.000000,0,2.700000,  !- X,Y,Z ==> Vertex 3 {m}
-    16.000000,6.000000,2.700000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.0,2.7,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,2.7,  !- X,Y,Z ==> Vertex 2 {m}
+    16.0,0.0,2.7,  !- X,Y,Z ==> Vertex 3 {m}
+    16.0,6.0,2.7;  !- X,Y,Z ==> Vertex 4 {m}
 
 ! ----------------------------------------------------------
 ! Surface for internal mass, seperating the two office and hallway
@@ -582,12 +576,12 @@
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     Sch Equ,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    768,                     !- Design Level {W}
+    768.0,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0,                       !- Fraction Lost
+    0.0,                     !- Fraction Lost
     Room Equi;               !- End-Use Subcategory
 
   Lights,
@@ -596,12 +590,12 @@
     Sch Lig,                 !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
     1632.0,                  !- Lighting Level {W}
-    0,                       !- Watts per Floor Area {W/m2}
-    0,                       !- Watts per Person {W/person}
-    0.000,                   !- Return Air Fraction
-    0.400,                   !- Fraction Radiant
-    0.200,                   !- Fraction Visible
-    1,                       !- Fraction Replaceable
+    0.0,                     !- Watts per Floor Area {W/m2}
+    0.0,                     !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.4,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    1.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   People,
@@ -622,30 +616,30 @@
   Schedule:Day:Hourly,
     Day Sch Act,             !- Name
     Any Number,              !- Schedule Type Limits Name
-    130,                     !- Hour 1
-    130,                     !- Hour 2
-    130,                     !- Hour 3
-    130,                     !- Hour 4
-    130,                     !- Hour 5
-    130,                     !- Hour 6
-    130,                     !- Hour 7
-    130,                     !- Hour 8
-    130,                     !- Hour 9
-    130,                     !- Hour 10
-    130,                     !- Hour 11
-    130,                     !- Hour 12
-    130,                     !- Hour 13
-    130,                     !- Hour 14
-    130,                     !- Hour 15
-    130,                     !- Hour 16
-    130,                     !- Hour 17
-    130,                     !- Hour 18
-    130,                     !- Hour 19
-    130,                     !- Hour 20
-    130,                     !- Hour 21
-    130,                     !- Hour 22
-    130,                     !- Hour 23
-    130;                     !- Hour 24
+    130.0,                   !- Hour 1
+    130.0,                   !- Hour 2
+    130.0,                   !- Hour 3
+    130.0,                   !- Hour 4
+    130.0,                   !- Hour 5
+    130.0,                   !- Hour 6
+    130.0,                   !- Hour 7
+    130.0,                   !- Hour 8
+    130.0,                   !- Hour 9
+    130.0,                   !- Hour 10
+    130.0,                   !- Hour 11
+    130.0,                   !- Hour 12
+    130.0,                   !- Hour 13
+    130.0,                   !- Hour 14
+    130.0,                   !- Hour 15
+    130.0,                   !- Hour 16
+    130.0,                   !- Hour 17
+    130.0,                   !- Hour 18
+    130.0,                   !- Hour 19
+    130.0,                   !- Hour 20
+    130.0,                   !- Hour 21
+    130.0,                   !- Hour 22
+    130.0,                   !- Hour 23
+    130.0;                   !- Hour 24
 
   Schedule:Week:Daily,
     Wee Sch Act,             !- Name
@@ -688,58 +682,58 @@
   Schedule:Day:Hourly,
     Day Sch 0,               !- Name
     Disc Sch,                !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    0,                       !- Hour 6
-    0,                       !- Hour 7
-    0,                       !- Hour 8
-    0,                       !- Hour 9
-    0,                       !- Hour 10
-    0,                       !- Hour 11
-    0,                       !- Hour 12
-    0,                       !- Hour 13
-    0,                       !- Hour 14
-    0,                       !- Hour 15
-    0,                       !- Hour 16
-    0,                       !- Hour 17
-    0,                       !- Hour 18
-    0,                       !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
 
   Schedule:Day:Hourly,
     Day Sch 1,               !- Name
     Disc Sch,                !- Schedule Type Limits Name
-    1,                       !- Hour 1
-    1,                       !- Hour 2
-    1,                       !- Hour 3
-    1,                       !- Hour 4
-    1,                       !- Hour 5
-    1,                       !- Hour 6
-    1,                       !- Hour 7
-    1,                       !- Hour 8
-    1,                       !- Hour 9
-    1,                       !- Hour 10
-    1,                       !- Hour 11
-    1,                       !- Hour 12
-    1,                       !- Hour 13
-    1,                       !- Hour 14
-    1,                       !- Hour 15
-    1,                       !- Hour 16
-    1,                       !- Hour 17
-    1,                       !- Hour 18
-    1,                       !- Hour 19
-    1,                       !- Hour 20
-    1,                       !- Hour 21
-    1,                       !- Hour 22
-    1,                       !- Hour 23
-    1;                       !- Hour 24
+    1.0,                     !- Hour 1
+    1.0,                     !- Hour 2
+    1.0,                     !- Hour 3
+    1.0,                     !- Hour 4
+    1.0,                     !- Hour 5
+    1.0,                     !- Hour 6
+    1.0,                     !- Hour 7
+    1.0,                     !- Hour 8
+    1.0,                     !- Hour 9
+    1.0,                     !- Hour 10
+    1.0,                     !- Hour 11
+    1.0,                     !- Hour 12
+    1.0,                     !- Hour 13
+    1.0,                     !- Hour 14
+    1.0,                     !- Hour 15
+    1.0,                     !- Hour 16
+    1.0,                     !- Hour 17
+    1.0,                     !- Hour 18
+    1.0,                     !- Hour 19
+    1.0,                     !- Hour 20
+    1.0,                     !- Hour 21
+    1.0,                     !- Hour 22
+    1.0,                     !- Hour 23
+    1.0;                     !- Hour 24
 
 ! ------------------------------------------------------------------
 ! People, weekdays
@@ -747,12 +741,12 @@
   Schedule:Day:Hourly,
     Day Sch Peo WD,          !- Name
     Cont Sch,                !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    0,                       !- Hour 6
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
     0.33,                    !- Hour 7
     0.67,                    !- Hour 8
     1.0,                     !- Hour 9
@@ -765,42 +759,42 @@
     1.0,                     !- Hour 16
     1.0,                     !- Hour 17
     0.5,                     !- Hour 18
-    0,                       !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
 
 ! People, weekend and holiday
 
   Schedule:Day:Hourly,
     Day Sch Peo WEH,         !- Name
     Cont Sch,                !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    0,                       !- Hour 6
-    0,                       !- Hour 7
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
     0.07,                    !- Hour 8
     0.13,                    !- Hour 9
     0.2,                     !- Hour 10
     0.2,                     !- Hour 11
     0.1,                     !- Hour 12
-    0,                       !- Hour 13
-    0,                       !- Hour 14
-    0,                       !- Hour 15
-    0,                       !- Hour 16
-    0,                       !- Hour 17
-    0,                       !- Hour 18
-    0,                       !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
 
 ! ------------------------------------------------------------------
 ! Lights, weekdays
@@ -869,60 +863,60 @@
   Schedule:Day:Hourly,
     Day Sch DayLig WD,       !- Name
     Disc Sch,                !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    0,                       !- Hour 6
-    1,                       !- Hour 7
-    1,                       !- Hour 8
-    1,                       !- Hour 9
-    1,                       !- Hour 10
-    1,                       !- Hour 11
-    1,                       !- Hour 12
-    1,                       !- Hour 13
-    1,                       !- Hour 14
-    1,                       !- Hour 15
-    1,                       !- Hour 16
-    1,                       !- Hour 17
-    1,                       !- Hour 18
-    0,                       !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    1.0,                     !- Hour 7
+    1.0,                     !- Hour 8
+    1.0,                     !- Hour 9
+    1.0,                     !- Hour 10
+    1.0,                     !- Hour 11
+    1.0,                     !- Hour 12
+    1.0,                     !- Hour 13
+    1.0,                     !- Hour 14
+    1.0,                     !- Hour 15
+    1.0,                     !- Hour 16
+    1.0,                     !- Hour 17
+    1.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
 
 ! Daylighting control, weekend
 
   Schedule:Day:Hourly,
     Day Sch DayLig WEH,      !- Name
     Disc Sch,                !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    0,                       !- Hour 6
-    0,                       !- Hour 7
-    0,                       !- Hour 8
-    0,                       !- Hour 9
-    0,                       !- Hour 10
-    0,                       !- Hour 11
-    0,                       !- Hour 12
-    0,                       !- Hour 13
-    0,                       !- Hour 14
-    0,                       !- Hour 15
-    0,                       !- Hour 16
-    0,                       !- Hour 17
-    0,                       !- Hour 18
-    0,                       !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
 
 ! ------------------------------------------------------------------
 ! Equipment, weekdays
@@ -1154,10 +1148,10 @@
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
-    1,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
-    0,                       !- Velocity Term Coefficient
-    0;                       !- Velocity Squared Term Coefficient
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
 ! =====================================================================
 ! Daylighting
@@ -1174,29 +1168,29 @@
     ,                        !- Number of Stepped Control Steps
     1.0,                     !- Probability Lighting will be Reset When Needed in Manual Stepped Control
     ZONE ONE_DaylRefPt1,     !- Glare Calculation Daylighting Reference Point Name
-    180,                     !- Glare Calculation Azimuth Angle of View Direction Clockwise from Zone y-Axis {deg}
+    180.0,                   !- Glare Calculation Azimuth Angle of View Direction Clockwise from Zone y-Axis {deg}
     22.0,                    !- Maximum Allowable Discomfort Glare Index
     ,                        !- DElight Gridding Resolution {m2}
     ZONE ONE_DaylRefPt1,     !- Daylighting Reference Point 1 Name
     0.5,                     !- Fraction of Lights Controlled by Reference Point 1
-    500,                     !- Illuminance Setpoint at Reference Point 1 {lux}
+    500.0,                   !- Illuminance Setpoint at Reference Point 1 {lux}
     ZONE ONE_DaylRefPt2,     !- Daylighting Reference Point 2 Name
     0.5,                     !- Fraction of Lights Controlled by Reference Point 2
-    500;                     !- Illuminance Setpoint at Reference Point 2 {lux}
+    500.0;                   !- Illuminance Setpoint at Reference Point 2 {lux}
 
   Daylighting:ReferencePoint,
     ZONE ONE_DaylRefPt1,     !- Name
     ZONE ONE,                !- Zone or Space Name
-    3,                       !- X-Coordinate of Reference Point {m}
-    3,                       !- Y-Coordinate of Reference Point {m}
-    1;                       !- Z-Coordinate of Reference Point {m}
+    3.0,                     !- X-Coordinate of Reference Point {m}
+    3.0,                     !- Y-Coordinate of Reference Point {m}
+    1.0;                     !- Z-Coordinate of Reference Point {m}
 
   Daylighting:ReferencePoint,
     ZONE ONE_DaylRefPt2,     !- Name
     ZONE ONE,                !- Zone or Space Name
-    13,                      !- X-Coordinate of Reference Point {m}
-    3,                       !- Y-Coordinate of Reference Point {m}
-    1;                       !- Z-Coordinate of Reference Point {m}
+    13.0,                    !- X-Coordinate of Reference Point {m}
+    3.0,                     !- Y-Coordinate of Reference Point {m}
+    1.0;                     !- Z-Coordinate of Reference Point {m}
 
 ! ===============================================================
 ! Other Equipment to link FMU air system to this room model
@@ -1208,12 +1202,12 @@
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     FMU_OthEquSen_ZoneOne,   !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    1,                       !- Design Level {W}
+    1.0,                     !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
-    0,                       !- Fraction Latent
-    0,                       !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.0,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
 ! -- latent heat transfer
 
@@ -1223,19 +1217,19 @@
     ZONE ONE,                !- Zone or ZoneList or Space or SpaceList Name
     FMU_OthEquLat_ZoneOne,   !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    1,                       !- Design Level {W}
+    1.0,                     !- Design Level {W}
     ,                        !- Power per Floor Area {W/m2}
     ,                        !- Power per Person {W/person}
-    1,                       !- Fraction Latent
-    0,                       !- Fraction Radiant
-    0;                       !- Fraction Lost
+    1.0,                     !- Fraction Latent
+    0.0,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   ExternalInterface,
     FunctionalMockupUnitImport;  !- Name of External Interface
 
   ExternalInterface:FunctionalMockupUnitImport,
     ..\datasets\FMUs\MoistAir.fmu,  !- FMU File Name
-    15,                      !- FMU Timeout {ms}
+    15.0,                    !- FMU Timeout {ms}
     0;                       !- FMU LoggingOn
 
   ExternalInterface:FunctionalMockupUnitImport:From:Variable,
@@ -1272,7 +1266,7 @@
     ..\datasets\FMUs\MoistAir.fmu,  !- FMU File Name
     Model1,                  !- FMU Instance Name
     QSensible,               !- FMU Variable Name
-    0;                       !- Initial Value
+    0.0;                     !- Initial Value
 
   ExternalInterface:FunctionalMockupUnitImport:To:Schedule,
     FMU_OthEquLat_ZoneOne,   !- Name
@@ -1280,7 +1274,7 @@
     ..\datasets\FMUs\MoistAir.fmu,  !- FMU File Name
     Model1,                  !- FMU Instance Name
     QLatent,                 !- FMU Variable Name
-    0;                       !- Initial Value
+    0.0;                     !- Initial Value
 
   Output:Variable,*,Other Equipment Convective Heating Energy,Timestep;
 
@@ -1294,7 +1288,6 @@
 
   Output:Variable,*,Lights Electricity Energy,Timestep;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
-
+  Output:Surfaces:Drawing,DXF;

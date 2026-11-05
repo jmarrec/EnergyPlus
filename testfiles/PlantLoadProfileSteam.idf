@@ -18,7 +18,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -26,15 +26,15 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     CHICAGO_IL_USA_WMO_725300,  !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -45,15 +45,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -62,7 +62,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Htg 99% Condns DB,  !- Name
@@ -73,15 +73,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -90,7 +90,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
   RunPeriod,
     Run Period 1,            !- Name
@@ -108,12 +108,12 @@
     Yes;                     !- Use Weather File Snow Indicators
 
   SimulationControl,
-    NO,                      !- Do Zone Sizing Calculation
-    NO,                      !- Do System Sizing Calculation
-    NO,                      !- Do Plant Sizing Calculation
-    YES,                     !- Run Simulation for Sizing Periods
-    NO,                      !- Run Simulation for Weather File Run Periods
-    NO,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
+    No,                      !- Run Simulation for Weather File Run Periods
+    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
   PlantLoop,
@@ -122,11 +122,11 @@
     ,                        !- User Defined Fluid Type
     Main Loop Operation,     !- Plant Equipment Operation Scheme Name
     Supply Outlet Node,      !- Loop Temperature Setpoint Node Name
-    110,                     !- Maximum Loop Temperature {C}
-    10,                      !- Minimum Loop Temperature {C}
-    autosize,                !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Plant Loop Volume {m3}
+    110.0,                   !- Maximum Loop Temperature {C}
+    10.0,                    !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    Autocalculate,           !- Plant Loop Volume {m3}
     Supply Inlet Node,       !- Plant Side Inlet Node Name
     Supply Outlet Node,      !- Plant Side Outlet Node Name
     Supply Branches,         !- Plant Side Branch List Name
@@ -135,7 +135,7 @@
     Demand Outlet Node,      !- Demand Side Outlet Node Name
     Demand Branches,         !- Demand Side Branch List Name
     Demand Connectors,       !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   SetpointManager:Scheduled,
     Main Loop Setpoint Manager,  !- Name
@@ -155,8 +155,8 @@
 
   PlantEquipmentOperation:HeatingLoad,
     Steam Boiler Plant Heat Supply,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Steam Boiler Heating Plant;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -199,15 +199,15 @@
     Steam Boiler Plant Steam Circ Pump,  !- Name
     Supply Inlet Node,       !- Inlet Node Name
     Condensate Pump Outlet Node,  !- Outlet Node Name
-    autosize,                !- Design Steam Volume Flow Rate {m3/s}
-    179352,                  !- Design Pump Head {Pa}
-    autosize,                !- Design Power Consumption {W}
+    Autosize,                !- Design Steam Volume Flow Rate {m3/s}
+    179352.0,                !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     0.9,                     !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
     ;                        !- Pump Flow Rate Schedule Name
 
   Branch,
@@ -221,11 +221,11 @@
   Boiler:Steam,
     Steam Boiler Plant Boiler,  !- Name
     NaturalGas,              !- Fuel Type
-    160000,                  !- Maximum Operating Pressure {Pa}
+    160000.0,                !- Maximum Operating Pressure {Pa}
     0.8,                     !- Theoretical Efficiency
-    115,                     !- Design Outlet Steam Temperature {C}
-    autosize,                !- Nominal Capacity {W}
-    0.00001,                 !- Minimum Part Load Ratio
+    115.0,                   !- Design Outlet Steam Temperature {C}
+    Autosize,                !- Nominal Capacity {W}
+    1e-05,                   !- Minimum Part Load Ratio
     1.0,                     !- Maximum Part Load Ratio
     0.2,                     !- Optimum Part Load Ratio
     0.8,                     !- Coefficient 1 of Fuel Use Function of Part Load Ratio Curve
@@ -299,8 +299,8 @@
     0.008,                   !- Peak Flow Rate {m3/s}
     Load Profile 1 Flow Frac Schedule,  !- Flow Rate Fraction Schedule Name
     Steam,                   !- Plant Loop Fluid Type
-    3,                       !- Degree of SubCooling {C}
-    15;                      !- Degree of Loop SubCooling {C}
+    3.0,                     !- Degree of SubCooling {C}
+    15.0;                    !- Degree of Loop SubCooling {C}
 
   Branch,
     Demand Outlet Branch,    !- Name
@@ -320,9 +320,9 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     Main Loop Temp Sch,      !- Name
@@ -357,10 +357,10 @@
   Sizing:Plant,
     Main Loop,               !- Plant or Condenser Loop Name
     Steam,                   !- Loop Type
-    110,                     !- Design Loop Exit Temperature {C}
-    25;                      !- Loop Design Temperature Difference {deltaC}
+    110.0,                   !- Design Loop Exit Temperature {C}
+    25.0;                    !- Loop Design Temperature Difference {deltaC}
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
   Output:Variable,*,System Node Temperature,Hourly;
 
@@ -394,4 +394,3 @@
 
   Output:SQLite,
     Simple;                  !- Option Type
-

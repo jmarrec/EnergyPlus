@@ -54,7 +54,7 @@
     0;                       !- Angle of Resolution for Screen Transmittance Output Map {deg}
 
   WindowMaterial:Screen,
-    BRIGHT ALUMINUM SCREEN 1,!- Name
+    BRIGHT ALUMINUM SCREEN 1,  !- Name
     ModelAsDiffuse,          !- Reflected Beam Transmittance Accounting Method
     0.6,                     !- Diffuse Solar Reflectance {dimensionless}
     0.6,                     !- Diffuse Visible Reflectance {dimensionless}
@@ -70,7 +70,7 @@
     0;                       !- Angle of Resolution for Screen Transmittance Output Map {deg}
 
   WindowMaterial:Screen,
-    BRIGHT ALUMINUM SCREEN 2,!- Name
+    BRIGHT ALUMINUM SCREEN 2,  !- Name
     ModelAsDiffuse,          !- Reflected Beam Transmittance Accounting Method
     0.6,                     !- Diffuse Solar Reflectance {dimensionless}
     0.6,                     !- Diffuse Visible Reflectance {dimensionless}
@@ -84,4 +84,3 @@
     0.0,                     !- Left Side Opening Multiplier {dimensionless}
     0.0,                     !- Right Side Opening Multiplier {dimensionless}
     0;                       !- Angle of Resolution for Screen Transmittance Output Map {deg}
-

@@ -38,14 +38,14 @@
     15000,                   !- Maximum Figures in Shadow Overlap Calculations
     SutherlandHodgman,       !- Polygon Clipping Algorithm
     512,                     !- Pixel Counting Resolution
-    SimpleSkyDiffuseModeling,!- Sky Diffuse Modeling Algorithm
+    SimpleSkyDiffuseModeling,  !- Sky Diffuse Modeling Algorithm
     No,                      !- Output External Shading Calculation Results
     No,                      !- Disable Self-Shading Within Shading Zone Groups
     No;                      !- Disable Self-Shading From Shading Zone Groups to Other Zones
 
 !-   ===========  ALL OBJECTS IN CLASS: HEATBALANCEALGORITHM ===========
 
-  HeatBalanceAlgorithm,ConductionTransferFunction,200;
+  HeatBalanceAlgorithm,ConductionTransferFunction,200.0;
 
 !-   ===========  ALL OBJECTS IN CLASS: TIMESTEP ===========
 
@@ -57,8 +57,8 @@
     Zacatecas,               !- Name
     22.75,                   !- Latitude {deg}
     -102.5,                  !- Longitude {deg}
-    -6,                      !- Time Zone {hr}
-    2440;                    !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    2440.0;                  !- Elevation {m}
 
 !-   ===========  ALL OBJECTS IN CLASS: RUNPERIOD ===========
 
@@ -81,16 +81,16 @@
 
   ScheduleTypeLimits,
     ActivityLevel,           !- Name
-    0,                       !- Lower Limit Value
+    0.0,                     !- Lower Limit Value
     ,                        !- Upper Limit Value
     Continuous,              !- Numeric Type
-    activitylevel;           !- Unit Type
+    ActivityLevel;           !- Unit Type
 
   ScheduleTypeLimits,
     Fraction,                !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Continuous;              !- Numeric Type
 
 !-   ===========  ALL OBJECTS IN CLASS: MATERIAL ===========
 
@@ -99,7 +99,7 @@
     MediumSmooth,            !- Roughness
     0.0191,                  !- Thickness {m}
     0.06,                    !- Conductivity {W/m-K}
-    368,                     !- Density {kg/m3}
+    368.0,                   !- Density {kg/m3}
     590.000000000002,        !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.3,                     !- Solar Absorptance
@@ -110,8 +110,8 @@
     MediumSmooth,            !- Roughness
     0.019,                   !- Thickness {m}
     0.16,                    !- Conductivity {W/m-K}
-    800,                     !- Density {kg/m3}
-    1090,                    !- Specific Heat {J/kg-K}
+    800.0,                   !- Density {kg/m3}
+    1090.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.4,                     !- Solar Absorptance
     0.4;                     !- Visible Absorptance
@@ -121,7 +121,7 @@
     MediumRough,             !- Roughness
     0.1016,                  !- Thickness {m}
     0.53,                    !- Conductivity {W/m-K}
-    1280,                    !- Density {kg/m3}
+    1280.0,                  !- Density {kg/m3}
     840.000000000002,        !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.5,                     !- Solar Absorptance
@@ -181,9 +181,9 @@
   Zone,
     ThermalZone,             !- Name
     ,                        !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     ,                        !- Type
     1,                       !- Multiplier
     ,                        !- Ceiling Height {m}
@@ -207,10 +207,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     ,                        !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,1,0,  !- X,Y,Z ==> Vertex 2 {m}
-    1,1,0,  !- X,Y,Z ==> Vertex 3 {m}
-    1,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     space_roofceiling,       !- Name
@@ -224,10 +224,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     ,                        !- Number of Vertices
-    1,0,1,  !- X,Y,Z ==> Vertex 1 {m}
-    1,1,1,  !- X,Y,Z ==> Vertex 2 {m}
-    0,1,1,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,1;  !- X,Y,Z ==> Vertex 4 {m}
+    1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}
+    1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     space_wall0,             !- Name
@@ -241,10 +241,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     ,                        !- Number of Vertices
-    0,0,1,  !- X,Y,Z ==> Vertex 1 {m}
-    0,1,1,  !- X,Y,Z ==> Vertex 2 {m}
-    0,1,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     space_wall1,             !- Name
@@ -258,10 +258,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     ,                        !- Number of Vertices
-    0,1,1,  !- X,Y,Z ==> Vertex 1 {m}
-    1,1,1,  !- X,Y,Z ==> Vertex 2 {m}
-    1,1,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,1,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}
+    1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,1.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     space_wall2,             !- Name
@@ -275,10 +275,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     ,                        !- Number of Vertices
-    1,0,1,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,1,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    1,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     space_wall3,             !- Name
@@ -292,10 +292,10 @@
     NoWind,                  !- Wind Exposure
     ,                        !- View Factor to Ground
     ,                        !- Number of Vertices
-    1,1,1,  !- X,Y,Z ==> Vertex 1 {m}
-    1,0,1,  !- X,Y,Z ==> Vertex 2 {m}
-    1,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    1,1,0;  !- X,Y,Z ==> Vertex 4 {m}
+    1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}
+    1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}
+    1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    1.0,1.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONEHVAC:AIRDISTRIBUTIONUNIT ===========
 
@@ -325,7 +325,9 @@
     ZoneHVAC:ForcedAir:UserDefined,  !- Zone Equipment 3 Object Type
     DirectSolarAirHeater,    !- Zone Equipment 3 Name
     1,                       !- Zone Equipment 3 Cooling Sequence
-    1;                       !- Zone Equipment 3 Heating or No-Load Sequence
+    1,                       !- Zone Equipment 3 Heating or No-Load Sequence
+    ,                        !- Zone Equipment 3 Sequential Cooling Fraction Schedule Name
+    ;                        !- Zone Equipment 3 Sequential Heating Fraction Schedule Name
 
 !-   ===========  ALL OBJECTS IN CLASS: ZONEHVAC:EQUIPMENTCONNECTIONS ===========
 
@@ -358,7 +360,7 @@
 
   ZoneHVAC:ForcedAir:UserDefined,
     IndirectSolarAirHeater,  !- Name
-    IndirectSolarHeatingEMS, !- Overall Model Simulation Program Calling Manager Name
+    IndirectSolarHeatingEMS,  !- Overall Model Simulation Program Calling Manager Name
     ,                        !- Model Setup and Sizing Program Calling Manager Name
     OA_ISAH_Node,            !- Primary Air Inlet Node Name
     ISAHOutletNode,          !- Primary Air Outlet Node Name
@@ -416,18 +418,17 @@
   PythonPlugin:Instance,
     DirectSolarHeatingEMS,   !- Name
     No,                      !- Run During Warmup Days
-    PythonPluginSolarHeating,!- Python Module Name
+    PythonPluginSolarHeating,  !- Python Module Name
     DirectSolarHeating;      !- Plugin Class Name
 
   PythonPlugin:Instance,
-    IndirectSolarHeatingEMS, !- Name
+    IndirectSolarHeatingEMS,  !- Name
     No,                      !- Run During Warmup Days
-    PythonPluginSolarHeating,!- Python Module Name
+    PythonPluginSolarHeating,  !- Python Module Name
     IndirectSolarHeating;    !- Plugin Class Name
 
   PythonPlugin:Instance,
     AirMixingEMS,            !- Name
     No,                      !- Run During Warmup Days
-    PythonPluginSolarHeating,!- Python Module Name
+    PythonPluginSolarHeating,  !- Python Module Name
     AirMixing;               !- Plugin Class Name
-

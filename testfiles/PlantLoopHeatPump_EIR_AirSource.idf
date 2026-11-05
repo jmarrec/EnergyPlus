@@ -16,7 +16,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -24,15 +24,15 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   Site:Location,
     Chicago,                 !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
   SizingPeriod:DesignDay,
     Chicago Summer 1%,       !- Name
@@ -43,15 +43,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     ,                        !- Rain Indicator
     ,                        !- Snow Indicator
     ,                        !- Daylight Saving Time Indicator
@@ -67,19 +67,19 @@
     1,                       !- Month
     21,                      !- Day of Month
     WinterDesignDay,         !- Day Type
-    -20,                     !- Maximum Dry-Bulb Temperature {C}
+    -20.0,                   !- Maximum Dry-Bulb Temperature {C}
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -20,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    -20.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98934.,                  !- Barometric Pressure {Pa}
+    98934.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     ,                        !- Rain Indicator
     ,                        !- Snow Indicator
     ,                        !- Daylight Saving Time Indicator
@@ -104,17 +104,17 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
     Discrete;                !- Numeric Type
 
   Schedule:Constant,Heating Coil Load Loop Setpoint Temperature Schedule,Any Number,65.0;
 
-  Schedule:Constant,Cooling Coil Load Loop Setpoint Temperature Schedule,Any Number,20;
+  Schedule:Constant,Cooling Coil Load Loop Setpoint Temperature Schedule,Any Number,20.0;
 
-  Schedule:Constant,AlwaysOnSchedule,On/Off,1;
+  Schedule:Constant,AlwaysOnSchedule,On/Off,1.0;
 
-  ! Simulate a winter time, overnight hours load, but the pump is always running in that season
+! Simulate a winter time, overnight hours load, but the pump is always running in that season
 
   Schedule:Compact,
     Heating Coil Load Profile Load Schedule,  !- Name
@@ -150,7 +150,7 @@
     FOR: AllDays,            !- Field 10
     UNTIL: 24:00,1.0;        !- Field 11
 
-  ! Simulate a summer time, daytime hours load, but the pump is always running in that season
+! Simulate a summer time, daytime hours load, but the pump is always running in that season
 
   Schedule:Compact,
     Cooling Coil Load Profile Load Schedule,  !- Name
@@ -184,15 +184,15 @@
 
   PlantLoop,
     Heating Coil Load Loop,  !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     Heating Coil Load Loop Operation,  !- Plant Equipment Operation Scheme Name
     Heating Coil Load Loop Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.005,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    1,                       !- Plant Loop Volume {m3}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    1.0,                     !- Plant Loop Volume {m3}
     Heating Coil Load Loop Supply Inlet Node,  !- Plant Side Inlet Node Name
     Heating Coil Load Loop Supply Outlet Node,  !- Plant Side Outlet Node Name
     Heating Coil Load Loop Supply Branches,  !- Plant Side Branch List Name
@@ -217,8 +217,8 @@
 
   PlantEquipmentOperation:HeatingLoad,
     Heating Coil Load Loop Heating Operation,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Heating Coil Load Loop Heating Equipment;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -247,16 +247,16 @@
     Heating Coil Load Loop Supply Inlet Node,  !- Inlet Node Name
     Heating Coil Load Loop Intermediate Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    3000,                    !- Design Pump Head {Pa}
-    22,                      !- Design Power Consumption {W}
+    3000.0,                  !- Design Pump Head {Pa}
+    22.0,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   HeatPump:PlantLoop:EIR:Heating,
     Heating Coil,            !- Name
@@ -264,14 +264,14 @@
     Heating Coil Load Loop Supply Outlet Node,  !- Load Side Outlet Node Name
     AirSource,               !- Condenser Type
     Outdoor Air Inlet Node,  !- Source Side Inlet Node Name
-    Outdoor Air Outlet Node, !- Source Side Outlet Node Name
+    Outdoor Air Outlet Node,  !- Source Side Outlet Node Name
     ,                        !- Heat Recovery Inlet Node Name
     ,                        !- Heat Recovery Outlet Node Name
     Cooling Coil,            !- Companion Heat Pump Name
     0.005,                   !- Load Side Reference Flow Rate {m3/s}
-    2,                       !- Source Side Reference Flow Rate {m3/s}
+    2.0,                     !- Source Side Reference Flow Rate {m3/s}
     ,                        !- Heat Recovery Reference Flow Rate {m3/s}
-    80000,                   !- Reference Capacity {W}
+    80000.0,                 !- Reference Capacity {W}
     3.5,                     !- Reference Coefficient of Performance {W/W}
     ,                        !- Sizing Factor
     CapCurveFuncTemp,        !- Capacity Modifier Function of Temperature Curve Name
@@ -347,15 +347,15 @@
 
   PlantLoop,
     Cooling Coil Load Loop,  !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     Cooling Coil Load Loop Operation,  !- Plant Equipment Operation Scheme Name
     Cooling Coil Load Loop Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
     0.005,                   !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    1,                       !- Plant Loop Volume {m3}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    1.0,                     !- Plant Loop Volume {m3}
     Cooling Coil Load Loop Supply Inlet Node,  !- Plant Side Inlet Node Name
     Cooling Coil Load Loop Supply Outlet Node,  !- Plant Side Outlet Node Name
     Cooling Coil Load Loop Supply Branches,  !- Plant Side Branch List Name
@@ -380,8 +380,8 @@
 
   PlantEquipmentOperation:CoolingLoad,
     Cooling Coil Load Loop Cooling Operation,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Cooling Coil Load Loop Cooling Equipment;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -410,16 +410,16 @@
     Cooling Coil Load Loop Supply Inlet Node,  !- Inlet Node Name
     Cooling Coil Load Loop Intermediate Node,  !- Outlet Node Name
     0.005,                   !- Design Maximum Flow Rate {m3/s}
-    3000,                    !- Design Pump Head {Pa}
-    22,                      !- Design Power Consumption {W}
+    3000.0,                  !- Design Pump Head {Pa}
+    22.0,                    !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   HeatPump:PlantLoop:EIR:Cooling,
     Cooling Coil,            !- Name
@@ -427,14 +427,14 @@
     Cooling Coil Load Loop Supply Outlet Node,  !- Load Side Outlet Node Name
     AirSource,               !- Condenser Type
     Outdoor Air Inlet Node,  !- Source Side Inlet Node Name
-    Outdoor Air Outlet Node, !- Source Side Outlet Node Name
+    Outdoor Air Outlet Node,  !- Source Side Outlet Node Name
     ,                        !- Heat Recovery Inlet Node Name
     ,                        !- Heat Recovery Outlet Node Name
     Heating Coil,            !- Companion Heat Pump Name
     0.005,                   !- Load Side Reference Flow Rate {m3/s}
-    20,                      !- Source Side Reference Flow Rate {m3/s}
+    20.0,                    !- Source Side Reference Flow Rate {m3/s}
     ,                        !- Heat Recovery Reference Flow Rate {m3/s}
-    400000,                  !- Reference Capacity {W}
+    400000.0,                !- Reference Capacity {W}
     3.5,                     !- Reference Coefficient of Performance {W/W}
     ,                        !- Sizing Factor
     CapCurveFuncTemp2,       !- Capacity Modifier Function of Temperature Curve Name
@@ -538,4 +538,3 @@
   Output:Variable,*,Heat Pump Load Side Mass Flow Rate,Hourly;
 
   Output:Variable,*,Heat Pump Source Side Mass Flow Rate,Hourly;
-

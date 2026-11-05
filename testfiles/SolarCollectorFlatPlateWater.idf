@@ -31,7 +31,7 @@
     Suburbs,                 !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.04,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -39,7 +39,7 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   ConvergenceLimits,
@@ -50,16 +50,16 @@
 
   Site:Location,
     CHICAGO_IL_USA_WMO_725300,  !- Name
-    42.00,                   !- Latitude {deg}
+    42.0,                    !- Latitude {deg}
     -87.88,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
   SimulationControl,
-    NO,                      !- Do Zone Sizing Calculation
-    NO,                      !- Do System Sizing Calculation
-    NO,                      !- Do Plant Sizing Calculation
-    YES,                     !- Run Simulation for Sizing Periods
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
     No,                      !- Run Simulation for Weather File Run Periods
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
@@ -72,12 +72,12 @@
     1,                       !- End Month
     7,                       !- End Day of Month
     ,                        !- End Year
-    TUESDAY,                 !- Day of Week for Start Day
-    YES,                     !- Use Weather File Holidays and Special Days
-    YES,                     !- Use Weather File Daylight Saving Period
-    NO,                      !- Apply Weekend Holiday Rule
-    YES,                     !- Use Weather File Rain Indicators
-    YES;                     !- Use Weather File Snow Indicators
+    Tuesday,                 !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
 
   RunPeriod,
     Run Period 2,            !- Name
@@ -87,14 +87,14 @@
     7,                       !- End Month
     7,                       !- End Day of Month
     ,                        !- End Year
-    TUESDAY,                 !- Day of Week for Start Day
-    YES,                     !- Use Weather File Holidays and Special Days
-    YES,                     !- Use Weather File Daylight Saving Period
-    NO,                      !- Apply Weekend Holiday Rule
-    YES,                     !- Use Weather File Rain Indicators
-    YES;                     !- Use Weather File Snow Indicators
+    Tuesday,                 !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
 
-  ! CHICAGO_IL_USA Annual Heating 99%, MaxDB=-17.3°C
+! CHICAGO_IL_USA Annual Heating 99%, MaxDB=-17.3°C
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Htg 99% Condns DB,  !- Name
@@ -105,15 +105,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -122,9 +122,9 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
-  ! CHICAGO_IL_USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.5°C MWB=23°C
+! CHICAGO_IL_USA Annual Cooling (DB=>MWB) 1%, MaxDB=31.5°C MWB=23°C
 
   SizingPeriod:DesignDay,
     CHICAGO Ann Clg 1% Condns DB=>MWB,  !- Name
@@ -135,15 +135,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    WetBulb,                 !- Humidity Condition Type
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -152,7 +152,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
 !***SURFACES***
 
@@ -161,74 +161,74 @@
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
     0.0,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
-    0.0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    1.220,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    1.220,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    1.22,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    1.22,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
     Collector Surface 2,     !- Name
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
-    1.300,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
-    1.300,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    2.520,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    2.520,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
+    1.3,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
+    1.3,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    2.52,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    2.52,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
     Collector Surface 3,     !- Name
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
-    2.600,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
-    2.600,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    3.820,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    3.820,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
+    2.6,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
+    2.6,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.82,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.82,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
     Collector Surface 4,     !- Name
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
-    3.900,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
-    3.900,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    5.120,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    5.120,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
+    3.9,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
+    3.9,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    5.12,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    5.12,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
     Collector Surface 5,     !- Name
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
-    5.200,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
-    5.200,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.420,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.420,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
+    5.2,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
+    5.2,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.42,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.42,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
 
   Shading:Site:Detailed,
     Collector Surface 6,     !- Name
     ,                        !- Transmittance Schedule Name
     4,                       !- Number of Vertices
-    6.500,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
-    6.500,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    7.720,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    7.720,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
+    6.5,1.718,1.718,  !- X,Y,Z ==> Vertex 1 {m}
+    6.5,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    7.72,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    7.72,1.718,1.718;  !- X,Y,Z ==> Vertex 4 {m}
 
 !***PLANT DHW LOOP***
 
   Sizing:Plant,
     DHW Loop,                !- Plant or Condenser Loop Name
-    HEATING,                 !- Loop Type
-    82.,                     !- Design Loop Exit Temperature {C}
-    11;                      !- Loop Design Temperature Difference {deltaC}
+    Heating,                 !- Loop Type
+    82.0,                    !- Design Loop Exit Temperature {C}
+    11.0;                    !- Loop Design Temperature Difference {deltaC}
 
   PlantLoop,
     DHW Loop,                !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
     DHW Loop Operation,      !- Plant Equipment Operation Scheme Name
     Instantaneous Water Heater Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
-    AUTOSIZE,                !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Plant Loop Volume {m3}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    Autocalculate,           !- Plant Loop Volume {m3}
     Storage Tank Use Loop Inlet Node,  !- Plant Side Inlet Node Name
     Instantaneous Water Heater Outlet Node,  !- Plant Side Outlet Node Name
     Storage Tank Use Branches,  !- Plant Side Branch List Name
@@ -237,7 +237,7 @@
     Demand Outlet Node,      !- Demand Side Outlet Node Name
     Demand Branches,         !- Demand Side Branch List Name
     Demand Connectors,       !- Demand Side Connector List Name
-    OPTIMAL;                 !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
 
   PlantEquipmentOperationSchemes,
     DHW Loop Operation,      !- Name
@@ -247,14 +247,14 @@
 
   PlantEquipmentOperation:HeatingLoad,
     DHW Control Scheme,      !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     DHW Plant Equipment;     !- Range 1 Equipment List Name
 
   PlantEquipmentList,
     DHW Plant Equipment,     !- Name
     TemperingValve,          !- Equipment 1 Object Type
-    DHW Anti-Scald Diverter, !- Equipment 1 Name
+    DHW Anti-Scald Diverter,  !- Equipment 1 Name
     WaterHeater:Mixed,       !- Equipment 2 Object Type
     Storage Tank,            !- Equipment 2 Name
     WaterHeater:Mixed,       !- Equipment 3 Object Type
@@ -271,12 +271,12 @@
     Instantaneous Water Heater Outlet Node,  !- Node 1 Name
     Instantaneous Water Heater Inlet Node;  !- Node 2 Name
 
-  !***PLANT DHW LOOP: WATER HEATER SIDE***
+!***PLANT DHW LOOP: WATER HEATER SIDE***
 
   BranchList,
     Storage Tank Use Branches,  !- Name
     Storage Tank Use Inlet Branch,  !- Branch 1 Name
-    Storage Tank Use Branch, !- Branch 2 Name
+    Storage Tank Use Branch,  !- Branch 2 Name
     Storage Tank Tempering Branch,  !- Branch 3 Name
     Storage Tank Use Outlet Branch;  !- Branch 4 Name
 
@@ -290,13 +290,13 @@
   Connector:Splitter,
     Storage Tank Use Splitter,  !- Name
     Storage Tank Use Inlet Branch,  !- Inlet Branch Name
-    Storage Tank Use Branch, !- Outlet Branch 1 Name
+    Storage Tank Use Branch,  !- Outlet Branch 1 Name
     Storage Tank Tempering Branch;  !- Outlet Branch 2 Name
 
   Connector:Mixer,
     Storage Tank Use Mixer,  !- Name
     Storage Tank Use Outlet Branch,  !- Outlet Branch Name
-    Storage Tank Use Branch, !- Inlet Branch 1 Name
+    Storage Tank Use Branch,  !- Inlet Branch 1 Name
     Storage Tank Tempering Branch;  !- Inlet Branch 2 Name
 
   Branch,
@@ -305,42 +305,42 @@
     Pump:VariableSpeed,      !- Component 1 Object Type
     DHW Loop Pump,           !- Component 1 Name
     Storage Tank Use Loop Inlet Node,  !- Component 1 Inlet Node Name
-    DHW Use Side Pump Outlet;!- Component 1 Outlet Node Name
+    DHW Use Side Pump Outlet;  !- Component 1 Outlet Node Name
 
   Branch,
     Storage Tank Tempering Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     TemperingValve,          !- Component 1 Object Type
-    DHW Anti-Scald Diverter, !- Component 1 Name
+    DHW Anti-Scald Diverter,  !- Component 1 Name
     DHW Anti-Scald Inlet Node,  !- Component 1 Inlet Node Name
     DHW Anti-Scald Outlet Node;  !- Component 1 Outlet Node Name
 
   TemperingValve,
-    DHW Anti-Scald Diverter, !- Name
+    DHW Anti-Scald Diverter,  !- Name
     DHW Anti-Scald Inlet Node,  !- Inlet Node Name
     DHW Anti-Scald Outlet Node,  !- Outlet Node Name
     Storage Tank Use Outlet Node,  !- Stream 2 Source Node Name
     Instantaneous Water Heater Outlet Node,  !- Temperature Setpoint Node Name
-    DHW Use Side Pump Outlet;!- Pump Outlet Node Name
+    DHW Use Side Pump Outlet;  !- Pump Outlet Node Name
 
   Pump:VariableSpeed,
     DHW Loop Pump,           !- Name
     Storage Tank Use Loop Inlet Node,  !- Inlet Node Name
-    DHW Use Side Pump Outlet,!- Outlet Node Name
-    AUTOSIZE,                !- Design Maximum Flow Rate {m3/s}
-    300000,                  !- Design Pump Head {Pa}
-    AUTOSIZE,                !- Design Power Consumption {W}
+    DHW Use Side Pump Outlet,  !- Outlet Node Name
+    Autosize,                !- Design Maximum Flow Rate {m3/s}
+    300000.0,                !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Branch,
-    Storage Tank Use Branch, !- Name
+    Storage Tank Use Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     WaterHeater:Mixed,       !- Component 1 Object Type
     Storage Tank,            !- Component 1 Name
@@ -361,13 +361,13 @@
     Hot Water Setpoint Temp Schedule,  !- Setpoint Temperature Schedule Name
     ,                        !- Deadband Temperature Difference {deltaC}
     82.2222,                 !- Maximum Temperature Limit {C}
-    MODULATE,                !- Heater Control Type
-    80000,                   !- Heater Maximum Capacity {W}
+    Modulate,                !- Heater Control Type
+    80000.0,                 !- Heater Maximum Capacity {W}
     ,                        !- Heater Minimum Capacity {W}
     ,                        !- Heater Ignition Minimum Flow Rate {m3/s}
     ,                        !- Heater Ignition Delay {s}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.90,                    !- Heater Thermal Efficiency
+    Electricity,             !- Heater Fuel Type
+    0.9,                     !- Heater Thermal Efficiency
     ,                        !- Part Load Factor Curve Name
     ,                        !- Off Cycle Parasitic Fuel Consumption Rate {W}
     ,                        !- Off Cycle Parasitic Fuel Type
@@ -375,14 +375,14 @@
     ,                        !- On Cycle Parasitic Fuel Consumption Rate {W}
     ,                        !- On Cycle Parasitic Fuel Type
     ,                        !- On Cycle Parasitic Heat Fraction to Tank
-    SCHEDULE,                !- Ambient Temperature Indicator
+    Schedule,                !- Ambient Temperature Indicator
     Ambient Temp Schedule,   !- Ambient Temperature Schedule Name
     ,                        !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
     1.0,                     !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
-    1,                       !- Off Cycle Loss Fraction to Zone
+    1.0,                     !- Off Cycle Loss Fraction to Zone
     1.0,                     !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
-    1,                       !- On Cycle Loss Fraction to Zone
+    1.0,                     !- On Cycle Loss Fraction to Zone
     ,                        !- Peak Use Flow Rate {m3/s}
     ,                        !- Use Flow Rate Fraction Schedule Name
     ,                        !- Cold Water Supply Temperature Schedule Name
@@ -392,11 +392,11 @@
     ,                        !- Source Side Inlet Node Name
     ,                        !- Source Side Outlet Node Name
     ,                        !- Source Side Effectiveness
-    autosize,                !- Use Side Design Flow Rate {m3/s}
+    Autosize,                !- Use Side Design Flow Rate {m3/s}
     ,                        !- Source Side Design Flow Rate {m3/s}
     ;                        !- Indirect Water Heating Recovery Time {hr}
 
-  !***PLANT DHW LOOP: DOMESTIC HOT WATER SIDE***
+!***PLANT DHW LOOP: DOMESTIC HOT WATER SIDE***
 
   BranchList,
     Demand Branches,         !- Name
@@ -450,7 +450,7 @@
     ,                        !- Reclamation Water Storage Tank Name
     ,                        !- Hot Water Supply Temperature Schedule Name
     ,                        !- Cold Water Supply Temperature Schedule Name
-    NONE,                    !- Drain Water Heat Exchanger Type
+    None,                    !- Drain Water Heat Exchanger Type
     ,                        !- Drain Water Heat Exchanger Destination
     ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
     Sinks,                   !- Water Use Equipment 1 Name
@@ -475,7 +475,7 @@
   WaterUse:Equipment,
     Clotheswasher,           !- Name
     Clotheswasher,           !- End-Use Subcategory
-    0.000063,                !- Peak Flow Rate {m3/s}
+    6.3e-05,                 !- Peak Flow Rate {m3/s}
     Clotheswasher,           !- Flow Rate Fraction Schedule Name
     Washers Temp Schedule;   !- Target Temperature Schedule Name
 
@@ -500,7 +500,7 @@
     Demand Outlet Node;      !- Outlet Node Name
 
   Site:WaterMainsTemperature,
-    CORRELATION,             !- Calculation Method
+    Correlation,             !- Calculation Method
     ,                        !- Temperature Schedule Name
     9.69,                    !- Annual Average Outdoor Air Temperature {C}
     28.1;                    !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
@@ -509,21 +509,21 @@
 
   Sizing:Plant,
     Collector Loop,          !- Plant or Condenser Loop Name
-    HEATING,                 !- Loop Type
-    82.,                     !- Design Loop Exit Temperature {C}
-    11;                      !- Loop Design Temperature Difference {deltaC}
+    Heating,                 !- Loop Type
+    82.0,                    !- Design Loop Exit Temperature {C}
+    11.0;                    !- Loop Design Temperature Difference {deltaC}
 
   PlantLoop,
     Collector Loop,          !- Name
-    WATER,                   !- Fluid Type
+    Water,                   !- Fluid Type
     ,                        !- User Defined Fluid Type
-    Collector Loop Operation,!- Plant Equipment Operation Scheme Name
+    Collector Loop Operation,  !- Plant Equipment Operation Scheme Name
     Storage Tank Source Loop Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    3,                       !- Minimum Loop Temperature {C}
-    AUTOSIZE,                !- Maximum Loop Flow Rate {m3/s}
+    100.0,                   !- Maximum Loop Temperature {C}
+    3.0,                     !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
     0.0,                     !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Plant Loop Volume {m3}
+    Autocalculate,           !- Plant Loop Volume {m3}
     Storage Tank Source Loop Inlet Node,  !- Plant Side Inlet Node Name
     Storage Tank Source Loop Outlet Node,  !- Plant Side Outlet Node Name
     Storage Tank Source Branches,  !- Plant Side Branch List Name
@@ -532,19 +532,19 @@
     Collector Loop Outlet Node,  !- Demand Side Outlet Node Name
     Collector Branches,      !- Demand Side Branch List Name
     Collector Connectors,    !- Demand Side Connector List Name
-    OPTIMAL,                 !- Load Distribution Scheme
+    Optimal,                 !- Load Distribution Scheme
     Collector Loop Availability Manager List;  !- Availability Manager List Name
 
   PlantEquipmentOperationSchemes,
-    Collector Loop Operation,!- Name
+    Collector Loop Operation,  !- Name
     PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 1 Object Type
-    Collector Control Scheme,!- Control Scheme 1 Name
+    Collector Control Scheme,  !- Control Scheme 1 Name
     AlwaysOnSchedule;        !- Control Scheme 1 Schedule Name
 
   PlantEquipmentOperation:HeatingLoad,
-    Collector Control Scheme,!- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    10000000,                !- Load Range 1 Upper Limit {W}
+    Collector Control Scheme,  !- Name
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    10000000.0,              !- Load Range 1 Upper Limit {W}
     Collector Plant Equipment;  !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -578,12 +578,12 @@
 
   AvailabilityManager:LowTemperatureTurnOn,
     Low Temperature Turn On Availability Manager,  !- Name
-    Collector 1 Outlet Node, !- Sensor Node Name
+    Collector 1 Outlet Node,  !- Sensor Node Name
     0.0;                     !- Temperature {C}
 
   AvailabilityManager:DifferentialThermostat,
     Differential Thermostat Availability Manager,  !- Name
-    Collector 1 Outlet Node, !- Hot Node Name
+    Collector 1 Outlet Node,  !- Hot Node Name
     Storage Tank Source Outlet Node,  !- Cold Node Name
     10.0,                    !- Temperature Difference On Limit {deltaC}
     2.0;                     !- Temperature Difference Off Limit {deltaC}
@@ -625,17 +625,17 @@
     Collector Loop Pump,     !- Name
     Storage Tank Source Loop Inlet Node,  !- Inlet Node Name
     Storage Tank Source Pump-Water Heater Node,  !- Outlet Node Name
-    AUTOSIZE,                !- Design Maximum Flow Rate {m3/s}
-    300000,                  !- Design Pump Head {Pa}
-    AUTOSIZE,                !- Design Power Consumption {W}
+    Autosize,                !- Design Maximum Flow Rate {m3/s}
+    300000.0,                !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
     0.0,                     !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    Intermittent;            !- Pump Control Type
 
   Branch,
     Storage Tank Source Branch,  !- Name
@@ -651,13 +651,13 @@
     Hot Water Setpoint Temp Schedule,  !- Setpoint Temperature Schedule Name
     5.0,                     !- Deadband Temperature Difference {deltaC}
     82.2222,                 !- Maximum Temperature Limit {C}
-    CYCLE,                   !- Heater Control Type
+    Cycle,                   !- Heater Control Type
     0.0,                     !- Heater Maximum Capacity {W}
     ,                        !- Heater Minimum Capacity {W}
     ,                        !- Heater Ignition Minimum Flow Rate {m3/s}
     ,                        !- Heater Ignition Delay {s}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.90,                    !- Heater Thermal Efficiency
+    Electricity,             !- Heater Fuel Type
+    0.9,                     !- Heater Thermal Efficiency
     ,                        !- Part Load Factor Curve Name
     ,                        !- Off Cycle Parasitic Fuel Consumption Rate {W}
     ,                        !- Off Cycle Parasitic Fuel Type
@@ -665,7 +665,7 @@
     ,                        !- On Cycle Parasitic Fuel Consumption Rate {W}
     ,                        !- On Cycle Parasitic Fuel Type
     ,                        !- On Cycle Parasitic Heat Fraction to Tank
-    SCHEDULE,                !- Ambient Temperature Indicator
+    Schedule,                !- Ambient Temperature Indicator
     Ambient Temp Schedule,   !- Ambient Temperature Schedule Name
     ,                        !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
@@ -682,8 +682,8 @@
     Storage Tank Source Inlet Node,  !- Source Side Inlet Node Name
     Storage Tank Source Outlet Node,  !- Source Side Outlet Node Name
     1.0,                     !- Source Side Effectiveness
-    autosize,                !- Use Side Design Flow Rate {m3/s}
-    autosize,                !- Source Side Design Flow Rate {m3/s}
+    Autosize,                !- Use Side Design Flow Rate {m3/s}
+    Autosize,                !- Source Side Design Flow Rate {m3/s}
     ;                        !- Indirect Water Heating Recovery Time {hr}
 
   Branch,
@@ -710,7 +710,7 @@
     Collector 4 Branch,      !- Branch 5 Name
     Collector 5 Branch,      !- Branch 6 Name
     Collector 6 Branch,      !- Branch 7 Name
-    Collector Outlet Branch; !- Branch 8 Name
+    Collector Outlet Branch;  !- Branch 8 Name
 
   ConnectorList,
     Collector Connectors,    !- Name
@@ -731,7 +731,7 @@
 
   Connector:Mixer,
     Collector Mixer,         !- Name
-    Collector Outlet Branch, !- Outlet Branch Name
+    Collector Outlet Branch,  !- Outlet Branch Name
     Collector 1 Branch,      !- Inlet Branch 1 Name
     Collector 2 Branch,      !- Inlet Branch 2 Name
     Collector 3 Branch,      !- Inlet Branch 3 Name
@@ -758,15 +758,15 @@
     SolarCollector:FlatPlate:Water,  !- Component 1 Object Type
     Collector 1,             !- Component 1 Name
     Collector 1 Inlet Node,  !- Component 1 Inlet Node Name
-    Collector 1 Outlet Node; !- Component 1 Outlet Node Name
+    Collector 1 Outlet Node;  !- Component 1 Outlet Node Name
 
   SolarCollector:FlatPlate:Water,
     Collector 1,             !- Name
     Alternate Energy Technologies AE-32,  !- SolarCollectorPerformance Name
     Collector Surface 1,     !- Surface Name
     Collector 1 Inlet Node,  !- Inlet Node Name
-    Collector 1 Outlet Node, !- Outlet Node Name
-    0.00001;                 !- Maximum Flow Rate {m3/s}
+    Collector 1 Outlet Node,  !- Outlet Node Name
+    1e-05;                   !- Maximum Flow Rate {m3/s}
 
   Branch,
     Collector 2 Branch,      !- Name
@@ -774,15 +774,15 @@
     SolarCollector:FlatPlate:Water,  !- Component 1 Object Type
     Collector 2,             !- Component 1 Name
     Collector 2 Inlet Node,  !- Component 1 Inlet Node Name
-    Collector 2 Outlet Node; !- Component 1 Outlet Node Name
+    Collector 2 Outlet Node;  !- Component 1 Outlet Node Name
 
   SolarCollector:FlatPlate:Water,
     Collector 2,             !- Name
     Alternate Energy Technologies AE-32,  !- SolarCollectorPerformance Name
     Collector Surface 2,     !- Surface Name
     Collector 2 Inlet Node,  !- Inlet Node Name
-    Collector 2 Outlet Node, !- Outlet Node Name
-    0.00001;                 !- Maximum Flow Rate {m3/s}
+    Collector 2 Outlet Node,  !- Outlet Node Name
+    1e-05;                   !- Maximum Flow Rate {m3/s}
 
   Branch,
     Collector 3 Branch,      !- Name
@@ -790,15 +790,15 @@
     SolarCollector:FlatPlate:Water,  !- Component 1 Object Type
     Collector 3,             !- Component 1 Name
     Collector 3 Inlet Node,  !- Component 1 Inlet Node Name
-    Collector 3 Outlet Node; !- Component 1 Outlet Node Name
+    Collector 3 Outlet Node;  !- Component 1 Outlet Node Name
 
   SolarCollector:FlatPlate:Water,
     Collector 3,             !- Name
     Alternate Energy Technologies AE-32,  !- SolarCollectorPerformance Name
     Collector Surface 3,     !- Surface Name
     Collector 3 Inlet Node,  !- Inlet Node Name
-    Collector 3 Outlet Node, !- Outlet Node Name
-    0.00001;                 !- Maximum Flow Rate {m3/s}
+    Collector 3 Outlet Node,  !- Outlet Node Name
+    1e-05;                   !- Maximum Flow Rate {m3/s}
 
   Branch,
     Collector 4 Branch,      !- Name
@@ -806,15 +806,15 @@
     SolarCollector:FlatPlate:Water,  !- Component 1 Object Type
     Collector 4,             !- Component 1 Name
     Collector 4 Inlet Node,  !- Component 1 Inlet Node Name
-    Collector 4 Outlet Node; !- Component 1 Outlet Node Name
+    Collector 4 Outlet Node;  !- Component 1 Outlet Node Name
 
   SolarCollector:FlatPlate:Water,
     Collector 4,             !- Name
     Alternate Energy Technologies AE-32,  !- SolarCollectorPerformance Name
     Collector Surface 4,     !- Surface Name
     Collector 4 Inlet Node,  !- Inlet Node Name
-    Collector 4 Outlet Node, !- Outlet Node Name
-    0.00001;                 !- Maximum Flow Rate {m3/s}
+    Collector 4 Outlet Node,  !- Outlet Node Name
+    1e-05;                   !- Maximum Flow Rate {m3/s}
 
   Branch,
     Collector 5 Branch,      !- Name
@@ -822,15 +822,15 @@
     SolarCollector:FlatPlate:Water,  !- Component 1 Object Type
     Collector 5,             !- Component 1 Name
     Collector 5 Inlet Node,  !- Component 1 Inlet Node Name
-    Collector 5 Outlet Node; !- Component 1 Outlet Node Name
+    Collector 5 Outlet Node;  !- Component 1 Outlet Node Name
 
   SolarCollector:FlatPlate:Water,
     Collector 5,             !- Name
     Alternate Energy Technologies AE-32,  !- SolarCollectorPerformance Name
     Collector Surface 5,     !- Surface Name
     Collector 5 Inlet Node,  !- Inlet Node Name
-    Collector 5 Outlet Node, !- Outlet Node Name
-    0.00001;                 !- Maximum Flow Rate {m3/s}
+    Collector 5 Outlet Node,  !- Outlet Node Name
+    1e-05;                   !- Maximum Flow Rate {m3/s}
 
   Branch,
     Collector 6 Branch,      !- Name
@@ -838,22 +838,22 @@
     SolarCollector:FlatPlate:Water,  !- Component 1 Object Type
     Collector 6,             !- Component 1 Name
     Collector 6 Inlet Node,  !- Component 1 Inlet Node Name
-    Collector 6 Outlet Node; !- Component 1 Outlet Node Name
+    Collector 6 Outlet Node;  !- Component 1 Outlet Node Name
 
   SolarCollector:FlatPlate:Water,
     Collector 6,             !- Name
     Alternate Energy Technologies AE-32,  !- SolarCollectorPerformance Name
     Collector Surface 6,     !- Surface Name
     Collector 6 Inlet Node,  !- Inlet Node Name
-    Collector 6 Outlet Node, !- Outlet Node Name
-    0.00001;                 !- Maximum Flow Rate {m3/s}
+    Collector 6 Outlet Node,  !- Outlet Node Name
+    1e-05;                   !- Maximum Flow Rate {m3/s}
 
   SolarCollectorPerformance:FlatPlate,
     Alternate Energy Technologies AE-32,  !- Name
     2.9646,                  !- Gross Area {m2}
-    WATER,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
-    INLET,                   !- Test Correlation Type
+    Water,                   !- Test Fluid
+    3.88e-05,                !- Test Flow Rate {m3/s}
+    Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
     -0.00193,                !- Coefficient 3 of Efficiency Equation {W/m2-K2}
@@ -861,7 +861,7 @@
     -0.0055;                 !- Coefficient 3 of Incident Angle Modifier
 
   Branch,
-    Collector Outlet Branch, !- Name
+    Collector Outlet Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
     Collector Outlet Pipe,   !- Component 1 Name
@@ -882,7 +882,7 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   Schedule:Compact,
     AlwaysOnSchedule,        !- Name
@@ -960,7 +960,7 @@
     Clotheswasher,           !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekends SummerDesignDay WinterDesignDay, !- Field 2
+    For: Weekends SummerDesignDay WinterDesignDay,  !- Field 2
     Until: 10:00,0.0,        !- Field 3
     Until: 11:00,1.0,        !- Field 5
     Until: 24:00,0.0,        !- Field 7
@@ -978,7 +978,7 @@
 
 !***REPORTING***
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
   Output:Surfaces:Drawing,DXF;
 
@@ -988,115 +988,114 @@
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
 
-  Output:Variable,*,Plant Supply Side Inlet Mass Flow Rate,detailed;
+  Output:Variable,*,Plant Supply Side Inlet Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Plant Supply Side Inlet Temperature,detailed;
+  Output:Variable,*,Plant Supply Side Inlet Temperature,Detailed;
 
-  Output:Variable,*,Plant Supply Side Outlet Temperature,detailed;
+  Output:Variable,*,Plant Supply Side Outlet Temperature,Detailed;
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,detailed;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Detailed;
 
-  Output:Variable,*,Pump Mass Flow Rate,detailed;
+  Output:Variable,*,Pump Mass Flow Rate,Detailed;
 
-  Output:Variable,*,System Node Temperature,detailed;
+  Output:Variable,*,System Node Temperature,Detailed;
 
-  Output:Variable,*,System Node Mass Flow Rate,detailed;
+  Output:Variable,*,System Node Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Heater Tank Temperature,detailed;
+  Output:Variable,*,Water Heater Tank Temperature,Detailed;
 
-  Output:Variable,*,Water Heater Heat Loss Rate,detailed;
+  Output:Variable,*,Water Heater Heat Loss Rate,Detailed;
 
-  Output:Variable,*,Water Heater Heat Loss Energy,detailed;
+  Output:Variable,*,Water Heater Heat Loss Energy,Detailed;
 
-  Output:Variable,*,Water Heater Use Side Mass Flow Rate,detailed;
+  Output:Variable,*,Water Heater Use Side Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Heater Use Side Inlet Temperature,detailed;
+  Output:Variable,*,Water Heater Use Side Inlet Temperature,Detailed;
 
-  Output:Variable,*,Water Heater Use Side Outlet Temperature,detailed;
+  Output:Variable,*,Water Heater Use Side Outlet Temperature,Detailed;
 
-  Output:Variable,*,Water Heater Use Side Heat Transfer Rate,detailed;
+  Output:Variable,*,Water Heater Use Side Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Water Heater Use Side Heat Transfer Energy,detailed;
+  Output:Variable,*,Water Heater Use Side Heat Transfer Energy,Detailed;
 
-  Output:Variable,*,Water Heater Source Side Mass Flow Rate,detailed;
+  Output:Variable,*,Water Heater Source Side Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Heater Source Side Inlet Temperature,detailed;
+  Output:Variable,*,Water Heater Source Side Inlet Temperature,Detailed;
 
-  Output:Variable,*,Water Heater Source Side Outlet Temperature,detailed;
+  Output:Variable,*,Water Heater Source Side Outlet Temperature,Detailed;
 
-  Output:Variable,*,Water Heater Source Side Heat Transfer Rate,detailed;
+  Output:Variable,*,Water Heater Source Side Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Water Heater Source Side Heat Transfer Energy,detailed;
+  Output:Variable,*,Water Heater Source Side Heat Transfer Energy,Detailed;
 
-  Output:Variable,*,Water Heater Total Demand Heat Transfer Rate,detailed;
+  Output:Variable,*,Water Heater Total Demand Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Water Heater Total Demand Heat Transfer Energy,detailed;
+  Output:Variable,*,Water Heater Total Demand Heat Transfer Energy,Detailed;
 
-  Output:Variable,*,Water Heater Heating Rate,detailed;
+  Output:Variable,*,Water Heater Heating Rate,Detailed;
 
-  Output:Variable,*,Water Heater Heating Energy,detailed;
+  Output:Variable,*,Water Heater Heating Energy,Detailed;
 
-  Output:Variable,*,Water Heater Unmet Demand Heat Transfer Rate,detailed;
+  Output:Variable,*,Water Heater Unmet Demand Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Water Heater Unmet Demand Heat Transfer Energy,detailed;
+  Output:Variable,*,Water Heater Unmet Demand Heat Transfer Energy,Detailed;
 
-  Output:Variable,*,Water Heater Venting Heat Transfer Rate,detailed;
+  Output:Variable,*,Water Heater Venting Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Water Heater Venting Heat Transfer Energy,detailed;
+  Output:Variable,*,Water Heater Venting Heat Transfer Energy,Detailed;
 
-  Output:Variable,*,Water Heater Net Heat Transfer Rate,detailed;
+  Output:Variable,*,Water Heater Net Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Water Heater Net Heat Transfer Energy,detailed;
+  Output:Variable,*,Water Heater Net Heat Transfer Energy,Detailed;
 
-  Output:Variable,*,Water Heater Cycle On Count,detailed;
+  Output:Variable,*,Water Heater Cycle On Count,Detailed;
 
-  Output:Variable,*,Water Heater Runtime Fraction,detailed;
+  Output:Variable,*,Water Heater Runtime Fraction,Detailed;
 
-  Output:Variable,*,Water Heater Part Load Ratio,detailed;
+  Output:Variable,*,Water Heater Part Load Ratio,Detailed;
 
-  Output:Variable,*,Water Heater Electricity Rate,detailed;
+  Output:Variable,*,Water Heater Electricity Rate,Detailed;
 
-  Output:Variable,*,Water Heater Electricity Energy,detailed;
+  Output:Variable,*,Water Heater Electricity Energy,Detailed;
 
-  Output:Variable,*,Water Heater Water Volume Flow Rate,detailed;
+  Output:Variable,*,Water Heater Water Volume Flow Rate,Detailed;
 
-  Output:Variable,*,Water Heater Water Volume,detailed;
+  Output:Variable,*,Water Heater Water Volume,Detailed;
 
-  Output:Variable,Instantaneous Water Heater Outlet Node,System Node Setpoint Temperature,detailed;
+  Output:Variable,Instantaneous Water Heater Outlet Node,System Node Setpoint Temperature,Detailed;
 
-  Output:Variable,Instantaneous Water Heater Outlet Node,System Node Setpoint High Temperature,detailed;
+  Output:Variable,Instantaneous Water Heater Outlet Node,System Node Setpoint High Temperature,Detailed;
 
-  Output:Variable,Instantaneous Water Heater Outlet Node,System Node Setpoint Low Temperature,detailed;
+  Output:Variable,Instantaneous Water Heater Outlet Node,System Node Setpoint Low Temperature,Detailed;
 
-  Output:Variable,*,Tempering Valve Flow Fraction,detailed;
+  Output:Variable,*,Tempering Valve Flow Fraction,Detailed;
 
-  Output:Variable,*,Water Use Equipment Hot Water Mass Flow Rate,detailed;
+  Output:Variable,*,Water Use Equipment Hot Water Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Use Equipment Cold Water Mass Flow Rate,detailed;
+  Output:Variable,*,Water Use Equipment Cold Water Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Use Equipment Total Mass Flow Rate,detailed;
+  Output:Variable,*,Water Use Equipment Total Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Use Connections Hot Water Mass Flow Rate,detailed;
+  Output:Variable,*,Water Use Connections Hot Water Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Use Connections Cold Water Mass Flow Rate,detailed;
+  Output:Variable,*,Water Use Connections Cold Water Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Water Use Connections Total Mass Flow Rate,detailed;
+  Output:Variable,*,Water Use Connections Total Mass Flow Rate,Detailed;
 
-  Output:Variable,*,Surface Outside Face Incident Solar Radiation Rate per Area,detailed;
+  Output:Variable,*,Surface Outside Face Incident Solar Radiation Rate per Area,Detailed;
 
-  Output:Variable,*,Solar Collector Incident Angle Modifier,detailed;
+  Output:Variable,*,Solar Collector Incident Angle Modifier,Detailed;
 
-  Output:Variable,*,Solar Collector Efficiency,detailed;
+  Output:Variable,*,Solar Collector Efficiency,Detailed;
 
-  Output:Variable,*,Solar Collector Heat Transfer Rate,detailed;
+  Output:Variable,*,Solar Collector Heat Transfer Rate,Detailed;
 
-  Output:Variable,*,Solar Collector Heat Gain Rate,detailed;
+  Output:Variable,*,Solar Collector Heat Gain Rate,Detailed;
 
-  Output:Variable,*,Solar Collector Heat Loss Rate,detailed;
+  Output:Variable,*,Solar Collector Heat Loss Rate,Detailed;
 
-  Output:Variable,*,Solar Collector Heat Transfer Energy,detailed;
+  Output:Variable,*,Solar Collector Heat Transfer Energy,Detailed;
 
-  Output:Meter,WaterSystems:Electricity,detailed;
+  Output:Meter,WaterSystems:Electricity,Detailed;
 
-  Output:Meter,WaterSystems:Water,detailed;
-
+  Output:Meter,WaterSystems:Water,Detailed;

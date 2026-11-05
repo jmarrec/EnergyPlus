@@ -132,7 +132,7 @@
 
   Building,
     Building,                !- Name
-    30.,                     !- North Axis {deg}
+    30.0,                    !- North Axis {deg}
     City,                    !- Terrain
     0.04,                    !- Loads Convergence Tolerance Value {W}
     0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -156,7 +156,7 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   ScheduleTypeLimits,
@@ -166,32 +166,32 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     FlowRate,                !- Name
     0.0,                     !- Lower Limit Value
-    10,                      !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    10.0,                    !- Upper Limit Value
+    Continuous;              !- Numeric Type
 
   RunPeriod,
     Run Period 1,            !- Name
@@ -232,18 +232,18 @@
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
- !  Data Source=ASHRAE 2009 Annual Design Conditions
+!  Data Source=ASHRAE 2009 Annual Design Conditions
 
   Site:Location,
     Miami Intl Ap FL USA WMO=722020,  !- Name
     25.82,                   !- Latitude {deg}
-    -80.30,                  !- Longitude {deg}
-    -5.00,                   !- Time Zone {hr}
-    11.00;                   !- Elevation {m}
+    -80.3,                   !- Longitude {deg}
+    -5.0,                    !- Time Zone {hr}
+    11.0;                    !- Elevation {m}
 
- ! Miami Intl Ap FL USA Annual Heating Design Conditions Wind Speed=3.8m/s Wind Dir=340
- ! Coldest Month=January
- ! Miami Intl Ap FL USA Annual Heating 99.6%, MaxDB=8.7°C
+! Miami Intl Ap FL USA Annual Heating Design Conditions Wind Speed=3.8m/s Wind Dir=340
+! Coldest Month=January
+! Miami Intl Ap FL USA Annual Heating 99.6%, MaxDB=8.7°C
 
   SizingPeriod:DesignDay,
     Miami Intl Ap Ann Htg 99.6% Condns DB,  !- Name
@@ -254,15 +254,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     8.7,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    101217.,                 !- Barometric Pressure {Pa}
+    101217.0,                !- Barometric Pressure {Pa}
     3.8,                     !- Wind Speed {m/s}
-    340,                     !- Wind Direction {deg}
+    340.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -271,11 +271,11 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
- ! Miami Intl Ap Annual Cooling Design Conditions Wind Speed=4.5m/s Wind Dir=140
- ! Hottest Month=July
- ! Miami Intl Ap FL USA Annual Cooling (DB=>MWB) .4%, MaxDB=33.2°C MWB=25.3°C
+! Miami Intl Ap Annual Cooling Design Conditions Wind Speed=4.5m/s Wind Dir=140
+! Hottest Month=July
+! Miami Intl Ap FL USA Annual Cooling (DB=>MWB) .4%, MaxDB=33.2°C MWB=25.3°C
 
   SizingPeriod:DesignDay,
     Miami Intl Ap Ann Clg .4% Condns DB=>MWB,  !- Name
@@ -286,15 +286,15 @@
     6.7,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     25.3,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    101217.,                 !- Barometric Pressure {Pa}
+    101217.0,                !- Barometric Pressure {Pa}
     4.5,                     !- Wind Speed {m/s}
-    140,                     !- Wind Direction {deg}
+    140.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -303,17 +303,17 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
-  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.30,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.20;
+  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.3,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.2;
 
   Material,
     WD10,                    !- Name
     MediumSmooth,            !- Roughness
     0.667,                   !- Thickness {m}
     0.115,                   !- Conductivity {W/m-K}
-    513,                     !- Density {kg/m3}
-    1381,                    !- Specific Heat {J/kg-K}
+    513.0,                   !- Density {kg/m3}
+    1381.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.78,                    !- Solar Absorptance
     0.78;                    !- Visible Absorptance
@@ -321,109 +321,109 @@
   Material,
     RG01,                    !- Name
     Rough,                   !- Roughness
-    1.2700000E-02,           !- Thickness {m}
-    1.442000,                !- Conductivity {W/m-K}
-    881.0000,                !- Density {kg/m3}
-    1674.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.0127,                  !- Thickness {m}
+    1.442,                   !- Conductivity {W/m-K}
+    881.0,                   !- Density {kg/m3}
+    1674.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     BR01,                    !- Name
     VeryRough,               !- Roughness
-    9.4999997E-03,           !- Thickness {m}
-    0.1620000,               !- Conductivity {W/m-K}
-    1121.000,                !- Density {kg/m3}
-    1464.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7000000,               !- Solar Absorptance
-    0.7000000;               !- Visible Absorptance
+    0.0094999997,            !- Thickness {m}
+    0.162,                   !- Conductivity {W/m-K}
+    1121.0,                  !- Density {kg/m3}
+    1464.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
 
   Material,
     IN46,                    !- Name
     VeryRough,               !- Roughness
-    7.6200001E-02,           !- Thickness {m}
-    2.3000000E-02,           !- Conductivity {W/m-K}
-    24.00000,                !- Density {kg/m3}
-    1590.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    0.076200001,             !- Thickness {m}
+    0.023,                   !- Conductivity {W/m-K}
+    24.0,                    !- Density {kg/m3}
+    1590.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     WD01,                    !- Name
     MediumSmooth,            !- Roughness
-    1.9099999E-02,           !- Thickness {m}
-    0.1150000,               !- Conductivity {W/m-K}
-    513.0000,                !- Density {kg/m3}
-    1381.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.019099999,             !- Thickness {m}
+    0.115,                   !- Conductivity {W/m-K}
+    513.0,                   !- Density {kg/m3}
+    1381.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     PW03,                    !- Name
     MediumSmooth,            !- Roughness
-    1.2700000E-02,           !- Thickness {m}
-    0.1150000,               !- Conductivity {W/m-K}
-    545.0000,                !- Density {kg/m3}
-    1213.000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7800000,               !- Solar Absorptance
-    0.7800000;               !- Visible Absorptance
+    0.0127,                  !- Thickness {m}
+    0.115,                   !- Conductivity {W/m-K}
+    545.0,                   !- Density {kg/m3}
+    1213.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.78,                    !- Solar Absorptance
+    0.78;                    !- Visible Absorptance
 
   Material,
     IN02,                    !- Name
     Rough,                   !- Roughness
-    9.0099998E-02,           !- Thickness {m}
-    4.3000001E-02,           !- Conductivity {W/m-K}
-    10.00000,                !- Density {kg/m3}
-    837.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.090099998,             !- Thickness {m}
+    0.043000001,             !- Conductivity {W/m-K}
+    10.0,                    !- Density {kg/m3}
+    837.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     GP01,                    !- Name
     MediumSmooth,            !- Roughness
-    1.2700000E-02,           !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    801.0000,                !- Density {kg/m3}
-    837.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.0127,                  !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    801.0,                   !- Density {kg/m3}
+    837.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     GP02,                    !- Name
     MediumSmooth,            !- Roughness
-    1.5900001E-02,           !- Thickness {m}
-    0.1600000,               !- Conductivity {W/m-K}
-    801.0000,                !- Density {kg/m3}
-    837.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.015900001,             !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    801.0,                   !- Density {kg/m3}
+    837.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     CC03,                    !- Name
     MediumRough,             !- Roughness
-    0.1016000,               !- Thickness {m}
-    1.310000,                !- Conductivity {W/m-K}
-    2243.000,                !- Density {kg/m3}
-    837.0000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    0.1016,                  !- Thickness {m}
+    1.31,                    !- Conductivity {W/m-K}
+    2243.0,                  !- Density {kg/m3}
+    837.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material:NoMass,
     CP01,                    !- Name
     Rough,                   !- Roughness
-    0.3670000,               !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.367,                   !- Thermal Resistance {m2-K/W}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material:NoMass,
     MAT-SB-U,                !- Name
@@ -436,7 +436,7 @@
   Material:NoMass,
     MAT-CLNG-1,              !- Name
     Rough,                   !- Roughness
-    0.652259290,             !- Thermal Resistance {m2-K/W}
+    0.65225929,              !- Thermal Resistance {m2-K/W}
     0.65,                    !- Thermal Absorptance
     0.65,                    !- Solar Absorptance
     0.65;                    !- Visible Absorptance
@@ -451,11 +451,11 @@
 
   Material:AirGap,
     AL21,                    !- Name
-    0.1570000;               !- Thermal Resistance {m2-K/W}
+    0.157;                   !- Thermal Resistance {m2-K/W}
 
   Material:AirGap,
     AL23,                    !- Name
-    0.1530000;               !- Thermal Resistance {m2-K/W}
+    0.153;                   !- Thermal Resistance {m2-K/W}
 
   Construction,
     ROOF-1,                  !- Name
@@ -488,81 +488,81 @@
   WindowMaterial:Gas,
     AIR 6MM,                 !- Name
     Air,                     !- Gas Type
-    .0063;                   !- Thickness {m}
+    0.0063;                  !- Thickness {m}
 
   WindowMaterial:Gas,
     AIR 13MM,                !- Name
     Air,                     !- Gas Type
-    .0127;                   !- Thickness {m}
+    0.0127;                  !- Thickness {m}
 
   WindowMaterial:Gas,
     ARGON 13MM,              !- Name
     Argon,                   !- Gas Type
-    .0127;                   !- Thickness {m}
+    0.0127;                  !- Thickness {m}
 
   WindowMaterial:Glazing,
     CLEAR 3MM,               !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .003,                    !- Thickness {m}
-    .837,                    !- Solar Transmittance at Normal Incidence
-    .075,                    !- Front Side Solar Reflectance at Normal Incidence
-    .075,                    !- Back Side Solar Reflectance at Normal Incidence
-    .898,                    !- Visible Transmittance at Normal Incidence
-    .081,                    !- Front Side Visible Reflectance at Normal Incidence
-    .081,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .84,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.003,                   !- Thickness {m}
+    0.837,                   !- Solar Transmittance at Normal Incidence
+    0.075,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.075,                   !- Back Side Solar Reflectance at Normal Incidence
+    0.898,                   !- Visible Transmittance at Normal Incidence
+    0.081,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.081,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   WindowMaterial:Glazing,
     GREY 3MM,                !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .003,                    !- Thickness {m}
-    .626,                    !- Solar Transmittance at Normal Incidence
-    .061,                    !- Front Side Solar Reflectance at Normal Incidence
-    .061,                    !- Back Side Solar Reflectance at Normal Incidence
-    .611,                    !- Visible Transmittance at Normal Incidence
-    .061,                    !- Front Side Visible Reflectance at Normal Incidence
-    .061,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .84,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.003,                   !- Thickness {m}
+    0.626,                   !- Solar Transmittance at Normal Incidence
+    0.061,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.061,                   !- Back Side Solar Reflectance at Normal Incidence
+    0.611,                   !- Visible Transmittance at Normal Incidence
+    0.061,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.061,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   WindowMaterial:Glazing,
     CLEAR 6MM,               !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .006,                    !- Thickness {m}
-    .775,                    !- Solar Transmittance at Normal Incidence
-    .071,                    !- Front Side Solar Reflectance at Normal Incidence
-    .071,                    !- Back Side Solar Reflectance at Normal Incidence
-    .881,                    !- Visible Transmittance at Normal Incidence
-    .080,                    !- Front Side Visible Reflectance at Normal Incidence
-    .080,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .84,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.006,                   !- Thickness {m}
+    0.775,                   !- Solar Transmittance at Normal Incidence
+    0.071,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.071,                   !- Back Side Solar Reflectance at Normal Incidence
+    0.881,                   !- Visible Transmittance at Normal Incidence
+    0.08,                    !- Front Side Visible Reflectance at Normal Incidence
+    0.08,                    !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   WindowMaterial:Glazing,
     LoE CLEAR 6MM,           !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .006,                    !- Thickness {m}
-    .600,                    !- Solar Transmittance at Normal Incidence
-    .170,                    !- Front Side Solar Reflectance at Normal Incidence
-    .220,                    !- Back Side Solar Reflectance at Normal Incidence
-    .840,                    !- Visible Transmittance at Normal Incidence
-    .055,                    !- Front Side Visible Reflectance at Normal Incidence
-    .078,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .10,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.006,                   !- Thickness {m}
+    0.6,                     !- Solar Transmittance at Normal Incidence
+    0.17,                    !- Front Side Solar Reflectance at Normal Incidence
+    0.22,                    !- Back Side Solar Reflectance at Normal Incidence
+    0.84,                    !- Visible Transmittance at Normal Incidence
+    0.055,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.078,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.1,                     !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   Construction,
     Dbl Clr 3mm/13mm Air,    !- Name
@@ -578,7 +578,7 @@
     OCCUPY-1,                !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay WinterDesignDay,  !- Field 2
     Until: 9:00,0.0,         !- Field 3
     Until: 12:00,1.0,        !- Field 5
     Until: 13:00,0.8,        !- Field 7
@@ -593,7 +593,7 @@
     LIGHTS-1,                !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay WinterDesignDay,  !- Field 2
     Until: 9:00,0.05,        !- Field 3
     Until: 10:00,0.9,        !- Field 5
     Until: 11:00,0.95,       !- Field 7
@@ -610,14 +610,14 @@
     EQUIP-1,                 !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay WinterDesignDay,  !- Field 2
     Until: 9:00,0.02,        !- Field 3
     Until: 10:00,0.4,        !- Field 5
     Until: 15:00,0.9,        !- Field 7
     Until: 16:00,0.8,        !- Field 9
     Until: 17:00,0.7,        !- Field 11
     Until: 24:00,0.02,       !- Field 13
-    For: CustomDay1 CustomDay2, !- Field 15
+    For: CustomDay1 CustomDay2,  !- Field 15
     Until: 9:00,0.02,        !- Field 16
     Until: 10:00,0.4,        !- Field 18
     Until: 15:00,0.9,        !- Field 20
@@ -645,7 +645,7 @@
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
-    Until: 24:00,117.239997864; !- Field 3
+    Until: 24:00,117.239997864;  !- Field 3
 
   Schedule:Compact,
     ShadeTransSch,           !- Name
@@ -656,10 +656,10 @@
 
   Zone,
     PLENUM-1,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     0.609600067,             !- Ceiling Height {m}
@@ -667,7 +667,7 @@
 
   BuildingSurface:Detailed,
     WALL-1PF,                !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -675,7 +675,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,0.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,0.0,2.4,  !- X,Y,Z ==> Vertex 2 {m}
@@ -684,7 +684,7 @@
 
   BuildingSurface:Detailed,
     WALL-1PR,                !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -692,7 +692,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     30.5,0.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}
     30.5,0.0,2.4,  !- X,Y,Z ==> Vertex 2 {m}
@@ -701,7 +701,7 @@
 
   BuildingSurface:Detailed,
     WALL-1PB,                !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -709,7 +709,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     30.5,15.2,3.0,  !- X,Y,Z ==> Vertex 1 {m}
     30.5,15.2,2.4,  !- X,Y,Z ==> Vertex 2 {m}
@@ -718,7 +718,7 @@
 
   BuildingSurface:Detailed,
     WALL-1PL,                !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -726,7 +726,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,15.2,3.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,15.2,2.4,  !- X,Y,Z ==> Vertex 2 {m}
@@ -735,7 +735,7 @@
 
   BuildingSurface:Detailed,
     TOP-1,                   !- Name
-    ROOF,                    !- Surface Type
+    Roof,                    !- Surface Type
     ROOF-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -743,7 +743,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.00000,                 !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,15.2,3.0,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,0.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -752,7 +752,7 @@
 
   BuildingSurface:Detailed,
     C1-1P,                   !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     CLNG-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -769,7 +769,7 @@
 
   BuildingSurface:Detailed,
     C2-1P,                   !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     CLNG-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -786,7 +786,7 @@
 
   BuildingSurface:Detailed,
     C3-1P,                   !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     CLNG-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -803,7 +803,7 @@
 
   BuildingSurface:Detailed,
     C4-1P,                   !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     CLNG-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -820,7 +820,7 @@
 
   BuildingSurface:Detailed,
     C5-1P,                   !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     CLNG-1,                  !- Construction Name
     PLENUM-1,                !- Zone Name
     ,                        !- Space Name
@@ -837,10 +837,10 @@
 
   Zone,
     SPACE1-1,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     2.438400269,             !- Ceiling Height {m}
@@ -850,22 +850,22 @@
     SPACE1-1 Infiltration,   !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
+    Flow/Zone,               !- Design Flow Rate Calculation Method
     0.0167,                  !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
-    0,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
+    0.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
     0.2237,                  !- Velocity Term Coefficient
-    0;                       !- Velocity Squared Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   People,
     SPACE1-1 People,         !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    11,                      !- Number of People
+    People,                  !- Number of People Calculation Method
+    11.0,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
@@ -877,30 +877,30 @@
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    1584,                    !- Lighting Level {W}
+    1584.0,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE1-1 Elec Equipment, !- Name
+    SPACE1-1 Elec Equipment,  !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    1056,                    !- Design Level {W}
+    1056.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   BuildingSurface:Detailed,
     FRONT-1,                 !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     SPACE1-1,                !- Zone Name
     ,                        !- Space Name
@@ -908,7 +908,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,0.0,2.4,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -917,11 +917,11 @@
 
   FenestrationSurface:Detailed,
     WF-1,                    !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Dbl Clr 3mm/13mm Air,    !- Construction Name
     FRONT-1,                 !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
@@ -932,11 +932,11 @@
 
   FenestrationSurface:Detailed,
     DF-1,                    !- Name
-    GLASSDOOR,               !- Surface Type
+    GlassDoor,               !- Surface Type
     Sgl Grey 3mm,            !- Construction Name
     FRONT-1,                 !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
@@ -967,7 +967,7 @@
 
   BuildingSurface:Detailed,
     C1-1,                    !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CLNG-1,                  !- Construction Name
     SPACE1-1,                !- Zone Name
     ,                        !- Space Name
@@ -984,7 +984,7 @@
 
   BuildingSurface:Detailed,
     F1-1,                    !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR-SLAB-1,            !- Construction Name
     SPACE1-1,                !- Zone Name
     ,                        !- Space Name
@@ -1001,7 +1001,7 @@
 
   BuildingSurface:Detailed,
     SB12,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE1-1,                !- Zone Name
     ,                        !- Space Name
@@ -1018,7 +1018,7 @@
 
   BuildingSurface:Detailed,
     SB14,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE1-1,                !- Zone Name
     ,                        !- Space Name
@@ -1035,7 +1035,7 @@
 
   BuildingSurface:Detailed,
     SB15,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE1-1,                !- Zone Name
     ,                        !- Space Name
@@ -1052,10 +1052,10 @@
 
   Zone,
     SPACE2-1,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     2.438400269,             !- Ceiling Height {m}
@@ -1065,22 +1065,22 @@
     SPACE2-1 Infiltration,   !- Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    .00717,                  !- Design Flow Rate {m3/s}
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.00717,                 !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
-    0,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
+    0.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
     0.2237,                  !- Velocity Term Coefficient
-    0;                       !- Velocity Squared Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   People,
     SPACE2-1 People,         !- Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    5,                       !- Number of People
+    People,                  !- Number of People Calculation Method
+    5.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
@@ -1092,30 +1092,30 @@
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    684,                     !- Lighting Level {W}
+    684.0,                   !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE2-1 Elec Equipment, !- Name
+    SPACE2-1 Elec Equipment,  !- Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    456,                     !- Design Level {W}
+    456.0,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   BuildingSurface:Detailed,
     RIGHT-1,                 !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     SPACE2-1,                !- Zone Name
     ,                        !- Space Name
@@ -1123,7 +1123,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     30.5,0.0,2.4,  !- X,Y,Z ==> Vertex 1 {m}
     30.5,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -1132,11 +1132,11 @@
 
   FenestrationSurface:Detailed,
     WR-1,                    !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Dbl Clr 3mm/13mm Air,    !- Construction Name
     RIGHT-1,                 !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
@@ -1147,7 +1147,7 @@
 
   BuildingSurface:Detailed,
     C2-1,                    !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CLNG-1,                  !- Construction Name
     SPACE2-1,                !- Zone Name
     ,                        !- Space Name
@@ -1164,7 +1164,7 @@
 
   BuildingSurface:Detailed,
     F2-1,                    !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR-SLAB-1,            !- Construction Name
     SPACE2-1,                !- Zone Name
     ,                        !- Space Name
@@ -1181,7 +1181,7 @@
 
   BuildingSurface:Detailed,
     SB21,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE2-1,                !- Zone Name
     ,                        !- Space Name
@@ -1198,7 +1198,7 @@
 
   BuildingSurface:Detailed,
     SB23,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE2-1,                !- Zone Name
     ,                        !- Space Name
@@ -1215,7 +1215,7 @@
 
   BuildingSurface:Detailed,
     SB25,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE2-1,                !- Zone Name
     ,                        !- Space Name
@@ -1232,10 +1232,10 @@
 
   Zone,
     SPACE3-1,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     2.438400269,             !- Ceiling Height {m}
@@ -1245,22 +1245,22 @@
     SPACE3-1 Infiltration,   !- Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
+    Flow/Zone,               !- Design Flow Rate Calculation Method
     0.0167,                  !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
-    0,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
+    0.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
     0.2237,                  !- Velocity Term Coefficient
-    0;                       !- Velocity Squared Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   People,
     SPACE3-1 People,         !- Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    11,                      !- Number of People
+    People,                  !- Number of People Calculation Method
+    11.0,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
@@ -1272,30 +1272,30 @@
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    1584,                    !- Lighting Level {W}
+    1584.0,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE3-1 Elec Equipment, !- Name
+    SPACE3-1 Elec Equipment,  !- Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    1056,                    !- Design Level {W}
+    1056.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   BuildingSurface:Detailed,
     BACK-1,                  !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     SPACE3-1,                !- Zone Name
     ,                        !- Space Name
@@ -1303,7 +1303,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     30.5,15.2,2.4,  !- X,Y,Z ==> Vertex 1 {m}
     30.5,15.2,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -1312,11 +1312,11 @@
 
   FenestrationSurface:Detailed,
     WB-1,                    !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Dbl Clr 3mm/13mm Air,    !- Construction Name
     BACK-1,                  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
@@ -1327,11 +1327,11 @@
 
   FenestrationSurface:Detailed,
     DB-1,                    !- Name
-    GLASSDOOR,               !- Surface Type
+    GlassDoor,               !- Surface Type
     Sgl Grey 3mm,            !- Construction Name
     BACK-1,                  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
@@ -1342,7 +1342,7 @@
 
   BuildingSurface:Detailed,
     C3-1,                    !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CLNG-1,                  !- Construction Name
     SPACE3-1,                !- Zone Name
     ,                        !- Space Name
@@ -1359,7 +1359,7 @@
 
   BuildingSurface:Detailed,
     F3-1,                    !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR-SLAB-1,            !- Construction Name
     SPACE3-1,                !- Zone Name
     ,                        !- Space Name
@@ -1376,7 +1376,7 @@
 
   BuildingSurface:Detailed,
     SB32,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE3-1,                !- Zone Name
     ,                        !- Space Name
@@ -1393,7 +1393,7 @@
 
   BuildingSurface:Detailed,
     SB34,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE3-1,                !- Zone Name
     ,                        !- Space Name
@@ -1410,7 +1410,7 @@
 
   BuildingSurface:Detailed,
     SB35,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE3-1,                !- Zone Name
     ,                        !- Space Name
@@ -1427,10 +1427,10 @@
 
   Zone,
     SPACE4-1,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     2.438400269,             !- Ceiling Height {m}
@@ -1440,22 +1440,22 @@
     SPACE4-1 Infiltration,   !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    .00717,                  !- Design Flow Rate {m3/s}
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.00717,                 !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
-    0,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
+    0.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
     0.2237,                  !- Velocity Term Coefficient
-    0;                       !- Velocity Squared Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   People,
     SPACE4-1 People,         !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    5,                       !- Number of People
+    People,                  !- Number of People Calculation Method
+    5.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
@@ -1467,30 +1467,30 @@
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    684,                     !- Lighting Level {W}
+    684.0,                   !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE4-1 Elec Equipment, !- Name
+    SPACE4-1 Elec Equipment,  !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    456,                     !- Design Level {W}
+    456.0,                   !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   BuildingSurface:Detailed,
     LEFT-1,                  !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     WALL-1,                  !- Construction Name
     SPACE4-1,                !- Zone Name
     ,                        !- Space Name
@@ -1498,7 +1498,7 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
     0.0,15.2,2.4,  !- X,Y,Z ==> Vertex 1 {m}
     0.0,15.2,0.0,  !- X,Y,Z ==> Vertex 2 {m}
@@ -1507,11 +1507,11 @@
 
   FenestrationSurface:Detailed,
     WL-1,                    !- Name
-    WINDOW,                  !- Surface Type
+    Window,                  !- Surface Type
     Dbl Clr 3mm/13mm Air,    !- Construction Name
     LEFT-1,                  !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.50000,                 !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
     1,                       !- Multiplier
     4,                       !- Number of Vertices
@@ -1522,7 +1522,7 @@
 
   BuildingSurface:Detailed,
     C4-1,                    !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CLNG-1,                  !- Construction Name
     SPACE4-1,                !- Zone Name
     ,                        !- Space Name
@@ -1539,7 +1539,7 @@
 
   BuildingSurface:Detailed,
     F4-1,                    !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR-SLAB-1,            !- Construction Name
     SPACE4-1,                !- Zone Name
     ,                        !- Space Name
@@ -1556,7 +1556,7 @@
 
   BuildingSurface:Detailed,
     SB41,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE4-1,                !- Zone Name
     ,                        !- Space Name
@@ -1573,7 +1573,7 @@
 
   BuildingSurface:Detailed,
     SB43,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE4-1,                !- Zone Name
     ,                        !- Space Name
@@ -1590,7 +1590,7 @@
 
   BuildingSurface:Detailed,
     SB45,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE4-1,                !- Zone Name
     ,                        !- Space Name
@@ -1607,10 +1607,10 @@
 
   Zone,
     SPACE5-1,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
     2.438400269,             !- Ceiling Height {m}
@@ -1620,22 +1620,22 @@
     SPACE5-1 Infiltration,   !- Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
-    flow/zone,               !- Design Flow Rate Calculation Method
-    .031089,                 !- Design Flow Rate {m3/s}
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.031089,                !- Design Flow Rate {m3/s}
     ,                        !- Flow Rate per Floor Area {m3/s-m2}
     ,                        !- Flow Rate per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
-    0,                       !- Constant Term Coefficient
-    0,                       !- Temperature Term Coefficient
+    0.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
     0.2237,                  !- Velocity Term Coefficient
-    0;                       !- Velocity Squared Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
 
   People,
     SPACE5-1 People,         !- Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    20,                      !- Number of People
+    People,                  !- Number of People Calculation Method
+    20.0,                    !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
     0.3,                     !- Fraction Radiant
@@ -1647,30 +1647,30 @@
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
-    2964,                    !- Lighting Level {W}
+    2964.0,                  !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0.2,                     !- Return Air Fraction
     0.59,                    !- Fraction Radiant
     0.2,                     !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE5-1 Elec Equipment, !- Name
+    SPACE5-1 Elec Equipment,  !- Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
-    1976,                    !- Design Level {W}
+    1976.0,                  !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
+    0.0,                     !- Fraction Latent
     0.3,                     !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0;                     !- Fraction Lost
 
   BuildingSurface:Detailed,
     C5-1,                    !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CLNG-1,                  !- Construction Name
     SPACE5-1,                !- Zone Name
     ,                        !- Space Name
@@ -1687,7 +1687,7 @@
 
   BuildingSurface:Detailed,
     F5-1,                    !- Name
-    FLOOR,                   !- Surface Type
+    Floor,                   !- Surface Type
     FLOOR-SLAB-1,            !- Construction Name
     SPACE5-1,                !- Zone Name
     ,                        !- Space Name
@@ -1704,7 +1704,7 @@
 
   BuildingSurface:Detailed,
     SB51,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE5-1,                !- Zone Name
     ,                        !- Space Name
@@ -1721,7 +1721,7 @@
 
   BuildingSurface:Detailed,
     SB52,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE5-1,                !- Zone Name
     ,                        !- Space Name
@@ -1738,7 +1738,7 @@
 
   BuildingSurface:Detailed,
     SB53,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE5-1,                !- Zone Name
     ,                        !- Space Name
@@ -1755,7 +1755,7 @@
 
   BuildingSurface:Detailed,
     SB54,                    !- Name
-    WALL,                    !- Surface Type
+    Wall,                    !- Surface Type
     INT-WALL-1,              !- Construction Name
     SPACE5-1,                !- Zone Name
     ,                        !- Space Name
@@ -1778,10 +1778,10 @@
   Sizing:Zone,
     SPACE1-1,                !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1789,20 +1789,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1813,7 +1813,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA SPACE1-1,        !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
@@ -1821,10 +1821,10 @@
   Sizing:Zone,
     SPACE2-1,                !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1832,20 +1832,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1856,7 +1856,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA SPACE2-1,        !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
@@ -1864,10 +1864,10 @@
   Sizing:Zone,
     SPACE3-1,                !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1875,20 +1875,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1899,7 +1899,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA SPACE3-1,        !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
@@ -1907,10 +1907,10 @@
   Sizing:Zone,
     SPACE4-1,                !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1918,20 +1918,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1942,7 +1942,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA SPACE4-1,        !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
@@ -1950,10 +1950,10 @@
   Sizing:Zone,
     SPACE5-1,                !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    14.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    14.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.009,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1961,20 +1961,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1985,34 +1985,34 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA SPACE5-1,        !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
 
   Sizing:System,
     VAV Sys 1,               !- AirLoop Name
-    sensible,                !- Type of Load to Size On
-    autosize,                !- Design Outdoor Air Flow Rate {m3/s}
+    Sensible,                !- Type of Load to Size On
+    Autosize,                !- Design Outdoor Air Flow Rate {m3/s}
     0.3,                     !- Central Heating Maximum System Air Flow Ratio
     7.0,                     !- Preheat Design Temperature {C}
-    .008,                    !- Preheat Design Humidity Ratio {kgWater/kgDryAir}
+    0.008,                   !- Preheat Design Humidity Ratio {kgWater/kgDryAir}
     11.0,                    !- Precool Design Temperature {C}
-    .008,                    !- Precool Design Humidity Ratio {kgWater/kgDryAir}
+    0.008,                   !- Precool Design Humidity Ratio {kgWater/kgDryAir}
     12.8,                    !- Central Cooling Design Supply Air Temperature {C}
     16.7,                    !- Central Heating Design Supply Air Temperature {C}
-    noncoincident,           !- Type of Zone Sum to Use
-    no,                      !- 100% Outdoor Air in Cooling
-    no,                      !- 100% Outdoor Air in Heating
+    NonCoincident,           !- Type of Zone Sum to Use
+    No,                      !- 100% Outdoor Air in Cooling
+    No,                      !- 100% Outdoor Air in Heating
     0.008,                   !- Central Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.008,                   !- Central Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     DesignDay,               !- Cooling Supply Air Flow Rate Method
-    0,                       !- Cooling Supply Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Supply Air Flow Rate {m3/s}
     ,                        !- Cooling Supply Air Flow Rate Per Floor Area {m3/s-m2}
     ,                        !- Cooling Fraction of Autosized Cooling Supply Air Flow Rate
     ,                        !- Cooling Supply Air Flow Rate Per Unit Cooling Capacity {m3/s-W}
     DesignDay,               !- Heating Supply Air Flow Rate Method
-    0,                       !- Heating Supply Air Flow Rate {m3/s}
+    0.0,                     !- Heating Supply Air Flow Rate {m3/s}
     ,                        !- Heating Supply Air Flow Rate Per Floor Area {m3/s-m2}
     ,                        !- Heating Fraction of Autosized Heating Supply Air Flow Rate
     ,                        !- Heating Fraction of Autosized Cooling Supply Air Flow Rate
@@ -2031,19 +2031,19 @@
 
   Sizing:Plant,
     Hot Water Loop,          !- Plant or Condenser Loop Name
-    heating,                 !- Loop Type
-    62.,                     !- Design Loop Exit Temperature {C}
-    11;                      !- Loop Design Temperature Difference {deltaC}
+    Heating,                 !- Loop Type
+    62.0,                    !- Design Loop Exit Temperature {C}
+    11.0;                    !- Loop Design Temperature Difference {deltaC}
 
   Sizing:Plant,
     Chilled Water Loop,      !- Plant or Condenser Loop Name
-    cooling,                 !- Loop Type
+    Cooling,                 !- Loop Type
     7.22,                    !- Design Loop Exit Temperature {C}
     6.67;                    !- Loop Design Temperature Difference {deltaC}
 
   Sizing:Plant,
     Condenser Water Loop,    !- Plant or Condenser Loop Name
-    condenser,               !- Loop Type
+    Condenser,               !- Loop Type
     29.4,                    !- Design Loop Exit Temperature {C}
     5.6;                     !- Loop Design Temperature Difference {deltaC}
 
@@ -2096,7 +2096,7 @@
     Until: 24:00,40.0;       !- Field 3
 
   Schedule:Compact,
-    Zone Control Type Sched, !- Name
+    Zone Control Type Sched,  !- Name
     Control Type,            !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
@@ -2106,7 +2106,7 @@
     Min OA Sched,            !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
+    For: Weekdays SummerDesignDay WinterDesignDay,  !- Field 2
     Until: 7:00,0.02,        !- Field 3
     Until: 19:00,1.0,        !- Field 5
     Until: 24:00,0.02,       !- Field 7
@@ -2124,7 +2124,7 @@
     Until: 7:00,0.0,         !- Field 7
     Until: 18:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
+    For: Weekends Holidays CustomDay1 CustomDay2,  !- Field 13
     Until: 24:00,0.0,        !- Field 14
     For: AllOtherDays,       !- Field 16
     Until: 24:00,1.0,        !- Field 17
@@ -2143,7 +2143,7 @@
     Until: 7:00,0.0,         !- Field 7
     Until: 18:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
+    For: Weekends Holidays CustomDay1 CustomDay2,  !- Field 13
     Until: 24:00,0.0,        !- Field 14
     For: AllOtherDays,       !- Field 16
     Until: 24:00,1.0,        !- Field 17
@@ -2208,26 +2208,26 @@
 
   ScheduleTypeLimits,
     Humidity,                !- Name
-    0,                       !- Lower Limit Value
-    100,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    100.0,                   !- Upper Limit Value
+    Continuous;              !- Numeric Type
 
 !********** Indoor Heat Pump Water Heater Inputs (uses zone and outdoor air) in Zone 5 ****************
 
   WaterHeater:HeatPump:PumpedCondenser,
-    Zone5HeatPumpWaterHeater,!- Name
+    Zone5HeatPumpWaterHeater,  !- Name
     HeatPumpWaterHeaterSch,  !- Availability Schedule Name
     HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
     2.0,                     !- Dead Band Temperature Difference {deltaC}
     HPWHWaterInletNode,      !- Condenser Water Inlet Node Name
     HPWHWaterOutletNode,     !- Condenser Water Outlet Node Name
-    autocalculate,           !- Condenser Water Flow Rate {m3/s}
-    autocalculate,           !- Evaporator Air Flow Rate {m3/s}
+    Autocalculate,           !- Condenser Water Flow Rate {m3/s}
+    Autocalculate,           !- Evaporator Air Flow Rate {m3/s}
     ZoneAndOutdoorAir,       !- Inlet Air Configuration
     HPWHAirOutletNode,       !- Air Inlet Node Name
     HPWHAirInletNode,        !- Air Outlet Node Name
-    HPWHOutdoorAirInletNode, !- Outdoor Air Node Name
-    HPWHExhaustAirOutletNode,!- Exhaust Air Node Name
+    HPWHOutdoorAirInletNode,  !- Outdoor Air Node Name
+    HPWHExhaustAirOutletNode,  !- Exhaust Air Node Name
     ,                        !- Inlet Air Temperature Schedule Name
     ,                        !- Inlet Air Humidity Schedule Name
     SPACE5-1,                !- Inlet Air Zone Name
@@ -2264,28 +2264,28 @@
     MasterSlave,             !- Heater Priority Control
     Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
+    5000.0,                  !- Heater 1 Capacity {W}
     0.360417,                !- Heater 1 Height {m}
     Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
+    0.0,                     !- Heater 2 Capacity {W}
     0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    30.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- On Cycle Parasitic Height {m}
-    ZONE,                    !- Ambient Temperature Indicator
+    Zone,                    !- Ambient Temperature Indicator
     ,                        !- Ambient Temperature Schedule Name
     SPACE5-1,                !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
     0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
+    1.0,                     !- Skin Loss Fraction to Zone
     ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
     ,                        !- Off Cycle Flue Loss Fraction to Zone
     0.00379,                 !- Peak Use Flow Rate {m3/s}
@@ -2294,12 +2294,12 @@
     ,                        !- Use Side Inlet Node Name
     ,                        !- Use Side Outlet Node Name
     ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
+    0.0,                     !- Use Side Inlet Height {m}
+    Autocalculate,           !- Use Side Outlet Height {m}
     HPWHWaterOutletNode,     !- Source Side Inlet Node Name
     HPWHWaterInletNode,      !- Source Side Outlet Node Name
     0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
+    0.0,                     !- Source Side Inlet Height {m}
     0.257441,                !- Source Side Outlet Height {m}
     Fixed,                   !- Inlet Mode
     ,                        !- Use Side Design Flow Rate {m3/s}
@@ -2316,15 +2316,15 @@
     29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
     22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
     55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
-    autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
+    Autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
+    Autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
     No,                      !- Evaporator Fan Power Included in Rated COP
     No,                      !- Condenser Pump Power Included in Rated COP
     No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
     150.0,                   !- Condenser Water Pump Power {W}
     0.1,                     !- Fraction of Condenser Pump Heat to Water
     HPWHInletAirMixerNode,   !- Evaporator Air Inlet Node Name
-    HPWHDXCoilAirOutletNode, !- Evaporator Air Outlet Node Name
+    HPWHDXCoilAirOutletNode,  !- Evaporator Air Outlet Node Name
     HPWHWaterInletNode,      !- Condenser Water Inlet Node Name
     HPWHWaterOutletNode,     !- Condenser Water Outlet Node Name
     100.0,                   !- Crankcase Heater Capacity {W}
@@ -2347,7 +2347,7 @@
     0.2685,                  !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
-    HPWHDXCoilAirOutletNode, !- Air Inlet Node Name
+    HPWHDXCoilAirOutletNode,  !- Air Inlet Node Name
     HPWHOutletAirSplitterNode;  !- Air Outlet Node Name
 
 !  Heating Capacity as a Function of Temperature Curve (Air Wet-bulb T, Condenser Water Inlet T)
@@ -2365,7 +2365,7 @@
     0.043341,                !- Coefficient2 x
     -0.00023,                !- Coefficient3 x**2
     0.000466,                !- Coefficient4 y
-    0.000026,                !- Coefficient5 y**2
+    2.6e-05,                 !- Coefficient5 y**2
     -0.00027,                !- Coefficient6 x*y
     0.0,                     !- Minimum Value of x
     40.0,                    !- Maximum Value of x
@@ -2381,7 +2381,7 @@
     HPWHHeatingCOPFTemp,     !- Name
     1.19713,                 !- Coefficient1 Constant
     0.077849,                !- Coefficient2 x
-    -0.0000016,              !- Coefficient3 x**2
+    -1.6e-06,                !- Coefficient3 x**2
     -0.02675,                !- Coefficient4 y
     0.000296,                !- Coefficient5 y**2
     -0.00112,                !- Coefficient6 x*y
@@ -2452,14 +2452,14 @@
 !*********** Indoor Heat Pump Water Heater Inputs (uses no outdoor air) in Zone 4 ******
 
   WaterHeater:HeatPump:PumpedCondenser,
-    Zone4HeatPumpWaterHeater,!- Name
+    Zone4HeatPumpWaterHeater,  !- Name
     HeatPumpWaterHeaterSch,  !- Availability Schedule Name
     HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
     2.0,                     !- Dead Band Temperature Difference {deltaC}
     Zone4WaterInletNode,     !- Condenser Water Inlet Node Name
     Zone4WaterOutletNode,    !- Condenser Water Outlet Node Name
-    autocalculate,           !- Condenser Water Flow Rate {m3/s}
-    autocalculate,           !- Evaporator Air Flow Rate {m3/s}
+    Autocalculate,           !- Condenser Water Flow Rate {m3/s}
+    Autocalculate,           !- Evaporator Air Flow Rate {m3/s}
     ZoneAirOnly,             !- Inlet Air Configuration
     Zone4AirOutletNode,      !- Air Inlet Node Name
     Zone4AirInletNode,       !- Air Outlet Node Name
@@ -2501,28 +2501,28 @@
     MasterSlave,             !- Heater Priority Control
     Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
+    5000.0,                  !- Heater 1 Capacity {W}
     0.360417,                !- Heater 1 Height {m}
     Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
+    0.0,                     !- Heater 2 Capacity {W}
     0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    30.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- On Cycle Parasitic Height {m}
-    ZONE,                    !- Ambient Temperature Indicator
+    Zone,                    !- Ambient Temperature Indicator
     ,                        !- Ambient Temperature Schedule Name
     SPACE4-1,                !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
     0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
+    1.0,                     !- Skin Loss Fraction to Zone
     ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
     ,                        !- Off Cycle Flue Loss Fraction to Zone
     0.00379,                 !- Peak Use Flow Rate {m3/s}
@@ -2531,12 +2531,12 @@
     ,                        !- Use Side Inlet Node Name
     ,                        !- Use Side Outlet Node Name
     ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
+    0.0,                     !- Use Side Inlet Height {m}
+    Autocalculate,           !- Use Side Outlet Height {m}
     Zone4WaterOutletNode,    !- Source Side Inlet Node Name
     Zone4WaterInletNode,     !- Source Side Outlet Node Name
     0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
+    0.0,                     !- Source Side Inlet Height {m}
     0.257441,                !- Source Side Outlet Height {m}
     Fixed,                   !- Inlet Mode
     ,                        !- Use Side Design Flow Rate {m3/s}
@@ -2553,15 +2553,15 @@
     29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
     22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
     55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
-    autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
+    Autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
+    Autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
     No,                      !- Evaporator Fan Power Included in Rated COP
     No,                      !- Condenser Pump Power Included in Rated COP
     No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
     150.0,                   !- Condenser Water Pump Power {W}
     0.1,                     !- Fraction of Condenser Pump Heat to Water
     Zone4AirOutletNode,      !- Evaporator Air Inlet Node Name
-    Zone4DXCoilAirOutletNode,!- Evaporator Air Outlet Node Name
+    Zone4DXCoilAirOutletNode,  !- Evaporator Air Outlet Node Name
     Zone4WaterInletNode,     !- Condenser Water Inlet Node Name
     Zone4WaterOutletNode,    !- Condenser Water Outlet Node Name
     100.0,                   !- Crankcase Heater Capacity {W}
@@ -2584,7 +2584,7 @@
     0.2685,                  !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
-    Zone4DXCoilAirOutletNode,!- Air Inlet Node Name
+    Zone4DXCoilAirOutletNode,  !- Air Inlet Node Name
     Zone4AirInletNode;       !- Air Outlet Node Name
 
 !*********** End of Indoor Heat Pump Water Heater Inputs (uses no outdoor air) in Zone 4 ******
@@ -2597,8 +2597,8 @@
     2.0,                     !- Dead Band Temperature Difference {deltaC}
     Zone4bWaterInletNode,    !- Condenser Water Inlet Node Name
     Zone4bWaterOutletNode,   !- Condenser Water Outlet Node Name
-    autocalculate,           !- Condenser Water Flow Rate {m3/s}
-    autocalculate,           !- Evaporator Air Flow Rate {m3/s}
+    Autocalculate,           !- Condenser Water Flow Rate {m3/s}
+    Autocalculate,           !- Evaporator Air Flow Rate {m3/s}
     ZoneAirOnly,             !- Inlet Air Configuration
     Zone4bAirOutletNode,     !- Air Inlet Node Name
     Zone4bAirInletNode,      !- Air Outlet Node Name
@@ -2640,28 +2640,28 @@
     MasterSlave,             !- Heater Priority Control
     Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    4000,                    !- Heater 1 Capacity {W}
+    4000.0,                  !- Heater 1 Capacity {W}
     0.360417,                !- Heater 1 Height {m}
     Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
+    0.0,                     !- Heater 2 Capacity {W}
     0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    30.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- On Cycle Parasitic Height {m}
-    ZONE,                    !- Ambient Temperature Indicator
+    Zone,                    !- Ambient Temperature Indicator
     ,                        !- Ambient Temperature Schedule Name
     SPACE4-1,                !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
     0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
+    1.0,                     !- Skin Loss Fraction to Zone
     ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
     ,                        !- Off Cycle Flue Loss Fraction to Zone
     ,                        !- Peak Use Flow Rate {m3/s}
@@ -2669,16 +2669,16 @@
     ,                        !- Cold Water Supply Temperature Schedule Name
     Water Heater Use Inlet Node,  !- Use Side Inlet Node Name
     Water Heater Use Outlet Node,  !- Use Side Outlet Node Name
-    1,                       !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
+    1.0,                     !- Use Side Effectiveness
+    0.0,                     !- Use Side Inlet Height {m}
+    Autocalculate,           !- Use Side Outlet Height {m}
     Zone4bWaterOutletNode,   !- Source Side Inlet Node Name
     Zone4bWaterInletNode,    !- Source Side Outlet Node Name
     1.0,                     !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
+    0.0,                     !- Source Side Inlet Height {m}
     0.257441,                !- Source Side Outlet Height {m}
     Fixed,                   !- Inlet Mode
-    autosize,                !- Use Side Design Flow Rate {m3/s}
+    Autosize,                !- Use Side Design Flow Rate {m3/s}
     ,                        !- Source Side Design Flow Rate {m3/s}
     ,                        !- Indirect Water Heating Recovery Time {hr}
     10;                      !- Number of Nodes
@@ -2686,14 +2686,14 @@
   Coil:WaterHeating:AirToWaterHeatPump:Pumped,
     Zone4bHPWHDXCoil,        !- Name
     ,                        !- Availability Schedule Name
-    4000,                    !- Rated Heating Capacity {W}
+    4000.0,                  !- Rated Heating Capacity {W}
     3.2,                     !- Rated COP {W/W}
     0.6956,                  !- Rated Sensible Heat Ratio
     29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
     22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
     55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
-    autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
+    Autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
+    Autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
     No,                      !- Evaporator Fan Power Included in Rated COP
     No,                      !- Condenser Pump Power Included in Rated COP
     No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
@@ -2734,8 +2734,8 @@
     PlantHPWHSch,            !- Availability Schedule Name
     HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
     2.0,                     !- Dead Band Temperature Difference {deltaC}
-    HPOutdoorWaterInletNode, !- Condenser Water Inlet Node Name
-    HPOutdoorWaterOutletNode,!- Condenser Water Outlet Node Name
+    HPOutdoorWaterInletNode,  !- Condenser Water Inlet Node Name
+    HPOutdoorWaterOutletNode,  !- Condenser Water Outlet Node Name
     0.00016,                 !- Condenser Water Flow Rate {m3/s}
     0.2685,                  !- Evaporator Air Flow Rate {m3/s}
     OutdoorAirOnly,          !- Inlet Air Configuration
@@ -2779,28 +2779,28 @@
     MasterSlave,             !- Heater Priority Control
     Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
+    5000.0,                  !- Heater 1 Capacity {W}
     0.360417,                !- Heater 1 Height {m}
     Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
+    0.0,                     !- Heater 2 Capacity {W}
     0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    30.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- On Cycle Parasitic Height {m}
     Outdoors,                !- Ambient Temperature Indicator
     ,                        !- Ambient Temperature Schedule Name
     ,                        !- Ambient Temperature Zone Name
-    HPWHOutdoorTank OA Node, !- Ambient Temperature Outdoor Air Node Name
+    HPWHOutdoorTank OA Node,  !- Ambient Temperature Outdoor Air Node Name
     0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
+    1.0,                     !- Skin Loss Fraction to Zone
     ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
     ,                        !- Off Cycle Flue Loss Fraction to Zone
     0.000379,                !- Peak Use Flow Rate {m3/s}
@@ -2809,12 +2809,12 @@
     ,                        !- Use Side Inlet Node Name
     ,                        !- Use Side Outlet Node Name
     ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    HPOutdoorWaterOutletNode,!- Source Side Inlet Node Name
-    HPOutdoorWaterInletNode, !- Source Side Outlet Node Name
+    0.0,                     !- Use Side Inlet Height {m}
+    Autocalculate,           !- Use Side Outlet Height {m}
+    HPOutdoorWaterOutletNode,  !- Source Side Inlet Node Name
+    HPOutdoorWaterInletNode,  !- Source Side Outlet Node Name
     0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
+    0.0,                     !- Source Side Inlet Height {m}
     0.257441,                !- Source Side Outlet Height {m}
     Fixed,                   !- Inlet Mode
     ,                        !- Use Side Design Flow Rate {m3/s}
@@ -2823,7 +2823,7 @@
     10;                      !- Number of Nodes
 
   OutdoorAir:Node,
-    HPWHOutdoorTank OA Node; !- Name
+    HPWHOutdoorTank OA Node;  !- Name
 
   Coil:WaterHeating:AirToWaterHeatPump:Pumped,
     HPWHOutdoorDXCoil,       !- Name
@@ -2843,8 +2843,8 @@
     0.1,                     !- Fraction of Condenser Pump Heat to Water
     HPOutdoorFanAirOutletNode,  !- Evaporator Air Inlet Node Name
     HPOutdoorAirOutletNode,  !- Evaporator Air Outlet Node Name
-    HPOutdoorWaterInletNode, !- Condenser Water Inlet Node Name
-    HPOutdoorWaterOutletNode,!- Condenser Water Outlet Node Name
+    HPOutdoorWaterInletNode,  !- Condenser Water Inlet Node Name
+    HPOutdoorWaterOutletNode,  !- Condenser Water Outlet Node Name
     100.0,                   !- Crankcase Heater Capacity {W}
     ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
     5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
@@ -2893,7 +2893,7 @@
     Until: 24:00,0.5;        !- Field 3
 
   Schedule:Compact,
-    ScheduledCompressorTemp, !- Name
+    ScheduledCompressorTemp,  !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
@@ -2909,8 +2909,8 @@
     0.00016,                 !- Condenser Water Flow Rate {m3/s}
     0.2685,                  !- Evaporator Air Flow Rate {m3/s}
     Schedule,                !- Inlet Air Configuration
-    HPScheduledAirInletNode, !- Air Inlet Node Name
-    HPScheduledAirOutletNode,!- Air Outlet Node Name
+    HPScheduledAirInletNode,  !- Air Inlet Node Name
+    HPScheduledAirOutletNode,  !- Air Outlet Node Name
     ,                        !- Outdoor Air Node Name
     ,                        !- Exhaust Air Node Name
     ScheduledAmbientTemp,    !- Inlet Air Temperature Schedule Name
@@ -2925,7 +2925,7 @@
     11.0,                    !- Minimum Inlet Air Temperature for Compressor Operation {C}
     ,                        !- Maximum Inlet Air Temperature for Compressor Operation {C}
     Schedule,                !- Compressor Location
-    ScheduledCompressorTemp, !- Compressor Ambient Temperature Schedule Name
+    ScheduledCompressorTemp,  !- Compressor Ambient Temperature Schedule Name
     Fan:OnOff,               !- Fan Object Type
     HPWHScheduledFan,        !- Fan Name
     BlowThrough,             !- Fan Placement
@@ -2949,28 +2949,28 @@
     MasterSlave,             !- Heater Priority Control
     Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
+    5000.0,                  !- Heater 1 Capacity {W}
     0.360417,                !- Heater 1 Height {m}
     Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
+    0.0,                     !- Heater 2 Capacity {W}
     0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    30.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- On Cycle Parasitic Height {m}
-    SCHEDULE,                !- Ambient Temperature Indicator
+    Schedule,                !- Ambient Temperature Indicator
     ScheduledAmbientTemp,    !- Ambient Temperature Schedule Name
     ,                        !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
     0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
+    1.0,                     !- Skin Loss Fraction to Zone
     ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
     ,                        !- Off Cycle Flue Loss Fraction to Zone
     0.000379,                !- Peak Use Flow Rate {m3/s}
@@ -2979,12 +2979,12 @@
     ,                        !- Use Side Inlet Node Name
     ,                        !- Use Side Outlet Node Name
     ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
+    0.0,                     !- Use Side Inlet Height {m}
+    Autocalculate,           !- Use Side Outlet Height {m}
     HPScheduledWaterOutletNode,  !- Source Side Inlet Node Name
     HPScheduledWaterInletNode,  !- Source Side Outlet Node Name
     0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
+    0.0,                     !- Source Side Inlet Height {m}
     0.257441,                !- Source Side Outlet Height {m}
     Fixed,                   !- Inlet Mode
     ,                        !- Use Side Design Flow Rate {m3/s}
@@ -3009,7 +3009,7 @@
     125.0,                   !- Condenser Water Pump Power {W}
     0.1,                     !- Fraction of Condenser Pump Heat to Water
     HPScheduledFanAirOutletNode,  !- Evaporator Air Inlet Node Name
-    HPScheduledAirOutletNode,!- Evaporator Air Outlet Node Name
+    HPScheduledAirOutletNode,  !- Evaporator Air Outlet Node Name
     HPScheduledWaterInletNode,  !- Condenser Water Inlet Node Name
     HPScheduledWaterOutletNode,  !- Condenser Water Outlet Node Name
     120.0,                   !- Crankcase Heater Capacity {W}
@@ -3032,7 +3032,7 @@
     0.2685,                  !- Maximum Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
-    HPScheduledAirInletNode, !- Air Inlet Node Name
+    HPScheduledAirInletNode,  !- Air Inlet Node Name
     HPScheduledFanAirOutletNode;  !- Air Outlet Node Name
 
 !*************** End of Scheduled Heat Pump Water Heater Inputs *****************
@@ -3049,28 +3049,28 @@
     MasterSlave,             !- Heater Priority Control
     Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
+    5000.0,                  !- Heater 1 Capacity {W}
     0.360417,                !- Heater 1 Height {m}
     Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
+    0.0,                     !- Heater 2 Capacity {W}
     0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    30.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     0.308929,                !- On Cycle Parasitic Height {m}
-    SCHEDULE,                !- Ambient Temperature Indicator
+    Schedule,                !- Ambient Temperature Indicator
     ScheduledAmbientTemp,    !- Ambient Temperature Schedule Name
     ,                        !- Ambient Temperature Zone Name
     ,                        !- Ambient Temperature Outdoor Air Node Name
     0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
+    1.0,                     !- Skin Loss Fraction to Zone
     ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
     ,                        !- Off Cycle Flue Loss Fraction to Zone
     0.000379,                !- Peak Use Flow Rate {m3/s}
@@ -3079,12 +3079,12 @@
     ,                        !- Use Side Inlet Node Name
     ,                        !- Use Side Outlet Node Name
     ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
+    0.0,                     !- Use Side Inlet Height {m}
+    Autocalculate,           !- Use Side Outlet Height {m}
     ,                        !- Source Side Inlet Node Name
     ,                        !- Source Side Outlet Node Name
     0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
+    0.0,                     !- Source Side Inlet Height {m}
     0.257441,                !- Source Side Outlet Height {m}
     Fixed,                   !- Inlet Mode
     ,                        !- Use Side Design Flow Rate {m3/s}
@@ -3093,7 +3093,7 @@
     10;                      !- Number of Nodes
 
   Site:WaterMainsTemperature,
-    CORRELATION,             !- Calculation Method
+    Correlation,             !- Calculation Method
     ,                        !- Temperature Schedule Name
     9.69,                    !- Annual Average Outdoor Air Temperature {C}
     28.1;                    !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
@@ -3105,10 +3105,10 @@
 
   NodeList,
     OutsideAirInletNodes,    !- Name
-    Outside Air Inlet Node 1,!- Node 1 Name
+    Outside Air Inlet Node 1,  !- Node 1 Name
     HPOutdoorAirInletNode,   !- Node 2 Name
     HPPlantAirInletNode,     !- Node 3 Name
-    HPWHOutdoorAirInletNode; !- Node 4 Name
+    HPWHOutdoorAirInletNode;  !- Node 4 Name
 
   NodeList,
     SPACE1-1 In Nodes,       !- Name
@@ -3185,7 +3185,7 @@
   ZoneControl:Thermostat,
     SPACE1-1 Control,        !- Name
     SPACE1-1,                !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
     DualSetPoint;            !- Control 1 Name
@@ -3193,7 +3193,7 @@
   ZoneControl:Thermostat,
     SPACE2-1 Control,        !- Name
     SPACE2-1,                !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
     DualSetPoint;            !- Control 1 Name
@@ -3206,7 +3206,7 @@
   ZoneControl:Thermostat,
     SPACE3-1 Control,        !- Name
     SPACE3-1,                !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
     DualSetPoint;            !- Control 1 Name
@@ -3214,7 +3214,7 @@
   ZoneControl:Thermostat,
     SPACE4-1 Control,        !- Name
     SPACE4-1,                !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
     DualSetPoint;            !- Control 1 Name
@@ -3222,7 +3222,7 @@
   ZoneControl:Thermostat,
     SPACE5-1 Control,        !- Name
     SPACE5-1,                !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
     DualSetPoint;            !- Control 1 Name
@@ -3288,7 +3288,7 @@
     ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
     ,                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
     WaterHeater:HeatPump:PumpedCondenser,  !- Zone Equipment 2 Object Type
-    Zone4HeatPumpWaterHeater,!- Zone Equipment 2 Name
+    Zone4HeatPumpWaterHeater,  !- Zone Equipment 2 Name
     1,                       !- Zone Equipment 2 Cooling Sequence
     1,                       !- Zone Equipment 2 Heating or No-Load Sequence
     ,                        !- Zone Equipment 2 Sequential Cooling Fraction Schedule Name
@@ -3304,7 +3304,7 @@
     SPACE5-1 Eq,             !- Name
     SequentialLoad,          !- Load Distribution Scheme
     WaterHeater:HeatPump:PumpedCondenser,  !- Zone Equipment 1 Object Type
-    Zone5HeatPumpWaterHeater,!- Zone Equipment 1 Name
+    Zone5HeatPumpWaterHeater,  !- Zone Equipment 1 Name
     1,                       !- Zone Equipment 1 Cooling Sequence
     1,                       !- Zone Equipment 1 Heating or No-Load Sequence
     ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
@@ -3351,112 +3351,112 @@
     ReheatCoilAvailSched,    !- Availability Schedule Name
     SPACE1-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE1-1 ATU In Node,    !- Air Inlet Node Name
-    autosize,                !- Maximum Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Air Flow Rate {m3/s}
     Constant,                !- Zone Minimum Air Flow Input Method
     0.3,                     !- Constant Minimum Air Flow Fraction
     ,                        !- Fixed Minimum Air Flow Rate {m3/s}
     ,                        !- Minimum Air Flow Fraction Schedule Name
     Coil:Heating:Water,      !- Reheat Coil Object Type
     SPACE1-1 Zone Coil,      !- Reheat Coil Name
-    autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
+    Autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
     0.0,                     !- Minimum Hot Water or Steam Flow Rate {m3/s}
     SPACE1-1 In Node,        !- Air Outlet Node Name
     0.001,                   !- Convergence Tolerance
     ReverseWithLimits,       !- Damper Heating Action
-    AUTOCALCULATE,           !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
-    AUTOCALCULATE;           !- Maximum Flow Fraction During Reheat
+    Autosize,                !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
+    Autosize;                !- Maximum Flow Fraction During Reheat
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE2-1 VAV Reheat,     !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
     SPACE2-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE2-1 ATU In Node,    !- Air Inlet Node Name
-    autosize,                !- Maximum Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Air Flow Rate {m3/s}
     Constant,                !- Zone Minimum Air Flow Input Method
     0.3,                     !- Constant Minimum Air Flow Fraction
     ,                        !- Fixed Minimum Air Flow Rate {m3/s}
     ,                        !- Minimum Air Flow Fraction Schedule Name
     Coil:Heating:Water,      !- Reheat Coil Object Type
     SPACE2-1 Zone Coil,      !- Reheat Coil Name
-    autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
+    Autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
     0.0,                     !- Minimum Hot Water or Steam Flow Rate {m3/s}
     SPACE2-1 In Node,        !- Air Outlet Node Name
     0.001,                   !- Convergence Tolerance
     ReverseWithLimits,       !- Damper Heating Action
-    AUTOCALCULATE,           !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
-    AUTOCALCULATE;           !- Maximum Flow Fraction During Reheat
+    Autosize,                !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
+    Autosize;                !- Maximum Flow Fraction During Reheat
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE3-1 VAV Reheat,     !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
     SPACE3-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE3-1 ATU In Node,    !- Air Inlet Node Name
-    autosize,                !- Maximum Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Air Flow Rate {m3/s}
     Constant,                !- Zone Minimum Air Flow Input Method
     0.3,                     !- Constant Minimum Air Flow Fraction
     ,                        !- Fixed Minimum Air Flow Rate {m3/s}
     ,                        !- Minimum Air Flow Fraction Schedule Name
     Coil:Heating:Water,      !- Reheat Coil Object Type
     SPACE3-1 Zone Coil,      !- Reheat Coil Name
-    autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
+    Autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
     0.0,                     !- Minimum Hot Water or Steam Flow Rate {m3/s}
     SPACE3-1 In Node,        !- Air Outlet Node Name
     0.001,                   !- Convergence Tolerance
     ReverseWithLimits,       !- Damper Heating Action
-    AUTOCALCULATE,           !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
-    AUTOCALCULATE;           !- Maximum Flow Fraction During Reheat
+    Autosize,                !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
+    Autosize;                !- Maximum Flow Fraction During Reheat
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE4-1 VAV Reheat,     !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
     SPACE4-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE4-1 ATU In Node,    !- Air Inlet Node Name
-    autosize,                !- Maximum Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Air Flow Rate {m3/s}
     Constant,                !- Zone Minimum Air Flow Input Method
     0.3,                     !- Constant Minimum Air Flow Fraction
     ,                        !- Fixed Minimum Air Flow Rate {m3/s}
     ,                        !- Minimum Air Flow Fraction Schedule Name
     Coil:Heating:Water,      !- Reheat Coil Object Type
     SPACE4-1 Zone Coil,      !- Reheat Coil Name
-    autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
+    Autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
     0.0,                     !- Minimum Hot Water or Steam Flow Rate {m3/s}
     SPACE4-1 In Node,        !- Air Outlet Node Name
     0.001,                   !- Convergence Tolerance
     ReverseWithLimits,       !- Damper Heating Action
-    AUTOCALCULATE,           !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
-    AUTOCALCULATE;           !- Maximum Flow Fraction During Reheat
+    Autosize,                !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
+    Autosize;                !- Maximum Flow Fraction During Reheat
 
   AirTerminal:SingleDuct:VAV:Reheat,
     SPACE5-1 VAV Reheat,     !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
     SPACE5-1 Zone Coil Air In Node,  !- Damper Air Outlet Node Name
     SPACE5-1 ATU In Node,    !- Air Inlet Node Name
-    autosize,                !- Maximum Air Flow Rate {m3/s}
+    Autosize,                !- Maximum Air Flow Rate {m3/s}
     Constant,                !- Zone Minimum Air Flow Input Method
     0.3,                     !- Constant Minimum Air Flow Fraction
     ,                        !- Fixed Minimum Air Flow Rate {m3/s}
     ,                        !- Minimum Air Flow Fraction Schedule Name
     Coil:Heating:Water,      !- Reheat Coil Object Type
     SPACE5-1 Zone Coil,      !- Reheat Coil Name
-    autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
+    Autosize,                !- Maximum Hot Water or Steam Flow Rate {m3/s}
     0.0,                     !- Minimum Hot Water or Steam Flow Rate {m3/s}
     SPACE5-1 In Node,        !- Air Outlet Node Name
     0.001,                   !- Convergence Tolerance
     ReverseWithLimits,       !- Damper Heating Action
-    AUTOCALCULATE,           !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
-    AUTOCALCULATE;           !- Maximum Flow Fraction During Reheat
+    Autosize,                !- Maximum Flow per Zone Floor Area During Reheat {m3/s-m2}
+    Autosize;                !- Maximum Flow Fraction During Reheat
 
   Coil:Heating:Water,
     SPACE1-1 Zone Coil,      !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     SPACE1-1 Zone Coil Water In Node,  !- Water Inlet Node Name
     SPACE1-1 Zone Coil Water Out Node,  !- Water Outlet Node Name
     SPACE1-1 Zone Coil Air In Node,  !- Air Inlet Node Name
     SPACE1-1 In Node,        !- Air Outlet Node Name
     UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method
-    autosize,                !- Rated Capacity {W}
+    Autosize,                !- Rated Capacity {W}
     82.2,                    !- Rated Inlet Water Temperature {C}
     16.6,                    !- Rated Inlet Air Temperature {C}
     71.1,                    !- Rated Outlet Water Temperature {C}
@@ -3466,14 +3466,14 @@
   Coil:Heating:Water,
     SPACE2-1 Zone Coil,      !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     SPACE2-1 Zone Coil Water In Node,  !- Water Inlet Node Name
     SPACE2-1 Zone Coil Water Out Node,  !- Water Outlet Node Name
     SPACE2-1 Zone Coil Air In Node,  !- Air Inlet Node Name
     SPACE2-1 In Node,        !- Air Outlet Node Name
     UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method
-    autosize,                !- Rated Capacity {W}
+    Autosize,                !- Rated Capacity {W}
     82.2,                    !- Rated Inlet Water Temperature {C}
     16.6,                    !- Rated Inlet Air Temperature {C}
     71.1,                    !- Rated Outlet Water Temperature {C}
@@ -3483,14 +3483,14 @@
   Coil:Heating:Water,
     SPACE3-1 Zone Coil,      !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     SPACE3-1 Zone Coil Water In Node,  !- Water Inlet Node Name
     SPACE3-1 Zone Coil Water Out Node,  !- Water Outlet Node Name
     SPACE3-1 Zone Coil Air In Node,  !- Air Inlet Node Name
     SPACE3-1 In Node,        !- Air Outlet Node Name
     UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method
-    autosize,                !- Rated Capacity {W}
+    Autosize,                !- Rated Capacity {W}
     82.2,                    !- Rated Inlet Water Temperature {C}
     16.6,                    !- Rated Inlet Air Temperature {C}
     71.1,                    !- Rated Outlet Water Temperature {C}
@@ -3500,14 +3500,14 @@
   Coil:Heating:Water,
     SPACE4-1 Zone Coil,      !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     SPACE4-1 Zone Coil Water In Node,  !- Water Inlet Node Name
     SPACE4-1 Zone Coil Water Out Node,  !- Water Outlet Node Name
     SPACE4-1 Zone Coil Air In Node,  !- Air Inlet Node Name
     SPACE4-1 In Node,        !- Air Outlet Node Name
     UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method
-    autosize,                !- Rated Capacity {W}
+    Autosize,                !- Rated Capacity {W}
     82.2,                    !- Rated Inlet Water Temperature {C}
     16.6,                    !- Rated Inlet Air Temperature {C}
     71.1,                    !- Rated Outlet Water Temperature {C}
@@ -3517,14 +3517,14 @@
   Coil:Heating:Water,
     SPACE5-1 Zone Coil,      !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     SPACE5-1 Zone Coil Water In Node,  !- Water Inlet Node Name
     SPACE5-1 Zone Coil Water Out Node,  !- Water Outlet Node Name
     SPACE5-1 Zone Coil Air In Node,  !- Air Inlet Node Name
     SPACE5-1 In Node,        !- Air Outlet Node Name
     UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method
-    autosize,                !- Rated Capacity {W}
+    Autosize,                !- Rated Capacity {W}
     82.2,                    !- Rated Inlet Water Temperature {C}
     16.6,                    !- Rated Inlet Air Temperature {C}
     71.1,                    !- Rated Outlet Water Temperature {C}
@@ -3534,7 +3534,7 @@
   AirLoopHVAC:ReturnPath,
     ReturnAirPath1,          !- Name
     PLENUM-1 Out Node,       !- Return Air Path Outlet Node Name
-    AirLoopHVAC:ReturnPlenum,!- Component 1 Object Type
+    AirLoopHVAC:ReturnPlenum,  !- Component 1 Object Type
     Return-Plenum-1;         !- Component 1 Name
 
   AirLoopHVAC:ReturnPlenum,
@@ -3552,7 +3552,7 @@
   AirLoopHVAC:SupplyPath,
     Zone Supply Air Path 1,  !- Name
     Zone Eq In Node,         !- Supply Air Path Inlet Node Name
-    AirLoopHVAC:ZoneSplitter,!- Component 1 Object Type
+    AirLoopHVAC:ZoneSplitter,  !- Component 1 Object Type
     Zone Supply Air Splitter 1;  !- Component 1 Name
 
   AirLoopHVAC:ZoneSplitter,
@@ -3568,7 +3568,7 @@
     VAV Sys 1,               !- Name
     VAV Sys 1 Controllers,   !- Controller List Name
     VAV Sys 1 Avail List,    !- Availability Manager List Name
-    autosize,                !- Design Supply Air Flow Rate {m3/s}
+    Autosize,                !- Design Supply Air Flow Rate {m3/s}
     VAV Sys 1 Branches,      !- Branch List Name
     ,                        !- Connector List Name
     VAV Sys 1 Inlet Node,    !- Supply Side Inlet Node Name
@@ -3634,20 +3634,20 @@
   OutdoorAir:Mixer,
     OA Mixing Box 1,         !- Name
     Mixed Air Node 1,        !- Mixed Air Node Name
-    Outside Air Inlet Node 1,!- Outdoor Air Stream Node Name
-    Relief Air Outlet Node 1,!- Relief Air Stream Node Name
+    Outside Air Inlet Node 1,  !- Outdoor Air Stream Node Name
+    Relief Air Outlet Node 1,  !- Relief Air Stream Node Name
     VAV Sys 1 Inlet Node;    !- Return Air Stream Node Name
 
   Coil:Cooling:Water,
     Main Cooling Coil 1,     !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
-    autosize,                !- Design Water Flow Rate {m3/s}
-    autosize,                !- Design Air Flow Rate {m3/s}
-    autosize,                !- Design Inlet Water Temperature {C}
-    autosize,                !- Design Inlet Air Temperature {C}
-    autosize,                !- Design Outlet Air Temperature {C}
-    autosize,                !- Design Inlet Air Humidity Ratio {kgWater/kgDryAir}
-    autosize,                !- Design Outlet Air Humidity Ratio {kgWater/kgDryAir}
+    Autosize,                !- Design Water Flow Rate {m3/s}
+    Autosize,                !- Design Air Flow Rate {m3/s}
+    Autosize,                !- Design Inlet Water Temperature {C}
+    Autosize,                !- Design Inlet Air Temperature {C}
+    Autosize,                !- Design Outlet Air Temperature {C}
+    Autosize,                !- Design Inlet Air Humidity Ratio {kgWater/kgDryAir}
+    Autosize,                !- Design Outlet Air Humidity Ratio {kgWater/kgDryAir}
     Main Cooling Coil 1 Water Inlet Node,  !- Water Inlet Node Name
     Main Cooling Coil 1 Water Outlet Node,  !- Water Outlet Node Name
     Mixed Air Node 1,        !- Air Inlet Node Name
@@ -3658,14 +3658,14 @@
   Coil:Heating:Water,
     Main Heating Coil 1,     !- Name
     ReheatCoilAvailSched,    !- Availability Schedule Name
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     Main Heating Coil 1 Water Inlet Node,  !- Water Inlet Node Name
     Main Heating Coil 1 Water Outlet Node,  !- Water Outlet Node Name
     Main Cooling Coil 1 Outlet Node,  !- Air Inlet Node Name
     Main Heating Coil 1 Outlet Node,  !- Air Outlet Node Name
     UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method
-    autosize,                !- Rated Capacity {W}
+    Autosize,                !- Rated Capacity {W}
     82.2,                    !- Rated Inlet Water Temperature {C}
     16.6,                    !- Rated Inlet Air Temperature {C}
     71.1,                    !- Rated Outlet Water Temperature {C}
@@ -3677,7 +3677,7 @@
     FanAvailSched,           !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
     600.0,                   !- Pressure Rise {Pa}
-    autosize,                !- Maximum Flow Rate {m3/s}
+    Autosize,                !- Maximum Flow Rate {m3/s}
     Fraction,                !- Fan Power Minimum Flow Rate Input Method
     0.25,                    !- Fan Power Minimum Flow Fraction
     ,                        !- Fan Power Minimum Air Flow Rate {m3/s}
@@ -3687,12 +3687,12 @@
     0.30850535,              !- Fan Power Coefficient 2
     -0.54137364,             !- Fan Power Coefficient 3
     0.87198823,              !- Fan Power Coefficient 4
-    0.000,                   !- Fan Power Coefficient 5
+    0.0,                     !- Fan Power Coefficient 5
     Main Heating Coil 1 Outlet Node,  !- Air Inlet Node Name
     VAV Sys 1 Outlet Node;   !- Air Outlet Node Name
 
   SetpointManager:MixedAir,
-    Mixed Air Temp Manager 2,!- Name
+    Mixed Air Temp Manager 2,  !- Name
     Temperature,             !- Control Variable
     VAV Sys 1 Outlet Node,   !- Reference Setpoint Node Name
     Main Heating Coil 1 Outlet Node,  !- Fan Inlet Node Name
@@ -3708,14 +3708,14 @@
     Central Cooling Coil Contoller 1,  !- Name
     TemperatureAndHumidityRatio,  !- Control Variable
     Reverse,                 !- Action
-    FLOW,                    !- Actuator Variable
+    Flow,                    !- Actuator Variable
     Main Cooling Coil 1 Outlet Node,  !- Sensor Node Name
     Main Cooling Coil 1 Water Inlet Node,  !- Actuator Node Name
     0.002,                   !- Controller Convergence Tolerance {deltaC}
-    autosize,                !- Maximum Actuated Flow {m3/s}
+    Autosize,                !- Maximum Actuated Flow {m3/s}
     0.0;                     !- Minimum Actuated Flow {m3/s}
 
-    ! This object uses results from ZoneControl:Humidistat and needs to reference the same zone
+! This object uses results from ZoneControl:Humidistat and needs to reference the same zone
 
   SetpointManager:SingleZone:Humidity:Maximum,
     Space2-1 Humidistat Manager,  !- Name
@@ -3724,19 +3724,19 @@
 
   Controller:OutdoorAir,
     OA Controller 1,         !- Name
-    Relief Air Outlet Node 1,!- Relief Air Outlet Node Name
+    Relief Air Outlet Node 1,  !- Relief Air Outlet Node Name
     VAV Sys 1 Inlet Node,    !- Return Air Node Name
     Mixed Air Node 1,        !- Mixed Air Node Name
-    Outside Air Inlet Node 1,!- Actuator Node Name
+    Outside Air Inlet Node 1,  !- Actuator Node Name
     0.25,                    !- Minimum Outdoor Air Flow Rate {m3/s}
     0.25,                    !- Maximum Outdoor Air Flow Rate {m3/s}
     FixedDryBulb,            !- Economizer Control Type
     ModulateFlow,            !- Economizer Control Action Type
-    19.,                     !- Economizer Maximum Limit Dry-Bulb Temperature {C}
+    19.0,                    !- Economizer Maximum Limit Dry-Bulb Temperature {C}
     ,                        !- Economizer Maximum Limit Enthalpy {J/kg}
     ,                        !- Economizer Maximum Limit Dewpoint Temperature {C}
     ,                        !- Electronic Enthalpy Limit Curve Name
-    4.,                      !- Economizer Minimum Limit Dry-Bulb Temperature {C}
+    4.0,                     !- Economizer Minimum Limit Dry-Bulb Temperature {C}
     NoLockout,               !- Lockout Type
     FixedMinimum,            !- Minimum Limit Type
     Min OA Sched;            !- Minimum Outdoor Air Schedule Name
@@ -3745,21 +3745,21 @@
     Central Heating Coil Contoller 1,  !- Name
     Temperature,             !- Control Variable
     Normal,                  !- Action
-    FLOW,                    !- Actuator Variable
+    Flow,                    !- Actuator Variable
     Main Heating Coil 1 Outlet Node,  !- Sensor Node Name
     Main Heating Coil 1 Water Inlet Node,  !- Actuator Node Name
     0.002,                   !- Controller Convergence Tolerance {deltaC}
-    autosize,                !- Maximum Actuated Flow {m3/s}
+    Autosize,                !- Maximum Actuated Flow {m3/s}
     0.0;                     !- Minimum Actuated Flow {m3/s}
 
   SetpointManager:Scheduled,
     Supply Air Temp Manager 1,  !- Name
     Temperature,             !- Control Variable
     Seasonal Reset Supply Air Temp Sch,  !- Schedule Name
-    Supply Air Temp Nodes 1; !- Setpoint Node or NodeList Name
+    Supply Air Temp Nodes 1;  !- Setpoint Node or NodeList Name
 
   SetpointManager:MixedAir,
-    Mixed Air Temp Manager 1,!- Name
+    Mixed Air Temp Manager 1,  !- Name
     Temperature,             !- Control Variable
     VAV Sys 1 Outlet Node,   !- Reference Setpoint Node Name
     Main Heating Coil 1 Outlet Node,  !- Fan Inlet Node Name
@@ -3767,7 +3767,7 @@
     Mixed Air Node 1;        !- Setpoint Node or NodeList Name
 
   NodeList,
-    Supply Air Temp Nodes 1, !- Name
+    Supply Air Temp Nodes 1,  !- Name
     VAV Sys 1 Outlet Node;   !- Node 1 Name
 
   PlantLoop,
@@ -3776,11 +3776,11 @@
     ,                        !- User Defined Fluid Type
     Hot Loop Operation,      !- Plant Equipment Operation Scheme Name
     HW Supply Outlet Node,   !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    10,                      !- Minimum Loop Temperature {C}
-    autosize,                !- Maximum Loop Flow Rate {m3/s}
+    100.0,                   !- Maximum Loop Temperature {C}
+    10.0,                    !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
     0.0,                     !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Plant Loop Volume {m3}
+    Autocalculate,           !- Plant Loop Volume {m3}
     HW Supply Inlet Node,    !- Plant Side Inlet Node Name
     HW Supply Outlet Node,   !- Plant Side Outlet Node Name
     Heating Supply Side Branches,  !- Plant Side Branch List Name
@@ -3811,7 +3811,7 @@
   ConnectorList,
     Heating Supply Side Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    Heating Supply Splitter, !- Connector 1 Name
+    Heating Supply Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     Heating Supply Mixer;    !- Connector 2 Name
 
@@ -3827,7 +3827,7 @@
     Central HPWH Branch,     !- Name
     ,                        !- Pressure Drop Curve Name
     WaterHeater:HeatPump:PumpedCondenser,  !- Component 1 Object Type
-    PlantHeatPumpWaterHeater,!- Component 1 Name
+    PlantHeatPumpWaterHeater,  !- Component 1 Name
     HPWH Use Inlet Node,     !- Component 1 Inlet Node Name
     HPWH Use Outlet Node;    !- Component 1 Outlet Node Name
 
@@ -3872,7 +3872,7 @@
   ConnectorList,
     Heating Demand Side Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    Heating Demand Splitter, !- Connector 1 Name
+    Heating Demand Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     Heating Demand Mixer;    !- Connector 2 Name
 
@@ -3964,7 +3964,7 @@
     Heating Demand Bypass Outlet Node;  !- Outlet Node Name
 
   Connector:Splitter,
-    Heating Demand Splitter, !- Name
+    Heating Demand Splitter,  !- Name
     Heating Demand Inlet Branch,  !- Inlet Branch Name
     SPACE1-1 Reheat Branch,  !- Outlet Branch 1 Name
     SPACE2-1 Reheat Branch,  !- Outlet Branch 2 Name
@@ -3986,7 +3986,7 @@
     Heating Demand Bypass Branch;  !- Inlet Branch 7 Name
 
   Connector:Splitter,
-    Heating Supply Splitter, !- Name
+    Heating Supply Splitter,  !- Name
     Heating Supply Inlet Branch,  !- Inlet Branch Name
     Central HPWH Branch,     !- Outlet Branch 1 Name
     Heating Supply Bypass Branch;  !- Outlet Branch 2 Name
@@ -4005,8 +4005,8 @@
 
   PlantEquipmentOperation:HeatingLoad,
     Central HPWH Only,       !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    1000000,                 !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    1000000.0,               !- Load Range 1 Upper Limit {W}
     heating plant;           !- Range 1 Equipment List Name
 
 !    WATER HEATER:MIXED,         !- KEY--Plant Equip 1
@@ -4015,12 +4015,12 @@
   PlantEquipmentList,
     heating plant,           !- Name
     WaterHeater:HeatPump:PumpedCondenser,  !- Equipment 1 Object Type
-    PlantHeatPumpWaterHeater;!- Equipment 1 Name
+    PlantHeatPumpWaterHeater;  !- Equipment 1 Name
 
 !************** Plant Heat Pump Water Heater Inputs ***********************
 
   WaterHeater:HeatPump:PumpedCondenser,
-    PlantHeatPumpWaterHeater,!- Name
+    PlantHeatPumpWaterHeater,  !- Name
     PlantHPWHSch,            !- Availability Schedule Name
     PlantHPWHTempSch,        !- Compressor Setpoint Temperature Schedule Name
     2.0,                     !- Dead Band Temperature Difference {deltaC}
@@ -4062,35 +4062,35 @@
     HPWHPlantTank,           !- Name
     ,                        !- End-Use Subcategory
     0.757,                   !- Tank Volume {m3}
-    0.648710,                !- Tank Height {m}
+    0.64871,                 !- Tank Height {m}
     VerticalCylinder,        !- Tank Shape
     ,                        !- Tank Perimeter {m}
     82.2222,                 !- Maximum Temperature Limit {C}
     MasterSlave,             !- Heater Priority Control
     Plant Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    25000,                   !- Heater 1 Capacity {W}
+    25000.0,                 !- Heater 1 Capacity {W}
     0.454097,                !- Heater 1 Height {m}
     Plant Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
     2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
+    0.0,                     !- Heater 2 Capacity {W}
     0.194613,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
+    Electricity,             !- Heater Fuel Type
     0.98,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
+    10.0,                    !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- Off Cycle Parasitic Fuel Type
+    0.0,                     !- Off Cycle Parasitic Heat Fraction to Tank
     0.389226,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
+    30.0,                    !- On Cycle Parasitic Fuel Consumption Rate {W}
+    Electricity,             !- On Cycle Parasitic Fuel Type
+    0.0,                     !- On Cycle Parasitic Heat Fraction to Tank
     0.389226,                !- On Cycle Parasitic Height {m}
     Outdoors,                !- Ambient Temperature Indicator
     ,                        !- Ambient Temperature Schedule Name
     ,                        !- Ambient Temperature Zone Name
     HPWHPlantTank OA Node,   !- Ambient Temperature Outdoor Air Node Name
-    0.000000,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    0.000000,                !- Skin Loss Fraction to Zone
+    0.0,                     !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
+    0.0,                     !- Skin Loss Fraction to Zone
     ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
     ,                        !- Off Cycle Flue Loss Fraction to Zone
     ,                        !- Peak Use Flow Rate {m3/s}
@@ -4099,15 +4099,15 @@
     HPWH Use Inlet Node,     !- Use Side Inlet Node Name
     HPWH Use Outlet Node,    !- Use Side Outlet Node Name
     0.98,                    !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
+    0.0,                     !- Use Side Inlet Height {m}
+    Autocalculate,           !- Use Side Outlet Height {m}
     HPPlantWaterOutletNode,  !- Source Side Inlet Node Name
     HPPlantWaterInletNode,   !- Source Side Outlet Node Name
     0.98,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
+    0.0,                     !- Source Side Inlet Height {m}
     0.324355,                !- Source Side Outlet Height {m}
     Fixed,                   !- Inlet Mode
-    autosize,                !- Use Side Design Flow Rate {m3/s}
+    Autosize,                !- Use Side Design Flow Rate {m3/s}
     ,                        !- Source Side Design Flow Rate {m3/s}
     ,                        !- Indirect Water Heating Recovery Time {hr}
     10;                      !- Number of Nodes
@@ -4131,7 +4131,7 @@
     No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
     150.0,                   !- Condenser Water Pump Power {W}
     0.1,                     !- Fraction of Condenser Pump Heat to Water
-    HPPlantFanAirOutletNode, !- Evaporator Air Inlet Node Name
+    HPPlantFanAirOutletNode,  !- Evaporator Air Inlet Node Name
     HPPlantAirOutletNode,    !- Evaporator Air Outlet Node Name
     HPPlantWaterInletNode,   !- Condenser Water Inlet Node Name
     HPPlantWaterOutletNode,  !- Condenser Water Outlet Node Name
@@ -4156,7 +4156,7 @@
     0.9,                     !- Motor Efficiency
     1.0,                     !- Motor In Airstream Fraction
     HPPlantAirInletNode,     !- Air Inlet Node Name
-    HPPlantFanAirOutletNode; !- Air Outlet Node Name
+    HPPlantFanAirOutletNode;  !- Air Outlet Node Name
 
   Schedule:Compact,
     PlantHPWHSch,            !- Name
@@ -4185,17 +4185,17 @@
     HW Circ Pump,            !- Name
     HW Supply Inlet Node,    !- Inlet Node Name
     HW Pump Outlet Node,     !- Outlet Node Name
-    autosize,                !- Design Maximum Flow Rate {m3/s}
-    179352,                  !- Design Pump Head {Pa}
-    autosize,                !- Design Power Consumption {W}
+    Autosize,                !- Design Maximum Flow Rate {m3/s}
+    179352.0,                !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     0.9,                     !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   PlantLoop,
     Chilled Water Loop,      !- Name
@@ -4203,11 +4203,11 @@
     ,                        !- User Defined Fluid Type
     CW Loop Operation,       !- Plant Equipment Operation Scheme Name
     CW Supply Outlet Node,   !- Loop Temperature Setpoint Node Name
-    98,                      !- Maximum Loop Temperature {C}
-    1,                       !- Minimum Loop Temperature {C}
-    autosize,                !- Maximum Loop Flow Rate {m3/s}
+    98.0,                    !- Maximum Loop Temperature {C}
+    1.0,                     !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
     0.0,                     !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Plant Loop Volume {m3}
+    Autocalculate,           !- Plant Loop Volume {m3}
     CW Supply Inlet Node,    !- Plant Side Inlet Node Name
     CW Supply Outlet Node,   !- Plant Side Outlet Node Name
     Cooling Supply Side Branches,  !- Plant Side Branch List Name
@@ -4307,12 +4307,12 @@
     Cooling Supply Outlet,   !- Name
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
-    Supply Side Outlet Pipe, !- Component 1 Name
+    Supply Side Outlet Pipe,  !- Component 1 Name
     Supply Side Exit Pipe Inlet Node,  !- Component 1 Inlet Node Name
     CW Supply Outlet Node;   !- Component 1 Outlet Node Name
 
   Pipe:Adiabatic,
-    Supply Side Outlet Pipe, !- Name
+    Supply Side Outlet Pipe,  !- Name
     Supply Side Exit Pipe Inlet Node,  !- Inlet Node Name
     CW Supply Outlet Node;   !- Outlet Node Name
 
@@ -4377,8 +4377,8 @@
 
   PlantEquipmentOperation:CoolingLoad,
     Central Chiller Only,    !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    900000,                  !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    900000.0,                !- Load Range 1 Upper Limit {W}
     Cooling Plant;           !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -4389,7 +4389,7 @@
   Chiller:Electric,
     Central Chiller,         !- Name
     WaterCooled,             !- Condenser Type
-    autosize,                !- Nominal Capacity {W}
+    Autosize,                !- Nominal Capacity {W}
     3.2,                     !- Nominal COP {W/W}
     Central Chiller Inlet Node,  !- Chilled Water Inlet Node Name
     Central Chiller Outlet Node,  !- Chilled Water Outlet Node Name
@@ -4397,23 +4397,23 @@
     Central Chiller Condenser Outlet Node,  !- Condenser Outlet Node Name
     0.0,                     !- Minimum Part Load Ratio
     1.0,                     !- Maximum Part Load Ratio
-    .65,                     !- Optimum Part Load Ratio
+    0.65,                    !- Optimum Part Load Ratio
     29.44,                   !- Design Condenser Inlet Temperature {C}
     2.682759,                !- Temperature Rise Coefficient
     6.667,                   !- Design Chilled Water Outlet Temperature {C}
-    autosize,                !- Design Chilled Water Flow Rate {m3/s}
-    autosize,                !- Design Condenser Fluid Flow Rate {m3/s}
-    0.94483600,              !- Coefficient 1 of Capacity Ratio Curve
-    -.05700880,              !- Coefficient 2 of Capacity Ratio Curve
-    -.00185486,              !- Coefficient 3 of Capacity Ratio Curve
+    Autosize,                !- Design Chilled Water Flow Rate {m3/s}
+    Autosize,                !- Design Condenser Fluid Flow Rate {m3/s}
+    0.944836,                !- Coefficient 1 of Capacity Ratio Curve
+    -0.0570088,              !- Coefficient 2 of Capacity Ratio Curve
+    -0.00185486,             !- Coefficient 3 of Capacity Ratio Curve
     1.907846,                !- Coefficient 1 of Power Ratio Curve
-    -1.20498700,             !- Coefficient 2 of Power Ratio Curve
-    0.26346230,              !- Coefficient 3 of Power Ratio Curve
+    -1.204987,               !- Coefficient 2 of Power Ratio Curve
+    0.2634623,               !- Coefficient 3 of Power Ratio Curve
     0.03303,                 !- Coefficient 1 of Full Load Ratio Curve
     0.6852,                  !- Coefficient 2 of Full Load Ratio Curve
     0.2818,                  !- Coefficient 3 of Full Load Ratio Curve
-    5,                       !- Chilled Water Outlet Temperature Lower Limit {C}
-    LeavingSetpointModulated;!- Chiller Flow Mode
+    5.0,                     !- Chilled Water Outlet Temperature Lower Limit {C}
+    LeavingSetpointModulated;  !- Chiller Flow Mode
 
   SetpointManager:Scheduled,
     Central Chiller Setpoint Manager,  !- Name
@@ -4425,17 +4425,17 @@
     CW Circ Pump,            !- Name
     CW Supply Inlet Node,    !- Inlet Node Name
     CW Pump Outlet Node,     !- Outlet Node Name
-    autosize,                !- Design Maximum Flow Rate {m3/s}
-    179352,                  !- Design Pump Head {Pa}
-    autosize,                !- Design Power Consumption {W}
+    Autosize,                !- Design Maximum Flow Rate {m3/s}
+    179352.0,                !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     0.9,                     !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT,            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent,            !- Pump Control Type
     CoolingPumpAvailSched;   !- Pump Flow Rate Schedule Name
 
   CondenserLoop,
@@ -4444,11 +4444,11 @@
     ,                        !- User Defined Fluid Type
     Tower Loop Operation,    !- Condenser Equipment Operation Scheme Name
     Condenser Supply Outlet Node,  !- Condenser Loop Temperature Setpoint Node Name
-    80,                      !- Maximum Loop Temperature {C}
-    10,                      !- Minimum Loop Temperature {C}
-    autosize,                !- Maximum Loop Flow Rate {m3/s}
+    80.0,                    !- Maximum Loop Temperature {C}
+    10.0,                    !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
     0.0,                     !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Condenser Loop Volume {m3}
+    Autocalculate,           !- Condenser Loop Volume {m3}
     Condenser Supply Inlet Node,  !- Condenser Side Inlet Node Name
     Condenser Supply Outlet Node,  !- Condenser Side Outlet Node Name
     Condenser Supply Side Branches,  !- Condenser Side Branch List Name
@@ -4463,9 +4463,9 @@
     MyCondenserControl,      !- Name
     Temperature,             !- Control Variable
     OutdoorAirWetBulb,       !- Reference Temperature Type
-    0,                       !- Offset Temperature Difference {deltaC}
-    80,                      !- Maximum Setpoint Temperature {C}
-    10,                      !- Minimum Setpoint Temperature {C}
+    0.0,                     !- Offset Temperature Difference {deltaC}
+    80.0,                    !- Maximum Setpoint Temperature {C}
+    10.0,                    !- Minimum Setpoint Temperature {C}
     Condenser Supply Outlet Node;  !- Setpoint Node or NodeList Name
 
   BranchList,
@@ -4493,7 +4493,7 @@
   Branch,
     Condenser Supply Tower Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
-    CoolingTower:SingleSpeed,!- Component 1 Object Type
+    CoolingTower:SingleSpeed,  !- Component 1 Object Type
     Central Tower,           !- Component 1 Name
     Condenser Tower Inlet Node,  !- Component 1 Inlet Node Name
     Condenser Tower Outlet Node;  !- Component 1 Outlet Node Name
@@ -4515,12 +4515,12 @@
     Condenser Supply Outlet Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
-    Condenser Supply Outlet, !- Component 1 Name
+    Condenser Supply Outlet,  !- Component 1 Name
     Condenser Supply Exit Pipe Inlet Node,  !- Component 1 Inlet Node Name
     Condenser Supply Outlet Node;  !- Component 1 Outlet Node Name
 
   Pipe:Adiabatic,
-    Condenser Supply Outlet, !- Name
+    Condenser Supply Outlet,  !- Name
     Condenser Supply Exit Pipe Inlet Node,  !- Inlet Node Name
     Condenser Supply Outlet Node;  !- Outlet Node Name
 
@@ -4617,23 +4617,23 @@
 
   PlantEquipmentOperation:CoolingLoad,
     Year Round Tower Operation,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    90000000,                !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    90000000.0,              !- Load Range 1 Upper Limit {W}
     All Towers;              !- Range 1 Equipment List Name
 
   CondenserEquipmentList,
     All Towers,              !- Name
-    CoolingTower:SingleSpeed,!- Equipment 1 Object Type
+    CoolingTower:SingleSpeed,  !- Equipment 1 Object Type
     Central Tower;           !- Equipment 1 Name
 
   CoolingTower:SingleSpeed,
     Central Tower,           !- Name
     Condenser Tower Inlet Node,  !- Water Inlet Node Name
     Condenser Tower Outlet Node,  !- Water Outlet Node Name
-    autosize,                !- Design Water Flow Rate {m3/s}
-    autosize,                !- Design Air Flow Rate {m3/s}
-    autosize,                !- Design Fan Power {W}
-    autosize,                !- Design U-Factor Times Area Value {W/K}
+    Autosize,                !- Design Water Flow Rate {m3/s}
+    Autosize,                !- Design Air Flow Rate {m3/s}
+    Autosize,                !- Design Fan Power {W}
+    Autosize,                !- Design U-Factor Times Area Value {W/K}
     0.0,                     !- Free Convection Regime Air Flow Rate {m3/s}
     ,                        !- Free Convection Regime Air Flow Rate Sizing Factor
     0.0,                     !- Free Convection Regime U-Factor Times Area Value {W/K}
@@ -4660,88 +4660,88 @@
     Cond Circ Pump,          !- Name
     Condenser Supply Inlet Node,  !- Inlet Node Name
     Condenser Pump Outlet Node,  !- Outlet Node Name
-    autosize,                !- Design Maximum Flow Rate {m3/s}
-    179352,                  !- Design Pump Head {Pa}
-    autosize,                !- Design Power Consumption {W}
+    Autosize,                !- Design Maximum Flow Rate {m3/s}
+    179352.0,                !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     0.9,                     !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT,            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent,            !- Pump Control Type
     CoolingPumpAvailSched;   !- Pump Flow Rate Schedule Name
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;
 
-  Output:Variable,*,Zone Air Temperature,hourly;
+  Output:Variable,*,Zone Air Temperature,Hourly;
 
-  Output:Variable,*,Heating Coil Heating Rate,hourly;
+  Output:Variable,*,Heating Coil Heating Rate,Hourly;
 
-  Output:Variable,*,Cooling Coil Total Cooling Rate,hourly;
+  Output:Variable,*,Cooling Coil Total Cooling Rate,Hourly;
 
-  Output:Variable,*,Water Heater Runtime Fraction,hourly;
+  Output:Variable,*,Water Heater Runtime Fraction,Hourly;
 
-  Output:Variable,*,Water Heater Part Load Ratio,hourly;
+  Output:Variable,*,Water Heater Part Load Ratio,Hourly;
 
-  Output:Variable,*,Water Heater Electricity Rate,hourly;
+  Output:Variable,*,Water Heater Electricity Rate,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Inlet Temperature,hourly;
+  Output:Variable,*,Water Heater Source Side Inlet Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Outlet Temperature,hourly;
+  Output:Variable,*,Water Heater Source Side Outlet Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Mass Flow Rate,hourly;
+  Output:Variable,*,Water Heater Source Side Mass Flow Rate,Hourly;
 
-  Output:Variable,*,Water Heater Source Side Heat Transfer Rate,hourly;
+  Output:Variable,*,Water Heater Source Side Heat Transfer Rate,Hourly;
 
-  Output:Variable,*,Water Heater Use Side Inlet Temperature,hourly;
+  Output:Variable,*,Water Heater Use Side Inlet Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Use Side Outlet Temperature,hourly;
+  Output:Variable,*,Water Heater Use Side Outlet Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Use Side Mass Flow Rate,hourly;
+  Output:Variable,*,Water Heater Use Side Mass Flow Rate,Hourly;
 
-  Output:Variable,*,Water Heater Use Side Heat Transfer Rate,hourly;
+  Output:Variable,*,Water Heater Use Side Heat Transfer Rate,Hourly;
 
-  Output:Variable,*,Cooling Coil Total Water Heating Rate,hourly;
+  Output:Variable,*,Cooling Coil Total Water Heating Rate,Hourly;
 
-  Output:Variable,*,Cooling Coil Water Heating Electricity Rate,hourly;
+  Output:Variable,*,Cooling Coil Water Heating Electricity Rate,Hourly;
 
-  Output:Variable,*,Water Heater Tank Temperature,hourly;
+  Output:Variable,*,Water Heater Tank Temperature,Hourly;
 
-  Output:Variable,*,Water Heater Compressor Part Load Ratio,hourly;
+  Output:Variable,*,Water Heater Compressor Part Load Ratio,Hourly;
 
-  Output:Variable,*,Fan Electricity Rate,hourly;
+  Output:Variable,*,Fan Electricity Rate,Hourly;
 
-  Output:Variable,*,Cooling Coil Crankcase Heater Electricity Rate,hourly;
+  Output:Variable,*,Cooling Coil Crankcase Heater Electricity Rate,Hourly;
 
-  Output:Variable,*,Water Heater On Cycle Ancillary Electricity Rate,hourly;
+  Output:Variable,*,Water Heater On Cycle Ancillary Electricity Rate,Hourly;
 
-  Output:Variable,*,Water Heater Off Cycle Ancillary Electricity Rate,hourly;
+  Output:Variable,*,Water Heater Off Cycle Ancillary Electricity Rate,Hourly;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
+  Output:Surfaces:Drawing,DXF;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Building,Monthly;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,monthly;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,monthly;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Plant,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Plant,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Building,RunPeriod;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,runperiod;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Plant,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Plant,RunPeriod;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -4760,8 +4760,8 @@
 
   WaterUse:Connections,
     Domestic Hot Water,      !- Name
-    Water Demand Inlet Node, !- Inlet Node Name
-    Water Demand Outlet Node,!- Outlet Node Name
+    Water Demand Inlet Node,  !- Inlet Node Name
+    Water Demand Outlet Node,  !- Outlet Node Name
     ,                        !- Supply Water Storage Tank Name
     ,                        !- Reclamation Water Storage Tank Name
     ,                        !- Hot Water Supply Temperature Schedule Name
@@ -4776,8 +4776,8 @@
     ,                        !- Pressure Drop Curve Name
     WaterUse:Connections,    !- Component 1 Object Type
     Domestic Hot Water,      !- Component 1 Name
-    Water Demand Inlet Node, !- Component 1 Inlet Node Name
-    Water Demand Outlet Node;!- Component 1 Outlet Node Name
+    Water Demand Inlet Node,  !- Component 1 Inlet Node Name
+    Water Demand Outlet Node;  !- Component 1 Outlet Node Name
 
   Connector:Mixer,
     DHW Demand Mixer,        !- Name
@@ -4786,12 +4786,12 @@
 
   Connector:Splitter,
     DHW Demand Splitter,     !- Name
-    DHW Demand Inlet Branch, !- Inlet Branch Name
+    DHW Demand Inlet Branch,  !- Inlet Branch Name
     Water Demand Branch;     !- Outlet Branch 1 Name
 
   Connector:Mixer,
     DHW Supply Mixer,        !- Name
-    DHW Supply Outlet Branch,!- Outlet Branch Name
+    DHW Supply Outlet Branch,  !- Outlet Branch Name
     Water Heater Branch;     !- Inlet Branch 1 Name
 
   Connector:Splitter,
@@ -4807,7 +4807,7 @@
     DHW Supply Mixer;        !- Connector 2 Name
 
   Branch,
-    DHW Supply Outlet Branch,!- Name
+    DHW Supply Outlet Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
     DHW Supply Outlet Pipe,  !- Component 1 Name
@@ -4821,7 +4821,7 @@
 
   BranchList,
     DHW Demand Branches,     !- Name
-    DHW Demand Inlet Branch, !- Branch 1 Name
+    DHW Demand Inlet Branch,  !- Branch 1 Name
     Water Demand Branch,     !- Branch 2 Name
     Mains Makeup Branch;     !- Branch 3 Name
 
@@ -4829,10 +4829,10 @@
     DHW Supply Branches,     !- Name
     Mains Inlet Branch,      !- Branch 1 Name
     Water Heater Branch,     !- Branch 2 Name
-    DHW Supply Outlet Branch;!- Branch 3 Name
+    DHW Supply Outlet Branch;  !- Branch 3 Name
 
   Branch,
-    DHW Demand Inlet Branch, !- Name
+    DHW Demand Inlet Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
     DHW Demand Inlet Pipe,   !- Component 1 Name
@@ -4870,10 +4870,10 @@
     ,                        !- User Defined Fluid Type
     DHW Loop Operation,      !- Plant Equipment Operation Scheme Name
     DHW Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    0,                       !- Minimum Loop Temperature {C}
+    100.0,                   !- Maximum Loop Temperature {C}
+    0.0,                     !- Minimum Loop Temperature {C}
     0.01,                    !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
     0.003,                   !- Plant Loop Volume {m3}
     Mains Inlet Node,        !- Plant Side Inlet Node Name
     DHW Supply Outlet Node,  !- Plant Side Outlet Node Name
@@ -4897,12 +4897,12 @@
     DHW Control Scheme,      !- Control Scheme 1 Name
     AlwaysOn;                !- Control Scheme 1 Schedule Name
 
-  Schedule:Constant,AlwaysOn,FRACTION,1;
+  Schedule:Constant,AlwaysOn,FRACTION,1.0;
 
   PlantEquipmentOperation:HeatingLoad,
     DHW Control Scheme,      !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    1000000000000000,        !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    1000000000000000.0,      !- Load Range 1 Upper Limit {W}
     DHW Plant Equipment;     !- Range 1 Equipment List Name
 
   SetpointManager:Scheduled,
@@ -4926,15 +4926,15 @@
     Mains Inlet Node,        !- Inlet Node Name
     Mains Pressure Outlet Node,  !- Outlet Node Name
     0.01,                    !- Design Maximum Flow Rate {m3/s}
-    1,                       !- Design Pump Head {Pa}
-    0,                       !- Design Power Consumption {W}
-    1,                       !- Motor Efficiency
-    0,                       !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
+    1.0,                     !- Design Pump Head {Pa}
+    0.0,                     !- Design Power Consumption {W}
+    1.0,                     !- Motor Efficiency
+    0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
     Intermittent;            !- Pump Control Type
 
   PlantEquipmentList,
@@ -4949,4 +4949,3 @@
     Zone4bHeatPumpWaterHeater,  !- Component 1 Name
     Water Heater Use Inlet Node,  !- Component 1 Inlet Node Name
     Water Heater Use Outlet Node;  !- Component 1 Outlet Node Name
-

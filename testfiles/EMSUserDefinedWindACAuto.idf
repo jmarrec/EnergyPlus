@@ -98,11 +98,11 @@
 
   Building,
     NONE,                    !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
-    3.9999999E-02,           !- Loads Convergence Tolerance Value {W}
-    0.4000000,               !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    0.039999999,             !- Loads Convergence Tolerance Value {W}
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -146,8 +146,8 @@
     CHICAGO_IL_USA TMY2-94846,  !- Name
     41.78,                   !- Latitude {deg}
     -87.75,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
   SimulationControl,
     Yes,                     !- Do Zone Sizing Calculation
@@ -169,15 +169,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -199,15 +199,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -221,13 +221,13 @@
   Material,
     A1 - 1 IN STUCCO,        !- Name
     Smooth,                  !- Roughness
-    2.5389841E-02,           !- Thickness {m}
+    0.025389841,             !- Thickness {m}
     0.6918309,               !- Conductivity {W/m-K}
     1858.142,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     C4 - 4 IN COMMON BRICK,  !- Name
@@ -235,21 +235,21 @@
     0.1014984,               !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1922.216,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7600000,               !- Solar Absorptance
-    0.7600000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.76,                    !- Solar Absorptance
+    0.76;                    !- Visible Absorptance
 
   Material,
     E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    1.9050000E-02,           !- Thickness {m}
+    0.01905,                 !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1601.846,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     C6 - 8 IN CLAY TILE,     !- Name
@@ -257,10 +257,10 @@
     0.2033016,               !- Thickness {m}
     0.5707605,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.8200000,               !- Solar Absorptance
-    0.8200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.82,                    !- Solar Absorptance
+    0.82;                    !- Visible Absorptance
 
   Material,
     C10 - 8 IN HW CONCRETE,  !- Name
@@ -268,64 +268,64 @@
     0.2033016,               !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E2 - 1 / 2 IN SLAG OR STONE,  !- Name
     Rough,                   !- Roughness
-    1.2710161E-02,           !- Thickness {m}
+    0.012710161,             !- Thickness {m}
     1.435549,                !- Conductivity {W/m-K}
     881.0155,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5500000,               !- Solar Absorptance
-    0.5500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.55,                    !- Solar Absorptance
+    0.55;                    !- Visible Absorptance
 
   Material,
     E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
     Rough,                   !- Roughness
-    9.5402403E-03,           !- Thickness {m}
+    0.0095402403,            !- Thickness {m}
     0.1902535,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     B5 - 1 IN DENSE INSULATION,  !- Name
     VeryRough,               !- Roughness
-    2.5389841E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.025389841,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     91.30524,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C12 - 2 IN HW CONCRETE,  !- Name
     MediumRough,             !- Roughness
-    5.0901599E-02,           !- Thickness {m}
+    0.050901599,             !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   WindowMaterial:Glazing,
     WIN-LAY-GLASS-LIGHT,     !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
     0.003,                   !- Thickness {m}
-    0.90,                    !- Solar Transmittance at Normal Incidence
+    0.9,                     !- Solar Transmittance at Normal Incidence
     0.031,                   !- Front Side Solar Reflectance at Normal Incidence
     0.031,                   !- Back Side Solar Reflectance at Normal Incidence
-    0.90,                    !- Visible Transmittance at Normal Incidence
+    0.9,                     !- Visible Transmittance at Normal Incidence
     0.05,                    !- Front Side Visible Reflectance at Normal Incidence
     0.05,                    !- Back Side Visible Reflectance at Normal Incidence
     0.0,                     !- Infrared Transmittance at Normal Incidence
@@ -367,26 +367,26 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     Activity Sch,            !- Name
@@ -430,7 +430,7 @@
     Until: 17:00,0.50,       !- Field 15
     Until: 18:00,0.10,       !- Field 17
     Until: 24:00,0.00,       !- Field 19
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 21
+    For: Weekends Holidays CustomDay1 CustomDay2,  !- Field 21
     Until: 24:00,0.00,       !- Field 22
     For: SummerDesignDay,    !- Field 24
     Until: 24:00,1.00,       !- Field 25
@@ -445,7 +445,7 @@
     Until: 8:00,0.00,        !- Field 3
     Until: 18:00,1.00,       !- Field 5
     Until: 24:00,0.00,       !- Field 7
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 9
+    For: Weekends Holidays CustomDay1 CustomDay2,  !- Field 9
     Until: 24:00,0.00,       !- Field 10
     For: SummerDesignDay,    !- Field 12
     Until: 24:00,1.00,       !- Field 13
@@ -462,7 +462,7 @@
     Until: 17:00,1.00,       !- Field 7
     Until: 18:00,0.50,       !- Field 9
     Until: 24:00,5.00E-002,  !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
+    For: Weekends Holidays CustomDay1 CustomDay2,  !- Field 13
     Until: 24:00,5.00E-002,  !- Field 14
     For: SummerDesignDay,    !- Field 16
     Until: 24:00,1.00,       !- Field 17
@@ -494,9 +494,9 @@
     Until: 7:00,0.00,        !- Field 7
     Until: 17:00,1.00,       !- Field 9
     Until: 24:00,0.00,       !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
+    For: Weekends Holidays CustomDay1 CustomDay2,  !- Field 13
     Until: 24:00,0.00,       !- Field 14
-    For: SummerDesignDay WinterDesignDay, !- Field 16
+    For: SummerDesignDay WinterDesignDay,  !- Field 16
     Until: 24:00,1.00,       !- Field 17
     Through: 12/31,          !- Field 19
     For: Alldays,            !- Field 20
@@ -513,9 +513,9 @@
     Until: 7:00,0.00,        !- Field 7
     Until: 17:00,1.00,       !- Field 9
     Until: 24:00,0.00,       !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
+    For: Weekends Holidays CustomDay1 CustomDay2,  !- Field 13
     Until: 24:00,0.00,       !- Field 14
-    For: SummerDesignDay WinterDesignDay, !- Field 16
+    For: SummerDesignDay WinterDesignDay,  !- Field 16
     Until: 24:00,1.00,       !- Field 17
     Through: 12/31,          !- Field 19
     For: Alldays,            !- Field 20
@@ -525,7 +525,7 @@
     HEATING SETPOINTS,       !- Name
     TEMPERATURE,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays Weekends Holidays CustomDay1 CustomDay2, !- Field 2
+    For: Weekdays Weekends Holidays CustomDay1 CustomDay2,  !- Field 2
     Until: 7:00,15.00,       !- Field 3
     Until: 17:00,20.00,      !- Field 5
     Until: 24:00,15.00,      !- Field 7
@@ -538,7 +538,7 @@
     COOLING SETPOINTS,       !- Name
     TEMPERATURE,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays Weekends Holidays CustomDay1 CustomDay2, !- Field 2
+    For: Weekdays Weekends Holidays CustomDay1 CustomDay2,  !- Field 2
     Until: 7:00,30.00,       !- Field 3
     Until: 17:00,24.00,      !- Field 5
     Until: 24:00,30.00,      !- Field 7
@@ -548,7 +548,7 @@
     Until: 24:00,50.00;      !- Field 13
 
   Schedule:Compact,
-    ZONE CONTROL TYPE SCHED, !- Name
+    ZONE CONTROL TYPE SCHED,  !- Name
     CONTROL TYPE,            !- Schedule Type Limits Name
     Through: 3/31,           !- Field 1
     For: Alldays,            !- Field 2
@@ -574,59 +574,59 @@
     For: Alldays,            !- Field 2
     Until: 24:00,1.00;       !- Field 3
 
-  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.30,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.20;
+  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.3,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.2;
 
 ! original zone origin (0,0,0)
 
   Zone,
     West Zone,               !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
 ! original zone origin (6.096,0,0)
 
   Zone,
     EAST ZONE,               !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
 ! original zone origin (0,6.096,0)
 
   Zone,
     NORTH ZONE,              !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   People,
     West Zone,               !- Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    3.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -635,7 +635,7 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   ElectricEquipment,
     West Zone ElecEq 1,      !- Name
@@ -645,22 +645,22 @@
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   People,
     EAST ZONE,               !- Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    3.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -669,7 +669,7 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   Lights,
     EAST ZONE Lights 1,      !- Name
@@ -679,10 +679,10 @@
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Return Air Fraction
+    0.2,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
@@ -693,22 +693,22 @@
     1464.375,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   People,
     NORTH ZONE,              !- Name
     NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
     Office Occupancy,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    4.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    4.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -717,7 +717,7 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   Lights,
     NORTH ZONE Lights 1,     !- Name
@@ -727,10 +727,10 @@
     878.6252,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
-    0,                       !- Fraction Replaceable
+    0.0,                     !- Return Air Fraction
+    0.2,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
@@ -741,13 +741,13 @@
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
   BuildingSurface:Detailed,
@@ -760,12 +760,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win001,    !- Name
@@ -773,14 +773,14 @@
     WIN-CON-LIGHT,           !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.548000,0,2.5000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.548000,0,0.5000,  !- X,Y,Z ==> Vertex 2 {m}
-    5.548000,0,0.5000,  !- X,Y,Z ==> Vertex 3 {m}
-    5.548000,0,2.5000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.548,0.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}
+    0.548,0.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}
+    5.548,0.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}
+    5.548,0.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall002,           !- Name
@@ -792,12 +792,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall003,           !- Name
@@ -809,12 +809,12 @@
     Zn003:Wall004,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall004,           !- Name
@@ -826,12 +826,12 @@
     Zn002:Wall004,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Flr001,            !- Name
@@ -843,12 +843,12 @@
     Zn001:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Roof001,           !- Name
@@ -860,12 +860,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall001,           !- Name
@@ -877,12 +877,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall002,           !- Name
@@ -894,12 +894,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall003,           !- Name
@@ -911,12 +911,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall004,           !- Name
@@ -928,12 +928,12 @@
     Zn001:Wall004,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall005,           !- Name
@@ -945,12 +945,12 @@
     Zn003:Wall005,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Flr001,            !- Name
@@ -962,12 +962,12 @@
     Zn002:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Roof001,           !- Name
@@ -979,12 +979,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall001,           !- Name
@@ -996,12 +996,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall002,           !- Name
@@ -1013,12 +1013,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall003,           !- Name
@@ -1030,12 +1030,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall004,           !- Name
@@ -1047,12 +1047,12 @@
     Zn001:Wall003,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall005,           !- Name
@@ -1064,12 +1064,12 @@
     Zn002:Wall005,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Flr001,            !- Name
@@ -1081,12 +1081,12 @@
     Zn003:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Roof001,           !- Name
@@ -1098,12 +1098,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   Sizing:Parameters,
     1.5,                     !- Heating Sizing Factor
@@ -1113,10 +1113,10 @@
   Sizing:Zone,
     West Zone,               !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    12.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    12.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.008,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.008,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1124,20 +1124,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1148,7 +1148,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA West Zone,       !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
@@ -1156,10 +1156,10 @@
   Sizing:Zone,
     EAST ZONE,               !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    12.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    12.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.008,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.008,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1167,20 +1167,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1191,7 +1191,7 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA EAST ZONE,       !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
@@ -1199,10 +1199,10 @@
   Sizing:Zone,
     NORTH ZONE,              !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    12.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    12.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    50.,                     !- Zone Heating Design Supply Air Temperature {C}
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.008,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.008,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1210,20 +1210,20 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
     ,                        !- Design Specification Zone Air Distribution Object Name
     No,                      !- Account for Dedicated Outdoor Air System
     NeutralSupplyAir,        !- Dedicated Outdoor Air System Control Strategy
-    autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-    autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+    Autosize,                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
     ,                        !- Zone Load Sizing Method
     ,                        !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
     ,                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -1234,16 +1234,16 @@
 
   DesignSpecification:OutdoorAir,
     SZ DSOA NORTH ZONE,      !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.00944,                 !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0;                     !- Outdoor Air Flow per Zone {m3/s}
 
   Sizing:Plant,
     Hot Water Loop,          !- Plant or Condenser Loop Name
-    heating,                 !- Loop Type
-    82.,                     !- Design Loop Exit Temperature {C}
-    11;                      !- Loop Design Temperature Difference {deltaC}
+    Heating,                 !- Loop Type
+    82.0,                    !- Design Loop Exit Temperature {C}
+    11.0;                    !- Loop Design Temperature Difference {deltaC}
 
   PlantLoop,
     Hot Water Loop,          !- Name
@@ -1251,11 +1251,11 @@
     ,                        !- User Defined Fluid Type
     Hot Loop Operation,      !- Plant Equipment Operation Scheme Name
     HW Supply Outlet Node,   !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    10,                      !- Minimum Loop Temperature {C}
-    autosize,                !- Maximum Loop Flow Rate {m3/s}
+    100.0,                   !- Maximum Loop Temperature {C}
+    10.0,                    !- Minimum Loop Temperature {C}
+    Autosize,                !- Maximum Loop Flow Rate {m3/s}
     0.0,                     !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Plant Loop Volume {m3}
+    Autocalculate,           !- Plant Loop Volume {m3}
     HW Supply Inlet Node,    !- Plant Side Inlet Node Name
     HW Supply Outlet Node,   !- Plant Side Outlet Node Name
     Heating Supply Side Branches,  !- Plant Side Branch List Name
@@ -1286,12 +1286,12 @@
   ConnectorList,
     Heating Supply Side Connectors,  !- Name
     Connector:Splitter,      !- Connector 1 Object Type
-    Heating Supply Splitter, !- Connector 1 Name
+    Heating Supply Splitter,  !- Connector 1 Name
     Connector:Mixer,         !- Connector 2 Object Type
     Heating Supply Mixer;    !- Connector 2 Name
 
   Connector:Splitter,
-    Heating Supply Splitter, !- Name
+    Heating Supply Splitter,  !- Name
     Heating Supply Inlet Branch,  !- Inlet Branch Name
     Heating Purchased Hot Water Branch,  !- Outlet Branch 1 Name
     Heating Supply Bypass Branch;  !- Outlet Branch 2 Name
@@ -1348,17 +1348,17 @@
     HW Circ Pump,            !- Name
     HW Supply Inlet Node,    !- Inlet Node Name
     HW Pump Outlet Node,     !- Outlet Node Name
-    autosize,                !- Design Maximum Flow Rate {m3/s}
-    179352,                  !- Design Pump Head {Pa}
-    autosize,                !- Design Power Consumption {W}
+    Autosize,                !- Design Maximum Flow Rate {m3/s}
+    179352.0,                !- Design Pump Head {Pa}
+    Autosize,                !- Design Power Consumption {W}
     0.9,                     !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   BranchList,
     Heating Demand Side Branches,  !- Name
@@ -1448,12 +1448,12 @@
     Pipe:Adiabatic,          !- Component 1 Object Type
     ZonesHWBypassPipe,       !- Component 1 Name
     ZonesHWBypassInletNode,  !- Component 1 Inlet Node Name
-    ZonesHWBypassOutletNode; !- Component 1 Outlet Node Name
+    ZonesHWBypassOutletNode;  !- Component 1 Outlet Node Name
 
   Pipe:Adiabatic,
     ZonesHWBypassPipe,       !- Name
     ZonesHWBypassInletNode,  !- Inlet Node Name
-    ZonesHWBypassOutletNode; !- Outlet Node Name
+    ZonesHWBypassOutletNode;  !- Outlet Node Name
 
   PlantEquipmentOperationSchemes,
     Hot Loop Operation,      !- Name
@@ -1463,8 +1463,8 @@
 
   PlantEquipmentOperation:HeatingLoad,
     Purchased Heating Only,  !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    1000000,                 !- Load Range 1 Upper Limit {W}
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    1000000.0,               !- Load Range 1 Upper Limit {W}
     heating plant;           !- Range 1 Equipment List Name
 
   PlantEquipmentList,
@@ -1476,7 +1476,7 @@
     Purchased Heating,       !- Name
     Purchased Heat Inlet Node,  !- Hot Water Inlet Node Name
     Purchased Heat Outlet Node,  !- Hot Water Outlet Node Name
-    1000000;                 !- Nominal Capacity {W}
+    1000000.0;               !- Nominal Capacity {W}
 
   EnergyManagementSystem:CurveOrTableIndexVariable,
     WindACCoolCapFT,         !- Name
@@ -1486,10 +1486,10 @@
     WindACCoolCapFT,         !- Name
     0.942587793,             !- Coefficient1 Constant
     0.009543347,             !- Coefficient2 x
-    0.000683770,             !- Coefficient3 x**2
+    0.00068377,              !- Coefficient3 x**2
     -0.011042676,            !- Coefficient4 y
-    0.000005249,             !- Coefficient5 y**2
-    -0.000009720,            !- Coefficient6 x*y
+    5.249e-06,               !- Coefficient5 y**2
+    -9.72e-06,               !- Coefficient6 x*y
     12.77778,                !- Minimum Value of x
     23.88889,                !- Maximum Value of x
     18.0,                    !- Minimum Value of y
@@ -1508,7 +1508,7 @@
     WindACEIRFT,             !- Name
     0.342414409,             !- Coefficient1 Constant
     0.034885008,             !- Coefficient2 x
-    -0.000623700,            !- Coefficient3 x**2
+    -0.0006237,              !- Coefficient3 x**2
     0.004977216,             !- Coefficient4 y
     0.000437951,             !- Coefficient5 y**2
     -0.000728028,            !- Coefficient6 x*y
@@ -1570,39 +1570,39 @@
   ZoneControl:Thermostat,
     Zone 1 Thermostat,       !- Name
     West Zone,               !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
-    Heating Setpoint with SB,!- Control 1 Name
+    Heating Setpoint with SB,  !- Control 1 Name
     ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
-    Cooling Setpoint with SB;!- Control 2 Name
+    Cooling Setpoint with SB;  !- Control 2 Name
 
   ZoneControl:Thermostat,
     Zone 2 Thermostat,       !- Name
     EAST ZONE,               !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
-    Heating Setpoint with SB,!- Control 1 Name
+    Heating Setpoint with SB,  !- Control 1 Name
     ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
-    Cooling Setpoint with SB;!- Control 2 Name
+    Cooling Setpoint with SB;  !- Control 2 Name
 
   ZoneControl:Thermostat,
     Zone 3 Thermostat,       !- Name
     NORTH ZONE,              !- Zone or ZoneList Name
-    Zone Control Type Sched, !- Control Type Schedule Name
+    Zone Control Type Sched,  !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:SingleHeating,  !- Control 1 Object Type
-    Heating Setpoint with SB,!- Control 1 Name
+    Heating Setpoint with SB,  !- Control 1 Name
     ThermostatSetpoint:SingleCooling,  !- Control 2 Object Type
-    Cooling Setpoint with SB;!- Control 2 Name
+    Cooling Setpoint with SB;  !- Control 2 Name
 
   ThermostatSetpoint:SingleHeating,
-    Heating Setpoint with SB,!- Name
+    Heating Setpoint with SB,  !- Name
     Heating Setpoints;       !- Setpoint Temperature Schedule Name
 
   ThermostatSetpoint:SingleCooling,
-    Cooling Setpoint with SB,!- Name
+    Cooling Setpoint with SB,  !- Name
     Cooling Setpoints;       !- Setpoint Temperature Schedule Name
 
   ZoneHVAC:EquipmentConnections,
@@ -1631,11 +1631,11 @@
 
   NodeList,
     Zone1Inlets,             !- Name
-    Zone1WindACAirOutletNode;!- Node 1 Name
+    Zone1WindACAirOutletNode;  !- Node 1 Name
 
   NodeList,
     Zone1Exhausts,           !- Name
-    Zone1WindACAirInletNode; !- Node 1 Name
+    Zone1WindACAirInletNode;  !- Node 1 Name
 
   ZoneHVAC:Baseboard:Convective:Water,
     Zone1Baseboard,          !- Name
@@ -1646,8 +1646,8 @@
     Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     0.001;                   !- Convergence Tolerance
 
   ZoneHVAC:EquipmentConnections,
@@ -1676,11 +1676,11 @@
 
   NodeList,
     Zone2Inlets,             !- Name
-    Zone2WindACAirOutletNode;!- Node 1 Name
+    Zone2WindACAirOutletNode;  !- Node 1 Name
 
   NodeList,
     Zone2Exhausts,           !- Name
-    Zone2WindACAirInletNode; !- Node 1 Name
+    Zone2WindACAirInletNode;  !- Node 1 Name
 
   ZoneHVAC:Baseboard:Convective:Water,
     Zone2Baseboard,          !- Name
@@ -1691,8 +1691,8 @@
     Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     0.001;                   !- Convergence Tolerance
 
   ZoneHVAC:EquipmentConnections,
@@ -1721,11 +1721,11 @@
 
   NodeList,
     Zone3Inlets,             !- Name
-    Zone3WindACAirOutletNode;!- Node 1 Name
+    Zone3WindACAirOutletNode;  !- Node 1 Name
 
   NodeList,
     Zone3Exhausts,           !- Name
-    Zone3WindACAirInletNode; !- Node 1 Name
+    Zone3WindACAirInletNode;  !- Node 1 Name
 
   ZoneHVAC:Baseboard:Convective:Water,
     Zone3Baseboard,          !- Name
@@ -1736,92 +1736,92 @@
     Autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
-    autosize,                !- U-Factor Times Area Value {W/K}
-    autosize,                !- Maximum Water Flow Rate {m3/s}
+    Autosize,                !- U-Factor Times Area Value {W/K}
+    Autosize,                !- Maximum Water Flow Rate {m3/s}
     0.001;                   !- Convergence Tolerance
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,hourly;
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,Hourly;
 
-  Output:Variable,*,Zone Air System Sensible Cooling Rate,hourly;
+  Output:Variable,*,Zone Air System Sensible Cooling Rate,Hourly;
 
-  Output:Variable,*,Zone Air System Sensible Heating Rate,hourly;
+  Output:Variable,*,Zone Air System Sensible Heating Rate,Hourly;
 
-  Output:Variable,*,Zone Air Temperature,hourly;
+  Output:Variable,*,Zone Air Temperature,Hourly;
 
-  Output:Variable,*,Zone Air Humidity Ratio,hourly;
+  Output:Variable,*,Zone Air Humidity Ratio,Hourly;
 
-  Output:Variable,*,Zone 3 WinAC Total Cooling Rate,hourly;
+  Output:Variable,*,Zone 3 WinAC Total Cooling Rate,Hourly;
 
-  Output:Variable,*,Zone 3 WinAC Electricity Power,hourly;
+  Output:Variable,*,Zone 3 WinAC Electricity Power,Hourly;
 
-  Output:Variable,*,Zone 2 WinAC Total Cooling Rate,hourly;
+  Output:Variable,*,Zone 2 WinAC Total Cooling Rate,Hourly;
 
-  Output:Variable,*,Zone 2 WinAC Electricity Power,hourly;
+  Output:Variable,*,Zone 2 WinAC Electricity Power,Hourly;
 
-  Output:Variable,*,Zone 1 WinAC Total Cooling Rate,hourly;
+  Output:Variable,*,Zone 1 WinAC Total Cooling Rate,Hourly;
 
-  Output:Variable,*,Zone 1 WinAC Electricity Power,hourly;
+  Output:Variable,*,Zone 1 WinAC Electricity Power,Hourly;
 
-  Output:Variable,Zone1WindACAirOutletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,Zone1WindACAirOutletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,Zone2WindACAirOutletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,Zone2WindACAirOutletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,Zone3WindACAirOutletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,Zone3WindACAirOutletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,Zone1WindACAirOutletNode,System Node Temperature,hourly;
+  Output:Variable,Zone1WindACAirOutletNode,System Node Temperature,Hourly;
 
-  Output:Variable,Zone2WindACAirOutletNode,System Node Temperature,hourly;
+  Output:Variable,Zone2WindACAirOutletNode,System Node Temperature,Hourly;
 
-  Output:Variable,Zone3WindACAirOutletNode,System Node Temperature,hourly;
+  Output:Variable,Zone3WindACAirOutletNode,System Node Temperature,Hourly;
 
-  Output:Variable,Zone1WindACAirOutletNode,System Node Humidity Ratio,hourly;
+  Output:Variable,Zone1WindACAirOutletNode,System Node Humidity Ratio,Hourly;
 
-  Output:Variable,Zone2WindACAirOutletNode,System Node Humidity Ratio,hourly;
+  Output:Variable,Zone2WindACAirOutletNode,System Node Humidity Ratio,Hourly;
 
-  Output:Variable,Zone3WindACAirOutletNode,System Node Humidity Ratio,hourly;
+  Output:Variable,Zone3WindACAirOutletNode,System Node Humidity Ratio,Hourly;
 
-  Output:Variable,Zone1WindACAirInletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,Zone1WindACAirInletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,Zone2WindACAirInletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,Zone2WindACAirInletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,Zone3WindACAirInletNode,System Node Mass Flow Rate,hourly;
+  Output:Variable,Zone3WindACAirInletNode,System Node Mass Flow Rate,Hourly;
 
-  Output:Variable,Zone1WindACAirInletNode,System Node Temperature,hourly;
+  Output:Variable,Zone1WindACAirInletNode,System Node Temperature,Hourly;
 
-  Output:Variable,Zone2WindACAirInletNode,System Node Temperature,hourly;
+  Output:Variable,Zone2WindACAirInletNode,System Node Temperature,Hourly;
 
-  Output:Variable,Zone3WindACAirInletNode,System Node Temperature,hourly;
+  Output:Variable,Zone3WindACAirInletNode,System Node Temperature,Hourly;
 
-  Output:Variable,Zone1WindACAirInletNode,System Node Humidity Ratio,hourly;
+  Output:Variable,Zone1WindACAirInletNode,System Node Humidity Ratio,Hourly;
 
-  Output:Variable,Zone2WindACAirInletNode,System Node Humidity Ratio,hourly;
+  Output:Variable,Zone2WindACAirInletNode,System Node Humidity Ratio,Hourly;
 
-  Output:Variable,Zone3WindACAirInletNode,System Node Humidity Ratio,hourly;
+  Output:Variable,Zone3WindACAirInletNode,System Node Humidity Ratio,Hourly;
 
   Output:VariableDictionary,IDF;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Building,Monthly;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,monthly;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,monthly;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Plant,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Plant,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Building,RunPeriod;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,runperiod;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Plant,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Plant,RunPeriod;
 
   Output:SQLite,
-    simple;                  !- Option Type
+    Simple;                  !- Option Type
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -1833,8 +1833,8 @@
     Zone1WindAC,             !- Name
     Zone 1 Window AC Model Program Manager,  !- Overall Model Simulation Program Calling Manager Name
     Zone 1 Window AC Init Program Manager,  !- Model Setup and Sizing Program Calling Manager Name
-    Zone1WindACAirInletNode, !- Primary Air Inlet Node Name
-    Zone1WindACAirOutletNode,!- Primary Air Outlet Node Name
+    Zone1WindACAirInletNode,  !- Primary Air Inlet Node Name
+    Zone1WindACAirOutletNode,  !- Primary Air Outlet Node Name
     Zone1WindACOAInNode,     !- Secondary Air Inlet Node Name
     Zone1WindACExhNode,      !- Secondary Air Outlet Node Name
     0;                       !- Number of Plant Loop Connections
@@ -1859,28 +1859,28 @@
     Zone1_WinAC_ModelInput,  !- Name
     Set PrimAir_Tinlet = Zone1WinAC_PrimAir_Tinlet,  !- Program Line 1
     Set PrimAir_Winlet = Zone1WinAC_PrimAir_Winlet,  !- Program Line 2
-    Set OA_Tdb = Zone1WinAC_OA_Tdb,  !- <none>
-    Set OA_W = Zone1WinAC_OA_W,  !- <none>
-    Set Qdot_Request = Zone1WinAC_Qdot_Request,  !- <none>
-    Set AirOAMdotDesign  = Zone1_OADesign_Vdot * Zone1WinAC_OA_rho,  !- <none>
-    Set AirSupMdotDesign = Zone1_CoolDesign_Mdot,  !- <none>
-    Set AirCp      = Zone1WinAC_PrimAir_Cp,  !- <none>
-    Set FanEff     = 0.5,    !- <none>
-    Set FanDeltaP  = 75.0,   !- <none>
-    Set RatedCap  = Zone1_CoolDesign_Cap / 0.75,  !- <none>
-    Set RatedEIR  = 1 / 3.0, !- <none>
-    Set ZoneCoolTstat = Zone1Cooling_Tstat;  !- <none>
+    Set OA_Tdb = Zone1WinAC_OA_Tdb,  !- Program Line 3
+    Set OA_W = Zone1WinAC_OA_W,  !- Program Line 4
+    Set Qdot_Request = Zone1WinAC_Qdot_Request,  !- Program Line 5
+    Set AirOAMdotDesign  = Zone1_OADesign_Vdot * Zone1WinAC_OA_rho,  !- Program Line 6
+    Set AirSupMdotDesign = Zone1_CoolDesign_Mdot,  !- Program Line 7
+    Set AirCp      = Zone1WinAC_PrimAir_Cp,  !- Program Line 8
+    Set FanEff     = 0.5,    !- Program Line 9
+    Set FanDeltaP  = 75.0,   !- Program Line 10
+    Set RatedCap  = Zone1_CoolDesign_Cap / 0.75,  !- Program Line 11
+    Set RatedEIR  = 1 / 3.0,  !- Program Line 12
+    Set ZoneCoolTstat = Zone1Cooling_Tstat;  !- Program Line 13
 
   EnergyManagementSystem:Program,
     Zone1_WinAC_ModelOuput,  !- Name
     Set Zone1WinAC_PrimAir_MdotOut = PrimAir_MdotOut,  !- Program Line 1
     Set Zone1WinAC_PrimAir_MdotIn  = PrimAir_MdotIn,  !- Program Line 2
-    Set Zone1WinAC_PrimAir_Tout    = PrimAir_Tout,  !- <none>
-    Set Zone1WinAC_PrimAir_Wout    = PrimAir_Wout,  !- <none>
-    Set Zone1WinAC_ElectPower      = ElectPower,  !- <none>
-    Set Zone1WinAC_tot_cool_Power  = tot_cool_Power,  !- <none>
-    Set Zone1WinAC_ElectEnergy     = ElectEnergy,  !- <none>
-    Set Zone1WinAC_OA_MdotIn       = OA_MdotIn;  !- <none>
+    Set Zone1WinAC_PrimAir_Tout    = PrimAir_Tout,  !- Program Line 3
+    Set Zone1WinAC_PrimAir_Wout    = PrimAir_Wout,  !- Program Line 4
+    Set Zone1WinAC_ElectPower      = ElectPower,  !- Program Line 5
+    Set Zone1WinAC_tot_cool_Power  = tot_cool_Power,  !- Program Line 6
+    Set Zone1WinAC_ElectEnergy     = ElectEnergy,  !- Program Line 7
+    Set Zone1WinAC_OA_MdotIn       = OA_MdotIn;  !- Program Line 8
 
   EnergyManagementSystem:Sensor,
     COOLINGCOILAVAILSCHED,   !- Name
@@ -1893,13 +1893,13 @@
     Zone Thermostat Cooling Setpoint Temperature;  !- Output:Variable or Output:Meter Name
 
   EnergyManagementSystem:Actuator,
-    Zone1WinAC_PrimAir_Tout, !- Name
+    Zone1WinAC_PrimAir_Tout,  !- Name
     Zone1WindAC,             !- Actuated Component Unique Name
     Primary Air Connection,  !- Actuated Component Type
     Outlet Temperature;      !- Actuated Component Control Type
 
   EnergyManagementSystem:Actuator,
-    Zone1WinAC_PrimAir_Wout, !- Name
+    Zone1WinAC_PrimAir_Wout,  !- Name
     Zone1WindAC,             !- Actuated Component Unique Name
     Primary Air Connection,  !- Actuated Component Type
     Outlet Humidity Ratio;   !- Actuated Component Control Type
@@ -1919,7 +1919,7 @@
   EnergyManagementSystem:Actuator,
     Zone1WinAC_OA_MdotIn,    !- Name
     Zone1WindAC,             !- Actuated Component Unique Name
-    Secondary Air Connection,!- Actuated Component Type
+    Secondary Air Connection,  !- Actuated Component Type
     Inlet Mass Flow Rate;    !- Actuated Component Control Type
 
   EnergyManagementSystem:InternalVariable,
@@ -1938,7 +1938,7 @@
     Inlet Specific Heat for Primary Air Connection;  !- Internal Data Type
 
   EnergyManagementSystem:InternalVariable,
-    Zone1WinAC_Qdot_Request, !- Name
+    Zone1WinAC_Qdot_Request,  !- Name
     Zone1WindAC,             !- Internal Data Index Key Name
     Remaining Sensible Load to Cooling Setpoint;  !- Internal Data Type
 
@@ -2004,15 +2004,15 @@
     Electricity,             !- Resource Type
     HVAC,                    !- Group Type
     Cooling,                 !- End-Use Category
-    Window Air Conditioners, !- End-Use Subcategory
+    Window Air Conditioners,  !- End-Use Subcategory
     J;                       !- Units
 
   ZoneHVAC:ForcedAir:UserDefined,
     Zone2WindAC,             !- Name
     Zone 2 Window AC Model Program Manager,  !- Overall Model Simulation Program Calling Manager Name
     Zone 2 Window AC Init Program Manager,  !- Model Setup and Sizing Program Calling Manager Name
-    Zone2WindACAirInletNode, !- Primary Air Inlet Node Name
-    Zone2WindACAirOutletNode,!- Primary Air Outlet Node Name
+    Zone2WindACAirInletNode,  !- Primary Air Inlet Node Name
+    Zone2WindACAirOutletNode,  !- Primary Air Outlet Node Name
     Zone2WindACOAInNode,     !- Secondary Air Inlet Node Name
     Zone2WindACExhNode,      !- Secondary Air Outlet Node Name
     0;                       !- Number of Plant Loop Connections
@@ -2037,28 +2037,28 @@
     Zone2_WinAC_ModelInput,  !- Name
     Set PrimAir_Tinlet = Zone2WinAC_PrimAir_Tinlet,  !- Program Line 1
     Set PrimAir_Winlet = Zone2WinAC_PrimAir_Winlet,  !- Program Line 2
-    Set OA_Tdb = Zone2WinAC_OA_Tdb,  !- <none>
-    Set OA_W = Zone2WinAC_OA_W,  !- <none>
-    Set Qdot_Request = Zone2WinAC_Qdot_Request,  !- <none>
-    Set AirOAMdotDesign  = Zone2_OADesign_Vdot * Zone2WinAC_OA_rho,  !- <none>
-    Set AirSupMdotDesign = Zone2_CoolDesign_Mdot,  !- <none>
-    Set AirCp      = Zone2WinAC_PrimAir_Cp,  !- <none>
-    Set FanEff     = 0.5,    !- <none>
-    Set FanDeltaP  = 75.0,   !- <none>
-    Set RatedCap  = Zone2_CoolDesign_Cap / 0.75,  !- <none>
-    Set RatedEIR  = 1 / 3.0, !- <none>
-    Set ZoneCoolTstat = Zone2Cooling_Tstat;  !- <none>
+    Set OA_Tdb = Zone2WinAC_OA_Tdb,  !- Program Line 3
+    Set OA_W = Zone2WinAC_OA_W,  !- Program Line 4
+    Set Qdot_Request = Zone2WinAC_Qdot_Request,  !- Program Line 5
+    Set AirOAMdotDesign  = Zone2_OADesign_Vdot * Zone2WinAC_OA_rho,  !- Program Line 6
+    Set AirSupMdotDesign = Zone2_CoolDesign_Mdot,  !- Program Line 7
+    Set AirCp      = Zone2WinAC_PrimAir_Cp,  !- Program Line 8
+    Set FanEff     = 0.5,    !- Program Line 9
+    Set FanDeltaP  = 75.0,   !- Program Line 10
+    Set RatedCap  = Zone2_CoolDesign_Cap / 0.75,  !- Program Line 11
+    Set RatedEIR  = 1 / 3.0,  !- Program Line 12
+    Set ZoneCoolTstat = Zone2Cooling_Tstat;  !- Program Line 13
 
   EnergyManagementSystem:Program,
     Zone2_WinAC_ModelOuput,  !- Name
     Set Zone2WinAC_PrimAir_MdotOut = PrimAir_MdotOut,  !- Program Line 1
     Set Zone2WinAC_PrimAir_MdotIn  = PrimAir_MdotIn,  !- Program Line 2
-    Set Zone2WinAC_PrimAir_Tout    = PrimAir_Tout,  !- <none>
-    Set Zone2WinAC_PrimAir_Wout    = PrimAir_Wout,  !- <none>
-    Set Zone2WinAC_ElectPower      = ElectPower,  !- <none>
-    Set Zone2WinAC_tot_cool_Power  = tot_cool_Power,  !- <none>
-    Set Zone2WinAC_ElectEnergy     = ElectEnergy,  !- <none>
-    Set Zone2WinAC_OA_MdotIn       = OA_MdotIn;  !- <none>
+    Set Zone2WinAC_PrimAir_Tout    = PrimAir_Tout,  !- Program Line 3
+    Set Zone2WinAC_PrimAir_Wout    = PrimAir_Wout,  !- Program Line 4
+    Set Zone2WinAC_ElectPower      = ElectPower,  !- Program Line 5
+    Set Zone2WinAC_tot_cool_Power  = tot_cool_Power,  !- Program Line 6
+    Set Zone2WinAC_ElectEnergy     = ElectEnergy,  !- Program Line 7
+    Set Zone2WinAC_OA_MdotIn       = OA_MdotIn;  !- Program Line 8
 
   EnergyManagementSystem:Sensor,
     Zone2Cooling_Tstat,      !- Name
@@ -2066,13 +2066,13 @@
     Zone Thermostat Cooling Setpoint Temperature;  !- Output:Variable or Output:Meter Name
 
   EnergyManagementSystem:Actuator,
-    Zone2WinAC_PrimAir_Tout, !- Name
+    Zone2WinAC_PrimAir_Tout,  !- Name
     Zone2WindAC,             !- Actuated Component Unique Name
     Primary Air Connection,  !- Actuated Component Type
     Outlet Temperature;      !- Actuated Component Control Type
 
   EnergyManagementSystem:Actuator,
-    Zone2WinAC_PrimAir_Wout, !- Name
+    Zone2WinAC_PrimAir_Wout,  !- Name
     Zone2WindAC,             !- Actuated Component Unique Name
     Primary Air Connection,  !- Actuated Component Type
     Outlet Humidity Ratio;   !- Actuated Component Control Type
@@ -2092,7 +2092,7 @@
   EnergyManagementSystem:Actuator,
     Zone2WinAC_OA_MdotIn,    !- Name
     Zone2WindAC,             !- Actuated Component Unique Name
-    Secondary Air Connection,!- Actuated Component Type
+    Secondary Air Connection,  !- Actuated Component Type
     Inlet Mass Flow Rate;    !- Actuated Component Control Type
 
   EnergyManagementSystem:InternalVariable,
@@ -2111,7 +2111,7 @@
     Inlet Specific Heat for Primary Air Connection;  !- Internal Data Type
 
   EnergyManagementSystem:InternalVariable,
-    Zone2WinAC_Qdot_Request, !- Name
+    Zone2WinAC_Qdot_Request,  !- Name
     Zone2WindAC,             !- Internal Data Index Key Name
     Remaining Sensible Load to Cooling Setpoint;  !- Internal Data Type
 
@@ -2172,15 +2172,15 @@
     Electricity,             !- Resource Type
     HVAC,                    !- Group Type
     Cooling,                 !- End-Use Category
-    Window Air Conditioners, !- End-Use Subcategory
+    Window Air Conditioners,  !- End-Use Subcategory
     J;                       !- Units
 
   ZoneHVAC:ForcedAir:UserDefined,
     Zone3WindAC,             !- Name
     Zone 3 Window AC Model Program Manager,  !- Overall Model Simulation Program Calling Manager Name
     Zone 3 Window AC Init Program Manager,  !- Model Setup and Sizing Program Calling Manager Name
-    Zone3WindACAirInletNode, !- Primary Air Inlet Node Name
-    Zone3WindACAirOutletNode,!- Primary Air Outlet Node Name
+    Zone3WindACAirInletNode,  !- Primary Air Inlet Node Name
+    Zone3WindACAirOutletNode,  !- Primary Air Outlet Node Name
     Zone3WindACOAInNode,     !- Secondary Air Inlet Node Name
     Zone3WindACExhNode,      !- Secondary Air Outlet Node Name
     0;                       !- Number of Plant Loop Connections
@@ -2205,28 +2205,28 @@
     Zone3_WinAC_ModelInput,  !- Name
     Set PrimAir_Tinlet = Zone3WinAC_PrimAir_Tinlet,  !- Program Line 1
     Set PrimAir_Winlet = Zone3WinAC_PrimAir_Winlet,  !- Program Line 2
-    Set OA_Tdb = Zone3WinAC_OA_Tdb,  !- <none>
-    Set OA_W = Zone3WinAC_OA_W,  !- <none>
-    Set Qdot_Request = Zone3WinAC_Qdot_Request,  !- <none>
-    Set AirOAMdotDesign  = Zone3_OADesign_Vdot * Zone3WinAC_OA_rho,  !- <none>
-    Set AirSupMdotDesign = Zone3_CoolDesign_Mdot,  !- <none>
-    Set AirCp      = Zone3WinAC_PrimAir_Cp,  !- <none>
-    Set FanEff     = 0.5,    !- <none>
-    Set FanDeltaP  = 75.0,   !- <none>
-    Set RatedCap  = Zone3_CoolDesign_Cap / 0.75,  !- <none>
-    Set RatedEIR  = 1 / 3.0, !- <none>
-    Set ZoneCoolTstat = Zone3_Cooling_Tstat;  !- <none>
+    Set OA_Tdb = Zone3WinAC_OA_Tdb,  !- Program Line 3
+    Set OA_W = Zone3WinAC_OA_W,  !- Program Line 4
+    Set Qdot_Request = Zone3WinAC_Qdot_Request,  !- Program Line 5
+    Set AirOAMdotDesign  = Zone3_OADesign_Vdot * Zone3WinAC_OA_rho,  !- Program Line 6
+    Set AirSupMdotDesign = Zone3_CoolDesign_Mdot,  !- Program Line 7
+    Set AirCp      = Zone3WinAC_PrimAir_Cp,  !- Program Line 8
+    Set FanEff     = 0.5,    !- Program Line 9
+    Set FanDeltaP  = 75.0,   !- Program Line 10
+    Set RatedCap  = Zone3_CoolDesign_Cap / 0.75,  !- Program Line 11
+    Set RatedEIR  = 1 / 3.0,  !- Program Line 12
+    Set ZoneCoolTstat = Zone3_Cooling_Tstat;  !- Program Line 13
 
   EnergyManagementSystem:Program,
     Zone3_WinAC_ModelOuput,  !- Name
     Set Zone3WinAC_PrimAir_MdotOut = PrimAir_MdotOut,  !- Program Line 1
     Set Zone3WinAC_PrimAir_MdotIn  = PrimAir_MdotIn,  !- Program Line 2
-    Set Zone3WinAC_PrimAir_Tout    = PrimAir_Tout,  !- <none>
-    Set Zone3WinAC_PrimAir_Wout    = PrimAir_Wout,  !- <none>
-    Set Zone3WinAC_ElectPower      = ElectPower,  !- <none>
-    Set Zone3WinAC_tot_cool_Power  = tot_cool_Power,  !- <none>
-    Set Zone3WinAC_ElectEnergy     = ElectEnergy,  !- <none>
-    Set Zone3WinAC_OA_MdotIn       = OA_MdotIn;  !- <none>
+    Set Zone3WinAC_PrimAir_Tout    = PrimAir_Tout,  !- Program Line 3
+    Set Zone3WinAC_PrimAir_Wout    = PrimAir_Wout,  !- Program Line 4
+    Set Zone3WinAC_ElectPower      = ElectPower,  !- Program Line 5
+    Set Zone3WinAC_tot_cool_Power  = tot_cool_Power,  !- Program Line 6
+    Set Zone3WinAC_ElectEnergy     = ElectEnergy,  !- Program Line 7
+    Set Zone3WinAC_OA_MdotIn       = OA_MdotIn;  !- Program Line 8
 
   EnergyManagementSystem:Sensor,
     Zone3_Cooling_Tstat,     !- Name
@@ -2234,13 +2234,13 @@
     Zone Thermostat Cooling Setpoint Temperature;  !- Output:Variable or Output:Meter Name
 
   EnergyManagementSystem:Actuator,
-    Zone3WinAC_PrimAir_Tout, !- Name
+    Zone3WinAC_PrimAir_Tout,  !- Name
     Zone3WindAC,             !- Actuated Component Unique Name
     Primary Air Connection,  !- Actuated Component Type
     Outlet Temperature;      !- Actuated Component Control Type
 
   EnergyManagementSystem:Actuator,
-    Zone3WinAC_PrimAir_Wout, !- Name
+    Zone3WinAC_PrimAir_Wout,  !- Name
     Zone3WindAC,             !- Actuated Component Unique Name
     Primary Air Connection,  !- Actuated Component Type
     Outlet Humidity Ratio;   !- Actuated Component Control Type
@@ -2260,7 +2260,7 @@
   EnergyManagementSystem:Actuator,
     Zone3WinAC_OA_MdotIn,    !- Name
     Zone3WindAC,             !- Actuated Component Unique Name
-    Secondary Air Connection,!- Actuated Component Type
+    Secondary Air Connection,  !- Actuated Component Type
     Inlet Mass Flow Rate;    !- Actuated Component Control Type
 
   EnergyManagementSystem:InternalVariable,
@@ -2279,7 +2279,7 @@
     Inlet Specific Heat for Primary Air Connection;  !- Internal Data Type
 
   EnergyManagementSystem:InternalVariable,
-    Zone3WinAC_Qdot_Request, !- Name
+    Zone3WinAC_Qdot_Request,  !- Name
     Zone3WindAC,             !- Internal Data Index Key Name
     Remaining Sensible Load to Cooling Setpoint;  !- Internal Data Type
 
@@ -2341,152 +2341,151 @@
 !    HVAC,                   !- Group Type
 !    Cooling,                !- End Use Category
 !    Window Air Conditioners;!- End Use Subcategory
-     ! turn it off and leave
-   ! unit is on and doing some cooling
-   ! determine mixed air conditions
-   ! blow thru fan, simulate fan first
-   ! DX coil at PLR = 1, full output
-     ! need to find PLR that satisifies load
+! turn it off and leave
+! unit is on and doing some cooling
+! determine mixed air conditions
+! blow thru fan, simulate fan first
+! DX coil at PLR = 1, full output
+! need to find PLR that satisifies load
 
   EnergyManagementSystem:Program,
     WinAC_OnFanCycCoil_Sim_Model,  !- Name
     IF Qdot_Request < 0.0,   !- Program Line 1
     Set QdotReq = Qdot_Request,  !- Program Line 2
-    ELSE,                    !- <none>
-    Set QdotReq = 0.0,       !- <none>
-    ENDIF,                   !- <none>
-    IF COOLINGCOILAVAILSCHED == 0.0,  !- <none>
-    Set QdotReq = 0.0,       !- <none>
-    ENDIF,                   !- <none>
-    IF QdotReq == 0.0,       !- <none>
-    Set PrimAir_MdotIn = 0.0,!- <none>
-    Set PrimAir_MdotOut = 0.0,  !- <none>
-    Set PrimAir_Tout = PrimAir_Tinlet,  !- <none>
-    Set PrimAir_Wout = PrimAir_Winlet,  !- <none>
-    Set tot_cool_Power = 0.0,!- <none>
-    Set ElectPower = 0.0,    !- <none>
-    Set ElectEnergy = 0.0,   !- <none>
-    Set OA_MdotIn = 0.0,     !- <none>
-    RETURN,                  !- <none>
-    ENDIF,                   !- <none>
-    Set Recirc_Mdot = AirSupMdotDesign - AirOAMdotDesign,  !- <none>
-    Set Recirc_H  = @HFnTdbW PrimAir_Tinlet PrimAir_Winlet,  !- <none>
-    Set OA_H  = @HFnTdbW OA_Tdb OA_W,  !- <none>
-    Set Mix_H = ((Recirc_Mdot * Recirc_H) + (AirOAMdotDesign * OA_H)) / AirSupMdotDesign,  !- <none>
-    Set Mix_W = ((Recirc_Mdot * PrimAir_Winlet) + (AirOAMdotDesign * OA_W)) / AirSupMdotDesign,  !- <none>
-    Set Mix_Tdb = @TdbFnHW Mix_H Mix_W,  !- <none>
-    Set Mix_Cp = @CpAirFnW Mix_W,  !- <none>
-    Set Mix_rho = @RhoAirFnPbTdbW OA_Press Mix_Tdb Mix_W,  !- <none>
-    Set FanPower = (AirSupMdotDesign * FanDeltaP) / (FanEff * Mix_rho),  !- <none>
-    Set FanPowerToAir = FanPower,  !- <none>
-    Set FanDeltaH = FanPowerToAir/AirSupMdotDesign,  !- <none>
-    Set FanOut_H = Mix_H + FanDeltaH,  !- <none>
-    Set FanOut_W = Mix_W,    !- <none>
-    Set FanOut_Tdb = @TdbFnHW FanOut_H FanOut_W,  !- <none>
-    Set FanOut_Twb = @TwbFnTdbWPb FanOut_Tdb FanOut_W OA_Press,  !- <none>
-    Set RatedCBF = 0.12666,  !- <none>
-    Set LogRatedCBF = @Ln RatedCBF,  !- <none>
-    Set A0 = (0.0 -1.0) * LogRatedCBF * AirSupMdotDesign,  !- <none>
-    Set ADiff = (0.0 - 1.0) * (A0 / AirSupMdotDesign),  !- <none>
-    Set CBF = @Exp ADiff,    !- <none>
-    Set dummy = 0.0,         !- <none>
-    Set TotCapTempModFac = @CurveValue WindACCoolCapFT FanOut_Twb OA_Tdb dummy dummy dummy,  !- <none>
-    Set TotCapFlowModFac = @CurveValue WindACCoolCapFFF 1.0 dummy dummy dummy dummy,  !- <none>
-    Set TotCap = RatedCap * TotCapTempModFac * TotCapFlowModFac,  !- <none>
-    Set HDelta = TotCap / AirSupMdotDesign,  !- <none>
-    Set H_ADP = FanOut_H - (HDelta / ( 1.0 - CBF)),  !- <none>
-    Set T_ADP = @TsatFnHPb H_ADP OA_Press,  !- <none>
-    Set W_ADP = @WfnTdbH T_ADP H_ADP,  !- <none>
-    Set H_Tin_W_ADP = @HFnTdbW FanOut_Tdb W_ADP,  !- <none>
-    IF ((FanOut_H - H_ADP) <> 0.0),  !- <none>
-    Set SHR = (H_Tin_W_ADP - H_ADP)/(FanOut_H - H_ADP ),  !- <none>
-    Set SHR = @Min SHR 1.0,  !- <none>
-    ELSE,                    !- <none>
-    Set SHR = 1.0,           !- <none>
-    ENDIF,                   !- <none>
-    Set PLR = 1.0,           !- <none>
-    Set FullLoadOutAirEnth = FanOut_H - (TotCap/AirSupMdotDesign),  !- <none>
-    Set hTinwout = FanOut_H - ((1.0 - SHR) * HDelta),  !- <none>
-    IF (SHR < 1.0),          !- <none>
-    Set FullLoadOutAirHumRat = @WFnTdbH FanOut_Tdb hTinwout,  !- <none>
-    ELSE,                    !- <none>
-    Set FullLoadOutAirHumRat = FanOut_W,  !- <none>
-    ENDIF,                   !- <none>
-    Set FullLoadOutAirTemp = @TdbFnHW FullLoadOutAirEnth  FullLoadOutAirHumRat,  !- <none>
-    Set DesiredZone_H = @HFnTdbW ZoneCoolTstat PrimAir_Winlet,  !- <none>
-    Set FullTotCapSens = AirSupMdotDesign * (DesiredZone_H - FullLoadOutAirEnth),  !- <none>
-    Set ABS_FullTotCapSens = @ABS FullTotCapSens,  !- <none>
-    Set ABS_QdotReq = @ABS QdotReq,  !- <none>
-    IF ABS_QdotReq < ABS_FullTotCapSens,  !- <none>
-    Set PLR = (ABS_QdotReq - FanPowerToAir)/ (ABS_FullTotCapSens - FanPowerToAir),  !- <none>
-    Set ErrorTol = 0.0005,   !- <none>
-    Set Iter = 0,            !- <none>
-    Set MaxIter = 30,        !- <none>
-    Set Relax = 0.8,         !- <none>
-    Set ABS_Error = 0.002,   !- <none>
-    WHILE (ABS_Error > ErrorTol) && (Iter < MaxIter),  !- <none>
-    Set OutAir_H = (PLR*FullLoadOutAirEnth) +  ((1.0-PLR)* FanOut_H),  !- <none>
-    Set OutAir_W = (PLR*FullLoadOutAirHumRat) + ((1.0-PLR)*FanOut_W),  !- <none>
-    Set OutletAirTemp = @TdbFnHW OutAir_H OutAir_W,  !- <none>
-    Set TotCapTest = AirSupMdotDesign * (DesiredZone_H - OutAir_H),  !- <none>
-    Set Error = (ABS_QdotReq - TotCapTest)/ABS_QdotReq,  !- <none>
-    Set ABS_Error = @ABS Error,  !- <none>
-    IF (ABS_Error > ErrorTol),  !- <none>
-    Set DelPLR = (ABS_QdotReq - TotCapTest) / ABS_FullTotCapSens,  !- <none>
-    Set PLR = PLR + Relax * DelPLR,  !- <none>
-    Set PLR = @min PLR 1.0,  !- <none>
-    ENDIF,                   !- <none>
-    Set Iter = Iter + 1,     !- <none>
-    If (Iter == 16),         !- <none>
-    Set Relax = 0.5,         !- <none>
-    ENDIF,                   !- <none>
-    ENDWHILE,                !- <none>
-    ELSE,                    !- <none>
-    Set PLR = 1.0,           !- <none>
-    Set OutAir_H = FullLoadOutAirEnth,  !- <none>
-    Set OutAir_W = FullLoadOutAirHumRat,  !- <none>
-    Set OutletAirTemp = FullLoadOutAirTemp,  !- <none>
-    ENDIF,                   !- <none>
-    Set PLF = @CurveValue WindACPLFFPLR PLR dummy dummy dummy dummy,  !- <none>
-    Set CoilRTF = PLR / PLF, !- <none>
-    Set CoilRTF = @Min CoilRTF 1.0,  !- <none>
-    Set EIRTempModFac = @CurveValue WindACEIRFT FanOut_Twb OA_Tdb dummy dummy dummy,  !- <none>
-    Set EIRFlowModFac = @CurveValue WindACEIRFFF 1.0 dummy dummy dummy dummy,  !- <none>
-    Set EIR = RatedEIR * EIRTempModFac * EIRFlowModFac,  !- <none>
-    Set DXElecPower = TotCap * CoilRTF * EIR,  !- <none>
-    Set ElectPower = DXElecPower + FanPower,  !- <none>
-    Set ElectEnergy = ElectPower * SystemTimeStep * 3600,  !- <none>
-    Set tot_cool_Power = ABS_FullTotCapSens * PLR,  !- <none>
-    Set PrimAir_MdotOut = AirSupMdotDesign,  !- <none>
-    Set PrimAir_MdotIn  = AirSupMdotDesign,  !- <none>
-    Set PrimAir_Tout  = OutletAirTemp,  !- <none>
-    SEt PrimAir_Wout = OutAir_W,  !- <none>
-    Set OA_MdotIn = AirOAMdotDesign;  !- <none>
+    ELSE,                    !- Program Line 3
+    Set QdotReq = 0.0,       !- Program Line 4
+    ENDIF,                   !- Program Line 5
+    IF COOLINGCOILAVAILSCHED == 0.0,  !- Program Line 6
+    Set QdotReq = 0.0,       !- Program Line 7
+    ENDIF,                   !- Program Line 8
+    IF QdotReq == 0.0,       !- Program Line 9
+    Set PrimAir_MdotIn = 0.0,  !- Program Line 10
+    Set PrimAir_MdotOut = 0.0,  !- Program Line 11
+    Set PrimAir_Tout = PrimAir_Tinlet,  !- Program Line 12
+    Set PrimAir_Wout = PrimAir_Winlet,  !- Program Line 13
+    Set tot_cool_Power = 0.0,  !- Program Line 14
+    Set ElectPower = 0.0,    !- Program Line 15
+    Set ElectEnergy = 0.0,   !- Program Line 16
+    Set OA_MdotIn = 0.0,     !- Program Line 17
+    RETURN,                  !- Program Line 18
+    ENDIF,                   !- Program Line 19
+    Set Recirc_Mdot = AirSupMdotDesign - AirOAMdotDesign,  !- Program Line 20
+    Set Recirc_H  = @HFnTdbW PrimAir_Tinlet PrimAir_Winlet,  !- Program Line 21
+    Set OA_H  = @HFnTdbW OA_Tdb OA_W,  !- Program Line 22
+    Set Mix_H = ((Recirc_Mdot * Recirc_H) + (AirOAMdotDesign * OA_H)) / AirSupMdotDesign,  !- Program Line 23
+    Set Mix_W = ((Recirc_Mdot * PrimAir_Winlet) + (AirOAMdotDesign * OA_W)) / AirSupMdotDesign,  !- Program Line 24
+    Set Mix_Tdb = @TdbFnHW Mix_H Mix_W,  !- Program Line 25
+    Set Mix_Cp = @CpAirFnW Mix_W,  !- Program Line 26
+    Set Mix_rho = @RhoAirFnPbTdbW OA_Press Mix_Tdb Mix_W,  !- Program Line 27
+    Set FanPower = (AirSupMdotDesign * FanDeltaP) / (FanEff * Mix_rho),  !- Program Line 28
+    Set FanPowerToAir = FanPower,  !- Program Line 29
+    Set FanDeltaH = FanPowerToAir/AirSupMdotDesign,  !- Program Line 30
+    Set FanOut_H = Mix_H + FanDeltaH,  !- Program Line 31
+    Set FanOut_W = Mix_W,    !- Program Line 32
+    Set FanOut_Tdb = @TdbFnHW FanOut_H FanOut_W,  !- Program Line 33
+    Set FanOut_Twb = @TwbFnTdbWPb FanOut_Tdb FanOut_W OA_Press,  !- Program Line 34
+    Set RatedCBF = 0.12666,  !- Program Line 35
+    Set LogRatedCBF = @Ln RatedCBF,  !- Program Line 36
+    Set A0 = (0.0 -1.0) * LogRatedCBF * AirSupMdotDesign,  !- Program Line 37
+    Set ADiff = (0.0 - 1.0) * (A0 / AirSupMdotDesign),  !- Program Line 38
+    Set CBF = @Exp ADiff,    !- Program Line 39
+    Set dummy = 0.0,         !- Program Line 40
+    Set TotCapTempModFac = @CurveValue WindACCoolCapFT FanOut_Twb OA_Tdb dummy dummy dummy,  !- Program Line 41
+    Set TotCapFlowModFac = @CurveValue WindACCoolCapFFF 1.0 dummy dummy dummy dummy,  !- Program Line 42
+    Set TotCap = RatedCap * TotCapTempModFac * TotCapFlowModFac,  !- Program Line 43
+    Set HDelta = TotCap / AirSupMdotDesign,  !- Program Line 44
+    Set H_ADP = FanOut_H - (HDelta / ( 1.0 - CBF)),  !- Program Line 45
+    Set T_ADP = @TsatFnHPb H_ADP OA_Press,  !- Program Line 46
+    Set W_ADP = @WfnTdbH T_ADP H_ADP,  !- Program Line 47
+    Set H_Tin_W_ADP = @HFnTdbW FanOut_Tdb W_ADP,  !- Program Line 48
+    IF ((FanOut_H - H_ADP) <> 0.0),  !- Program Line 49
+    Set SHR = (H_Tin_W_ADP - H_ADP)/(FanOut_H - H_ADP ),  !- Program Line 50
+    Set SHR = @Min SHR 1.0,  !- Program Line 51
+    ELSE,                    !- Program Line 52
+    Set SHR = 1.0,           !- Program Line 53
+    ENDIF,                   !- Program Line 54
+    Set PLR = 1.0,           !- Program Line 55
+    Set FullLoadOutAirEnth = FanOut_H - (TotCap/AirSupMdotDesign),  !- Program Line 56
+    Set hTinwout = FanOut_H - ((1.0 - SHR) * HDelta),  !- Program Line 57
+    IF (SHR < 1.0),          !- Program Line 58
+    Set FullLoadOutAirHumRat = @WFnTdbH FanOut_Tdb hTinwout,  !- Program Line 59
+    ELSE,                    !- Program Line 60
+    Set FullLoadOutAirHumRat = FanOut_W,  !- Program Line 61
+    ENDIF,                   !- Program Line 62
+    Set FullLoadOutAirTemp = @TdbFnHW FullLoadOutAirEnth  FullLoadOutAirHumRat,  !- Program Line 63
+    Set DesiredZone_H = @HFnTdbW ZoneCoolTstat PrimAir_Winlet,  !- Program Line 64
+    Set FullTotCapSens = AirSupMdotDesign * (DesiredZone_H - FullLoadOutAirEnth),  !- Program Line 65
+    Set ABS_FullTotCapSens = @ABS FullTotCapSens,  !- Program Line 66
+    Set ABS_QdotReq = @ABS QdotReq,  !- Program Line 67
+    IF ABS_QdotReq < ABS_FullTotCapSens,  !- Program Line 68
+    Set PLR = (ABS_QdotReq - FanPowerToAir)/ (ABS_FullTotCapSens - FanPowerToAir),  !- Program Line 69
+    Set ErrorTol = 0.0005,   !- Program Line 70
+    Set Iter = 0,            !- Program Line 71
+    Set MaxIter = 30,        !- Program Line 72
+    Set Relax = 0.8,         !- Program Line 73
+    Set ABS_Error = 0.002,   !- Program Line 74
+    WHILE (ABS_Error > ErrorTol) && (Iter < MaxIter),  !- Program Line 75
+    Set OutAir_H = (PLR*FullLoadOutAirEnth) +  ((1.0-PLR)* FanOut_H),  !- Program Line 76
+    Set OutAir_W = (PLR*FullLoadOutAirHumRat) + ((1.0-PLR)*FanOut_W),  !- Program Line 77
+    Set OutletAirTemp = @TdbFnHW OutAir_H OutAir_W,  !- Program Line 78
+    Set TotCapTest = AirSupMdotDesign * (DesiredZone_H - OutAir_H),  !- Program Line 79
+    Set Error = (ABS_QdotReq - TotCapTest)/ABS_QdotReq,  !- Program Line 80
+    Set ABS_Error = @ABS Error,  !- Program Line 81
+    IF (ABS_Error > ErrorTol),  !- Program Line 82
+    Set DelPLR = (ABS_QdotReq - TotCapTest) / ABS_FullTotCapSens,  !- Program Line 83
+    Set PLR = PLR + Relax * DelPLR,  !- Program Line 84
+    Set PLR = @min PLR 1.0,  !- Program Line 85
+    ENDIF,                   !- Program Line 86
+    Set Iter = Iter + 1,     !- Program Line 87
+    If (Iter == 16),         !- Program Line 88
+    Set Relax = 0.5,         !- Program Line 89
+    ENDIF,                   !- Program Line 90
+    ENDWHILE,                !- Program Line 91
+    ELSE,                    !- Program Line 92
+    Set PLR = 1.0,           !- Program Line 93
+    Set OutAir_H = FullLoadOutAirEnth,  !- Program Line 94
+    Set OutAir_W = FullLoadOutAirHumRat,  !- Program Line 95
+    Set OutletAirTemp = FullLoadOutAirTemp,  !- Program Line 96
+    ENDIF,                   !- Program Line 97
+    Set PLF = @CurveValue WindACPLFFPLR PLR dummy dummy dummy dummy,  !- Program Line 98
+    Set CoilRTF = PLR / PLF,  !- Program Line 99
+    Set CoilRTF = @Min CoilRTF 1.0,  !- Program Line 100
+    Set EIRTempModFac = @CurveValue WindACEIRFT FanOut_Twb OA_Tdb dummy dummy dummy,  !- Program Line 101
+    Set EIRFlowModFac = @CurveValue WindACEIRFFF 1.0 dummy dummy dummy dummy,  !- Program Line 102
+    Set EIR = RatedEIR * EIRTempModFac * EIRFlowModFac,  !- Program Line 103
+    Set DXElecPower = TotCap * CoilRTF * EIR,  !- Program Line 104
+    Set ElectPower = DXElecPower + FanPower,  !- Program Line 105
+    Set ElectEnergy = ElectPower * SystemTimeStep * 3600,  !- Program Line 106
+    Set tot_cool_Power = ABS_FullTotCapSens * PLR,  !- Program Line 107
+    Set PrimAir_MdotOut = AirSupMdotDesign,  !- Program Line 108
+    Set PrimAir_MdotIn  = AirSupMdotDesign,  !- Program Line 109
+    Set PrimAir_Tout  = OutletAirTemp,  !- Program Line 110
+    SEt PrimAir_Wout = OutAir_W,  !- Program Line 111
+    Set OA_MdotIn = AirOAMdotDesign;  !- Program Line 112
 
   EnergyManagementSystem:GlobalVariable,
     PrimAir_Tinlet,          !- Erl Variable 1 Name
     PrimAir_Winlet,          !- Erl Variable 2 Name
     PrimAir_MdotOut,         !- Erl Variable 3 Name
-    PrimAir_MdotIn,          !- <none>
-    PrimAir_Tout,            !- <none>
-    PrimAir_Wout,            !- <none>
-    tot_cool_Power,          !- <none>
-    ElectPower,              !- <none>
-    ElectEnergy,             !- <none>
-    OA_Tdb,                  !- <none>
-    OA_W,                    !- <none>
-    Qdot_Request,            !- <none>
-    AirSupMdotDesign,        !- <none>
-    AirOAMdotDesign,         !- <none>
-    FanEff,                  !- <none>
-    FanDeltaP,               !- <none>
-    RatedCap,                !- <none>
-    RatedEIR,                !- <none>
-    OA_MdotIn,               !- <none>
-    ZoneCoolTstat;           !- <none>
+    PrimAir_MdotIn,          !- Erl Variable 4 Name
+    PrimAir_Tout,            !- Erl Variable 5 Name
+    PrimAir_Wout,            !- Erl Variable 6 Name
+    tot_cool_Power,          !- Erl Variable 7 Name
+    ElectPower,              !- Erl Variable 8 Name
+    ElectEnergy,             !- Erl Variable 9 Name
+    OA_Tdb,                  !- Erl Variable 10 Name
+    OA_W,                    !- Erl Variable 11 Name
+    Qdot_Request,            !- Erl Variable 12 Name
+    AirSupMdotDesign,        !- Erl Variable 13 Name
+    AirOAMdotDesign,         !- Erl Variable 14 Name
+    FanEff,                  !- Erl Variable 15 Name
+    FanDeltaP,               !- Erl Variable 16 Name
+    RatedCap,                !- Erl Variable 17 Name
+    RatedEIR,                !- Erl Variable 18 Name
+    OA_MdotIn,               !- Erl Variable 19 Name
+    ZoneCoolTstat;           !- Erl Variable 20 Name
 
   Output:EnergyManagementSystem,
     Verbose,                 !- Actuator Availability Dictionary Reporting
-    verbose,                 !- Internal Variable Availability Dictionary Reporting
+    Verbose,                 !- Internal Variable Availability Dictionary Reporting
     ErrorsOnly;              !- EMS Runtime Language Debug Output Level
-

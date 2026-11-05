@@ -24,7 +24,7 @@
     ACR Solar International 10-01,  !- Name
     0.9325,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000316,               !- Test Flow Rate {m3/s}
+    3.16e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.603,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.8665,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -36,7 +36,7 @@
     ACR Solar International 20-01,  !- Name
     1.865,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000316,               !- Test Flow Rate {m3/s}
+    3.16e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.605,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.837,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -48,7 +48,7 @@
     Alternate Energy Technologies AE-21,  !- Name
     1.9307,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -60,7 +60,7 @@
     Alternate Energy Technologies AE-21E,  !- Name
     1.926,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -72,7 +72,7 @@
     Alternate Energy Technologies AE-24,  !- Name
     2.2116,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -84,7 +84,7 @@
     Alternate Energy Technologies AE-24E,  !- Name
     2.212,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -96,7 +96,7 @@
     Alternate Energy Technologies AE-26,  !- Name
     2.3549,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -108,7 +108,7 @@
     Alternate Energy Technologies AE-26E,  !- Name
     2.355,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -120,7 +120,7 @@
     Alternate Energy Technologies AE-28,  !- Name
     2.5987,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -132,7 +132,7 @@
     Alternate Energy Technologies AE-28E,  !- Name
     2.599,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -144,7 +144,7 @@
     Alternate Energy Technologies AE-32,  !- Name
     2.9646,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -156,7 +156,7 @@
     Alternate Energy Technologies AE-32E,  !- Name
     2.965,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -168,7 +168,7 @@
     Alternate Energy Technologies AE-40,  !- Name
     3.6962,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -180,7 +180,7 @@
     Alternate Energy Technologies AE-40E,  !- Name
     3.696,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -192,7 +192,7 @@
     Alternate Energy Technologies AE-50,  !- Name
     4.6636,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -204,7 +204,7 @@
     Alternate Energy Technologies AE-56,  !- Name
     5.1754,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -216,7 +216,7 @@
     Alternate Energy Technologies MSC-21,  !- Name
     1.9974,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -228,7 +228,7 @@
     Alternate Energy Technologies MSC-21E,  !- Name
     1.999,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -240,7 +240,7 @@
     Alternate Energy Technologies MSC-24,  !- Name
     2.2761,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -252,7 +252,7 @@
     Alternate Energy Technologies MSC-24E,  !- Name
     2.265,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -264,7 +264,7 @@
     Alternate Energy Technologies MSC-26,  !- Name
     2.4155,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -276,7 +276,7 @@
     Alternate Energy Technologies MSC-26E,  !- Name
     2.405,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -288,7 +288,7 @@
     Alternate Energy Technologies MSC-28,  !- Name
     2.6632,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -300,7 +300,7 @@
     Alternate Energy Technologies MSC-28E,  !- Name
     2.652,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.264,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -312,7 +312,7 @@
     Alternate Energy Technologies MSC-32,  !- Name
     3.0348,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -324,7 +324,7 @@
     Alternate Energy Technologies MSC-32E,  !- Name
     3.023,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -336,7 +336,7 @@
     Alternate Energy Technologies MSC-40,  !- Name
     3.9158,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -348,7 +348,7 @@
     Alternate Energy Technologies MSC-40E,  !- Name
     3.764,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.638,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2645,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -360,7 +360,7 @@
     Alternate Energy Technologies ST-21E,  !- Name
     1.967,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.665,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.716,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -372,7 +372,7 @@
     Alternate Energy Technologies ST-40E,  !- Name
     3.575,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000385,               !- Test Flow Rate {m3/s}
+    3.85e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.665,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.716,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -386,7 +386,7 @@
     American Solar Works Holdings ASW52B,  !- Name
     2.8638,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000570,               !- Test Flow Rate {m3/s}
+    5.7e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.474,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.8937,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -400,7 +400,7 @@
     Apricus Solar Co Ltd AP-10,  !- Name
     1.342,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000545,               !- Test Flow Rate {m3/s}
+    5.45e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.416,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.9646,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -414,7 +414,7 @@
     Apricus Solar Co Ltd AP-20,  !- Name
     2.709,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000545,               !- Test Flow Rate {m3/s}
+    5.45e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.416,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.9646,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -428,7 +428,7 @@
     Apricus Solar Co Ltd AP-22,  !- Name
     2.9828,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000545,               !- Test Flow Rate {m3/s}
+    5.45e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.416,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.9646,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -442,7 +442,7 @@
     Apricus Solar Co Ltd AP-30,  !- Name
     4.0534,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000545,               !- Test Flow Rate {m3/s}
+    5.45e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.416,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.9646,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -456,7 +456,7 @@
     Beijing Sunda Solar Energy Technology Co Ltd SEIDO 10-10ASAB,  !- Name
     1.6787,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000340,               !- Test Flow Rate {m3/s}
+    3.4e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.46,                    !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.2893,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -470,7 +470,7 @@
     Beijing Sunda Solar Energy Technology Co Ltd SEIDO 10-20ASAB,  !- Name
     3.3937,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000340,               !- Test Flow Rate {m3/s}
+    3.4e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.46,                    !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.2893,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -484,7 +484,7 @@
     Beijing Sunda Solar Energy Technology Co Ltd SEIDO 1-16,  !- Name
     3.994,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000360,               !- Test Flow Rate {m3/s}
+    3.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.526,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.3253,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -498,7 +498,7 @@
     Beijing Sunda Solar Energy Technology Co Ltd SEIDO 1-8,  !- Name
     1.997,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000360,               !- Test Flow Rate {m3/s}
+    3.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.5255,                  !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.3253,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -512,7 +512,7 @@
     Beijing Sunda Solar Energy Technology Co Ltd SEIDO 5-16 ASAB,  !- Name
     4.0966,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000410,               !- Test Flow Rate {m3/s}
+    4.1e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.4886,                  !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.5855,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -526,7 +526,7 @@
     Beijing Sunda Solar Energy Technology Co Ltd SEIDO 5-8 ASAB,  !- Name
     2.0277,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000410,               !- Test Flow Rate {m3/s}
+    4.1e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.4886,                  !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.5855,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -540,7 +540,7 @@
     BTF Ltd SP-20,           !- Name
     3.075,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000550,               !- Test Flow Rate {m3/s}
+    5.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.342,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.8539,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -554,7 +554,7 @@
     Dawn Solar Systems Inc 3004-CT,  !- Name
     9.641,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000315,               !- Test Flow Rate {m3/s}
+    3.15e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.074,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -2.8751,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -566,7 +566,7 @@
     Dawn Solar Systems Inc 3004L,  !- Name
     9.302,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000315,               !- Test Flow Rate {m3/s}
+    3.15e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.125,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.867,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -578,7 +578,7 @@
     Enerworks Inc COL-4X8-NL-SG1-SH10US,  !- Name
     2.8729,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000530,               !- Test Flow Rate {m3/s}
+    5.3e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.7622,                  !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2787,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -590,7 +590,7 @@
     Enerworks Inc COL-4x8-TL-SG1-SD10US,  !- Name
     2.8741,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000561,               !- Test Flow Rate {m3/s}
+    5.61e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.7166,                  !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.0141,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -632,7 +632,7 @@
     Fafco Inc Sunsaver ST,   !- Name
     2.9342,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0002180,               !- Test Flow Rate {m3/s}
+    0.000218,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.811,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -21.4446,                !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -644,7 +644,7 @@
     Genersys PLC 1000-10,    !- Name
     2.0351,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000130,               !- Test Flow Rate {m3/s}
+    1.3e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.588,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.5677,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -658,7 +658,7 @@
     Heliocol USA Inc HC,     !- Name
     2.70339,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0001890,               !- Test Flow Rate {m3/s}
+    0.000189,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.873,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -20.62,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -670,19 +670,19 @@
     Heliodyne Inc Gobi 308,  !- Name
     2.23814,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.721,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.322,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
     -0.0247,                 !- Coefficient 3 of Efficiency Equation {W/m2-K2}
     -0.09,                   !- Coefficient 2 of Incident Angle Modifier
-    0;                       !- Coefficient 3 of Incident Angle Modifier
+    0.0;                     !- Coefficient 3 of Incident Angle Modifier
 
   SolarCollectorPerformance:FlatPlate,
-    Heliodyne Inc Gobi 3366, !- Name
+    Heliodyne Inc Gobi 3366,  !- Name
     2.489,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.722,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.276,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -694,55 +694,55 @@
     Heliodyne Inc Gobi 408,  !- Name
     2.99601,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.725,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2,                    !- Coefficient 2 of Efficiency Equation {W/m2-K}
     -0.022,                  !- Coefficient 3 of Efficiency Equation {W/m2-K2}
     -0.09,                   !- Coefficient 2 of Incident Angle Modifier
-    0;                       !- Coefficient 3 of Incident Angle Modifier
+    0.0;                     !- Coefficient 3 of Incident Angle Modifier
 
   SolarCollectorPerformance:FlatPlate,
     Heliodyne Inc Gobi 410,  !- Name
     3.74387,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.725,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2,                    !- Coefficient 2 of Efficiency Equation {W/m2-K}
     -0.022,                  !- Coefficient 3 of Efficiency Equation {W/m2-K2}
     -0.09,                   !- Coefficient 2 of Incident Angle Modifier
-    0;                       !- Coefficient 3 of Incident Angle Modifier
+    0.0;                     !- Coefficient 3 of Incident Angle Modifier
 
   SolarCollectorPerformance:FlatPlate,
-    Heliodyne Inc Mojave 408,!- Name
+    Heliodyne Inc Mojave 408,  !- Name
     2.9996,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000550,               !- Test Flow Rate {m3/s}
+    5.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.719,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -5.31,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
     -0.01,                   !- Coefficient 3 of Efficiency Equation {W/m2-K2}
     -0.09,                   !- Coefficient 2 of Incident Angle Modifier
-    0;                       !- Coefficient 3 of Incident Angle Modifier
+    0.0;                     !- Coefficient 3 of Incident Angle Modifier
 
   SolarCollectorPerformance:FlatPlate,
-    Heliodyne Inc Mojave 410,!- Name
+    Heliodyne Inc Mojave 410,  !- Name
     3.72667,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.719,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -5.31,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
     -0.01,                   !- Coefficient 3 of Efficiency Equation {W/m2-K2}
     -0.09,                   !- Coefficient 2 of Incident Angle Modifier
-    0;                       !- Coefficient 3 of Incident Angle Modifier
+    0.0;                     !- Coefficient 3 of Incident Angle Modifier
 
   SolarCollectorPerformance:FlatPlate,
     King Solar Products KS-32,  !- Name
     2.9646,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -754,7 +754,7 @@
     King Solar Products KS-40,  !- Name
     3.6962,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -766,7 +766,7 @@
     Mr Sun Solar AE-40,      !- Name
     3.6962,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -778,7 +778,7 @@
     Mr Sun Solar AE-50,      !- Name
     4.6636,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -790,7 +790,7 @@
     Mr Sun Solar AE-56,      !- Name
     5.1754,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -802,7 +802,7 @@
     R&R Solar Supply EPI-308CU 3x7,  !- Name
     1.901,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -814,7 +814,7 @@
     R&R Solar Supply EPI-308CU 3x8,  !- Name
     2.169,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -826,7 +826,7 @@
     R&R Solar Supply EPI-308CU 4x8,  !- Name
     2.918,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -838,7 +838,7 @@
     R&R Solar Supply EPI-308SS 3x7,  !- Name
     1.901,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -850,7 +850,7 @@
     R&R Solar Supply EPI-308SS 3x8,  !- Name
     2.169,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -862,7 +862,7 @@
     R&R Solar Supply EPI-308SS 4x8,  !- Name
     2.918,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -874,7 +874,7 @@
     R&R Solar Supply Sunpro 21,  !- Name
     1.9,                     !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -886,7 +886,7 @@
     R&R Solar Supply Sunpro 24,  !- Name
     2.169,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -898,7 +898,7 @@
     R&R Solar Supply Sunpro 32,  !- Name
     2.918,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -910,7 +910,7 @@
     R&R Solar Supply Sunpro 40,  !- Name
     3.642,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000350,               !- Test Flow Rate {m3/s}
+    3.5e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.697,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.83,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -922,7 +922,7 @@
     Radco Products Inc 308C-HP,  !- Name
     2.201,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.772,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.38,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -934,7 +934,7 @@
     Radco Products Inc 308P-HP,  !- Name
     2.200801,                !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.759,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -6.882,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -946,7 +946,7 @@
     Radco Products Inc 408C-HP,  !- Name
     2.99957,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000561,               !- Test Flow Rate {m3/s}
+    5.61e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.774,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2,                    !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -958,7 +958,7 @@
     Radco Products Inc 408P-HP,  !- Name
     2.99946,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000562,               !- Test Flow Rate {m3/s}
+    5.62e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.763,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -6.62,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -970,7 +970,7 @@
     Radco Products Inc 410C-HP,  !- Name
     3.7078,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.774,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2,                    !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -982,7 +982,7 @@
     Radco Products Inc 410P-HP,  !- Name
     3.70784,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.763,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -6.62,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -994,7 +994,7 @@
     Radco Products Inc 412C-HP,  !- Name
     4.48999,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.774,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2,                    !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1006,7 +1006,7 @@
     Radco Products Inc 412P-HP,  !- Name
     4.48999,                 !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000560,               !- Test Flow Rate {m3/s}
+    5.6e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.763,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -6.62,                   !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1018,7 +1018,7 @@
     Rheem Water Heaters RS21-BC,  !- Name
     1.983,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000370,               !- Test Flow Rate {m3/s}
+    3.7e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.731,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.0411,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1030,7 +1030,7 @@
     Rheem Water Heaters RS21-BP,  !- Name
     1.983,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000370,               !- Test Flow Rate {m3/s}
+    3.7e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.737,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.4193,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1042,7 +1042,7 @@
     Rheem Water Heaters RS21-SC,  !- Name
     1.9834,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000372,               !- Test Flow Rate {m3/s}
+    3.72e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.753,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -5.2917,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1054,7 +1054,7 @@
     Schuco International KG V H LA,  !- Name
     2.6986,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000500,               !- Test Flow Rate {m3/s}
+    5e-05,                   !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.708,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.1129,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1066,7 +1066,7 @@
     Schuco International KG V LA,  !- Name
     2.3109,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000430,               !- Test Flow Rate {m3/s}
+    4.3e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.706,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -2.9209,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1080,7 +1080,7 @@
     Sealed Air Corporation FP,  !- Name
     4.359,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0003030,               !- Test Flow Rate {m3/s}
+    0.000303,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.794,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -15.78,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1094,7 +1094,7 @@
     Sealed Air Corporation FS,  !- Name
     4.404,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0002860,               !- Test Flow Rate {m3/s}
+    0.000286,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.782,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -15.04,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1106,7 +1106,7 @@
     Sealed Air Corporation FW-48,  !- Name
     4.4031,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0002840,               !- Test Flow Rate {m3/s}
+    0.000284,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.736,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -9.323,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1118,7 +1118,7 @@
     Sensible Technologies Inc STS 410BC,  !- Name
     3.7957,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1130,7 +1130,7 @@
     Sensible Technologies Inc STS 410BP,  !- Name
     3.7957,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1142,7 +1142,7 @@
     Sensible Technologies Inc STS 48BC,  !- Name
     3.0505,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1154,7 +1154,7 @@
     Sensible Technologies Inc STS 48BP,  !- Name
     3.0505,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1166,7 +1166,7 @@
     Solahart Industries Bt,  !- Name
     1.9834,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000372,               !- Test Flow Rate {m3/s}
+    3.72e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.753,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -5.2917,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1178,7 +1178,7 @@
     Solahart Industries J,   !- Name
     1.983,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000370,               !- Test Flow Rate {m3/s}
+    3.7e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.737,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.4193,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1190,7 +1190,7 @@
     Solahart Industries Kf,  !- Name
     1.983,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000370,               !- Test Flow Rate {m3/s}
+    3.7e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.731,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.0411,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1202,7 +1202,7 @@
     Solahart Industries L,   !- Name
     1.983,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000370,               !- Test Flow Rate {m3/s}
+    3.7e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.608,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -5.4707,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1214,7 +1214,7 @@
     Solahart Industries M,   !- Name
     1.983,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000370,               !- Test Flow Rate {m3/s}
+    3.7e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.621,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.1009,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1226,7 +1226,7 @@
     Solar Development Inc SD8-21,  !- Name
     1.9307,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1238,7 +1238,7 @@
     Solar Development Inc SD8-26,  !- Name
     2.3549,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1250,7 +1250,7 @@
     Solar Development Inc SD8-28,  !- Name
     2.5987,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1262,7 +1262,7 @@
     Solar Development Inc SD8-32,  !- Name
     2.9646,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1274,7 +1274,7 @@
     Solar Development Inc SD8-40,  !- Name
     3.6962,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000388,               !- Test Flow Rate {m3/s}
+    3.88e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.691,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.396,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1286,7 +1286,7 @@
     Solar Energy Inc SE-21,  !- Name
     2.0323,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000375,               !- Test Flow Rate {m3/s}
+    3.75e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.698,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.7428,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1298,7 +1298,7 @@
     Solar Energy Inc SE-24,  !- Name
     2.3122,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000375,               !- Test Flow Rate {m3/s}
+    3.75e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.698,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.7428,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1310,7 +1310,7 @@
     Solar Energy Inc SE-28,  !- Name
     2.5108,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000375,               !- Test Flow Rate {m3/s}
+    3.75e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.698,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.7428,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1322,7 +1322,7 @@
     Solar Energy Inc SE-32,  !- Name
     2.8679,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000375,               !- Test Flow Rate {m3/s}
+    3.75e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.698,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.7428,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1334,7 +1334,7 @@
     Solar Energy Inc SE-40,  !- Name
     3.5821,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000375,               !- Test Flow Rate {m3/s}
+    3.75e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.698,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.7428,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1348,7 +1348,7 @@
     Solargenix Energy LLC WS0503,  !- Name
     2.239,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000410,               !- Test Flow Rate {m3/s}
+    4.1e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.591,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.5502,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1362,7 +1362,7 @@
     SolarTech International LLC ST-300,  !- Name
     3.229,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0002020,               !- Test Flow Rate {m3/s}
+    0.000202,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.696,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -23.3641,                !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1374,7 +1374,7 @@
     Solene SLCO-30,          !- Name
     2.2775,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000447,               !- Test Flow Rate {m3/s}
+    4.47e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.779,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2847,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1386,7 +1386,7 @@
     Solene SLCO-32,          !- Name
     2.9523,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000447,               !- Test Flow Rate {m3/s}
+    4.47e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.782,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2829,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1398,7 +1398,7 @@
     Solene SLCO-40,          !- Name
     3.6114,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000447,               !- Test Flow Rate {m3/s}
+    4.47e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.784,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.2805,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1410,7 +1410,7 @@
     Solene SLCR-30,          !- Name
     2.8149,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000520,               !- Test Flow Rate {m3/s}
+    5.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.704,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.7983,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1422,7 +1422,7 @@
     Solene SLCR-32,          !- Name
     2.971,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000520,               !- Test Flow Rate {m3/s}
+    5.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.704,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.7983,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1434,7 +1434,7 @@
     Solene SLCR-40,          !- Name
     3.7214,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000520,               !- Test Flow Rate {m3/s}
+    5.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.704,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -1.7983,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1446,7 +1446,7 @@
     Stiebel Eltron Sol 25 Plus,  !- Name
     2.7342,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000549,               !- Test Flow Rate {m3/s}
+    5.49e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.649,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.1374,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1458,7 +1458,7 @@
     SunBank Solar SB10,      !- Name
     0.9325,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000316,               !- Test Flow Rate {m3/s}
+    3.16e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.603,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.8665,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1470,7 +1470,7 @@
     SunBank Solar SB20,      !- Name
     1.865,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000316,               !- Test Flow Rate {m3/s}
+    3.16e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.605,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.837,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1482,7 +1482,7 @@
     SunEarth Inc EC-20,      !- Name
     1.831,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1494,7 +1494,7 @@
     SunEarth Inc EC-21,      !- Name
     1.9707,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1506,7 +1506,7 @@
     SunEarth Inc EC-24,      !- Name
     2.2899,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1518,7 +1518,7 @@
     SunEarth Inc EC-32,      !- Name
     3.0505,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1530,7 +1530,7 @@
     SunEarth Inc EC-40,      !- Name
     3.7957,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1542,7 +1542,7 @@
     SunEarth Inc EP-20,      !- Name
     1.831,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1554,7 +1554,7 @@
     SunEarth Inc EP-21,      !- Name
     1.9707,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1566,7 +1566,7 @@
     SunEarth Inc EP-24,      !- Name
     2.2899,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1578,7 +1578,7 @@
     SunEarth Inc EP-32,      !- Name
     3.0505,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1590,7 +1590,7 @@
     SunEarth Inc EP-40,      !- Name
     3.7957,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1602,7 +1602,7 @@
     SunEarth Inc IC-24,      !- Name
     2.3007,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1614,7 +1614,7 @@
     SunEarth Inc IC-32,      !- Name
     3.0623,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1626,7 +1626,7 @@
     SunEarth Inc IC-40,      !- Name
     3.8094,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1638,7 +1638,7 @@
     SunEarth Inc IP-24,      !- Name
     2.3007,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1650,7 +1650,7 @@
     SunEarth Inc IP-32,      !- Name
     3.0623,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1662,7 +1662,7 @@
     SunEarth Inc IP-40,      !- Name
     3.8094,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1674,7 +1674,7 @@
     SunEarth Inc SC-24,      !- Name
     2.2899,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1686,7 +1686,7 @@
     SunEarth Inc SC-32,      !- Name
     3.0505,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1698,7 +1698,7 @@
     SunEarth Inc SC-40,      !- Name
     3.7957,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1710,7 +1710,7 @@
     SunEarth Inc SP-24,      !- Name
     2.2899,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1722,7 +1722,7 @@
     SunEarth Inc SP-32,      !- Name
     3.0505,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1734,7 +1734,7 @@
     SunEarth Inc SP-40,      !- Name
     3.7957,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000320,               !- Test Flow Rate {m3/s}
+    3.2e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1746,7 +1746,7 @@
     SunEarth Inc SSC-21,     !- Name
     1.8596,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1758,7 +1758,7 @@
     SunEarth Inc SSC-24,     !- Name
     2.1585,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1770,7 +1770,7 @@
     SunEarth Inc SSC-32,     !- Name
     2.9065,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1782,7 +1782,7 @@
     SunEarth Inc SSC-40,     !- Name
     3.6285,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.702,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2828,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1794,7 +1794,7 @@
     SunEarth Inc SSP-21,     !- Name
     1.8596,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1806,7 +1806,7 @@
     SunEarth Inc SSP-24,     !- Name
     2.1585,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1818,7 +1818,7 @@
     SunEarth Inc SSP-32,     !- Name
     2.9065,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1830,7 +1830,7 @@
     SunEarth Inc SSP-40,     !- Name
     3.6285,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000317,               !- Test Flow Rate {m3/s}
+    3.17e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.666,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.3563,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1844,7 +1844,7 @@
     Suntrek Industries Inc,  !- Name
     3.8686,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0002710,               !- Test Flow Rate {m3/s}
+    0.000271,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.856,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -17.9339,                !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1856,7 +1856,7 @@
     Synergy Solar S19.78,    !- Name
     1.8496,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000327,               !- Test Flow Rate {m3/s}
+    3.27e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.612,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.3317,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1868,7 +1868,7 @@
     Synergy Solar S26.68,    !- Name
     2.4794,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000327,               !- Test Flow Rate {m3/s}
+    3.27e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.612,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -4.3317,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1880,7 +1880,7 @@
     Synergy Solar T19.78,    !- Name
     1.8506,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000327,               !- Test Flow Rate {m3/s}
+    3.27e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.633,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2437,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1892,7 +1892,7 @@
     Synergy Solar T26.68,    !- Name
     2.4794,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000327,               !- Test Flow Rate {m3/s}
+    3.27e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.633,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.2437,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1904,7 +1904,7 @@
     Synergy Solar TC-19.78,  !- Name
     1.838,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000505,               !- Test Flow Rate {m3/s}
+    5.05e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.677,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.7302,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1916,7 +1916,7 @@
     Synergy Solar TC-26.52,  !- Name
     2.4802,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000505,               !- Test Flow Rate {m3/s}
+    5.05e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.688,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.6994,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1930,7 +1930,7 @@
     Techno-Solis Inc SM C20TS10,  !- Name
     3.964,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0002800,               !- Test Flow Rate {m3/s}
+    0.00028,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.805,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -15.4679,                !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1942,7 +1942,7 @@
     Thermo Dynamics Ltd G32-P,  !- Name
     2.9824,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000596,               !- Test Flow Rate {m3/s}
+    5.96e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.689,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.8475,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1956,7 +1956,7 @@
     Thermo Technologies TMA-600-20,  !- Name
     3.06,                    !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000758,               !- Test Flow Rate {m3/s}
+    7.58e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.525,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.886,                  !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1970,7 +1970,7 @@
     Thermo Technologies TMA-600-30,  !- Name
     4.581,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000758,               !- Test Flow Rate {m3/s}
+    7.58e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.525,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.8858,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1984,7 +1984,7 @@
     Thermo Technologies TMA-600-50,  !- Name
     7.641,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000758,               !- Test Flow Rate {m3/s}
+    7.58e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.525,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.8858,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -1998,7 +1998,7 @@
     Thermo Technologies TMA-600-70,  !- Name
     10.701,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000758,               !- Test Flow Rate {m3/s}
+    7.58e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.525,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.8858,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2012,7 +2012,7 @@
     Thermo Technologies TMA-600-80,  !- Name
     12.222,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000758,               !- Test Flow Rate {m3/s}
+    7.58e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.525,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.8858,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2026,7 +2026,7 @@
     Thermomax Industries Ltd AST20,  !- Name
     2.849,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000498,               !- Test Flow Rate {m3/s}
+    4.98e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.573,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -2.8501,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2040,7 +2040,7 @@
     Thermomax Industries Ltd AST30,  !- Name
     4.2795,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000498,               !- Test Flow Rate {m3/s}
+    4.98e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.573,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -2.8501,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2054,7 +2054,7 @@
     Thermomax Industries Ltd AST50,  !- Name
     7.129,                   !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000498,               !- Test Flow Rate {m3/s}
+    4.98e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.573,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -2.8501,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2068,7 +2068,7 @@
     Thermomax Industries Ltd AST70,  !- Name
     9.9775,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000498,               !- Test Flow Rate {m3/s}
+    4.98e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.573,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -2.8501,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2082,7 +2082,7 @@
     Thermomax Industries Ltd AST80,  !- Name
     11.408,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000498,               !- Test Flow Rate {m3/s}
+    4.98e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.573,                   !- Coefficient 1 of Efficiency Equation {dimensionless}
     -2.8501,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2094,7 +2094,7 @@
     Viessmann Manufacturing Company US Inc SV1 SH1,  !- Name
     2.5228,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000498,               !- Test Flow Rate {m3/s}
+    4.98e-05,                !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.7162,                  !- Coefficient 1 of Efficiency Equation {dimensionless}
     -3.0562,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
@@ -2108,11 +2108,10 @@
     Viessmann Manufacturing Company US Inc Type SP3 2m2,  !- Name
     2.8775,                  !- Gross Area {m2}
     Water,                   !- Test Fluid
-    0.0000590,               !- Test Flow Rate {m3/s}
+    5.9e-05,                 !- Test Flow Rate {m3/s}
     Inlet,                   !- Test Correlation Type
     0.5079,                  !- Coefficient 1 of Efficiency Equation {dimensionless}
     -0.9156,                 !- Coefficient 2 of Efficiency Equation {W/m2-K}
     -0.003,                  !- Coefficient 3 of Efficiency Equation {W/m2-K2}
     0.5192,                  !- Coefficient 2 of Incident Angle Modifier
     -0.7428;                 !- Coefficient 3 of Incident Angle Modifier
-

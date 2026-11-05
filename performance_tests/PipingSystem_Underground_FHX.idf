@@ -61,7 +61,7 @@
     Suburbs,                 !- Terrain
     0.05,                    !- Loads Convergence Tolerance Value {W}
     0.05,                    !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    FullInteriorAndExterior,  !- Solar Distribution
     35,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -69,7 +69,7 @@
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     Relative;                !- Coordinate System
 
   RunPeriod,
@@ -104,8 +104,8 @@
     Denver Centennial CO USA WMO=724666,  !- Name
     39.57,                   !- Latitude {deg}
     -104.85,                 !- Longitude {deg}
-    -7.00,                   !- Time Zone {hr}
-    1793.00;                 !- Elevation {m}
+    -7.0,                    !- Time Zone {hr}
+    1793.0;                  !- Elevation {m}
 
   SizingPeriod:DesignDay,
     Denver Centennial Ann Htg 99.6% Condns DB,  !- Name
@@ -116,15 +116,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -18.8,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    81560.,                  !- Barometric Pressure {Pa}
-    3,                       !- Wind Speed {m/s}
-    340,                     !- Wind Direction {deg}
+    81560.0,                 !- Barometric Pressure {Pa}
+    3.0,                     !- Wind Speed {m/s}
+    340.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -133,26 +133,26 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
   SizingPeriod:DesignDay,
     Denver Centennial Ann Clg 1% Condns DB=>MWB,  !- Name
     7,                       !- Month
     21,                      !- Day of Month
     SummerDesignDay,         !- Day Type
-    32,                      !- Maximum Dry-Bulb Temperature {C}
+    32.0,                    !- Maximum Dry-Bulb Temperature {C}
     15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    81560.,                  !- Barometric Pressure {Pa}
+    81560.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    0,                       !- Wind Direction {deg}
+    0.0,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -161,7 +161,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
 !***********************************************************
 !****** SIZING CONFIGURATION *******************************
@@ -174,7 +174,7 @@
 
   DesignSpecification:OutdoorAir,
     OA Sizing,               !- Name
-    flow/person,             !- Outdoor Air Method
+    Flow/Person,             !- Outdoor Air Method
     0.0125,                  !- Outdoor Air Flow per Person {m3/s-person}
     0.0,                     !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
     0.0,                     !- Outdoor Air Flow per Zone {m3/s}
@@ -184,10 +184,10 @@
   Sizing:Zone,
     Basement,                !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    13.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    13.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    29.,                     !- Zone Heating Design Supply Air Temperature {C}
+    29.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.0075,                  !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -195,12 +195,12 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
@@ -220,10 +220,10 @@
   Sizing:Zone,
     Main Floor,              !- Zone or ZoneList Name
     SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
-    13.,                     !- Zone Cooling Design Supply Air Temperature {C}
+    13.0,                    !- Zone Cooling Design Supply Air Temperature {C}
     ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
     SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
-    29.,                     !- Zone Heating Design Supply Air Temperature {C}
+    29.0,                    !- Zone Heating Design Supply Air Temperature {C}
     ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
     0.0075,                  !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
     0.004,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
@@ -231,12 +231,12 @@
     0.0,                     !- Zone Heating Sizing Factor
     0.0,                     !- Zone Cooling Sizing Factor
     DesignDay,               !- Cooling Design Air Flow Method
-    0,                       !- Cooling Design Air Flow Rate {m3/s}
+    0.0,                     !- Cooling Design Air Flow Rate {m3/s}
     ,                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Cooling Minimum Air Flow {m3/s}
     ,                        !- Cooling Minimum Air Flow Fraction
     DesignDay,               !- Heating Design Air Flow Method
-    0,                       !- Heating Design Air Flow Rate {m3/s}
+    0.0,                     !- Heating Design Air Flow Rate {m3/s}
     ,                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Heating Maximum Air Flow {m3/s}
     ,                        !- Heating Maximum Air Flow Fraction
@@ -285,7 +285,7 @@
     Until: 24:00,4;          !- Field 3
 
   ThermostatSetpoint:DualSetpoint,
-    Basement Dual SP Control,!- Name
+    Basement Dual SP Control,  !- Name
     Htg-SetP-Sch,            !- Heating Setpoint Temperature Schedule Name
     Clg-SetP-Sch;            !- Cooling Setpoint Temperature Schedule Name
 
@@ -295,7 +295,7 @@
     HVACTemplate-Always 4,   !- Control Type Schedule Name
     ,                        !- Temperature Difference Between Cutout And Setpoint {deltaC}
     ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    Basement Dual SP Control;!- Control 1 Name
+    Basement Dual SP Control;  !- Control 1 Name
 
   ThermostatSetpoint:DualSetpoint,
     Main Floor Dual SP Control,  !- Name
@@ -319,20 +319,20 @@
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     Fraction,                !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -100,                    !- Lower Limit Value
-    200,                     !- Upper Limit Value
+    -100.0,                  !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
     Continuous;              !- Numeric Type
 
   Schedule:Compact,
@@ -362,15 +362,15 @@
 
   Zone,
     Basement,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     ,                        !- Type
     ,                        !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate,           !- Volume {m3}
-    autocalculate,           !- Floor Area {m2}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate,           !- Volume {m3}
+    Autocalculate,           !- Floor Area {m2}
     Simple,                  !- Zone Inside Convection Algorithm
     SimpleCombined,          !- Zone Outside Convection Algorithm
     Yes;                     !- Part of Total Floor Area
@@ -381,16 +381,16 @@
     Basement Wall/Floor Construction,  !- Construction Name
     Basement,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     BasementWallOSCM,        !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
-    15,0,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
-    15,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
+    15.0,0.0,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
+    15.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Basement Wall 2,         !- Name
@@ -398,16 +398,16 @@
     Basement Wall/Floor Construction,  !- Construction Name
     Basement,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     BasementWallOSCM,        !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,10,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
-    15,10,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
-    15,10,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,10,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
+    15.0,10.0,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
+    15.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Basement Wall 3,         !- Name
@@ -415,16 +415,16 @@
     Basement Wall/Floor Construction,  !- Construction Name
     Basement,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     BasementWallOSCM,        !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    15,0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
-    15,10,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
-    15,10,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    15.0,0.0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
+    15.0,10.0,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
+    15.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Basement Wall 4,         !- Name
@@ -432,16 +432,16 @@
     Basement Wall/Floor Construction,  !- Construction Name
     Basement,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     BasementWallOSCM,        !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,10,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,10,-3.1;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,-3.1;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Basement Floor,          !- Name
@@ -449,16 +449,16 @@
     Basement Wall/Floor Construction,  !- Construction Name
     Basement,                !- Zone Name
     ,                        !- Space Name
-    OtherSideConditionsModel,!- Outside Boundary Condition
+    OtherSideConditionsModel,  !- Outside Boundary Condition
     BasementFloorOSCM,       !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,10,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
-    15,10,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
-    15,0,-3.1,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,-3.1;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,-3.1,  !- X,Y,Z ==> Vertex 1 {m}
+    15.0,10.0,-3.1,  !- X,Y,Z ==> Vertex 2 {m}
+    15.0,0.0,-3.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,-3.1;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Basement Ceiling,        !- Name
@@ -470,12 +470,12 @@
     Main Floor,              !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,10,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    10,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    10,10,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   SurfaceProperty:OtherSideConditionsModel,
     BasementWallOSCM,        !- Name
@@ -491,15 +491,15 @@
 
   Zone,
     Main Floor,              !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     ,                        !- Type
     ,                        !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate,           !- Volume {m3}
-    autocalculate,           !- Floor Area {m2}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate,           !- Volume {m3}
+    Autocalculate,           !- Floor Area {m2}
     Simple,                  !- Zone Inside Convection Algorithm
     SimpleCombined,          !- Zone Outside Convection Algorithm
     Yes;                     !- Part of Total Floor Area
@@ -514,12 +514,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    15,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15,0,3.1,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,3.1;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    15.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.0,0.0,3.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.1;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Main Floor Wall 2,       !- Name
@@ -531,12 +531,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,10,0,  !- X,Y,Z ==> Vertex 1 {m}
-    15,10,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15,10,3.1,  !- X,Y,Z ==> Vertex 3 {m}
-    0,10,3.1;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    15.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.0,10.0,3.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,3.1;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Main Floor Wall 3,       !- Name
@@ -548,12 +548,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    15,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    15,10,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15,10,3.1,  !- X,Y,Z ==> Vertex 3 {m}
-    15,0,3.1;  !- X,Y,Z ==> Vertex 4 {m}
+    15.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    15.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.0,10.0,3.1,  !- X,Y,Z ==> Vertex 3 {m}
+    15.0,0.0,3.1;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Main Floor Wall 4,       !- Name
@@ -565,12 +565,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,3.1,  !- X,Y,Z ==> Vertex 2 {m}
-    0,10,3.1,  !- X,Y,Z ==> Vertex 3 {m}
-    0,10,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.1,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,10.0,3.1,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,10.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Main Floor Roof,         !- Name
@@ -582,12 +582,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    autocalculate,           !- View Factor to Ground
+    Autocalculate,           !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,10,3.1,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,3.1,  !- X,Y,Z ==> Vertex 2 {m}
-    10,0,3.1,  !- X,Y,Z ==> Vertex 3 {m}
-    10,10,3.1;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,10.0,3.1,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.1,  !- X,Y,Z ==> Vertex 2 {m}
+    10.0,0.0,3.1,  !- X,Y,Z ==> Vertex 3 {m}
+    10.0,10.0,3.1;  !- X,Y,Z ==> Vertex 4 {m}
 
 !***********************************************************
 !****** ABOVE-GROUND MATERIALS/CONSTRUCTIONS ***************
@@ -611,7 +611,7 @@
     0.019,                   !- Thickness {m}
     0.137,                   !- Conductivity {W/m-K}
     640.0,                   !- Density {kg/m3}
-    1006,                    !- Specific Heat {J/kg-K}
+    1006.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -622,7 +622,7 @@
     0.133,                   !- Thickness {m}
     0.047,                   !- Conductivity {W/m-K}
     93.84,                   !- Density {kg/m3}
-    1006,                    !- Specific Heat {J/kg-K}
+    1006.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -633,7 +633,7 @@
     0.025,                   !- Thickness {m}
     0.246,                   !- Conductivity {W/m-K}
     492.67,                  !- Density {kg/m3}
-    1006,                    !- Specific Heat {J/kg-K}
+    1006.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -647,8 +647,8 @@
     MediumRough,             !- Roughness
     0.1524,                  !- Thickness {m}
     1.802,                   !- Conductivity {W/m-K}
-    2243,                    !- Density {kg/m3}
-    837,                     !- Specific Heat {J/kg-K}
+    2243.0,                  !- Density {kg/m3}
+    837.0,                   !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.65,                    !- Solar Absorptance
     0.65;                    !- Visible Absorptance
@@ -669,9 +669,9 @@
     Roof Layer 1,            !- Name
     Rough,                   !- Roughness
     3.344,                   !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
 !***********************************************************
 !****** BASEMENT CEILING MATLS/CONSTRUCTIONS ***************
@@ -686,8 +686,8 @@
     Rough,                   !- Roughness
     0.1,                     !- Thickness {m}
     12.3,                    !- Conductivity {W/m-K}
-    800,                     !- Density {kg/m3}
-    1300,                    !- Specific Heat {J/kg-K}
+    800.0,                   !- Density {kg/m3}
+    1300.0,                  !- Specific Heat {J/kg-K}
     0.9,                     !- Thermal Absorptance
     0.7,                     !- Solar Absorptance
     0.7;                     !- Visible Absorptance
@@ -698,7 +698,7 @@
 
   PipingSystem:Underground:Domain,
     My Piping System,        !- Name
-    12,                      !- Xmax {m}
+    12.0,                    !- Xmax {m}
     4.5,                     !- Ymax {m}
     36.84,                   !- Zmax {m}
     2,                       !- X-Direction Mesh Density Parameter
@@ -711,14 +711,14 @@
     Uniform,                 !- Z-Direction Mesh Type
     ,                        !- Z-Direction Geometric Coefficient
     1.08,                    !- Soil Thermal Conductivity {W/m-K}
-    962,                     !- Soil Density {kg/m3}
-    2576,                    !- Soil Specific Heat {J/kg-K}
-    30,                      !- Soil Moisture Content Volume Fraction {percent}
-    50,                      !- Soil Moisture Content Volume Fraction at Saturation {percent}
+    962.0,                   !- Soil Density {kg/m3}
+    2576.0,                  !- Soil Specific Heat {J/kg-K}
+    30.0,                    !- Soil Moisture Content Volume Fraction {percent}
+    50.0,                    !- Soil Moisture Content Volume Fraction at Saturation {percent}
     Site:GroundTemperature:Undisturbed:KusudaAchenbach,  !- Undisturbed Ground Temperature Model Type
     KATemps,                 !- Undisturbed Ground Temperature Model Name
     Yes,                     !- This Domain Includes Basement Surface Interaction
-    6,                       !- Width of Basement Floor in Ground Domain {m}
+    6.0,                     !- Width of Basement Floor in Ground Domain {m}
     2.5,                     !- Depth of Basement Wall In Ground Domain {m}
     Yes,                     !- Shift Pipe X Coordinates By Basement Width
     BasementWallOSCM,        !- Name of Basement Wall Boundary Condition Model
@@ -732,8 +732,8 @@
   Site:GroundTemperature:Undisturbed:KusudaAchenbach,
     KATemps,                 !- Name
     1.08,                    !- Soil Thermal Conductivity {W/m-K}
-    962,                     !- Soil Density {kg/m3}
-    2576,                    !- Soil Specific Heat {J/kg-K}
+    962.0,                   !- Soil Density {kg/m3}
+    2576.0,                  !- Soil Specific Heat {J/kg-K}
     15.5,                    !- Average Soil Surface Temperature {C}
     12.8,                    !- Average Amplitude of Surface Temperature {deltaC}
     17.3;                    !- Phase Shift of Minimum Surface Temperature {days}
@@ -741,12 +741,12 @@
   PipingSystem:Underground:PipeCircuit,
     My Pipe Circuit,         !- Name
     0.3895,                  !- Pipe Thermal Conductivity {W/m-K}
-    641,                     !- Pipe Density {kg/m3}
-    2405,                    !- Pipe Specific Heat {J/kg-K}
+    641.0,                   !- Pipe Density {kg/m3}
+    2405.0,                  !- Pipe Specific Heat {J/kg-K}
     0.016,                   !- Pipe Inner Diameter {m}
     0.02667,                 !- Pipe Outer Diameter {m}
     0.004,                   !- Design Flow Rate {m3/s}
-    Piping System Inlet Node,!- Circuit Inlet Node
+    Piping System Inlet Node,  !- Circuit Inlet Node
     Piping System Outlet Node,  !- Circuit Outlet Node
     0.001,                   !- Convergence Criterion for the Inner Radial Iteration Loop {deltaC}
     100,                     !- Maximum Iterations in the Inner Radial Iteration Loop
@@ -763,36 +763,36 @@
   PipingSystem:Underground:PipeSegment,
     Segment 1,               !- Name
     0.67,                    !- X Position {m}
-    2.20,                    !- Y Position {m}
+    2.2,                     !- Y Position {m}
     IncreasingZ;             !- Flow Direction
 
   PipingSystem:Underground:PipeSegment,
     Segment 2,               !- Name
     0.95,                    !- X Position {m}
-    2.20,                    !- Y Position {m}
+    2.2,                     !- Y Position {m}
     IncreasingZ;             !- Flow Direction
 
   PipingSystem:Underground:PipeSegment,
     Segment 3,               !- Name
     1.23,                    !- X Position {m}
-    2.20,                    !- Y Position {m}
+    2.2,                     !- Y Position {m}
     IncreasingZ;             !- Flow Direction
 
   PipingSystem:Underground:PipeSegment,
     Segment 4,               !- Name
-    1.40,                    !- X Position {m}
+    1.4,                     !- X Position {m}
     1.94,                    !- Y Position {m}
     DecreasingZ;             !- Flow Direction
 
   PipingSystem:Underground:PipeSegment,
     Segment 5,               !- Name
-    1.40,                    !- X Position {m}
+    1.4,                     !- X Position {m}
     1.66,                    !- Y Position {m}
     DecreasingZ;             !- Flow Direction
 
   PipingSystem:Underground:PipeSegment,
     Segment 6,               !- Name
-    1.40,                    !- X Position {m}
+    1.4,                     !- X Position {m}
     1.39,                    !- Y Position {m}
     DecreasingZ;             !- Flow Direction
 
@@ -872,16 +872,16 @@
     -1.75195196204063,       !- Coefficient3 x
     0.760820340847872,       !- Coefficient4 y
     0.0,                     !- Coefficient5 z
-    -100,                    !- Minimum Value of w
-    100,                     !- Maximum Value of w
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
-    0,                       !- Minimum Value of y
-    100,                     !- Maximum Value of y
-    0,                       !- Minimum Value of z
-    100,                     !- Maximum Value of z
-    0,                       !- Minimum Curve Output
-    38;                      !- Maximum Curve Output
+    -100.0,                  !- Minimum Value of w
+    100.0,                   !- Maximum Value of w
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    0.0,                     !- Minimum Value of y
+    100.0,                   !- Maximum Value of y
+    0.0,                     !- Minimum Value of z
+    100.0,                   !- Maximum Value of z
+    0.0,                     !- Minimum Curve Output
+    38.0;                    !- Maximum Curve Output
 
   Curve:QuadLinear,
     CoolPowCurve,            !- Name
@@ -890,16 +890,16 @@
     4.03828937789764,        !- Coefficient3 x
     0.952179101682919,       !- Coefficient4 y
     0.0,                     !- Coefficient5 z
-    -100,                    !- Minimum Value of w
-    100,                     !- Maximum Value of w
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
-    0,                       !- Minimum Value of y
-    100,                     !- Maximum Value of y
-    0,                       !- Minimum Value of z
-    100,                     !- Maximum Value of z
-    0,                       !- Minimum Curve Output
-    38;                      !- Maximum Curve Output
+    -100.0,                  !- Minimum Value of w
+    100.0,                   !- Maximum Value of w
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    0.0,                     !- Minimum Value of y
+    100.0,                   !- Maximum Value of y
+    0.0,                     !- Minimum Value of z
+    100.0,                   !- Maximum Value of z
+    0.0,                     !- Minimum Curve Output
+    38.0;                    !- Maximum Curve Output
 
   Curve:QuadLinear,
     HeatCapCurve,            !- Name
@@ -908,16 +908,16 @@
     4.00919247797279,        !- Coefficient3 x
     0.615580752610271,       !- Coefficient4 y
     0.0,                     !- Coefficient5 z
-    -100,                    !- Minimum Value of w
-    100,                     !- Maximum Value of w
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
-    0,                       !- Minimum Value of y
-    100,                     !- Maximum Value of y
-    0,                       !- Minimum Value of z
-    100,                     !- Maximum Value of z
-    0,                       !- Minimum Curve Output
-    38;                      !- Maximum Curve Output
+    -100.0,                  !- Minimum Value of w
+    100.0,                   !- Maximum Value of w
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    0.0,                     !- Minimum Value of y
+    100.0,                   !- Maximum Value of y
+    0.0,                     !- Minimum Value of z
+    100.0,                   !- Maximum Value of z
+    0.0,                     !- Minimum Curve Output
+    38.0;                    !- Maximum Curve Output
 
   Curve:QuadLinear,
     HeatPowCurve,            !- Name
@@ -926,16 +926,16 @@
     1.5682782658283,         !- Coefficient3 x
     0.689709515714146,       !- Coefficient4 y
     0.0,                     !- Coefficient5 z
-    -100,                    !- Minimum Value of w
-    100,                     !- Maximum Value of w
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
-    0,                       !- Minimum Value of y
-    100,                     !- Maximum Value of y
-    0,                       !- Minimum Value of z
-    100,                     !- Maximum Value of z
-    0,                       !- Minimum Curve Output
-    38;                      !- Maximum Curve Output
+    -100.0,                  !- Minimum Value of w
+    100.0,                   !- Maximum Value of w
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    0.0,                     !- Minimum Value of y
+    100.0,                   !- Maximum Value of y
+    0.0,                     !- Minimum Value of z
+    100.0,                   !- Maximum Value of z
+    0.0,                     !- Minimum Curve Output
+    38.0;                    !- Maximum Curve Output
 
   Curve:QuintLinear,
     CoolSensCapCurve,        !- Name
@@ -945,18 +945,18 @@
     -0.944804890543481,      !- Coefficient4 x
     0.739606605780884,       !- Coefficient5 y
     0.0,                     !- Coefficient6 z
-    -100,                    !- Minimum Value of v
-    100,                     !- Maximum Value of v
-    -100,                    !- Minimum Value of w
-    100,                     !- Maximum Value of w
-    -100,                    !- Minimum Value of x
-    100,                     !- Maximum Value of x
-    0,                       !- Minimum Value of y
-    100,                     !- Maximum Value of y
-    0,                       !- Minimum Value of z
-    100,                     !- Maximum Value of z
-    0,                       !- Minimum Curve Output
-    38;                      !- Maximum Curve Output
+    -100.0,                  !- Minimum Value of v
+    100.0,                   !- Maximum Value of v
+    -100.0,                  !- Minimum Value of w
+    100.0,                   !- Maximum Value of w
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    0.0,                     !- Minimum Value of y
+    100.0,                   !- Maximum Value of y
+    0.0,                     !- Minimum Value of z
+    100.0,                   !- Maximum Value of z
+    0.0,                     !- Minimum Curve Output
+    38.0;                    !- Maximum Curve Output
 
   Coil:Cooling:WaterToAirHeatPump:EquationFit,
     Sys 2 Heat Pump Cooling Mode,  !- Name
@@ -977,8 +977,8 @@
     CoolSensCapCurve,        !- Sensible Cooling Capacity Curve Name
     CoolPowCurve,            !- Cooling Power Consumption Curve Name
     HPACCOOLPLFFPLR,         !- Part Load Fraction Correlation Curve Name
-    0,                       !- Nominal Time for Condensate Removal to Begin {s}
-    0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
+    0.0,                     !- Nominal Time for Condensate Removal to Begin {s}
+    0.0,                     !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
     ,                        !- Maximum Cycling Rate {cycles/hr}
     ,                        !- Latent Capacity Time Constant {s}
     ;                        !- Fan Delay Time {s}
@@ -1017,7 +1017,7 @@
     FanAndCoilAvailSched,    !- Availability Schedule Name
     NaturalGas,              !- Fuel Type
     0.8,                     !- Burner Efficiency
-    32000,                   !- Nominal Capacity {W}
+    32000.0,                 !- Nominal Capacity {W}
     Sys 2 SuppHeating Coil Air Inlet Node,  !- Air Inlet Node Name
     Zone 2 Inlet Node;       !- Air Outlet Node Name
 
@@ -1109,8 +1109,8 @@
     CoolSensCapCurve,        !- Sensible Cooling Capacity Curve Name
     CoolPowCurve,            !- Cooling Power Consumption Curve Name
     HPACCOOLPLFFPLR,         !- Part Load Fraction Correlation Curve Name
-    0,                       !- Nominal Time for Condensate Removal to Begin {s}
-    0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
+    0.0,                     !- Nominal Time for Condensate Removal to Begin {s}
+    0.0,                     !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
     ,                        !- Maximum Cycling Rate {cycles/hr}
     ,                        !- Latent Capacity Time Constant {s}
     ;                        !- Fan Delay Time {s}
@@ -1149,7 +1149,7 @@
     FanAndCoilAvailSched,    !- Availability Schedule Name
     NaturalGas,              !- Fuel Type
     0.8,                     !- Burner Efficiency
-    32000,                   !- Nominal Capacity {W}
+    32000.0,                 !- Nominal Capacity {W}
     Sys 1 SuppHeating Coil Air Inlet Node,  !- Air Inlet Node Name
     Zone 1 Inlet Node;       !- Air Outlet Node Name
 
@@ -1160,14 +1160,14 @@
   CondenserLoop,
     Condenser Loop,          !- Name
     UserDefinedFluidType,    !- Fluid Type
-    PropyleneGlycol70Percent,!- User Defined Fluid Type
+    PropyleneGlycol70Percent,  !- User Defined Fluid Type
     Loop Operation,          !- Condenser Equipment Operation Scheme Name
     Condenser Supply Outlet Node,  !- Condenser Loop Temperature Setpoint Node Name
-    80,                      !- Maximum Loop Temperature {C}
-    -30,                     !- Minimum Loop Temperature {C}
-    0.00400000,              !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    autocalculate,           !- Condenser Loop Volume {m3}
+    80.0,                    !- Maximum Loop Temperature {C}
+    -30.0,                   !- Minimum Loop Temperature {C}
+    0.004,                   !- Maximum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    Autocalculate,           !- Condenser Loop Volume {m3}
     Condenser Supply Inlet Node,  !- Condenser Side Inlet Node Name
     Condenser Supply Outlet Node,  !- Condenser Side Outlet Node Name
     Condenser Supply Side Branches,  !- Condenser Side Branch List Name
@@ -1178,7 +1178,7 @@
     Condenser Demand Side Connectors,  !- Condenser Demand Side Connector List Name
     SequentialLoad,          !- Load Distribution Scheme
     ,                        !- Pressure Simulation Type
-    20;                      !- Loop Circulation Time {minutes}
+    20.0;                    !- Loop Circulation Time {minutes}
 
   SetpointManager:Scheduled,
     Main Loop Setpoint Manager,  !- Name
@@ -1224,7 +1224,7 @@
     ,                        !- Pressure Drop Curve Name
     PipingSystem:Underground:PipeCircuit,  !- Component 1 Object Type
     My Pipe Circuit,         !- Component 1 Name
-    Piping System Inlet Node,!- Component 1 Inlet Node Name
+    Piping System Inlet Node,  !- Component 1 Inlet Node Name
     Piping System Outlet Node;  !- Component 1 Outlet Node Name
 
   Branch,
@@ -1244,12 +1244,12 @@
     Condenser Supply Outlet Branch,  !- Name
     ,                        !- Pressure Drop Curve Name
     Pipe:Adiabatic,          !- Component 1 Object Type
-    Condenser Supply Outlet, !- Component 1 Name
+    Condenser Supply Outlet,  !- Component 1 Name
     Condenser Supply Exit Pipe Inlet Node,  !- Component 1 Inlet Node Name
     Condenser Supply Outlet Node;  !- Component 1 Outlet Node Name
 
   Pipe:Adiabatic,
-    Condenser Supply Outlet, !- Name
+    Condenser Supply Outlet,  !- Name
     Condenser Supply Exit Pipe Inlet Node,  !- Inlet Node Name
     Condenser Supply Outlet Node;  !- Outlet Node Name
 
@@ -1390,17 +1390,17 @@
     Cond Circ Pump,          !- Name
     Condenser Supply Inlet Node,  !- Inlet Node Name
     Condenser Pump Outlet Node,  !- Outlet Node Name
-    .004,                    !- Design Maximum Flow Rate {m3/s}
-    5000,                    !- Design Pump Head {Pa}
-    25,                      !- Design Power Consumption {W}
-    .87,                     !- Motor Efficiency
+    0.004,                   !- Design Maximum Flow Rate {m3/s}
+    5000.0,                  !- Design Pump Head {Pa}
+    25.0,                    !- Design Power Consumption {W}
+    0.87,                    !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT;            !- Pump Control Type
+    0.0,                     !- Coefficient 1 of the Part Load Performance Curve
+    1.0,                     !- Coefficient 2 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 3 of the Part Load Performance Curve
+    0.0,                     !- Coefficient 4 of the Part Load Performance Curve
+    0.0,                     !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
 
   Curve:Quadratic,
     HPACCOOLPLFFPLR,         !- Name
@@ -1424,11 +1424,11 @@
 
   Output:VariableDictionary,IDF;
 
-  Output:Variable,*,Surface Other Side Conditions Modeled Convection Air Temperature,hourly;
+  Output:Variable,*,Surface Other Side Conditions Modeled Convection Air Temperature,Hourly;
 
-  Output:Variable,*,Zone Air Temperature,hourly;
+  Output:Variable,*,Zone Air Temperature,Hourly;
 
-  Output:Variable,*,Zone Predicted Sensible Load to Setpoint Heat Transfer Rate,hourly;
+  Output:Variable,*,Zone Predicted Sensible Load to Setpoint Heat Transfer Rate,Hourly;
 
   Output:Variable,*,System Node Temperature,Hourly;
 
@@ -1442,11 +1442,11 @@
 
   Output:Variable,*,Pipe Circuit Outlet Temperature,Hourly;
 
-  Output:Variable,*,Cooling Coil Total Cooling Rate,hourly;
+  Output:Variable,*,Cooling Coil Total Cooling Rate,Hourly;
 
-  Output:Variable,*,Cooling Coil Source Side Heat Transfer Rate,hourly;
+  Output:Variable,*,Cooling Coil Source Side Heat Transfer Rate,Hourly;
 
-  Output:Variable,*,Pump Mass Flow Rate,hourly;
+  Output:Variable,*,Pump Mass Flow Rate,Hourly;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
@@ -1463,11 +1463,10 @@
 
   FluidProperties:Name,
     PropyleneGlycol,         !- Fluid Name
-    GLYCOL;                  !- Fluid Type
+    Glycol;                  !- Fluid Type
 
   FluidProperties:GlycolConcentration,
-    PropyleneGlycol70Percent,!- Name
+    PropyleneGlycol70Percent,  !- Name
     PropyleneGlycol,         !- Glycol Type
     ,                        !- User Defined Glycol Name
     0.7;                     !- Glycol Concentration
-

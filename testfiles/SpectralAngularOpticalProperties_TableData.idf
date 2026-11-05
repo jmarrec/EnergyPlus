@@ -126,11 +126,11 @@
 
   Building,
     Small Office,            !- Name
-    0,                       !- North Axis {deg}
+    0.0,                     !- North Axis {deg}
     Suburbs,                 !- Terrain
     0.001,                   !- Loads Convergence Tolerance Value {W}
-    0.0050000,               !- Temperature Convergence Tolerance Value {deltaC}
-    FullInteriorAndExterior, !- Solar Distribution
+    0.005,                   !- Temperature Convergence Tolerance Value {deltaC}
+    FullInteriorAndExterior,  !- Solar Distribution
     25,                      !- Maximum Number of Warmup Days
     6;                       !- Minimum Number of Warmup Days
 
@@ -146,13 +146,7 @@
     No,                      !- Report Debugging Data
     No;                      !- Report During Warmup
 
-  ZoneCapacitanceMultiplier:ResearchSpecial,
-    Multiplier,              !- Name
-    ,                        !- Zone or ZoneList Name
-    1.0,                     !- Temperature Capacity Multiplier
-    1.0,                     !- Humidity Capacity Multiplier
-    1.0,                     !- Carbon Dioxide Capacity Multiplier
-    ;                        !- Generic Contaminant Capacity Multiplier
+  ZoneCapacitanceMultiplier:ResearchSpecial,Multiplier,,1.0,1.0,1.0;
 
   SimulationControl,
     No,                      !- Do Zone Sizing Calculation
@@ -197,8 +191,8 @@
     CHICAGO_IL_USA TMY2-94846,  !- Name
     41.78,                   !- Latitude {deg}
     -87.75,                  !- Longitude {deg}
-    -6.00,                   !- Time Zone {hr}
-    190.00;                  !- Elevation {m}
+    -6.0,                    !- Time Zone {hr}
+    190.0;                   !- Elevation {m}
 
 ! CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
 
@@ -211,15 +205,15 @@
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
+    270.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -241,15 +235,15 @@
     10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
+    WetBulb,                 !- Humidity Condition Type
     23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    99063.,                  !- Barometric Pressure {Pa}
+    99063.0,                 !- Barometric Pressure {Pa}
     5.3,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
+    230.0,                   !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -260,18 +254,18 @@
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
     1.0;                     !- Sky Clearness
 
-  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.30,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.20;
+  Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.3,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.2;
 
   Material,
     A1 - 1 IN STUCCO,        !- Name
     Smooth,                  !- Roughness
-    2.5389841E-02,           !- Thickness {m}
+    0.025389841,             !- Thickness {m}
     0.6918309,               !- Conductivity {W/m-K}
     1858.142,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     C4 - 4 IN COMMON BRICK,  !- Name
@@ -279,21 +273,21 @@
     0.1014984,               !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1922.216,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7600000,               !- Solar Absorptance
-    0.7600000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.76,                    !- Solar Absorptance
+    0.76;                    !- Visible Absorptance
 
   Material,
     E1 - 3 / 4 IN PLASTER OR GYP BOARD,  !- Name
     Smooth,                  !- Roughness
-    1.9050000E-02,           !- Thickness {m}
+    0.01905,                 !- Thickness {m}
     0.7264224,               !- Conductivity {W/m-K}
     1601.846,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   Material,
     C6 - 8 IN CLAY TILE,     !- Name
@@ -301,10 +295,10 @@
     0.2033016,               !- Thickness {m}
     0.5707605,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.8200000,               !- Solar Absorptance
-    0.8200000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.82,                    !- Solar Absorptance
+    0.82;                    !- Visible Absorptance
 
   Material,
     C10 - 8 IN HW CONCRETE,  !- Name
@@ -312,65 +306,65 @@
     0.2033016,               !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     E2 - 1 / 2 IN SLAG OR STONE,  !- Name
     Rough,                   !- Roughness
-    1.2710161E-02,           !- Thickness {m}
+    0.012710161,             !- Thickness {m}
     1.435549,                !- Conductivity {W/m-K}
     881.0155,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5500000,               !- Solar Absorptance
-    0.5500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.55,                    !- Solar Absorptance
+    0.55;                    !- Visible Absorptance
 
   Material,
     E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
     Rough,                   !- Roughness
-    9.5402403E-03,           !- Thickness {m}
+    0.0095402403,            !- Thickness {m}
     0.1902535,               !- Conductivity {W/m-K}
     1121.292,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+    1673.6,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.75,                    !- Solar Absorptance
+    0.75;                    !- Visible Absorptance
 
   Material,
     B5 - 1 IN DENSE INSULATION,  !- Name
     VeryRough,               !- Roughness
-    2.5389841E-02,           !- Thickness {m}
-    4.3239430E-02,           !- Conductivity {W/m-K}
+    0.025389841,             !- Thickness {m}
+    0.04323943,              !- Conductivity {W/m-K}
     91.30524,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
 
   Material,
     C12 - 2 IN HW CONCRETE,  !- Name
     MediumRough,             !- Roughness
-    5.0901599E-02,           !- Thickness {m}
+    0.050901599,             !- Thickness {m}
     1.729577,                !- Conductivity {W/m-K}
     2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
 
   Material,
     1.375in-Solid-Core,      !- Name
     Smooth,                  !- Roughness
-    3.4925E-02,              !- Thickness {m}
-    0.1525000,               !- Conductivity {W/m-K}
-    614.5000,                !- Density {kg/m3}
-    1630.0000,               !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.9200000,               !- Solar Absorptance
-    0.9200000;               !- Visible Absorptance
+    0.034925,                !- Thickness {m}
+    0.1525,                  !- Conductivity {W/m-K}
+    614.5,                   !- Density {kg/m3}
+    1630.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.92,                    !- Solar Absorptance
+    0.92;                    !- Visible Absorptance
 
   WindowMaterial:Glazing,
     SPECTRAL GLASS INNER PANE,  !- Name
@@ -422,113 +416,113 @@
     ,                        !- External File Name
     ,                        !- External File Column Number
     ,                        !- External File Starting Row Number
-    .00000,                  !- Value 1
-    90.00000;                !- Value 2
+    0.0,                     !- Value 1
+    90.0;                    !- Value 2
 
   Table:IndependentVariable,
     Wavelengths,             !- Name
     Linear,                  !- Interpolation Method
     Constant,                !- Extrapolation Method
-    0.30,                    !- Minimum Value
-    2.50,                    !- Maximum Value
+    0.3,                     !- Minimum Value
+    2.5,                     !- Maximum Value
     ,                        !- Normalization Reference Value
     Dimensionless,           !- Unit Type
     ,                        !- External File Name
     ,                        !- External File Column Number
     ,                        !- External File Starting Row Number
-    .30000,                  !- Value 1
-    .31000,                  !- Value 2
-    .32000,                  !- <none>
-    .33000,                  !- <none>
-    .34000,                  !- <none>
-    .35000,                  !- <none>
-    .36000,                  !- <none>
-    .37000,                  !- <none>
-    .38000,                  !- <none>
-    .39000,                  !- <none>
-    .40000,                  !- <none>
-    .41000,                  !- <none>
-    .42000,                  !- <none>
-    .43000,                  !- <none>
-    .44000,                  !- <none>
-    .45000,                  !- <none>
-    .46000,                  !- <none>
-    .47000,                  !- <none>
-    .48000,                  !- <none>
-    .49000,                  !- <none>
-    .50000,                  !- <none>
-    .51000,                  !- <none>
-    .52000,                  !- <none>
-    .53000,                  !- <none>
-    .54000,                  !- <none>
-    .55000,                  !- <none>
-    .56000,                  !- <none>
-    .57000,                  !- <none>
-    .58000,                  !- <none>
-    .59000,                  !- <none>
-    .60000,                  !- <none>
-    .61000,                  !- <none>
-    .62000,                  !- <none>
-    .63000,                  !- <none>
-    .64000,                  !- <none>
-    .65000,                  !- <none>
-    .66000,                  !- <none>
-    .67000,                  !- <none>
-    .68000,                  !- <none>
-    .69000,                  !- <none>
-    .70000,                  !- <none>
-    .71000,                  !- <none>
-    .72000,                  !- <none>
-    .73000,                  !- <none>
-    .74000,                  !- <none>
-    .75000,                  !- <none>
-    .76000,                  !- <none>
-    .77000,                  !- <none>
-    .78000,                  !- <none>
-    .79000,                  !- <none>
-    .80000,                  !- <none>
-    .81000,                  !- <none>
-    .82000,                  !- <none>
-    .83000,                  !- <none>
-    .84000,                  !- <none>
-    .85000,                  !- <none>
-    .86000,                  !- <none>
-    .87000,                  !- <none>
-    .88000,                  !- <none>
-    .89000,                  !- <none>
-    .90000,                  !- <none>
-    .95000,                  !- <none>
-    1.00000,                 !- <none>
-    1.05000,                 !- <none>
-    1.10000,                 !- <none>
-    1.15000,                 !- <none>
-    1.20000,                 !- <none>
-    1.25000,                 !- <none>
-    1.30000,                 !- <none>
-    1.35000,                 !- <none>
-    1.40000,                 !- <none>
-    1.45000,                 !- <none>
-    1.50000,                 !- <none>
-    1.55000,                 !- <none>
-    1.60000,                 !- <none>
-    1.65000,                 !- <none>
-    1.70000,                 !- <none>
-    1.75000,                 !- <none>
-    1.80000,                 !- <none>
-    1.85000,                 !- <none>
-    1.90000,                 !- <none>
-    1.95000,                 !- <none>
-    2.00000,                 !- <none>
-    2.05000,                 !- <none>
-    2.10000,                 !- <none>
-    2.15000,                 !- <none>
-    2.20000,                 !- <none>
-    2.25000,                 !- <none>
-    2.30000,                 !- <none>
-    2.35000,                 !- <none>
-    2.40000,                 !- <none>
-    2.45000,                 !- <none>
-    2.50000;                 !- <none>
+    0.3,                     !- Value 1
+    0.31,                    !- Value 2
+    0.32,                    !- Value 3
+    0.33,                    !- Value 4
+    0.34,                    !- Value 5
+    0.35,                    !- Value 6
+    0.36,                    !- Value 7
+    0.37,                    !- Value 8
+    0.38,                    !- Value 9
+    0.39,                    !- Value 10
+    0.4,                     !- Value 11
+    0.41,                    !- Value 12
+    0.42,                    !- Value 13
+    0.43,                    !- Value 14
+    0.44,                    !- Value 15
+    0.45,                    !- Value 16
+    0.46,                    !- Value 17
+    0.47,                    !- Value 18
+    0.48,                    !- Value 19
+    0.49,                    !- Value 20
+    0.5,                     !- Value 21
+    0.51,                    !- Value 22
+    0.52,                    !- Value 23
+    0.53,                    !- Value 24
+    0.54,                    !- Value 25
+    0.55,                    !- Value 26
+    0.56,                    !- Value 27
+    0.57,                    !- Value 28
+    0.58,                    !- Value 29
+    0.59,                    !- Value 30
+    0.6,                     !- Value 31
+    0.61,                    !- Value 32
+    0.62,                    !- Value 33
+    0.63,                    !- Value 34
+    0.64,                    !- Value 35
+    0.65,                    !- Value 36
+    0.66,                    !- Value 37
+    0.67,                    !- Value 38
+    0.68,                    !- Value 39
+    0.69,                    !- Value 40
+    0.7,                     !- Value 41
+    0.71,                    !- Value 42
+    0.72,                    !- Value 43
+    0.73,                    !- Value 44
+    0.74,                    !- Value 45
+    0.75,                    !- Value 46
+    0.76,                    !- Value 47
+    0.77,                    !- Value 48
+    0.78,                    !- Value 49
+    0.79,                    !- Value 50
+    0.8,                     !- Value 51
+    0.81,                    !- Value 52
+    0.82,                    !- Value 53
+    0.83,                    !- Value 54
+    0.84,                    !- Value 55
+    0.85,                    !- Value 56
+    0.86,                    !- Value 57
+    0.87,                    !- Value 58
+    0.88,                    !- Value 59
+    0.89,                    !- Value 60
+    0.9,                     !- Value 61
+    0.95,                    !- Value 62
+    1.0,                     !- Value 63
+    1.05,                    !- Value 64
+    1.1,                     !- Value 65
+    1.15,                    !- Value 66
+    1.2,                     !- Value 67
+    1.25,                    !- Value 68
+    1.3,                     !- Value 69
+    1.35,                    !- Value 70
+    1.4,                     !- Value 71
+    1.45,                    !- Value 72
+    1.5,                     !- Value 73
+    1.55,                    !- Value 74
+    1.6,                     !- Value 75
+    1.65,                    !- Value 76
+    1.7,                     !- Value 77
+    1.75,                    !- Value 78
+    1.8,                     !- Value 79
+    1.85,                    !- Value 80
+    1.9,                     !- Value 81
+    1.95,                    !- Value 82
+    2.0,                     !- Value 83
+    2.05,                    !- Value 84
+    2.1,                     !- Value 85
+    2.15,                    !- Value 86
+    2.2,                     !- Value 87
+    2.25,                    !- Value 88
+    2.3,                     !- Value 89
+    2.35,                    !- Value 90
+    2.4,                     !- Value 91
+    2.45,                    !- Value 92
+    2.5;                     !- Value 93
 
   Table:IndependentVariableList,
     Spectral and Angular Data,  !- Name
@@ -546,192 +540,192 @@
     ,                        !- External File Name
     ,                        !- External File Column Number
     ,                        !- External File Starting Row Number
-    0.00100,                 !- Output Value 1
-    0.00100,                 !- Output Value 2
-    0.00100,                 !- <none>
-    0.00100,                 !- <none>
-    0.00100,                 !- <none>
-    0.00100,                 !- <none>
-    0.00900,                 !- <none>
-    0.12000,                 !- <none>
-    0.49200,                 !- <none>
-    0.78200,                 !- <none>
-    0.85600,                 !- <none>
-    0.85800,                 !- <none>
-    0.85800,                 !- <none>
-    0.86000,                 !- <none>
-    0.86100,                 !- <none>
-    0.87100,                 !- <none>
-    0.88000,                 !- <none>
-    0.88300,                 !- <none>
-    0.88700,                 !- <none>
-    0.89000,                 !- <none>
-    0.89000,                 !- <none>
-    0.89100,                 !- <none>
-    0.88700,                 !- <none>
-    0.89000,                 !- <none>
-    0.88300,                 !- <none>
-    0.88800,                 !- <none>
-    0.88200,                 !- <none>
-    0.88100,                 !- <none>
-    0.86500,                 !- <none>
-    0.85800,                 !- <none>
-    0.86500,                 !- <none>
-    0.85600,                 !- <none>
-    0.84500,                 !- <none>
-    0.83700,                 !- <none>
-    0.82700,                 !- <none>
-    0.82000,                 !- <none>
-    0.80700,                 !- <none>
-    0.79800,                 !- <none>
-    0.79100,                 !- <none>
-    0.78100,                 !- <none>
-    0.76800,                 !- <none>
-    0.76100,                 !- <none>
-    0.74400,                 !- <none>
-    0.71300,                 !- <none>
-    0.70300,                 !- <none>
-    0.69400,                 !- <none>
-    0.68500,                 !- <none>
-    0.67500,                 !- <none>
-    0.66700,                 !- <none>
-    0.65500,                 !- <none>
-    0.64600,                 !- <none>
-    0.63800,                 !- <none>
-    0.62900,                 !- <none>
-    0.62300,                 !- <none>
-    0.61400,                 !- <none>
-    0.60800,                 !- <none>
-    0.60100,                 !- <none>
-    0.59700,                 !- <none>
-    0.59200,                 !- <none>
-    0.58700,                 !- <none>
-    0.58200,                 !- <none>
-    0.56800,                 !- <none>
-    0.56200,                 !- <none>
-    0.55600,                 !- <none>
-    0.56300,                 !- <none>
-    0.55600,                 !- <none>
-    0.54700,                 !- <none>
-    0.57700,                 !- <none>
-    0.59800,                 !- <none>
-    0.60800,                 !- <none>
-    0.60300,                 !- <none>
-    0.61400,                 !- <none>
-    0.64800,                 !- <none>
-    0.68000,                 !- <none>
-    0.69900,                 !- <none>
-    0.70600,                 !- <none>
-    0.57000,                 !- <none>
-    0.58500,                 !- <none>
-    0.63700,                 !- <none>
-    0.65500,                 !- <none>
-    0.63700,                 !- <none>
-    0.63400,                 !- <none>
-    0.63400,                 !- <none>
-    0.58600,                 !- <none>
-    0.58800,                 !- <none>
-    0.59700,                 !- <none>
-    0.57600,                 !- <none>
-    0.40400,                 !- <none>
-    0.17900,                 !- <none>
-    0.21900,                 !- <none>
-    0.24000,                 !- <none>
-    0.20000,                 !- <none>
-    0.21400,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000,                 !- <none>
-    0.00000;                 !- <none>
+    0.001,                   !- Output Value 1
+    0.001,                   !- Output Value 2
+    0.001,                   !- Output Value 3
+    0.001,                   !- Output Value 4
+    0.001,                   !- Output Value 5
+    0.001,                   !- Output Value 6
+    0.009,                   !- Output Value 7
+    0.12,                    !- Output Value 8
+    0.492,                   !- Output Value 9
+    0.782,                   !- Output Value 10
+    0.856,                   !- Output Value 11
+    0.858,                   !- Output Value 12
+    0.858,                   !- Output Value 13
+    0.86,                    !- Output Value 14
+    0.861,                   !- Output Value 15
+    0.871,                   !- Output Value 16
+    0.88,                    !- Output Value 17
+    0.883,                   !- Output Value 18
+    0.887,                   !- Output Value 19
+    0.89,                    !- Output Value 20
+    0.89,                    !- Output Value 21
+    0.891,                   !- Output Value 22
+    0.887,                   !- Output Value 23
+    0.89,                    !- Output Value 24
+    0.883,                   !- Output Value 25
+    0.888,                   !- Output Value 26
+    0.882,                   !- Output Value 27
+    0.881,                   !- Output Value 28
+    0.865,                   !- Output Value 29
+    0.858,                   !- Output Value 30
+    0.865,                   !- Output Value 31
+    0.856,                   !- Output Value 32
+    0.845,                   !- Output Value 33
+    0.837,                   !- Output Value 34
+    0.827,                   !- Output Value 35
+    0.82,                    !- Output Value 36
+    0.807,                   !- Output Value 37
+    0.798,                   !- Output Value 38
+    0.791,                   !- Output Value 39
+    0.781,                   !- Output Value 40
+    0.768,                   !- Output Value 41
+    0.761,                   !- Output Value 42
+    0.744,                   !- Output Value 43
+    0.713,                   !- Output Value 44
+    0.703,                   !- Output Value 45
+    0.694,                   !- Output Value 46
+    0.685,                   !- Output Value 47
+    0.675,                   !- Output Value 48
+    0.667,                   !- Output Value 49
+    0.655,                   !- Output Value 50
+    0.646,                   !- Output Value 51
+    0.638,                   !- Output Value 52
+    0.629,                   !- Output Value 53
+    0.623,                   !- Output Value 54
+    0.614,                   !- Output Value 55
+    0.608,                   !- Output Value 56
+    0.601,                   !- Output Value 57
+    0.597,                   !- Output Value 58
+    0.592,                   !- Output Value 59
+    0.587,                   !- Output Value 60
+    0.582,                   !- Output Value 61
+    0.568,                   !- Output Value 62
+    0.562,                   !- Output Value 63
+    0.556,                   !- Output Value 64
+    0.563,                   !- Output Value 65
+    0.556,                   !- Output Value 66
+    0.547,                   !- Output Value 67
+    0.577,                   !- Output Value 68
+    0.598,                   !- Output Value 69
+    0.608,                   !- Output Value 70
+    0.603,                   !- Output Value 71
+    0.614,                   !- Output Value 72
+    0.648,                   !- Output Value 73
+    0.68,                    !- Output Value 74
+    0.699,                   !- Output Value 75
+    0.706,                   !- Output Value 76
+    0.57,                    !- Output Value 77
+    0.585,                   !- Output Value 78
+    0.637,                   !- Output Value 79
+    0.655,                   !- Output Value 80
+    0.637,                   !- Output Value 81
+    0.634,                   !- Output Value 82
+    0.634,                   !- Output Value 83
+    0.586,                   !- Output Value 84
+    0.588,                   !- Output Value 85
+    0.597,                   !- Output Value 86
+    0.576,                   !- Output Value 87
+    0.404,                   !- Output Value 88
+    0.179,                   !- Output Value 89
+    0.219,                   !- Output Value 90
+    0.24,                    !- Output Value 91
+    0.2,                     !- Output Value 92
+    0.214,                   !- Output Value 93
+    0.0,                     !- Output Value 94
+    0.0,                     !- Output Value 95
+    0.0,                     !- Output Value 96
+    0.0,                     !- Output Value 97
+    0.0,                     !- Output Value 98
+    0.0,                     !- Output Value 99
+    0.0,                     !- Output Value 100
+    0.0,                     !- Output Value 101
+    0.0,                     !- Output Value 102
+    0.0,                     !- Output Value 103
+    0.0,                     !- Output Value 104
+    0.0,                     !- Output Value 105
+    0.0,                     !- Output Value 106
+    0.0,                     !- Output Value 107
+    0.0,                     !- Output Value 108
+    0.0,                     !- Output Value 109
+    0.0,                     !- Output Value 110
+    0.0,                     !- Output Value 111
+    0.0,                     !- Output Value 112
+    0.0,                     !- Output Value 113
+    0.0,                     !- Output Value 114
+    0.0,                     !- Output Value 115
+    0.0,                     !- Output Value 116
+    0.0,                     !- Output Value 117
+    0.0,                     !- Output Value 118
+    0.0,                     !- Output Value 119
+    0.0,                     !- Output Value 120
+    0.0,                     !- Output Value 121
+    0.0,                     !- Output Value 122
+    0.0,                     !- Output Value 123
+    0.0,                     !- Output Value 124
+    0.0,                     !- Output Value 125
+    0.0,                     !- Output Value 126
+    0.0,                     !- Output Value 127
+    0.0,                     !- Output Value 128
+    0.0,                     !- Output Value 129
+    0.0,                     !- Output Value 130
+    0.0,                     !- Output Value 131
+    0.0,                     !- Output Value 132
+    0.0,                     !- Output Value 133
+    0.0,                     !- Output Value 134
+    0.0,                     !- Output Value 135
+    0.0,                     !- Output Value 136
+    0.0,                     !- Output Value 137
+    0.0,                     !- Output Value 138
+    0.0,                     !- Output Value 139
+    0.0,                     !- Output Value 140
+    0.0,                     !- Output Value 141
+    0.0,                     !- Output Value 142
+    0.0,                     !- Output Value 143
+    0.0,                     !- Output Value 144
+    0.0,                     !- Output Value 145
+    0.0,                     !- Output Value 146
+    0.0,                     !- Output Value 147
+    0.0,                     !- Output Value 148
+    0.0,                     !- Output Value 149
+    0.0,                     !- Output Value 150
+    0.0,                     !- Output Value 151
+    0.0,                     !- Output Value 152
+    0.0,                     !- Output Value 153
+    0.0,                     !- Output Value 154
+    0.0,                     !- Output Value 155
+    0.0,                     !- Output Value 156
+    0.0,                     !- Output Value 157
+    0.0,                     !- Output Value 158
+    0.0,                     !- Output Value 159
+    0.0,                     !- Output Value 160
+    0.0,                     !- Output Value 161
+    0.0,                     !- Output Value 162
+    0.0,                     !- Output Value 163
+    0.0,                     !- Output Value 164
+    0.0,                     !- Output Value 165
+    0.0,                     !- Output Value 166
+    0.0,                     !- Output Value 167
+    0.0,                     !- Output Value 168
+    0.0,                     !- Output Value 169
+    0.0,                     !- Output Value 170
+    0.0,                     !- Output Value 171
+    0.0,                     !- Output Value 172
+    0.0,                     !- Output Value 173
+    0.0,                     !- Output Value 174
+    0.0,                     !- Output Value 175
+    0.0,                     !- Output Value 176
+    0.0,                     !- Output Value 177
+    0.0,                     !- Output Value 178
+    0.0,                     !- Output Value 179
+    0.0,                     !- Output Value 180
+    0.0,                     !- Output Value 181
+    0.0,                     !- Output Value 182
+    0.0,                     !- Output Value 183
+    0.0,                     !- Output Value 184
+    0.0,                     !- Output Value 185
+    0.0;                     !- Output Value 186
 
   Table:Lookup,
     FrontReflectanceData,    !- Name
@@ -744,192 +738,192 @@
     ,                        !- External File Name
     ,                        !- External File Column Number
     ,                        !- External File Starting Row Number
-    0.04500,                 !- Output Value 1
-    0.04400,                 !- Output Value 2
-    0.04400,                 !- <none>
-    0.04200,                 !- <none>
-    0.04100,                 !- <none>
-    0.04000,                 !- <none>
-    0.04000,                 !- <none>
-    0.04000,                 !- <none>
-    0.05100,                 !- <none>
-    0.07000,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07600,                 !- <none>
-    0.07500,                 !- <none>
-    0.07600,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07400,                 !- <none>
-    0.07400,                 !- <none>
-    0.07400,                 !- <none>
-    0.07400,                 !- <none>
-    0.07100,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.06900,                 !- <none>
-    0.06700,                 !- <none>
-    0.06700,                 !- <none>
-    0.06500,                 !- <none>
-    0.06500,                 !- <none>
-    0.06500,                 !- <none>
-    0.06400,                 !- <none>
-    0.06400,                 !- <none>
-    0.06200,                 !- <none>
-    0.06400,                 !- <none>
-    0.06200,                 !- <none>
-    0.06100,                 !- <none>
-    0.06100,                 !- <none>
-    0.06000,                 !- <none>
-    0.06000,                 !- <none>
-    0.06000,                 !- <none>
-    0.05900,                 !- <none>
-    0.05900,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05600,                 !- <none>
-    0.05600,                 !- <none>
-    0.05500,                 !- <none>
-    0.05400,                 !- <none>
-    0.05400,                 !- <none>
-    0.05400,                 !- <none>
-    0.05500,                 !- <none>
-    0.05100,                 !- <none>
-    0.05100,                 !- <none>
-    0.05000,                 !- <none>
-    0.05100,                 !- <none>
-    0.05000,                 !- <none>
-    0.05000,                 !- <none>
-    0.05100,                 !- <none>
-    0.05400,                 !- <none>
-    0.05500,                 !- <none>
-    0.05200,                 !- <none>
-    0.05500,                 !- <none>
-    0.05700,                 !- <none>
-    0.05900,                 !- <none>
-    0.06000,                 !- <none>
-    0.06000,                 !- <none>
-    0.05100,                 !- <none>
-    0.05100,                 !- <none>
-    0.05500,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05200,                 !- <none>
-    0.05400,                 !- <none>
-    0.05400,                 !- <none>
-    0.05100,                 !- <none>
-    0.04500,                 !- <none>
-    0.03700,                 !- <none>
-    0.03700,                 !- <none>
-    0.03900,                 !- <none>
-    0.04000,                 !- <none>
-    0.03900,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000;                 !- <none>
+    0.045,                   !- Output Value 1
+    0.044,                   !- Output Value 2
+    0.044,                   !- Output Value 3
+    0.042,                   !- Output Value 4
+    0.041,                   !- Output Value 5
+    0.04,                    !- Output Value 6
+    0.04,                    !- Output Value 7
+    0.04,                    !- Output Value 8
+    0.051,                   !- Output Value 9
+    0.07,                    !- Output Value 10
+    0.075,                   !- Output Value 11
+    0.075,                   !- Output Value 12
+    0.075,                   !- Output Value 13
+    0.075,                   !- Output Value 14
+    0.075,                   !- Output Value 15
+    0.075,                   !- Output Value 16
+    0.076,                   !- Output Value 17
+    0.075,                   !- Output Value 18
+    0.076,                   !- Output Value 19
+    0.075,                   !- Output Value 20
+    0.075,                   !- Output Value 21
+    0.075,                   !- Output Value 22
+    0.075,                   !- Output Value 23
+    0.075,                   !- Output Value 24
+    0.074,                   !- Output Value 25
+    0.074,                   !- Output Value 26
+    0.074,                   !- Output Value 27
+    0.074,                   !- Output Value 28
+    0.071,                   !- Output Value 29
+    0.07,                    !- Output Value 30
+    0.07,                    !- Output Value 31
+    0.07,                    !- Output Value 32
+    0.07,                    !- Output Value 33
+    0.07,                    !- Output Value 34
+    0.069,                   !- Output Value 35
+    0.067,                   !- Output Value 36
+    0.067,                   !- Output Value 37
+    0.065,                   !- Output Value 38
+    0.065,                   !- Output Value 39
+    0.065,                   !- Output Value 40
+    0.064,                   !- Output Value 41
+    0.064,                   !- Output Value 42
+    0.062,                   !- Output Value 43
+    0.064,                   !- Output Value 44
+    0.062,                   !- Output Value 45
+    0.061,                   !- Output Value 46
+    0.061,                   !- Output Value 47
+    0.06,                    !- Output Value 48
+    0.06,                    !- Output Value 49
+    0.06,                    !- Output Value 50
+    0.059,                   !- Output Value 51
+    0.059,                   !- Output Value 52
+    0.057,                   !- Output Value 53
+    0.057,                   !- Output Value 54
+    0.056,                   !- Output Value 55
+    0.056,                   !- Output Value 56
+    0.055,                   !- Output Value 57
+    0.054,                   !- Output Value 58
+    0.054,                   !- Output Value 59
+    0.054,                   !- Output Value 60
+    0.055,                   !- Output Value 61
+    0.051,                   !- Output Value 62
+    0.051,                   !- Output Value 63
+    0.05,                    !- Output Value 64
+    0.051,                   !- Output Value 65
+    0.05,                    !- Output Value 66
+    0.05,                    !- Output Value 67
+    0.051,                   !- Output Value 68
+    0.054,                   !- Output Value 69
+    0.055,                   !- Output Value 70
+    0.052,                   !- Output Value 71
+    0.055,                   !- Output Value 72
+    0.057,                   !- Output Value 73
+    0.059,                   !- Output Value 74
+    0.06,                    !- Output Value 75
+    0.06,                    !- Output Value 76
+    0.051,                   !- Output Value 77
+    0.051,                   !- Output Value 78
+    0.055,                   !- Output Value 79
+    0.057,                   !- Output Value 80
+    0.057,                   !- Output Value 81
+    0.057,                   !- Output Value 82
+    0.057,                   !- Output Value 83
+    0.052,                   !- Output Value 84
+    0.054,                   !- Output Value 85
+    0.054,                   !- Output Value 86
+    0.051,                   !- Output Value 87
+    0.045,                   !- Output Value 88
+    0.037,                   !- Output Value 89
+    0.037,                   !- Output Value 90
+    0.039,                   !- Output Value 91
+    0.04,                    !- Output Value 92
+    0.039,                   !- Output Value 93
+    1.0,                     !- Output Value 94
+    1.0,                     !- Output Value 95
+    1.0,                     !- Output Value 96
+    1.0,                     !- Output Value 97
+    1.0,                     !- Output Value 98
+    1.0,                     !- Output Value 99
+    1.0,                     !- Output Value 100
+    1.0,                     !- Output Value 101
+    1.0,                     !- Output Value 102
+    1.0,                     !- Output Value 103
+    1.0,                     !- Output Value 104
+    1.0,                     !- Output Value 105
+    1.0,                     !- Output Value 106
+    1.0,                     !- Output Value 107
+    1.0,                     !- Output Value 108
+    1.0,                     !- Output Value 109
+    1.0,                     !- Output Value 110
+    1.0,                     !- Output Value 111
+    1.0,                     !- Output Value 112
+    1.0,                     !- Output Value 113
+    1.0,                     !- Output Value 114
+    1.0,                     !- Output Value 115
+    1.0,                     !- Output Value 116
+    1.0,                     !- Output Value 117
+    1.0,                     !- Output Value 118
+    1.0,                     !- Output Value 119
+    1.0,                     !- Output Value 120
+    1.0,                     !- Output Value 121
+    1.0,                     !- Output Value 122
+    1.0,                     !- Output Value 123
+    1.0,                     !- Output Value 124
+    1.0,                     !- Output Value 125
+    1.0,                     !- Output Value 126
+    1.0,                     !- Output Value 127
+    1.0,                     !- Output Value 128
+    1.0,                     !- Output Value 129
+    1.0,                     !- Output Value 130
+    1.0,                     !- Output Value 131
+    1.0,                     !- Output Value 132
+    1.0,                     !- Output Value 133
+    1.0,                     !- Output Value 134
+    1.0,                     !- Output Value 135
+    1.0,                     !- Output Value 136
+    1.0,                     !- Output Value 137
+    1.0,                     !- Output Value 138
+    1.0,                     !- Output Value 139
+    1.0,                     !- Output Value 140
+    1.0,                     !- Output Value 141
+    1.0,                     !- Output Value 142
+    1.0,                     !- Output Value 143
+    1.0,                     !- Output Value 144
+    1.0,                     !- Output Value 145
+    1.0,                     !- Output Value 146
+    1.0,                     !- Output Value 147
+    1.0,                     !- Output Value 148
+    1.0,                     !- Output Value 149
+    1.0,                     !- Output Value 150
+    1.0,                     !- Output Value 151
+    1.0,                     !- Output Value 152
+    1.0,                     !- Output Value 153
+    1.0,                     !- Output Value 154
+    1.0,                     !- Output Value 155
+    1.0,                     !- Output Value 156
+    1.0,                     !- Output Value 157
+    1.0,                     !- Output Value 158
+    1.0,                     !- Output Value 159
+    1.0,                     !- Output Value 160
+    1.0,                     !- Output Value 161
+    1.0,                     !- Output Value 162
+    1.0,                     !- Output Value 163
+    1.0,                     !- Output Value 164
+    1.0,                     !- Output Value 165
+    1.0,                     !- Output Value 166
+    1.0,                     !- Output Value 167
+    1.0,                     !- Output Value 168
+    1.0,                     !- Output Value 169
+    1.0,                     !- Output Value 170
+    1.0,                     !- Output Value 171
+    1.0,                     !- Output Value 172
+    1.0,                     !- Output Value 173
+    1.0,                     !- Output Value 174
+    1.0,                     !- Output Value 175
+    1.0,                     !- Output Value 176
+    1.0,                     !- Output Value 177
+    1.0,                     !- Output Value 178
+    1.0,                     !- Output Value 179
+    1.0,                     !- Output Value 180
+    1.0,                     !- Output Value 181
+    1.0,                     !- Output Value 182
+    1.0,                     !- Output Value 183
+    1.0,                     !- Output Value 184
+    1.0,                     !- Output Value 185
+    1.0;                     !- Output Value 186
 
   Table:Lookup,
     BackRefelectanceData,    !- Name
@@ -942,195 +936,195 @@
     ,                        !- External File Name
     ,                        !- External File Column Number
     ,                        !- External File Starting Row Number
-    0.04500,                 !- Output Value 1
-    0.04400,                 !- Output Value 2
-    0.04400,                 !- <none>
-    0.04200,                 !- <none>
-    0.04100,                 !- <none>
-    0.04000,                 !- <none>
-    0.04000,                 !- <none>
-    0.04000,                 !- <none>
-    0.05100,                 !- <none>
-    0.07000,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07600,                 !- <none>
-    0.07500,                 !- <none>
-    0.07600,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07500,                 !- <none>
-    0.07400,                 !- <none>
-    0.07400,                 !- <none>
-    0.07400,                 !- <none>
-    0.07400,                 !- <none>
-    0.07100,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.07000,                 !- <none>
-    0.06900,                 !- <none>
-    0.06700,                 !- <none>
-    0.06700,                 !- <none>
-    0.06500,                 !- <none>
-    0.06500,                 !- <none>
-    0.06500,                 !- <none>
-    0.06400,                 !- <none>
-    0.06400,                 !- <none>
-    0.06200,                 !- <none>
-    0.06400,                 !- <none>
-    0.06200,                 !- <none>
-    0.06100,                 !- <none>
-    0.06100,                 !- <none>
-    0.06000,                 !- <none>
-    0.06000,                 !- <none>
-    0.06000,                 !- <none>
-    0.05900,                 !- <none>
-    0.05900,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05600,                 !- <none>
-    0.05600,                 !- <none>
-    0.05500,                 !- <none>
-    0.05400,                 !- <none>
-    0.05400,                 !- <none>
-    0.05400,                 !- <none>
-    0.05500,                 !- <none>
-    0.05100,                 !- <none>
-    0.05100,                 !- <none>
-    0.05000,                 !- <none>
-    0.05100,                 !- <none>
-    0.05000,                 !- <none>
-    0.05000,                 !- <none>
-    0.05100,                 !- <none>
-    0.05400,                 !- <none>
-    0.05500,                 !- <none>
-    0.05200,                 !- <none>
-    0.05500,                 !- <none>
-    0.05700,                 !- <none>
-    0.05900,                 !- <none>
-    0.06000,                 !- <none>
-    0.06000,                 !- <none>
-    0.05100,                 !- <none>
-    0.05100,                 !- <none>
-    0.05500,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05700,                 !- <none>
-    0.05200,                 !- <none>
-    0.05400,                 !- <none>
-    0.05400,                 !- <none>
-    0.05100,                 !- <none>
-    0.04500,                 !- <none>
-    0.03700,                 !- <none>
-    0.03700,                 !- <none>
-    0.03900,                 !- <none>
-    0.04000,                 !- <none>
-    0.03900,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000,                 !- <none>
-    1.00000;                 !- <none>
+    0.045,                   !- Output Value 1
+    0.044,                   !- Output Value 2
+    0.044,                   !- Output Value 3
+    0.042,                   !- Output Value 4
+    0.041,                   !- Output Value 5
+    0.04,                    !- Output Value 6
+    0.04,                    !- Output Value 7
+    0.04,                    !- Output Value 8
+    0.051,                   !- Output Value 9
+    0.07,                    !- Output Value 10
+    0.075,                   !- Output Value 11
+    0.075,                   !- Output Value 12
+    0.075,                   !- Output Value 13
+    0.075,                   !- Output Value 14
+    0.075,                   !- Output Value 15
+    0.075,                   !- Output Value 16
+    0.076,                   !- Output Value 17
+    0.075,                   !- Output Value 18
+    0.076,                   !- Output Value 19
+    0.075,                   !- Output Value 20
+    0.075,                   !- Output Value 21
+    0.075,                   !- Output Value 22
+    0.075,                   !- Output Value 23
+    0.075,                   !- Output Value 24
+    0.074,                   !- Output Value 25
+    0.074,                   !- Output Value 26
+    0.074,                   !- Output Value 27
+    0.074,                   !- Output Value 28
+    0.071,                   !- Output Value 29
+    0.07,                    !- Output Value 30
+    0.07,                    !- Output Value 31
+    0.07,                    !- Output Value 32
+    0.07,                    !- Output Value 33
+    0.07,                    !- Output Value 34
+    0.069,                   !- Output Value 35
+    0.067,                   !- Output Value 36
+    0.067,                   !- Output Value 37
+    0.065,                   !- Output Value 38
+    0.065,                   !- Output Value 39
+    0.065,                   !- Output Value 40
+    0.064,                   !- Output Value 41
+    0.064,                   !- Output Value 42
+    0.062,                   !- Output Value 43
+    0.064,                   !- Output Value 44
+    0.062,                   !- Output Value 45
+    0.061,                   !- Output Value 46
+    0.061,                   !- Output Value 47
+    0.06,                    !- Output Value 48
+    0.06,                    !- Output Value 49
+    0.06,                    !- Output Value 50
+    0.059,                   !- Output Value 51
+    0.059,                   !- Output Value 52
+    0.057,                   !- Output Value 53
+    0.057,                   !- Output Value 54
+    0.056,                   !- Output Value 55
+    0.056,                   !- Output Value 56
+    0.055,                   !- Output Value 57
+    0.054,                   !- Output Value 58
+    0.054,                   !- Output Value 59
+    0.054,                   !- Output Value 60
+    0.055,                   !- Output Value 61
+    0.051,                   !- Output Value 62
+    0.051,                   !- Output Value 63
+    0.05,                    !- Output Value 64
+    0.051,                   !- Output Value 65
+    0.05,                    !- Output Value 66
+    0.05,                    !- Output Value 67
+    0.051,                   !- Output Value 68
+    0.054,                   !- Output Value 69
+    0.055,                   !- Output Value 70
+    0.052,                   !- Output Value 71
+    0.055,                   !- Output Value 72
+    0.057,                   !- Output Value 73
+    0.059,                   !- Output Value 74
+    0.06,                    !- Output Value 75
+    0.06,                    !- Output Value 76
+    0.051,                   !- Output Value 77
+    0.051,                   !- Output Value 78
+    0.055,                   !- Output Value 79
+    0.057,                   !- Output Value 80
+    0.057,                   !- Output Value 81
+    0.057,                   !- Output Value 82
+    0.057,                   !- Output Value 83
+    0.052,                   !- Output Value 84
+    0.054,                   !- Output Value 85
+    0.054,                   !- Output Value 86
+    0.051,                   !- Output Value 87
+    0.045,                   !- Output Value 88
+    0.037,                   !- Output Value 89
+    0.037,                   !- Output Value 90
+    0.039,                   !- Output Value 91
+    0.04,                    !- Output Value 92
+    0.039,                   !- Output Value 93
+    1.0,                     !- Output Value 94
+    1.0,                     !- Output Value 95
+    1.0,                     !- Output Value 96
+    1.0,                     !- Output Value 97
+    1.0,                     !- Output Value 98
+    1.0,                     !- Output Value 99
+    1.0,                     !- Output Value 100
+    1.0,                     !- Output Value 101
+    1.0,                     !- Output Value 102
+    1.0,                     !- Output Value 103
+    1.0,                     !- Output Value 104
+    1.0,                     !- Output Value 105
+    1.0,                     !- Output Value 106
+    1.0,                     !- Output Value 107
+    1.0,                     !- Output Value 108
+    1.0,                     !- Output Value 109
+    1.0,                     !- Output Value 110
+    1.0,                     !- Output Value 111
+    1.0,                     !- Output Value 112
+    1.0,                     !- Output Value 113
+    1.0,                     !- Output Value 114
+    1.0,                     !- Output Value 115
+    1.0,                     !- Output Value 116
+    1.0,                     !- Output Value 117
+    1.0,                     !- Output Value 118
+    1.0,                     !- Output Value 119
+    1.0,                     !- Output Value 120
+    1.0,                     !- Output Value 121
+    1.0,                     !- Output Value 122
+    1.0,                     !- Output Value 123
+    1.0,                     !- Output Value 124
+    1.0,                     !- Output Value 125
+    1.0,                     !- Output Value 126
+    1.0,                     !- Output Value 127
+    1.0,                     !- Output Value 128
+    1.0,                     !- Output Value 129
+    1.0,                     !- Output Value 130
+    1.0,                     !- Output Value 131
+    1.0,                     !- Output Value 132
+    1.0,                     !- Output Value 133
+    1.0,                     !- Output Value 134
+    1.0,                     !- Output Value 135
+    1.0,                     !- Output Value 136
+    1.0,                     !- Output Value 137
+    1.0,                     !- Output Value 138
+    1.0,                     !- Output Value 139
+    1.0,                     !- Output Value 140
+    1.0,                     !- Output Value 141
+    1.0,                     !- Output Value 142
+    1.0,                     !- Output Value 143
+    1.0,                     !- Output Value 144
+    1.0,                     !- Output Value 145
+    1.0,                     !- Output Value 146
+    1.0,                     !- Output Value 147
+    1.0,                     !- Output Value 148
+    1.0,                     !- Output Value 149
+    1.0,                     !- Output Value 150
+    1.0,                     !- Output Value 151
+    1.0,                     !- Output Value 152
+    1.0,                     !- Output Value 153
+    1.0,                     !- Output Value 154
+    1.0,                     !- Output Value 155
+    1.0,                     !- Output Value 156
+    1.0,                     !- Output Value 157
+    1.0,                     !- Output Value 158
+    1.0,                     !- Output Value 159
+    1.0,                     !- Output Value 160
+    1.0,                     !- Output Value 161
+    1.0,                     !- Output Value 162
+    1.0,                     !- Output Value 163
+    1.0,                     !- Output Value 164
+    1.0,                     !- Output Value 165
+    1.0,                     !- Output Value 166
+    1.0,                     !- Output Value 167
+    1.0,                     !- Output Value 168
+    1.0,                     !- Output Value 169
+    1.0,                     !- Output Value 170
+    1.0,                     !- Output Value 171
+    1.0,                     !- Output Value 172
+    1.0,                     !- Output Value 173
+    1.0,                     !- Output Value 174
+    1.0,                     !- Output Value 175
+    1.0,                     !- Output Value 176
+    1.0,                     !- Output Value 177
+    1.0,                     !- Output Value 178
+    1.0,                     !- Output Value 179
+    1.0,                     !- Output Value 180
+    1.0,                     !- Output Value 181
+    1.0,                     !- Output Value 182
+    1.0,                     !- Output Value 183
+    1.0,                     !- Output Value 184
+    1.0,                     !- Output Value 185
+    1.0;                     !- Output Value 186
 
   WindowMaterial:Glazing,
-    ELECTRO GLASS DARK STATE,!- Name
+    ELECTRO GLASS DARK STATE,  !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
     0.006,                   !- Thickness {m}
@@ -1147,104 +1141,104 @@
 
   WindowMaterial:Gas,
     WinAirGap,               !- Name
-    AIR,                     !- Gas Type
+    Air,                     !- Gas Type
     0.013;                   !- Thickness {m}
 
   MaterialProperty:GlazingSpectralData,
     TestSpectralDataSet,     !- Name
-    0.300,0.000,0.045,0.045,
-    0.310,0.000,0.044,0.044,
-    0.320,0.000,0.044,0.044,
-    0.330,0.000,0.042,0.042,
-    0.340,0.000,0.041,0.041,
-    0.350,0.000,0.040,0.040,
-    0.360,0.009,0.040,0.040,
-    0.370,0.120,0.040,0.040,
-    0.380,0.492,0.051,0.051,
-    0.390,0.782,0.070,0.070,
-    0.400,0.856,0.075,0.075,
-    0.410,0.858,0.075,0.075,
-    0.420,0.858,0.075,0.075,
-    0.430,0.860,0.075,0.075,
-    0.440,0.861,0.075,0.075,
-    0.450,0.871,0.075,0.075,
-    0.460,0.880,0.076,0.076,
-    0.470,0.883,0.075,0.075,
-    0.480,0.887,0.076,0.076,
-    0.490,0.890,0.075,0.075,
-    0.500,0.890,0.075,0.075,
-    0.510,0.891,0.075,0.075,
-    0.520,0.887,0.075,0.075,
-    0.530,0.890,0.075,0.075,
-    0.540,0.883,0.074,0.074,
-    0.550,0.888,0.074,0.074,
-    0.560,0.882,0.074,0.074,
-    0.570,0.881,0.074,0.074,
-    0.580,0.865,0.071,0.071,
-    0.590,0.858,0.070,0.070,
-    0.600,0.865,0.070,0.070,
-    0.610,0.856,0.070,0.070,
-    0.620,0.845,0.070,0.070,
-    0.630,0.837,0.070,0.070,
-    0.640,0.827,0.069,0.069,
-    0.650,0.820,0.067,0.067,
-    0.660,0.807,0.067,0.067,
-    0.670,0.798,0.065,0.065,
-    0.680,0.791,0.065,0.065,
-    0.690,0.781,0.065,0.065,
-    0.700,0.768,0.064,0.064,
-    0.710,0.761,0.064,0.064,
-    0.720,0.744,0.062,0.062,
-    0.730,0.713,0.064,0.064,
-    0.740,0.703,0.062,0.062,
-    0.750,0.694,0.061,0.061,
-    0.760,0.685,0.061,0.061,
-    0.770,0.675,0.060,0.060,
-    0.780,0.667,0.060,0.060,
-    0.790,0.655,0.060,0.060,
-    0.800,0.646,0.059,0.059,
-    0.810,0.638,0.059,0.059,
-    0.820,0.629,0.057,0.057,
-    0.830,0.623,0.057,0.057,
-    0.840,0.614,0.056,0.056,
-    0.850,0.608,0.056,0.056,
-    0.860,0.601,0.055,0.055,
-    0.870,0.597,0.054,0.054,
-    0.880,0.592,0.054,0.054,
-    0.890,0.587,0.054,0.054,
-    0.900,0.582,0.055,0.055,
-    0.950,0.568,0.051,0.051,
-    1.000,0.562,0.051,0.051,
-    1.050,0.556,0.050,0.050,
-    1.100,0.563,0.051,0.051,
-    1.150,0.556,0.050,0.050,
-    1.200,0.547,0.050,0.050,
-    1.250,0.577,0.051,0.051,
-    1.300,0.598,0.054,0.054,
-    1.350,0.608,0.055,0.055,
-    1.400,0.603,0.052,0.052,
-    1.450,0.614,0.055,0.055,
-    1.500,0.648,0.057,0.057,
-    1.550,0.680,0.059,0.059,
-    1.600,0.699,0.060,0.060,
-    1.650,0.706,0.060,0.060,
-    1.700,0.570,0.051,0.051,
-    1.750,0.585,0.051,0.051,
-    1.800,0.637,0.055,0.055,
-    1.850,0.655,0.057,0.057,
-    1.900,0.637,0.057,0.057,
-    1.950,0.634,0.057,0.057,
-    2.000,0.634,0.057,0.057,
-    2.050,0.586,0.052,0.052,
-    2.100,0.588,0.054,0.054,
-    2.150,0.597,0.054,0.054,
-    2.200,0.576,0.051,0.051,
-    2.250,0.404,0.045,0.045,
-    2.300,0.179,0.037,0.037,
-    2.350,0.219,0.037,0.037,
-    2.400,0.240,0.039,0.039,
-    2.450,0.200,0.040,0.040,
-    2.500,0.214,0.039,0.039;
+    0.3,0.0,0.045,0.045,
+    0.31,0.0,0.044,0.044,
+    0.32,0.0,0.044,0.044,
+    0.33,0.0,0.042,0.042,
+    0.34,0.0,0.041,0.041,
+    0.35,0.0,0.04,0.04,
+    0.36,0.009,0.04,0.04,
+    0.37,0.12,0.04,0.04,
+    0.38,0.492,0.051,0.051,
+    0.39,0.782,0.07,0.07,
+    0.4,0.856,0.075,0.075,
+    0.41,0.858,0.075,0.075,
+    0.42,0.858,0.075,0.075,
+    0.43,0.86,0.075,0.075,
+    0.44,0.861,0.075,0.075,
+    0.45,0.871,0.075,0.075,
+    0.46,0.88,0.076,0.076,
+    0.47,0.883,0.075,0.075,
+    0.48,0.887,0.076,0.076,
+    0.49,0.89,0.075,0.075,
+    0.5,0.89,0.075,0.075,
+    0.51,0.891,0.075,0.075,
+    0.52,0.887,0.075,0.075,
+    0.53,0.89,0.075,0.075,
+    0.54,0.883,0.074,0.074,
+    0.55,0.888,0.074,0.074,
+    0.56,0.882,0.074,0.074,
+    0.57,0.881,0.074,0.074,
+    0.58,0.865,0.071,0.071,
+    0.59,0.858,0.07,0.07,
+    0.6,0.865,0.07,0.07,
+    0.61,0.856,0.07,0.07,
+    0.62,0.845,0.07,0.07,
+    0.63,0.837,0.07,0.07,
+    0.64,0.827,0.069,0.069,
+    0.65,0.82,0.067,0.067,
+    0.66,0.807,0.067,0.067,
+    0.67,0.798,0.065,0.065,
+    0.68,0.791,0.065,0.065,
+    0.69,0.781,0.065,0.065,
+    0.7,0.768,0.064,0.064,
+    0.71,0.761,0.064,0.064,
+    0.72,0.744,0.062,0.062,
+    0.73,0.713,0.064,0.064,
+    0.74,0.703,0.062,0.062,
+    0.75,0.694,0.061,0.061,
+    0.76,0.685,0.061,0.061,
+    0.77,0.675,0.06,0.06,
+    0.78,0.667,0.06,0.06,
+    0.79,0.655,0.06,0.06,
+    0.8,0.646,0.059,0.059,
+    0.81,0.638,0.059,0.059,
+    0.82,0.629,0.057,0.057,
+    0.83,0.623,0.057,0.057,
+    0.84,0.614,0.056,0.056,
+    0.85,0.608,0.056,0.056,
+    0.86,0.601,0.055,0.055,
+    0.87,0.597,0.054,0.054,
+    0.88,0.592,0.054,0.054,
+    0.89,0.587,0.054,0.054,
+    0.9,0.582,0.055,0.055,
+    0.95,0.568,0.051,0.051,
+    1.0,0.562,0.051,0.051,
+    1.05,0.556,0.05,0.05,
+    1.1,0.563,0.051,0.051,
+    1.15,0.556,0.05,0.05,
+    1.2,0.547,0.05,0.05,
+    1.25,0.577,0.051,0.051,
+    1.3,0.598,0.054,0.054,
+    1.35,0.608,0.055,0.055,
+    1.4,0.603,0.052,0.052,
+    1.45,0.614,0.055,0.055,
+    1.5,0.648,0.057,0.057,
+    1.55,0.68,0.059,0.059,
+    1.6,0.699,0.06,0.06,
+    1.65,0.706,0.06,0.06,
+    1.7,0.57,0.051,0.051,
+    1.75,0.585,0.051,0.051,
+    1.8,0.637,0.055,0.055,
+    1.85,0.655,0.057,0.057,
+    1.9,0.637,0.057,0.057,
+    1.95,0.634,0.057,0.057,
+    2.0,0.634,0.057,0.057,
+    2.05,0.586,0.052,0.052,
+    2.1,0.588,0.054,0.054,
+    2.15,0.597,0.054,0.054,
+    2.2,0.576,0.051,0.051,
+    2.25,0.404,0.045,0.045,
+    2.3,0.179,0.037,0.037,
+    2.35,0.219,0.037,0.037,
+    2.4,0.24,0.039,0.039,
+    2.45,0.2,0.04,0.04,
+    2.5,0.214,0.039,0.039;
 
   Construction,
     EXTWALL80,               !- Name
@@ -1296,51 +1290,51 @@
 
   Zone,
     West Zone,               !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     EAST ZONE,               !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     NORTH ZONE,              !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   Zone,
     ATTIC ZONE,              !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
+    0.0,                     !- Direction of Relative North {deg}
+    0.0,                     !- X Origin {m}
+    0.0,                     !- Y Origin {m}
+    0.0,                     !- Z Origin {m}
     1,                       !- Type
     1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+    Autocalculate,           !- Ceiling Height {m}
+    Autocalculate;           !- Volume {m3}
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
+    Counterclockwise,        !- Vertex Entry Direction
     World;                   !- Coordinate System
 
   BuildingSurface:Detailed,
@@ -1353,12 +1347,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall002,           !- Name
@@ -1370,12 +1364,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall003,           !- Name
@@ -1387,12 +1381,12 @@
     Zn003:Wall004,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Wall004,           !- Name
@@ -1404,12 +1398,12 @@
     Zn002:Wall004,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Flr001,            !- Name
@@ -1421,16 +1415,16 @@
     Zn001:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn001:Ceil001,           !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CEILING:ZONE,            !- Construction Name
     West Zone,               !- Zone Name
     ,                        !- Space Name
@@ -1438,12 +1432,12 @@
     Zn004:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall001,           !- Name
@@ -1455,12 +1449,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall002,           !- Name
@@ -1472,12 +1466,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall003,           !- Name
@@ -1489,12 +1483,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall004,           !- Name
@@ -1506,12 +1500,12 @@
     Zn001:Wall004,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Wall005,           !- Name
@@ -1523,12 +1517,12 @@
     Zn003:Wall005,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Flr001,            !- Name
@@ -1540,16 +1534,16 @@
     Zn002:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn002:Ceil001,           !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CEILING:ZONE,            !- Construction Name
     EAST ZONE,               !- Zone Name
     ,                        !- Space Name
@@ -1557,12 +1551,12 @@
     Zn004:Flr002,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall001,           !- Name
@@ -1574,12 +1568,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall002,           !- Name
@@ -1591,12 +1585,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall003,           !- Name
@@ -1608,12 +1602,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall004,           !- Name
@@ -1625,12 +1619,12 @@
     Zn001:Wall003,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Wall005,           !- Name
@@ -1642,12 +1636,12 @@
     Zn002:Wall005,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Flr001,            !- Name
@@ -1659,16 +1653,16 @@
     Zn003:Flr001,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,0,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,12.19200,0,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,0;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,12.192,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn003:Ceil001,           !- Name
-    CEILING,                 !- Surface Type
+    Ceiling,                 !- Surface Type
     CEILING:ZONE,            !- Construction Name
     NORTH ZONE,              !- Zone Name
     ,                        !- Space Name
@@ -1676,12 +1670,12 @@
     Zn004:Flr003,            !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,12.19200,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,12.192,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall001,           !- Name
@@ -1693,12 +1687,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall002,           !- Name
@@ -1710,12 +1704,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall003,           !- Name
@@ -1727,12 +1721,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,0,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,0,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,0.0,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall004,           !- Name
@@ -1744,12 +1738,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    12.19200,6.096000,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    12.192,6.096,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall005,           !- Name
@@ -1761,12 +1755,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,6.096000,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,12.19200,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,12.19200,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,6.096,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,12.192,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,12.192,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall006,           !- Name
@@ -1778,12 +1772,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    9.144000,12.19200,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    9.144000,12.19200,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    0,12.19200,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    9.144,12.192,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    9.144,12.192,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,12.192,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall007,           !- Name
@@ -1795,12 +1789,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    0,6.096000,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,6.096,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Wall008,           !- Name
@@ -1812,12 +1806,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    0.0,0.0,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Roof001,           !- Name
@@ -1829,12 +1823,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,3.962400,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,0,3.962400,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,6.096000,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,0.0,3.9624,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,0.0,3.9624,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,6.096,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Roof002,           !- Name
@@ -1846,12 +1840,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,6.096000,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,0,3.962400,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,0,3.962400,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,6.096000,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,6.096,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,0.0,3.9624,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,0.0,3.9624,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,6.096,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Roof003,           !- Name
@@ -1863,12 +1857,12 @@
     ,                        !- Outside Boundary Condition Object
     SunExposed,              !- Sun Exposure
     WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
+    0.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,12.19200,3.962400,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,3.962400,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,6.096000,3.962400,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,12.19200,3.962400;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,12.192,3.9624,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,3.9624,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,6.096,3.9624,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,12.192,3.9624;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Flr001,            !- Name
@@ -1880,12 +1874,12 @@
     Zn001:Ceil001,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    6.096000,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Flr002,            !- Name
@@ -1897,12 +1891,12 @@
     Zn002:Ceil001,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    6.096000,0,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    6.096000,6.096000,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    12.19200,6.096000,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    12.19200,0,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    6.096,6.096,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    12.192,6.096,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    12.192,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   BuildingSurface:Detailed,
     Zn004:Flr003,            !- Name
@@ -1914,12 +1908,12 @@
     Zn003:Ceil001,           !- Outside Boundary Condition Object
     NoSun,                   !- Sun Exposure
     NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
+    1.0,                     !- View Factor to Ground
     4,                       !- Number of Vertices
-    0,6.096000,3.048000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,12.19200,3.048000,  !- X,Y,Z ==> Vertex 2 {m}
-    9.144000,12.19200,3.048000,  !- X,Y,Z ==> Vertex 3 {m}
-    9.144000,6.096000,3.048000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.0,6.096,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,12.192,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+    9.144,12.192,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+    9.144,6.096,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall001:Win001,    !- Name
@@ -1927,29 +1921,29 @@
     ELECTRO-CON-LIGHT,       !- Construction Name
     Zn001:Wall001,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     TestFrameAndDivider,     !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    0.548000,0,2.5000,  !- X,Y,Z ==> Vertex 1 {m}
-    0.548000,0,0.5000,  !- X,Y,Z ==> Vertex 2 {m}
-    5.548000,0,0.5000,  !- X,Y,Z ==> Vertex 3 {m}
-    5.548000,0,2.5000;  !- X,Y,Z ==> Vertex 4 {m}
+    0.548,0.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}
+    0.548,0.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}
+    5.548,0.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}
+    5.548,0.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn001:Wall003:Door001,   !- Name
-    DOOR,                    !- Surface Type
+    Door,                    !- Surface Type
     DOOR-CON,                !- Construction Name
     Zn001:Wall003,           !- Building Surface Name
     Zn003:Wall004:Door001,   !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    3.500,6.096000,2.0,  !- X,Y,Z ==> Vertex 1 {m}
-    3.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    2.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    2.500,6.096000,2.0;  !- X,Y,Z ==> Vertex 4 {m}
+    3.5,6.096,2.0,  !- X,Y,Z ==> Vertex 1 {m}
+    3.5,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    2.5,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    2.5,6.096,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn003:Wall002:Win001,    !- Name
@@ -1957,29 +1951,29 @@
     ELECTRO-CON-LIGHT,       !- Construction Name
     Zn003:Wall002,           !- Building Surface Name
     ,                        !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     TestFrameAndDivider,     !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    5.548000,12.19200,2.5000,  !- X,Y,Z ==> Vertex 1 {m}
-    5.548000,12.19200,0.5000,  !- X,Y,Z ==> Vertex 2 {m}
-    0.548000,12.19200,0.5000,  !- X,Y,Z ==> Vertex 3 {m}
-    0.548000,12.19200,2.5000;  !- X,Y,Z ==> Vertex 4 {m}
+    5.548,12.192,2.5,  !- X,Y,Z ==> Vertex 1 {m}
+    5.548,12.192,0.5,  !- X,Y,Z ==> Vertex 2 {m}
+    0.548,12.192,0.5,  !- X,Y,Z ==> Vertex 3 {m}
+    0.548,12.192,2.5;  !- X,Y,Z ==> Vertex 4 {m}
 
   FenestrationSurface:Detailed,
     Zn003:Wall004:Door001,   !- Name
-    DOOR,                    !- Surface Type
+    Door,                    !- Surface Type
     DOOR-CON,                !- Construction Name
     Zn003:Wall004,           !- Building Surface Name
     Zn001:Wall003:Door001,   !- Outside Boundary Condition Object
-    0.5000000,               !- View Factor to Ground
+    0.5,                     !- View Factor to Ground
     ,                        !- Frame and Divider Name
-    1.0,                     !- Multiplier
+    1,                       !- Multiplier
     4,                       !- Number of Vertices
-    2.500,6.096000,2.0,  !- X,Y,Z ==> Vertex 1 {m}
-    2.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 2 {m}
-    3.500,6.096000,0.0,  !- X,Y,Z ==> Vertex 3 {m}
-    3.500,6.096000,2.0;  !- X,Y,Z ==> Vertex 4 {m}
+    2.5,6.096,2.0,  !- X,Y,Z ==> Vertex 1 {m}
+    2.5,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    3.5,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    3.5,6.096,2.0;  !- X,Y,Z ==> Vertex 4 {m}
 
   WindowShadingControl,
     WIN-CONTROL-GLARE-West Zone,  !- Name
@@ -1991,7 +1985,7 @@
     ,                        !- Schedule Name
     0.0,                     !- Setpoint {W/m2, W or deg C}
     No,                      !- Shading Control Is Scheduled
-    YES,                     !- Glare Control Is Active
+    Yes,                     !- Glare Control Is Active
     ,                        !- Shading Device Material Name
     FixedSlatAngle,          !- Type of Slat Angle Control for Blinds
     ,                        !- Slat Angle Schedule Name
@@ -2035,26 +2029,26 @@
     Fraction,                !- Name
     0.0,                     !- Lower Limit Value
     1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+    Continuous;              !- Numeric Type
 
   ScheduleTypeLimits,
     Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
+    -60.0,                   !- Lower Limit Value
+    200.0,                   !- Upper Limit Value
+    Continuous,              !- Numeric Type
     Temperature;             !- Unit Type
 
   ScheduleTypeLimits,
     Control Type,            !- Name
-    0,                       !- Lower Limit Value
-    4,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    4.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   ScheduleTypeLimits,
     On/Off,                  !- Name
-    0,                       !- Lower Limit Value
-    1,                       !- Upper Limit Value
-    DISCRETE;                !- Numeric Type
+    0.0,                     !- Lower Limit Value
+    1.0,                     !- Upper Limit Value
+    Discrete;                !- Numeric Type
 
   Schedule:Compact,
     WindowVentSched,         !- Name
@@ -2164,7 +2158,7 @@
     For: AllDays,            !- Field 2
     Until: 24:00,1.0,        !- Field 3
     Through: 9/30,           !- Field 5
-    For: WeekDays SummerDesignDay, !- Field 6
+    For: WeekDays SummerDesignDay,  !- Field 6
     Until: 7:00,0.0,         !- Field 7
     Until: 17:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
@@ -2183,7 +2177,7 @@
     For: AllDays,            !- Field 2
     Until: 24:00,0.0,        !- Field 3
     Through: 9/30,           !- Field 5
-    For: WeekDays SummerDesignDay, !- Field 6
+    For: WeekDays SummerDesignDay,  !- Field 6
     Until: 7:00,0.0,         !- Field 7
     Until: 17:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
@@ -2233,14 +2227,14 @@
     West Zone People,        !- Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    3.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -2249,20 +2243,20 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   People,
     EAST ZONE People,        !- Name
     EAST ZONE,               !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    3.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -2271,20 +2265,20 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   People,
     NORTH ZONE People,       !- Name
     NORTH ZONE,              !- Zone or ZoneList or Space or SpaceList Name
     OFFICE OCCUPANCY,        !- Number of People Schedule Name
-    people,                  !- Number of People Calculation Method
-    4.000000,                !- Number of People
+    People,                  !- Number of People Calculation Method
+    4.0,                     !- Number of People
     ,                        !- People per Floor Area {person/m2}
     ,                        !- Floor Area per Person {m2/person}
-    0.3000000,               !- Fraction Radiant
+    0.3,                     !- Fraction Radiant
     ,                        !- Sensible Heat Fraction
     Activity Sch,            !- Activity Level Schedule Name
-    3.82E-8,                 !- Carbon Dioxide Generation Rate {m3/s-W}
+    3.82e-08,                !- Carbon Dioxide Generation Rate {m3/s-W}
     ,                        !- Enable ASHRAE 55 Comfort Warnings
     EnclosureAveraged,       !- Mean Radiant Temperature Calculation Type
     ,                        !- Surface Name/Angle Factor List Name
@@ -2293,7 +2287,7 @@
     ,                        !- Clothing Insulation Calculation Method Schedule Name
     Clothing Sch,            !- Clothing Insulation Schedule Name
     Air Velo Sch,            !- Air Velocity Schedule Name
-    FANGER;                  !- Thermal Comfort Model 1 Type
+    Fanger;                  !- Thermal Comfort Model 1 Type
 
   Lights,
     West Zone Lights 1,      !- Name
@@ -2303,9 +2297,9 @@
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
+    0.0,                     !- Return Air Fraction
+    0.2,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
     1.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
@@ -2317,9 +2311,9 @@
     1464.375,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
+    0.0,                     !- Return Air Fraction
+    0.2,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
     1.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
@@ -2331,9 +2325,9 @@
     878.6252,                !- Lighting Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Return Air Fraction
-    0.2000000,               !- Fraction Radiant
-    0.2000000,               !- Fraction Visible
+    0.0,                     !- Return Air Fraction
+    0.2,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
     1.0,                     !- Fraction Replaceable
     GeneralLights;           !- End-Use Subcategory
 
@@ -2345,9 +2339,9 @@
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   ElectricEquipment,
     EAST ZONE ElecEq 1,      !- Name
@@ -2357,9 +2351,9 @@
     1464.375,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   ElectricEquipment,
     NORTH ZONE ElecEq 1,     !- Name
@@ -2369,9 +2363,9 @@
     2928.751,                !- Design Level {W}
     ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
-    0,                       !- Fraction Latent
-    0.3000000,               !- Fraction Radiant
-    0;                       !- Fraction Lost
+    0.0,                     !- Fraction Latent
+    0.3,                     !- Fraction Radiant
+    0.0;                     !- Fraction Lost
 
   Daylighting:Controls,
     West Zone_DaylCtrl,      !- Name
@@ -2389,7 +2383,7 @@
     ,                        !- DElight Gridding Resolution {m2}
     West Zone_DaylRefPt1,    !- Daylighting Reference Point 1 Name
     1.0,                     !- Fraction of Lights Controlled by Reference Point 1
-    500.;                    !- Illuminance Setpoint at Reference Point 1 {lux}
+    500.0;                   !- Illuminance Setpoint at Reference Point 1 {lux}
 
   Daylighting:ReferencePoint,
     West Zone_DaylRefPt1,    !- Name
@@ -2402,10 +2396,10 @@
     WindACCoolCapFT,         !- Name
     0.942587793,             !- Coefficient1 Constant
     0.009543347,             !- Coefficient2 x
-    0.000683770,             !- Coefficient3 x**2
+    0.00068377,              !- Coefficient3 x**2
     -0.011042676,            !- Coefficient4 y
-    0.000005249,             !- Coefficient5 y**2
-    -0.000009720,            !- Coefficient6 x*y
+    5.249e-06,               !- Coefficient5 y**2
+    -9.72e-06,               !- Coefficient6 x*y
     12.77778,                !- Minimum Value of x
     23.88889,                !- Maximum Value of x
     18.0,                    !- Minimum Value of y
@@ -2420,7 +2414,7 @@
     WindACEIRFT,             !- Name
     0.342414409,             !- Coefficient1 Constant
     0.034885008,             !- Coefficient2 x
-    -0.000623700,            !- Coefficient3 x**2
+    -0.0006237,              !- Coefficient3 x**2
     0.004977216,             !- Coefficient4 y
     0.000437951,             !- Coefficient5 y**2
     -0.000728028,            !- Coefficient6 x*y
@@ -2495,7 +2489,7 @@
     Mixed Air Node,          !- Component 2 Inlet Node Name
     Cooling Coil Air Inlet Node,  !- Component 2 Outlet Node Name
     CoilSystem:Cooling:DX,   !- Component 3 Object Type
-    DX Cooling Coil System 1,!- Component 3 Name
+    DX Cooling Coil System 1,  !- Component 3 Name
     Cooling Coil Air Inlet Node,  !- Component 3 Inlet Node Name
     Heating Coil Air Inlet Node,  !- Component 3 Outlet Node Name
     Coil:Heating:Fuel,       !- Component 4 Object Type
@@ -2511,7 +2505,7 @@
     Air Loop Branches,       !- Branch List Name
     ,                        !- Connector List Name
     Air Loop Inlet Node,     !- Supply Side Inlet Node Name
-    Return Air Mixer Outlet, !- Demand Side Outlet Node Name
+    Return Air Mixer Outlet,  !- Demand Side Outlet Node Name
     Zone Equipment Inlet Node,  !- Demand Side Inlet Node Names
     Air Loop Outlet Node;    !- Supply Side Outlet Node Names
 
@@ -2550,10 +2544,10 @@
     FanAndCoilAvailSched;    !- Schedule Name
 
   SetpointManager:SingleZone:Reheat,
-    Supply Air Temp Manager, !- Name
+    Supply Air Temp Manager,  !- Name
     Temperature,             !- Control Variable
-    13.,                     !- Minimum Supply Air Temperature {C}
-    45.,                     !- Maximum Supply Air Temperature {C}
+    13.0,                    !- Minimum Supply Air Temperature {C}
+    45.0,                    !- Maximum Supply Air Temperature {C}
     NORTH ZONE,              !- Control Zone Name
     Zone 3 Node,             !- Zone Node Name
     Zone 3 Inlet Node,       !- Zone Inlet Node Name
@@ -2569,11 +2563,11 @@
     1.9,                     !- Maximum Outdoor Air Flow Rate {m3/s}
     NoEconomizer,            !- Economizer Control Type
     ModulateFlow,            !- Economizer Control Action Type
-    19.,                     !- Economizer Maximum Limit Dry-Bulb Temperature {C}
+    19.0,                    !- Economizer Maximum Limit Dry-Bulb Temperature {C}
     ,                        !- Economizer Maximum Limit Enthalpy {J/kg}
     ,                        !- Economizer Maximum Limit Dewpoint Temperature {C}
     ,                        !- Electronic Enthalpy Limit Curve Name
-    4.,                      !- Economizer Minimum Limit Dry-Bulb Temperature {C}
+    4.0,                     !- Economizer Minimum Limit Dry-Bulb Temperature {C}
     NoLockout,               !- Lockout Type
     FixedMinimum;            !- Minimum Limit Type
 
@@ -2641,7 +2635,7 @@
     Zone3 Exhaust Fan,       !- Name
     FanAndCoilAvailSched,    !- Availability Schedule Name
     0.7,                     !- Fan Total Efficiency
-    500,                     !- Pressure Rise {Pa}
+    500.0,                   !- Pressure Rise {Pa}
     0.01,                    !- Maximum Flow Rate {m3/s}
     Zone3 Exhaust Node,      !- Air Inlet Node Name
     Zone3 Exhaust Fan Outlet Node,  !- Air Outlet Node Name
@@ -2660,7 +2654,7 @@
     Reheat Zone 2;           !- Air Terminal Name
 
   CoilSystem:Cooling:DX,
-    DX Cooling Coil System 1,!- Name
+    DX Cooling Coil System 1,  !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
     Cooling Coil Air Inlet Node,  !- DX Cooling Coil System Inlet Node Name
     Heating Coil Air Inlet Node,  !- DX Cooling Coil System Outlet Node Name
@@ -2742,17 +2736,17 @@
   AirLoopHVAC:SupplyPath,
     TermReheatSupplyPath,    !- Name
     Zone Equipment Inlet Node,  !- Supply Air Path Inlet Node Name
-    AirLoopHVAC:ZoneSplitter,!- Component 1 Object Type
-    Zone Supply Air Splitter;!- Component 1 Name
+    AirLoopHVAC:ZoneSplitter,  !- Component 1 Object Type
+    Zone Supply Air Splitter;  !- Component 1 Name
 
   AirLoopHVAC:ReturnPath,
     TermReheatReturnPath,    !- Name
-    Return Air Mixer Outlet, !- Return Air Path Outlet Node Name
+    Return Air Mixer Outlet,  !- Return Air Path Outlet Node Name
     AirLoopHVAC:ZoneMixer,   !- Component 1 Object Type
     Zone Return Air Mixer;   !- Component 1 Name
 
   AirLoopHVAC:ZoneSplitter,
-    Zone Supply Air Splitter,!- Name
+    Zone Supply Air Splitter,  !- Name
     Zone Equipment Inlet Node,  !- Inlet Node Name
     Zone 1 Reheat Air Inlet Node,  !- Outlet 1 Node Name
     Zone 2 Reheat Air Inlet Node,  !- Outlet 2 Node Name
@@ -2760,7 +2754,7 @@
 
   AirLoopHVAC:ZoneMixer,
     Zone Return Air Mixer,   !- Name
-    Return Air Mixer Outlet, !- Outlet Node Name
+    Return Air Mixer Outlet,  !- Outlet Node Name
     Zone 1 Outlet Node,      !- Inlet 1 Node Name
     Zone 2 Outlet Node,      !- Inlet 2 Node Name
     Zone 3 Outlet Node;      !- Inlet 3 Node Name
@@ -2770,7 +2764,7 @@
     FanAndCoilAvailSched,    !- Availability Schedule Name
     NaturalGas,              !- Fuel Type
     0.8,                     !- Burner Efficiency
-    60000,                   !- Nominal Capacity {W}
+    60000.0,                 !- Nominal Capacity {W}
     Heating Coil Air Inlet Node,  !- Air Inlet Node Name
     Air Loop Outlet Node,    !- Air Outlet Node Name
     Air Loop Outlet Node;    !- Temperature Setpoint Node Name
@@ -2780,7 +2774,7 @@
     FanAndCoilAvailSched,    !- Availability Schedule Name
     NaturalGas,              !- Fuel Type
     0.8,                     !- Burner Efficiency
-    1000,                    !- Nominal Capacity {W}
+    1000.0,                  !- Nominal Capacity {W}
     Zone 1 Reheat Air Inlet Node,  !- Air Inlet Node Name
     Zone 1 Reheat Air Outlet Node;  !- Air Outlet Node Name
 
@@ -2789,14 +2783,14 @@
     FanAndCoilAvailSched,    !- Availability Schedule Name
     NaturalGas,              !- Fuel Type
     1.0,                     !- Burner Efficiency
-    1000,                    !- Nominal Capacity {W}
+    1000.0,                  !- Nominal Capacity {W}
     Zone 2 Reheat Air Inlet Node,  !- Air Inlet Node Name
     Zone 2 Reheat Air Outlet Node;  !- Air Outlet Node Name
 
   Coil:Cooling:DX:SingleSpeed,
     ACDXCoil 1,              !- Name
     CoolingCoilAvailSched,   !- Availability Schedule Name
-    35000,                   !- Gross Rated Total Cooling Capacity {W}
+    35000.0,                 !- Gross Rated Total Cooling Capacity {W}
     0.8,                     !- Gross Rated Sensible Heat Ratio
     3.0,                     !- Gross Rated Cooling COP {W/W}
     1.9,                     !- Rated Air Flow Rate {m3/s}
@@ -2824,61 +2818,60 @@
     Mixed Air Node,          !- Air Inlet Node Name
     Cooling Coil Air Inlet Node;  !- Air Outlet Node Name
 
-  Output:Variable,*,Heating Coil NaturalGas Rate,timestep,ReportSch;
+  Output:Variable,*,Heating Coil NaturalGas Rate,Timestep,ReportSch;
 
-  Output:Variable,*,Cooling Coil Electricity Rate,timestep,ReportSch;
+  Output:Variable,*,Cooling Coil Electricity Rate,Timestep,ReportSch;
 
-  Output:Variable,*,Zone Air Temperature,timestep,ReportSch;
+  Output:Variable,*,Zone Air Temperature,Timestep,ReportSch;
 
-  Output:Variable,*,Zone Air System Sensible Heating Energy,timestep,ReportSch;
+  Output:Variable,*,Zone Air System Sensible Heating Energy,Timestep,ReportSch;
 
-  Output:Variable,*,Zone Air System Sensible Cooling Energy,timestep,ReportSch;
+  Output:Variable,*,Zone Air System Sensible Cooling Energy,Timestep,ReportSch;
 
-  Output:Variable,*,Surface Window System Solar Transmittance,timestep,ReportSch;
+  Output:Variable,*,Surface Window System Solar Transmittance,Timestep,ReportSch;
 
-  Output:Variable,*,Surface Window System Solar Reflectance,timestep,ReportSch;
+  Output:Variable,*,Surface Window System Solar Reflectance,Timestep,ReportSch;
 
-  Output:Variable,*,Surface Window System Solar Absorptance,timestep,ReportSch;
+  Output:Variable,*,Surface Window System Solar Absorptance,Timestep,ReportSch;
 
-  Output:Variable,*,Surface Window Glazing Beam to Beam Solar Transmittance,timestep,ReportSch;
+  Output:Variable,*,Surface Window Glazing Beam to Beam Solar Transmittance,Timestep,ReportSch;
 
-  Output:Variable,*,Surface Window Glazing Beam to Diffuse Solar Transmittance,timestep,ReportSch;
+  Output:Variable,*,Surface Window Glazing Beam to Diffuse Solar Transmittance,Timestep,ReportSch;
 
-  Output:Variable,*,Surface Window Glazing Diffuse to Diffuse Solar Transmittance,timestep,ReportSch;
+  Output:Variable,*,Surface Window Glazing Diffuse to Diffuse Solar Transmittance,Timestep,ReportSch;
 
-  Output:Variable,*,Surface Outside Face Beam Solar Incident Angle Cosine Value,timestep,ReportSch;
+  Output:Variable,*,Surface Outside Face Beam Solar Incident Angle Cosine Value,Timestep,ReportSch;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,monthly;
+  Output:Meter:MeterFileOnly,Electricity:Building,Monthly;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,monthly;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,monthly;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,Monthly;
 
-  Output:Meter:MeterFileOnly,NaturalGas:Facility,monthly;
+  Output:Meter:MeterFileOnly,NaturalGas:Facility,Monthly;
 
-  Output:Meter:MeterFileOnly,NaturalGas:HVAC,monthly;
+  Output:Meter:MeterFileOnly,NaturalGas:HVAC,Monthly;
 
-  Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:Building,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:Building,RunPeriod;
 
-  Output:Meter:MeterFileOnly,InteriorLights:Electricity,runperiod;
+  Output:Meter:MeterFileOnly,InteriorLights:Electricity,RunPeriod;
 
-  Output:Meter:MeterFileOnly,Electricity:HVAC,runperiod;
+  Output:Meter:MeterFileOnly,Electricity:HVAC,RunPeriod;
 
-  Output:Meter:MeterFileOnly,NaturalGas:Facility,runperiod;
+  Output:Meter:MeterFileOnly,NaturalGas:Facility,RunPeriod;
 
-  Output:Meter:MeterFileOnly,NaturalGas:HVAC,runperiod;
+  Output:Meter:MeterFileOnly,NaturalGas:HVAC,RunPeriod;
 
-  Output:VariableDictionary,Regular;
+  Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
+  Output:Surfaces:Drawing,DXF;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
-
