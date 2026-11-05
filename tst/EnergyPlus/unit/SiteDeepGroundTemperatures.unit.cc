@@ -61,19 +61,7 @@ using namespace EnergyPlus;
 TEST_F(EnergyPlusFixture, SiteDeepGroundTempTest)
 {
     std::string const idf_objects = delimited_string({
-        "Site:GroundTemperature:Deep,",
-        "	21.00,	!- January",
-        "	22.00,	!- February",
-        "	23.00,	!- March",
-        "	24.00,	!- April",
-        "	25.00,	!- May",
-        "	26.00,	!- June",
-        "	27.00,	!- July",
-        "	28.00,	!- August",
-        "	29.00,	!- September",
-        "	30.00,	!- October",
-        "	31.00,	!- November",
-        "	32.00;	!- December",
+        "Site:GroundTemperature:Deep,21.0,22.0,23.0,24.0,25.0,26.0,27.0,28.0,29.0,30.0,31.0,32.0;",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

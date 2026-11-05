@@ -71,28 +71,30 @@ using namespace EnergyPlus;
 
 TEST_F(EnergyPlusFixture, CheckEMPDCalc)
 {
-    std::string const idf_objects =
-        delimited_string({"Material,",
-                          "Concrete,                !- Name",
-                          "Rough,                   !- Roughness",
-                          "0.152,                   !- Thickness {m}",
-                          "0.3,                     !- Conductivity {W/m-K}",
-                          "1000,                    !- Density {kg/m3}",
-                          "950,                     !- Specific Heat {J/kg-K}",
-                          "0.900000,                !- Thermal Absorptance",
-                          "0.600000,                !- Solar Absorptance",
-                          "0.600000;                !- Visible Absorptance",
-                          "MaterialProperty:MoisturePenetrationDepth:Settings,",
-                          "Concrete,                !- Name",
-                          "6.554,                     !- Water Vapor Diffusion Resistance Factor {dimensionless} (mu)",
-                          "0.0661,                   !- Moisture Equation Coefficient a {dimensionless} (MoistACoeff)",
-                          "1,                       !- Moisture Equation Coefficient b {dimensionless} (MoistBCoeff)",
-                          "0,                       !- Moisture Equation Coefficient c {dimensionless} (MoistCCoeff)",
-                          "1,                       !- Moisture Equation Coefficient d {dimensionless} (MoistDCoeff)",
-                          "0.006701,                    !- Surface-layer penetration depth {m} (dEMPD)",
-                          "0.013402,                    !- Deep-layer penetration depth {m} (dEPMDdeep)",
-                          "0,                       !- Coating layer permeability {m} (CoatingThickness)",
-                          "1;                       !- Coating layer water vapor diffusion resistance factor {dimensionless} (muCoating)"});
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  Concrete,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.152,                   !- Thickness {m}",
+        "  0.3,                     !- Conductivity {W/m-K}",
+        "  1000,                    !- Density {kg/m3}",
+        "  950,                     !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.6,                     !- Solar Absorptance",
+        "  0.6;                     !- Visible Absorptance",
+
+        "MaterialProperty:MoisturePenetrationDepth:Settings,",
+        "  Concrete,                !- Name",
+        "  6.554,                   !- Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "  0.0661,                  !- Moisture Equation Coefficient a {dimensionless}",
+        "  1,                       !- Moisture Equation Coefficient b {dimensionless}",
+        "  0,                       !- Moisture Equation Coefficient c {dimensionless}",
+        "  1,                       !- Moisture Equation Coefficient d {dimensionless}",
+        "  0.006701,                !- Surface Layer Penetration Depth {m}",
+        "  0.013402,                !- Deep Layer Penetration Depth {m}",
+        "  0,                       !- Coating Layer Thickness {m}",
+        "  1;                       !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -154,28 +156,30 @@ TEST_F(EnergyPlusFixture, CheckEMPDCalc)
 
 TEST_F(EnergyPlusFixture, EMPDAutocalcDepth)
 {
-    std::string const idf_objects =
-        delimited_string({"Material,",
-                          "Concrete,                !- Name",
-                          "Rough,                   !- Roughness",
-                          "0.152,                   !- Thickness {m}",
-                          "0.3,                     !- Conductivity {W/m-K}",
-                          "850,                     !- Density {kg/m3}",
-                          "950,                     !- Specific Heat {J/kg-K}",
-                          "0.900000,                !- Thermal Absorptance",
-                          "0.600000,                !- Solar Absorptance",
-                          "0.600000;                !- Visible Absorptance",
-                          "MaterialProperty:MoisturePenetrationDepth:Settings,",
-                          "Concrete,                !- Name",
-                          "8,                     !- Water Vapor Diffusion Resistance Factor {dimensionless} (mu)",
-                          "0.012,                   !- Moisture Equation Coefficient a {dimensionless} (MoistACoeff)",
-                          "1,                       !- Moisture Equation Coefficient b {dimensionless} (MoistBCoeff)",
-                          "0,                       !- Moisture Equation Coefficient c {dimensionless} (MoistCCoeff)",
-                          "1,                       !- Moisture Equation Coefficient d {dimensionless} (MoistDCoeff)",
-                          ",                    !- Surface-layer penetration depth {m} (dEMPD)",
-                          "autocalculate,                    !- Deep-layer penetration depth {m} (dEPMDdeep)",
-                          "0,                       !- Coating layer permeability {m} (CoatingThickness)",
-                          "1;                       !- Coating layer water vapor diffusion resistance factor {dimensionless} (muCoating)"});
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  Concrete,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.152,                   !- Thickness {m}",
+        "  0.3,                     !- Conductivity {W/m-K}",
+        "  850,                     !- Density {kg/m3}",
+        "  950,                     !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.6,                     !- Solar Absorptance",
+        "  0.6;                     !- Visible Absorptance",
+
+        "MaterialProperty:MoisturePenetrationDepth:Settings,",
+        "  Concrete,                !- Name",
+        "  8,                       !- Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "  0.012,                   !- Moisture Equation Coefficient a {dimensionless}",
+        "  1,                       !- Moisture Equation Coefficient b {dimensionless}",
+        "  0,                       !- Moisture Equation Coefficient c {dimensionless}",
+        "  1,                       !- Moisture Equation Coefficient d {dimensionless}",
+        "  ,                        !- Surface Layer Penetration Depth {m}",
+        "  Autocalculate,           !- Deep Layer Penetration Depth {m}",
+        "  0,                       !- Coating Layer Thickness {m}",
+        "  1;                       !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -191,28 +195,30 @@ TEST_F(EnergyPlusFixture, EMPDAutocalcDepth)
 
 TEST_F(EnergyPlusFixture, EMPDRcoating)
 {
-    std::string const idf_objects =
-        delimited_string({"Material,",
-                          "Concrete,                !- Name",
-                          "Rough,                   !- Roughness",
-                          "0.152,                   !- Thickness {m}",
-                          "0.3,                     !- Conductivity {W/m-K}",
-                          "1000,                    !- Density {kg/m3}",
-                          "950,                     !- Specific Heat {J/kg-K}",
-                          "0.900000,                !- Thermal Absorptance",
-                          "0.600000,                !- Solar Absorptance",
-                          "0.600000;                !- Visible Absorptance",
-                          "MaterialProperty:MoisturePenetrationDepth:Settings,",
-                          "Concrete,                !- Name",
-                          "6.554,                     !- Water Vapor Diffusion Resistance Factor {dimensionless} (mu)",
-                          "0.0661,                   !- Moisture Equation Coefficient a {dimensionless} (MoistACoeff)",
-                          "1,                       !- Moisture Equation Coefficient b {dimensionless} (MoistBCoeff)",
-                          "0,                       !- Moisture Equation Coefficient c {dimensionless} (MoistCCoeff)",
-                          "1,                       !- Moisture Equation Coefficient d {dimensionless} (MoistDCoeff)",
-                          "0.006701,                    !- Surface-layer penetration depth {m} (dEMPD)",
-                          "0.013402,                    !- Deep-layer penetration depth {m} (dEPMDdeep)",
-                          "0.002,                       !- Coating layer permeability {m} (CoatingThickness)",
-                          "1;                       !- Coating layer water vapor diffusion resistance factor {dimensionless} (muCoating)"});
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  Concrete,                !- Name",
+        "  Rough,                   !- Roughness",
+        "  0.152,                   !- Thickness {m}",
+        "  0.3,                     !- Conductivity {W/m-K}",
+        "  1000,                    !- Density {kg/m3}",
+        "  950,                     !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.6,                     !- Solar Absorptance",
+        "  0.6;                     !- Visible Absorptance",
+
+        "MaterialProperty:MoisturePenetrationDepth:Settings,",
+        "  Concrete,                !- Name",
+        "  6.554,                   !- Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "  0.0661,                  !- Moisture Equation Coefficient a {dimensionless}",
+        "  1,                       !- Moisture Equation Coefficient b {dimensionless}",
+        "  0,                       !- Moisture Equation Coefficient c {dimensionless}",
+        "  1,                       !- Moisture Equation Coefficient d {dimensionless}",
+        "  0.006701,                !- Surface Layer Penetration Depth {m}",
+        "  0.013402,                !- Deep Layer Penetration Depth {m}",
+        "  0.002,                   !- Coating Layer Thickness {m}",
+        "  1;                       !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -274,29 +280,30 @@ TEST_F(EnergyPlusFixture, EMPDRcoating)
 
 TEST_F(EnergyPlusFixture, CheckEMPDCalc_Slope)
 {
-    std::string const idf_objects =
-        delimited_string({"Material,",
-                          "WOOD,                    !- Name",
-                          "MediumSmooth,            !- Roughness",
-                          "1.9099999E-02,           !- Thickness {m}",
-                          "0.1150000,               !- Conductivity {W/m-K}",
-                          "513.0000,                !- Density {kg/m3}",
-                          "1381.000,                !- Specific Heat {J/kg-K}",
-                          "0.900000,                !- Thermal Absorptance",
-                          "0.780000,                !- Solar Absorptance",
-                          "0.780000;                !- Visible Absorptance",
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  WOOD,                    !- Name",
+        "  MediumSmooth,            !- Roughness",
+        "  0.019099999,             !- Thickness {m}",
+        "  0.115,                   !- Conductivity {W/m-K}",
+        "  513.0,                   !- Density {kg/m3}",
+        "  1381.0,                  !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.78,                    !- Solar Absorptance",
+        "  0.78;                    !- Visible Absorptance",
 
-                          "MaterialProperty:MoisturePenetrationDepth:Settings,",
-                          "WOOD,                    !- Name",
-                          "150,                     !- Water Vapor Diffusion Resistance Factor {dimensionless} (mu)",
-                          "0.204,                   !- Moisture Equation Coefficient a {dimensionless} (MoistACoeff)",
-                          "2.32,                    !- Moisture Equation Coefficient b {dimensionless} (MoistBCoeff)",
-                          "0.43,                    !- Moisture Equation Coefficient c {dimensionless} (MoistCCoeff)",
-                          "72,                      !- Moisture Equation Coefficient d {dimensionless} (MoistDCoeff)",
-                          "0.0011,                  !- Surface-layer penetration depth {m} (dEMPD)",
-                          "0.004,                   !- Deep-layer penetration depth {m} (dEPMDdeep)",
-                          "0,                       !- Coating layer permeability {m} (CoatingThickness)",
-                          "0;                       !- Coating layer water vapor diffusion resistance factor {dimensionless} (muCoating)"});
+        "MaterialProperty:MoisturePenetrationDepth:Settings,",
+        "  WOOD,                    !- Name",
+        "  150,                     !- Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "  0.204,                   !- Moisture Equation Coefficient a {dimensionless}",
+        "  2.32,                    !- Moisture Equation Coefficient b {dimensionless}",
+        "  0.43,                    !- Moisture Equation Coefficient c {dimensionless}",
+        "  72,                      !- Moisture Equation Coefficient d {dimensionless}",
+        "  0.0011,                  !- Surface Layer Penetration Depth {m}",
+        "  0.004,                   !- Deep Layer Penetration Depth {m}",
+        "  0,                       !- Coating Layer Thickness {m}",
+        "  0;                       !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -381,52 +388,53 @@ TEST_F(EnergyPlusFixture, CheckEMPDCalc_Slope)
 
 TEST_F(EnergyPlusFixture, CheckEMPDWarningMissingOnInsideLayer)
 {
-    std::string const idf_objects =
-        delimited_string({"  Material,",
-                          "    000_G01a 19mm gypsum board,  !- Name",
-                          "    MediumSmooth,            !- Roughness",
-                          "    0.019,                   !- Thickness {m}",
-                          "    0.16,                    !- Conductivity {W/m-K}",
-                          "    800,                     !- Density {kg/m3}",
-                          "    1090,                    !- Specific Heat {J/kg-K}",
-                          "    0.9,                     !- Thermal Absorptance",
-                          "    0.7,                     !- Solar Absorptance",
-                          "    0.7;                     !- Visible Absorptance",
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  000_G01a 19mm gypsum board,  !- Name",
+        "  MediumSmooth,            !- Roughness",
+        "  0.019,                   !- Thickness {m}",
+        "  0.16,                    !- Conductivity {W/m-K}",
+        "  800,                     !- Density {kg/m3}",
+        "  1090,                    !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.7,                     !- Solar Absorptance",
+        "  0.7;                     !- Visible Absorptance",
 
-                          "!-  MaterialProperty:MoisturePenetrationDepth:Settings,",
-                          "!-    000_G01a 19mm gypsum board,  !- Name",
-                          "!-    8.9,                     !- Water Vapor Diffusion Resistance Factor {dimensionless}",
-                          "!-    0.0069,                  !- Moisture Equation Coefficient a {dimensionless}",
-                          "!-    0.9066,                  !- Moisture Equation Coefficient b {dimensionless}",
-                          "!-    0.0404,                  !- Moisture Equation Coefficient c {dimensionless}",
-                          "!-    22.1121,                 !- Moisture Equation Coefficient d {dimensionless}",
-                          "!-    Autocalculate,           !- Surface Layer Penetration Depth {m}",
-                          "!-    Autocalculate,           !- Deep Layer Penetration Depth {m}",
-                          "!-    0.005,                   !- Coating Layer Thickness {m}",
-                          "!-    140;                     !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "!-  MaterialProperty:MoisturePenetrationDepth:Settings,",
+        "!-    000_G01a 19mm gypsum board,  !- Name",
+        "!-    8.9,                     !- Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "!-    0.0069,                  !- Moisture Equation Coefficient a {dimensionless}",
+        "!-    0.9066,                  !- Moisture Equation Coefficient b {dimensionless}",
+        "!-    0.0404,                  !- Moisture Equation Coefficient c {dimensionless}",
+        "!-    22.1121,                 !- Moisture Equation Coefficient d {dimensionless}",
+        "!-    Autocalculate,           !- Surface Layer Penetration Depth {m}",
+        "!-    Autocalculate,           !- Deep Layer Penetration Depth {m}",
+        "!-    0.005,                   !- Coating Layer Thickness {m}",
+        "!-    140;                     !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
 
-                          "  Material,",
-                          "    1/2IN Gypsum,            !- Name",
-                          "    Smooth,                  !- Roughness",
-                          "    0.0127,                  !- Thickness {m}",
-                          "    0.16,                    !- Conductivity {W/m-K}",
-                          "    784.9,                   !- Density {kg/m3}",
-                          "    830,                     !- Specific Heat {J/kg-K}",
-                          "    0.9,                     !- Thermal Absorptance",
-                          "    0.92,                    !- Solar Absorptance",
-                          "    0.92;                    !- Visible Absorptance",
+        "Material,",
+        "  1/2IN Gypsum,            !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.0127,                  !- Thickness {m}",
+        "  0.16,                    !- Conductivity {W/m-K}",
+        "  784.9,                   !- Density {kg/m3}",
+        "  830,                     !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
 
-                          "  MaterialProperty:MoisturePenetrationDepth:Settings,",
-                          "    1/2IN Gypsum,            !- Name",
-                          "    8.9,                     !- Water Vapor Diffusion Resistance Factor {dimensionless}",
-                          "    0.0069,                  !- Moisture Equation Coefficient a {dimensionless}",
-                          "    0.9066,                  !- Moisture Equation Coefficient b {dimensionless}",
-                          "    0.0404,                  !- Moisture Equation Coefficient c {dimensionless}",
-                          "    22.1121,                 !- Moisture Equation Coefficient d {dimensionless}",
-                          "    Autocalculate,           !- Surface Layer Penetration Depth {m}",
-                          "    Autocalculate,           !- Deep Layer Penetration Depth {m}",
-                          "    0.005,                   !- Coating Layer Thickness {m}",
-                          "    140;                     !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}"});
+        "MaterialProperty:MoisturePenetrationDepth:Settings,",
+        "  1/2IN Gypsum,            !- Name",
+        "  8.9,                     !- Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "  0.0069,                  !- Moisture Equation Coefficient a {dimensionless}",
+        "  0.9066,                  !- Moisture Equation Coefficient b {dimensionless}",
+        "  0.0404,                  !- Moisture Equation Coefficient c {dimensionless}",
+        "  22.1121,                 !- Moisture Equation Coefficient d {dimensionless}",
+        "  Autocalculate,           !- Surface Layer Penetration Depth {m}",
+        "  Autocalculate,           !- Deep Layer Penetration Depth {m}",
+        "  0.005,                   !- Coating Layer Thickness {m}",
+        "  140;                     !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -472,37 +480,38 @@ TEST_F(EnergyPlusFixture, CheckEMPDNoSegFault)
 {
     // Regression test for #10777: CalcMoistureBalanceEMPD should not segfault when an EMPD surface's
     // inside-layer material lacks EMPD properties (dynamic_cast returns nullptr), so the routine bails out cleanly.
-    std::string const idf_objects =
-        delimited_string({"  Material,",
-                          "    1/2IN Gypsum,            !- Name",
-                          "    Smooth,                  !- Roughness",
-                          "    0.0127,                  !- Thickness {m}",
-                          "    0.16,                    !- Conductivity {W/m-K}",
-                          "    784.9,                   !- Density {kg/m3}",
-                          "    830,                     !- Specific Heat {J/kg-K}",
-                          "    0.9,                     !- Thermal Absorptance",
-                          "    0.92,                    !- Solar Absorptance",
-                          "    0.92;                    !- Visible Absorptance",
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  1/2IN Gypsum,            !- Name",
+        "  Smooth,                  !- Roughness",
+        "  0.0127,                  !- Thickness {m}",
+        "  0.16,                    !- Conductivity {W/m-K}",
+        "  784.9,                   !- Density {kg/m3}",
+        "  830,                     !- Specific Heat {J/kg-K}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.92,                    !- Solar Absorptance",
+        "  0.92;                    !- Visible Absorptance",
 
-                          "  MaterialProperty:MoisturePenetrationDepth:Settings,",
-                          "    1/2IN Gypsum,            !- Name",
-                          "    8.9,                     !- Water Vapor Diffusion Resistance Factor {dimensionless}",
-                          "    0.0069,                  !- Moisture Equation Coefficient a {dimensionless}",
-                          "    0.9066,                  !- Moisture Equation Coefficient b {dimensionless}",
-                          "    0.0404,                  !- Moisture Equation Coefficient c {dimensionless}",
-                          "    22.1121,                 !- Moisture Equation Coefficient d {dimensionless}",
-                          "    Autocalculate,           !- Surface Layer Penetration Depth {m}",
-                          "    Autocalculate,           !- Deep Layer Penetration Depth {m}",
-                          "    0.005,                   !- Coating Layer Thickness {m}",
-                          "    140;                     !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "MaterialProperty:MoisturePenetrationDepth:Settings,",
+        "  1/2IN Gypsum,            !- Name",
+        "  8.9,                     !- Water Vapor Diffusion Resistance Factor {dimensionless}",
+        "  0.0069,                  !- Moisture Equation Coefficient a {dimensionless}",
+        "  0.9066,                  !- Moisture Equation Coefficient b {dimensionless}",
+        "  0.0404,                  !- Moisture Equation Coefficient c {dimensionless}",
+        "  22.1121,                 !- Moisture Equation Coefficient d {dimensionless}",
+        "  Autocalculate,           !- Surface Layer Penetration Depth {m}",
+        "  Autocalculate,           !- Deep Layer Penetration Depth {m}",
+        "  0.005,                   !- Coating Layer Thickness {m}",
+        "  140;                     !- Coating Layer Water Vapor Diffusion Resistance Factor {dimensionless}",
 
-                          "  Material:NoMass,",
-                          "    CP02 CARPET PAD,         !- Name",
-                          "    VeryRough,               !- Roughness",
-                          "    0.2165,                  !- Thermal Resistance {m2-K/W}",
-                          "    0.9,                     !- Thermal Absorptance",
-                          "    0.7,                     !- Solar Absorptance",
-                          "    0.8;                     !- Visible Absorptance"});
+        "Material:NoMass,",
+        "  CP02 CARPET PAD,         !- Name",
+        "  VeryRough,               !- Roughness",
+        "  0.2165,                  !- Thermal Resistance {m2-K/W}",
+        "  0.9,                     !- Thermal Absorptance",
+        "  0.7,                     !- Solar Absorptance",
+        "  0.8;                     !- Visible Absorptance",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
 

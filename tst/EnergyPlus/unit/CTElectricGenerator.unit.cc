@@ -78,7 +78,7 @@ TEST_F(EnergyPlusFixture, CTElectricGenerator_Fueltype)
         "  BG Tur Recovery Lube Heat Curve,  !- Heat Recovery Lube Energy Curve Name",
         "  0.01907045,              !- Coefficient 1 of U-Factor Times Area Curve",
         "  0.9,                     !- Coefficient 2 of U-Factor Times Area Curve",
-        "  0.00000504,              !- Maximum Exhaust Flow per Unit of Power Output {(kg/s)/W}",
+        "  5.04e-06,                !- Maximum Exhaust Flow per Unit of Power Output {(kg/s)/W}",
         "  150,                     !- Design Minimum Exhaust Temperature {C}",
         "  25,                      !- Design Air Inlet Temperature {C}",
         "  43500,                   !- Fuel Higher Heating Value {kJ/kg}",
@@ -103,7 +103,7 @@ TEST_F(EnergyPlusFixture, CTElectricGenerator_Fueltype)
         "  -0.0008,                 !- Coefficient2 x",
         "  0,                       !- Coefficient3 x**2",
         "  -30,                     !- Minimum Value of x",
-        "  +30;                     !- Maximum Value of x",
+        "  30;                      !- Maximum Value of x",
 
         "Curve:Quadratic,",
         "  BG Exhaust Flow Curve,   !- Name",
@@ -127,7 +127,7 @@ TEST_F(EnergyPlusFixture, CTElectricGenerator_Fueltype)
         "  0.0018,                  !- Coefficient2 x",
         "  0,                       !- Coefficient3 x**2",
         "  -30,                     !- Minimum Value of x",
-        "  +30;                     !- Maximum Value of x",
+        "  30;                      !- Maximum Value of x",
 
         "Curve:Quadratic,",
         "  BG Tur Recovery Lube Heat Curve,  !- Name",

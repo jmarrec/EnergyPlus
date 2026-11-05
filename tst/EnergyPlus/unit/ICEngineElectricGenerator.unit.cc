@@ -76,7 +76,7 @@ TEST_F(EnergyPlusFixture, ICEngineElectricGenerator_Fueltype)
         "  BG Exhaust Temperature Curve,  !- Exhaust Temperature Curve Name",
         "  0.00952329,              !- Coefficient 1 of U-Factor Times Area Curve",
         "  0.9,                     !- Coefficient 2 of U-Factor Times Area Curve",
-        "  0.00000063,              !- Maximum Exhaust Flow per Unit of Power Output {(kg/s)/W}",
+        "  6.3e-07,                 !- Maximum Exhaust Flow per Unit of Power Output {(kg/s)/W}",
         "  150,                     !- Design Minimum Exhaust Temperature {C}",
         "  45500,                   !- Fuel Higher Heating Value {kJ/kg}",
         "  0.0,                     !- Design Heat Recovery Water Flow Rate {m3/s}",

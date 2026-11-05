@@ -74,14 +74,16 @@ namespace EnergyPlus {
 
 TEST_F(EnergyPlusFixture, ExerciseBaseboardElectric)
 {
-    std::string const idf_objects = delimited_string({"ZoneHVAC:Baseboard:Convective:Electric,",
-                                                      "Zone1Baseboard,          !- Name",
-                                                      ",                        !- Availability Schedule Name",
-                                                      "HeatingDesignCapacity,   !- Heating Design Capacity Method",
-                                                      "5000,                    !- Heating Design Capacity {W}",
-                                                      ",                        !- Heating Design Capacity Per Floor Area {W/m2}",
-                                                      ",                        !- Fraction of Autosized Heating Design Capacity",
-                                                      "0.97;                    !- Efficiency"});
+    std::string const idf_objects = delimited_string({
+        "ZoneHVAC:Baseboard:Convective:Electric,",
+        "  Zone1Baseboard,          !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  HeatingDesignCapacity,   !- Heating Design Capacity Method",
+        "  5000,                    !- Heating Design Capacity {W}",
+        "  ,                        !- Heating Design Capacity Per Floor Area {W/m2}",
+        "  ,                        !- Fraction of Autosized Heating Design Capacity",
+        "  0.97;                    !- Efficiency",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
 

@@ -177,15 +177,16 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_Weather)
     // I cannot hard set WeatherManager's GetBranchInputOneTimeFlag (in anonymous namespace) to false,
     // so it'll end up calling >state->dataWeather->ReadUserWeatherInput which calls the inputProcessor to set the NumOfEnvrn in particular.
     std::string const idf_objects = delimited_string({
-
-        "Timestep,4;"
+        "Timestep,4;",
 
         "SimulationControl,",
         "  Yes,                     !- Do Zone Sizing Calculation",
         "  Yes,                     !- Do System Sizing Calculation",
         "  No,                      !- Do Plant Sizing Calculation",
         "  Yes,                     !- Run Simulation for Sizing Periods",
-        "  No;                      !- Run Simulation for Weather File Run Periods",
+        "  No,                      !- Run Simulation for Weather File Run Periods",
+        "  ,                        !- Do HVAC Sizing Simulation for Sizing Periods",
+        "  ;                        !- Maximum Number of HVAC Sizing Simulation Passes",
 
         "RunPeriod,",
         "  January,                 !- Name",
@@ -206,8 +207,8 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_Weather)
         "  CHICAGO_IL_USA TMY2-94846,  !- Name",
         "  41.78,                   !- Latitude {deg}",
         "  -87.75,                  !- Longitude {deg}",
-        "  -6.00,                   !- Time Zone {hr}",
-        "  190.00;                  !- Elevation {m}",
+        "  -6.0,                    !- Time Zone {hr}",
+        "  190.0;                   !- Elevation {m}",
 
         "SizingPeriod:DesignDay,",
         "  CHICAGO_IL_USA Annual Cooling 1% Design Conditions DB/MCWB,  !- Name",
@@ -218,13 +219,13 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_Weather)
         "  10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}",
         "  ,                        !- Dry-Bulb Temperature Range Modifier Type",
         "  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
-        "  Wetbulb,                 !- Humidity Condition Type",
+        "  WetBulb,                 !- Humidity Condition Type",
         "  23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
         "  ,                        !- Humidity Condition Day Schedule Name",
         "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
         "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "  99063.,                  !- Barometric Pressure {Pa}",
+        "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
         "  230,                     !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
@@ -246,13 +247,13 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_Weather)
         "  0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}",
         "  ,                        !- Dry-Bulb Temperature Range Modifier Type",
         "  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
-        "  Wetbulb,                 !- Humidity Condition Type",
+        "  WetBulb,                 !- Humidity Condition Type",
         "  -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
         "  ,                        !- Humidity Condition Day Schedule Name",
         "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
         "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "  99063.,                  !- Barometric Pressure {Pa}",
+        "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
         "  270,                     !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
@@ -264,7 +265,6 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_Weather)
         "  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
         "  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
         "  0.0;                     !- Sky Clearness",
-
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

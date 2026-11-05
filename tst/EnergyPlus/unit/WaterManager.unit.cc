@@ -69,15 +69,12 @@ TEST_F(EnergyPlusFixture, WaterManager_NormalAnnualPrecipitation)
     // This unit test ensures that the WaterManager correctly calculates the Rainfall CurrentRate
     std::string const idf_objects = delimited_string({
         "Site:Precipitation,",
-        "ScheduleAndDesignLevel,  !- Precipitation Model Type",
-        "0.75,                    !- Design Level for Total Annual Precipitation {m/yr}",
-        "PrecipitationSchd,       !- Precipitation Rates Schedule Name",
-        "0.80771;                 !- Average Total Annual Precipitation {m/yr}",
+        "  ScheduleAndDesignLevel,  !- Precipitation Model Type",
+        "  0.75,                    !- Design Level for Total Annual Precipitation {m/yr}",
+        "  PrecipitationSchd,       !- Precipitation Rates Schedule Name",
+        "  0.80771;                 !- Average Total Annual Precipitation {m/yr}",
 
-        "Schedule:Constant,",
-        "PrecipitationSchd,",
-        ",",
-        "1;",
+        "Schedule:Constant,PrecipitationSchd,,1;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -106,17 +103,13 @@ TEST_F(EnergyPlusFixture, WaterManager_UpdatePrecipitation)
 {
     // with site:precipitation
     std::string const idf_objects = delimited_string({
-
         "Site:Precipitation,",
-        "ScheduleAndDesignLevel,  !- Precipitation Model Type",
-        "0.75,                    !- Design Level for Total Annual Precipitation {m/yr}",
-        "PrecipitationSchd,       !- Precipitation Rates Schedule Name",
-        "0.75;                    !- Average Total Annual Precipitation {m/yr}",
+        "  ScheduleAndDesignLevel,  !- Precipitation Model Type",
+        "  0.75,                    !- Design Level for Total Annual Precipitation {m/yr}",
+        "  PrecipitationSchd,       !- Precipitation Rates Schedule Name",
+        "  0.75;                    !- Average Total Annual Precipitation {m/yr}",
 
-        "Schedule:Constant,",
-        "PrecipitationSchd,",
-        ",",
-        "1;",
+        "Schedule:Constant,PrecipitationSchd,,1;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -150,15 +143,12 @@ TEST_F(EnergyPlusFixture, WaterManager_ZeroAnnualPrecipitation)
     // the average total annual precipitation input is zero.
     std::string const idf_objects = delimited_string({
         "Site:Precipitation,",
-        "ScheduleAndDesignLevel,  !- Precipitation Model Type",
-        "0.75,                    !- Design Level for Total Annual Precipitation {m/yr}",
-        "PrecipitationSchd,       !- Precipitation Rates Schedule Name",
-        "0.0;                     !- Average Total Annual Precipitation {m/yr}",
+        "  ScheduleAndDesignLevel,  !- Precipitation Model Type",
+        "  0.75,                    !- Design Level for Total Annual Precipitation {m/yr}",
+        "  PrecipitationSchd,       !- Precipitation Rates Schedule Name",
+        "  0.0;                     !- Average Total Annual Precipitation {m/yr}",
 
-        "Schedule:Constant,",
-        "PrecipitationSchd,",
-        ",",
-        "1;",
+        "Schedule:Constant,PrecipitationSchd,,1;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -184,7 +174,6 @@ TEST_F(EnergyPlusFixture, WaterManager_Fill)
     // Test for #6435 : When using a Valve from a well, it should keep on filling until it hits the ValveOffCapacity instead of stopping after
     // the first timestep as soon as it's over ValveOnCapacity
     std::string const idf_objects = delimited_string({
-
         "WaterUse:Storage,",
         "  Cooling Tower Water Storage Tank,  !- Name",
         "  Mains,                   !- Water Quality Subcategory",
@@ -194,9 +183,9 @@ TEST_F(EnergyPlusFixture, WaterManager_Fill)
         "  ,                        !- Design Out Flow Rate {m3/s}",
         "  ,                        !- Overflow Destination",
         "  GroundwaterWell,         !- Type of Supply Controlled by Float Valve",
-        "  0.20,                    !- Float Valve On Capacity {m3}",
+        "  0.2,                     !- Float Valve On Capacity {m3}",
         "  3,                       !- Float Valve Off Capacity {m3}",
-        "  0.10,                    !- Backup Mains Capacity {m3}",
+        "  0.1,                     !- Backup Mains Capacity {m3}",
         "  ,                        !- Other Tank Name",
         "  ScheduledTemperature,    !- Water Thermal Mode",
         "  Always 18,               !- Water Temperature Schedule Name",
@@ -221,10 +210,7 @@ TEST_F(EnergyPlusFixture, WaterManager_Fill)
         "  ,                        !- Water Table Depth {m}",
         "  ;                        !- Water Table Depth Schedule Name",
 
-        "Schedule:Constant,",
-        "    Always 18,               !- Name",
-        "    ,                        !- Schedule Type Limits Name",
-        "    18.0;                    !- Hourly Value",
+        "Schedule:Constant,Always 18,,18.0;",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -319,7 +305,6 @@ TEST_F(EnergyPlusFixture, WaterManager_MainsWater_Meter_Test)
     // Test for #10235: A mainswater meter with a blank Water Quality Subcategory
     // should add a "General" mainswater meter
     std::string const idf_objects = delimited_string({
-
         "WaterUse:Storage,",
         "  Cooling Tower Water Storage Tank,  !- Name",
         "  ,                        !- Water Quality Subcategory",
@@ -329,9 +314,9 @@ TEST_F(EnergyPlusFixture, WaterManager_MainsWater_Meter_Test)
         "  ,                        !- Design Out Flow Rate {m3/s}",
         "  ,                        !- Overflow Destination",
         "  GroundwaterWell,         !- Type of Supply Controlled by Float Valve",
-        "  0.20,                    !- Float Valve On Capacity {m3}",
+        "  0.2,                     !- Float Valve On Capacity {m3}",
         "  3,                       !- Float Valve Off Capacity {m3}",
-        "  0.10,                    !- Backup Mains Capacity {m3}",
+        "  0.1,                     !- Backup Mains Capacity {m3}",
         "  ,                        !- Other Tank Name",
         "  ScheduledTemperature,    !- Water Thermal Mode",
         "  Always 18,               !- Water Temperature Schedule Name",
@@ -356,10 +341,7 @@ TEST_F(EnergyPlusFixture, WaterManager_MainsWater_Meter_Test)
         "  ,                        !- Water Table Depth {m}",
         "  ;                        !- Water Table Depth Schedule Name",
 
-        "Schedule:Constant,",
-        "    Always 18,               !- Name",
-        "    ,                        !- Schedule Type Limits Name",
-        "    18.0;                    !- Hourly Value",
+        "Schedule:Constant,Always 18,,18.0;",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
