@@ -64,8 +64,8 @@ TEST_F(EnergyPlusFixture, ChillerIndirectAbsorption_GetInput)
     std::string const idf_objects = delimited_string({
         "Chiller:Absorption:Indirect,",
         "  Big Chiller,             !- Name",
-        "  10000,                   !- Nominal Capacity {W}",
-        "  150,                     !- Nominal Pumping Power {W}",
+        "  10000.0,                 !- Nominal Capacity {W}",
+        "  150.0,                   !- Nominal Pumping Power {W}",
         "  Big Chiller Inlet Node,  !- Chilled Water Inlet Node Name",
         "  Big Chiller Outlet Node,  !- Chilled Water Outlet Node Name",
         "  Big Chiller Condenser Inlet Node,  !- Condenser Inlet Node Name",

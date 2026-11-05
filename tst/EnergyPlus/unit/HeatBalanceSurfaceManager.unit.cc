@@ -387,7 +387,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with AirflowNetwork simulation,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -458,7 +458,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -486,7 +486,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -620,10 +620,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -646,10 +646,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -663,10 +663,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -680,10 +680,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -697,10 +697,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -712,12 +712,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -729,12 +729,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -1070,7 +1070,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  Core_bottom,             !- Zone or ZoneList or Space or SpaceList Name",
         "  Core_bottom Occupancy,   !- Number of People Schedule Name",
         "  People,                  !- Number of People Calculation Method",
-        "  4,                       !- Number of People",
+        "  4.0,                     !- Number of People",
         "  ,                        !- People per Floor Area {person/m2}",
         "  ,                        !- Floor Area per Person {m2/person}",
         "  0.9,                     !- Fraction Radiant",
@@ -1137,8 +1137,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  Core_bottom,             !- Zone or ZoneList Name",
         "  SpecificObject,          !- Averaging Method",
         "  Core_bottom People,      !- Specific People Name",
-        "  0,                       !- Minimum Dry-Bulb Temperature Setpoint {C}",
-        "  50,                      !- Maximum Dry-Bulb Temperature Setpoint {C}",
+        "  0.0,                     !- Minimum Dry-Bulb Temperature Setpoint {C}",
+        "  50.0,                    !- Maximum Dry-Bulb Temperature Setpoint {C}",
         "  Comfort Control,         !- Thermal Comfort Control Type Schedule Name",
         "  ThermostatSetpoint:ThermalComfort:Fanger:SingleHeating,  !- Thermal Comfort Control 1 Object Type",
         "  Single Htg PMV,          !- Thermal Comfort Control 1 Name",
@@ -1166,7 +1166,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
         "  Single Cooling PMV,      !- Name",
         "  Single Cooling PMV;      !- Fanger Thermal Comfort Schedule Name",
 
-        "Schedule:Constant,Dual Zone Control Type Sched,Control Type,4;",
+        "Schedule:Constant,Dual Zone Control Type Sched,Control Type,4.0;",
 
         "ThermostatSetpoint:DualSetpoint,",
         "  Core_bottom DualSPSched,  !- Name",
@@ -1197,29 +1197,29 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Continuous,              !- Numeric Type",
         "  Dimensionless;           !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  Temperature,             !- Name",
-        "  -60,                     !- Lower Limit Value",
-        "  200,                     !- Upper Limit Value",
+        "  -60.0,                   !- Lower Limit Value",
+        "  200.0,                   !- Upper Limit Value",
         "  Continuous,              !- Numeric Type",
         "  Temperature;             !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  Control Type,            !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  4,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  4.0,                     !- Upper Limit Value",
         "  Discrete,                !- Numeric Type",
         "  Dimensionless;           !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  On/Off,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete,                !- Numeric Type",
         "  Dimensionless;           !- Unit Type",
 
@@ -1238,15 +1238,15 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceI
 
         "ScheduleTypeLimits,",
         "  Activity Level,          !- Name",
-        "  0,                       !- Lower Limit Value",
+        "  0.0,                     !- Lower Limit Value",
         "  ,                        !- Upper Limit Value",
         "  Continuous,              !- Numeric Type",
         "  ActivityLevel;           !- Unit Type",
 
         "ScheduleTypeLimits,",
         "  Dimensionless,           !- Name",
-        "  -1,                      !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  -1.0,                    !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Continuous;              !- Numeric Type",
     });
 
@@ -1374,7 +1374,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with Local Air Nodes,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -1453,7 +1453,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -1481,7 +1481,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -1615,10 +1615,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -1641,10 +1641,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -1658,10 +1658,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -1675,10 +1675,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -1692,10 +1692,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -1707,12 +1707,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -1724,12 +1724,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyLocalEnv)
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "SurfaceProperty:LocalEnvironment,",
         "  LocEnv:Living:North,     !- Name",
@@ -1925,7 +1925,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with Local Air Nodes,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -2002,7 +2002,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -2030,7 +2030,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -2164,10 +2164,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -2190,10 +2190,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -2207,10 +2207,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -2224,10 +2224,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -2241,10 +2241,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -2256,12 +2256,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -2273,12 +2273,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "SurfaceProperty:LocalEnvironment,",
         "  LocEnv:Living:North,     !- Name",
@@ -2572,7 +2572,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with AirflowNetwork simulation,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -2651,7 +2651,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -2679,7 +2679,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -2822,10 +2822,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -2848,10 +2848,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -2865,10 +2865,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -2882,10 +2882,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -2899,10 +2899,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -2914,12 +2914,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -2931,12 +2931,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfTempCalcHeatBalanceA
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  Sche_Q_Evap_Cool,        !- Name",
@@ -4618,7 +4618,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with Local Air Nodes,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -4773,10 +4773,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -4799,10 +4799,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -4816,10 +4816,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -4833,10 +4833,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -4850,10 +4850,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -4865,12 +4865,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -4882,12 +4882,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBInterzoneWindow)
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -5044,7 +5044,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestInitHBDaylightingNoExtWi
 
 Building,
   Building,                !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   Suburbs,                 !- Terrain
   0.04,                    !- Loads Convergence Tolerance Value {W}
   0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -5079,7 +5079,7 @@ RunPeriod,
   Yes,                     !- Use Weather File Snow Indicators
   No;                      !- Treat Weather as Actual
 
-Site:GroundTemperature:BuildingSurface,18,18,18,18,18,18,18,18,18,18,18,18;
+Site:GroundTemperature:BuildingSurface,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0,18.0;
 
 ! Materials
 Material,
@@ -5087,8 +5087,8 @@ Material,
   Rough,                   !- Roughness
   0.25,                    !- Thickness {m}
   2.3,                     !- Conductivity {W/m-K}
-  2400,                    !- Density {kg/m3}
-  840,                     !- Specific Heat {J/kg-K}
+  2400.0,                  !- Density {kg/m3}
+  840.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -5099,8 +5099,8 @@ Material,
   Rough,                   !- Roughness
   0.194,                   !- Thickness {m}
   0.041,                   !- Conductivity {W/m-K}
-  155,                     !- Density {kg/m3}
-  1130,                    !- Specific Heat {J/kg-K}
+  155.0,                   !- Density {kg/m3}
+  1130.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -5109,9 +5109,9 @@ Material,
   General Concrete_0.2_UVal_0.2_Mass,  !- Name
   Rough,                   !- Roughness
   0.2,                     !- Thickness {m}
-  2,                       !- Conductivity {W/m-K}
-  2400,                    !- Density {kg/m3}
-  950,                     !- Specific Heat {J/kg-K}
+  2.0,                     !- Conductivity {W/m-K}
+  2400.0,                  !- Density {kg/m3}
+  950.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -5137,10 +5137,10 @@ Construction,
 
 Zone,
   Zone_0,                  !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   1,                       !- Type
   1,                       !- Multiplier
   ,                        !- Ceiling Height {m}
@@ -5254,7 +5254,7 @@ BuildingSurface:Detailed,
   ,                        !- Outside Boundary Condition Object
   SunExposed,              !- Sun Exposure
   WindExposed,             !- Wind Exposure
-  0,                       !- View Factor to Ground
+  0.0,                     !- View Factor to Ground
   4,                       !- Number of Vertices
   24.7463,16.8426,12.9774,  !- X,Y,Z ==> Vertex 1 {m}
   24.7463,39.9005,12.9774,  !- X,Y,Z ==> Vertex 2 {m}
@@ -5292,14 +5292,14 @@ Daylighting:Controls,
   0.1,                     !- Minimum Input Power Fraction for Continuous or ContinuousOff Dimming Control
   0.1,                     !- Minimum Light Output Fraction for Continuous or ContinuousOff Dimming Control
   3,                       !- Number of Stepped Control Steps
-  1,                       !- Probability Lighting will be Reset When Needed in Manual Stepped Control
+  1.0,                     !- Probability Lighting will be Reset When Needed in Manual Stepped Control
   ,                        !- Glare Calculation Daylighting Reference Point Name
   ,                        !- Glare Calculation Azimuth Angle of View Direction Clockwise from Zone y-Axis {deg}
-  22,                      !- Maximum Allowable Discomfort Glare Index
+  22.0,                    !- Maximum Allowable Discomfort Glare Index
   ,                        !- DElight Gridding Resolution {m2}
   Zone_0_DaylCtrlRefPt1,   !- Daylighting Reference Point 1 Name
-  1,                       !- Fraction of Lights Controlled by Reference Point 1
-  500;                     !- Illuminance Setpoint at Reference Point 1 {lux}
+  1.0,                     !- Fraction of Lights Controlled by Reference Point 1
+  500.0;                   !- Illuminance Setpoint at Reference Point 1 {lux}
 
 Daylighting:ReferencePoint,
   Zone_0_DaylCtrlRefPt1,   !- Name
@@ -5850,9 +5850,9 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestTDDSurfWinHeatGain)
         "  Very High Reflectivity Surface,  !- Name",
         "  Smooth,                  !- Roughness",
         "  0.0005,                  !- Thickness {m}",
-        "  237,                     !- Conductivity {W/m-K}",
-        "  2702,                    !- Density {kg/m3}",
-        "  903,                     !- Specific Heat {J/kg-K}",
+        "  237.0,                   !- Conductivity {W/m-K}",
+        "  2702.0,                  !- Density {kg/m3}",
+        "  903.0,                   !- Specific Heat {J/kg-K}",
         "  0.9,                     !- Thermal Absorptance",
         "  0.05,                    !- Solar Absorptance",
         "  0.05;                    !- Visible Absorptance",
@@ -6022,7 +6022,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with Local Air Nodes,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -6099,7 +6099,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -6127,7 +6127,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -6261,10 +6261,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -6287,10 +6287,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -6304,10 +6304,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -6321,10 +6321,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -6338,10 +6338,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -6353,12 +6353,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -6370,12 +6370,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsI
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "SurfaceProperty:LocalEnvironment,",
         "  LocEnv:Living:North,     !- Name",
@@ -6571,7 +6571,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with Local Air Nodes,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -6648,7 +6648,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -6676,7 +6676,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -6810,10 +6810,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -6836,10 +6836,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -6853,10 +6853,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -6870,10 +6870,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -6887,10 +6887,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -6902,12 +6902,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -6919,12 +6919,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySurfToGndLWR
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "SurfaceProperty:LocalEnvironment,",
         "  LocEnv:Living:North,     !- Name",
@@ -7344,8 +7344,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestGroundSurfsAverageTemp)
 
         "ScheduleTypeLimits,",
         "  Temperature,             !- Name",
-        "  -60,                     !- Lower Limit Value",
-        "  200,                     !- Upper Limit Value",
+        "  -60.0,                   !- Lower Limit Value",
+        "  200.0,                   !- Upper Limit Value",
         "  Continuous,              !- Numeric Type",
         "  Temperature;             !- Unit Type",
 
@@ -7378,17 +7378,17 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestGroundSurfsAverageTemp)
         "  NoWind,                  !- Wind Exposure",
         "  1.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0.0,0.0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0.0,10.0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10.0,10.0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10.0,0.0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Zone,",
         "  Zone,                    !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
+        "  0.0,                     !- Direction of Relative North {deg}",
         "  6.0,                     !- X Origin {m}",
         "  6.0,                     !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -7642,8 +7642,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestGroundSurfsAverageRefl)
 
         "ScheduleTypeLimits,",
         "  Temperature,             !- Name",
-        "  -60,                     !- Lower Limit Value",
-        "  200,                     !- Upper Limit Value",
+        "  -60.0,                   !- Lower Limit Value",
+        "  200.0,                   !- Upper Limit Value",
         "  Continuous,              !- Numeric Type",
         "  Temperature;             !- Unit Type",
 
@@ -7670,8 +7670,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestGroundSurfsAverageRefl)
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Continuous;              !- Numeric Type",
 
         "BuildingSurface:Detailed,",
@@ -7703,17 +7703,17 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestGroundSurfsAverageRefl)
         "  NoWind,                  !- Wind Exposure",
         "  1.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0.0,0.0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0.0,10.0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10.0,10.0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10.0,0.0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Zone,",
         "  Zone,                    !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
+        "  0.0,                     !- Direction of Relative North {deg}",
         "  6.0,                     !- X Origin {m}",
         "  6.0,                     !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -7833,7 +7833,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with Local Air Nodes,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -7910,7 +7910,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -7938,7 +7938,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -8072,10 +8072,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -8098,10 +8098,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -8115,10 +8115,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -8132,10 +8132,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -8149,10 +8149,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -8164,12 +8164,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -8181,12 +8181,12 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertyViewFactorsR
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "SurfaceProperty:LocalEnvironment,",
         "  LocEnv:Living:North,     !- Name",
@@ -8526,8 +8526,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestUpdateVariableAbsorptanc
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Continuous,              !- Numeric Type",
         "  Dimensionless;           !- Unit Type",
 
@@ -8966,10 +8966,10 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_SurroundingSurfacesTempTest)
 
 Zone,
   Zone,                    !- Name
-  0,                       !- Direction of Relative North {deg}
+  0.0,                     !- Direction of Relative North {deg}
   6.0,                     !- X Origin {m}
   6.0,                     !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Z Origin {m}
   1,                       !- Type
   1,                       !- Multiplier
   Autocalculate,           !- Ceiling Height {m}
@@ -9115,10 +9115,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   1.0,                     !- View Factor to Ground
   4,                       !- Number of Vertices
-  0.0,0.0,0,  !- X,Y,Z ==> Vertex 1 {m}
-  0.0,10.0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  10.0,10.0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  10.0,0.0,0;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  10.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
     )IDF";
 
@@ -9185,7 +9185,7 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  House with Local Air Nodes,  !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.001,                   !- Loads Convergence Tolerance Value {W}",
         "  0.005,                   !- Temperature Convergence Tolerance Value {deltaC}",
@@ -9262,7 +9262,7 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  4.9,                     !- Wind Speed {m/s}",
-        "  270,                     !- Wind Direction {deg}",
+        "  270.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -9290,7 +9290,7 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
         "  99063.0,                 !- Barometric Pressure {Pa}",
         "  5.3,                     !- Wind Speed {m/s}",
-        "  230,                     !- Wind Direction {deg}",
+        "  230.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
         "  No,                      !- Snow Indicator",
         "  No,                      !- Daylight Saving Time Indicator",
@@ -9424,10 +9424,10 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
 
         "Zone,",
         "  LIVING ZONE,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -9450,10 +9450,10 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:East,             !- Name",
@@ -9467,10 +9467,10 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:South,            !- Name",
@@ -9484,10 +9484,10 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:West,             !- Name",
@@ -9501,10 +9501,10 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Floor,            !- Name",
@@ -9516,12 +9516,12 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  Living:Floor,            !- Outside Boundary Condition Object",
         "  NoSun,                   !- Sun Exposure",
         "  NoWind,                  !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,1,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,1,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,0,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,1.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,1.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Living:Ceiling,          !- Name",
@@ -9533,12 +9533,12 @@ TEST_F(EnergyPlusFixture, CFDHeatBalanceSurfaceManager_TestSurfPropSrdSurfLWR)
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,1,1,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,1,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  1,0,1,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  1,1,1;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,1.0,1.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,1.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  1.0,0.0,1.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  1.0,1.0,1.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "SurfaceProperty:LocalEnvironment,",
         "  LocEnv:Living:North,     !- Name",

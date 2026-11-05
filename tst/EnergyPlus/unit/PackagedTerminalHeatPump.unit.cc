@@ -683,10 +683,10 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimPTAC_HeatingCoilTest)
         "  SPACE1-1 Supply Fan,     !- Name",
         "  FanAvailSched,           !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  75,                      !- Pressure Rise {Pa}",
+        "  75.0,                    !- Pressure Rise {Pa}",
         "  0.5,                     !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  PTACOAMixerOutletNode,   !- Air Inlet Node Name",
         "  SPACE1-1 Fan Outlet Node;  !- Air Outlet Node Name",
 
@@ -802,10 +802,10 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimPTAC_HeatingCoilTest)
 
         "Zone,",
         "  SPACE1-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -1037,10 +1037,10 @@ TEST_F(EnergyPlusFixture, SimPTAC_SZVAVTest)
         "  SPACE1-1 Supply Fan,     !- Name",
         "  FanAvailSched,           !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  75,                      !- Pressure Rise {Pa}",
+        "  75.0,                    !- Pressure Rise {Pa}",
         "  0.5,                     !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  PTACOAMixerOutletNode,   !- Air Inlet Node Name",
         "  SPACE1-1 Fan Outlet Node;  !- Air Outlet Node Name",
 
@@ -1156,10 +1156,10 @@ TEST_F(EnergyPlusFixture, SimPTAC_SZVAVTest)
 
         "Zone,",
         "  SPACE1-1,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  2.438400269,             !- Ceiling Height {m}",
@@ -4147,10 +4147,10 @@ TEST_F(EnergyPlusFixture, PTAC_ZoneEquipment_NodeInputTest)
         "  SPACE1-1 Supply Fan,     !- Name",
         "  ,                        !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  75,                      !- Pressure Rise {Pa}",
+        "  75.0,                    !- Pressure Rise {Pa}",
         "  0.5,                     !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  PTACOAMixerOutletNode,   !- Air Inlet Node Name",
         "  SPACE1-1 Fan Outlet Node;  !- Air Outlet Node Name",
 
@@ -4411,7 +4411,7 @@ TEST_F(EnergyPlusFixture, ZonePTHP_ElectricityRateTest)
         "  Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",
         "  PTHP Thermal Zone One Supp EL Htg Coil,  !- Supplemental Heating Coil Name",
         "  50.0,                    !- Maximum Supply Air Temperature from Supplemental Heater {C}",
-        "  21,                      !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}",
+        "  21.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}",
         "  DrawThrough,             !- Fan Placement",
         "  ;                        !- Supply Air Fan Operating Mode Schedule Name",
 
@@ -4452,16 +4452,16 @@ TEST_F(EnergyPlusFixture, ZonePTHP_ElectricityRateTest)
         "  Curve Quadratic,         !- Energy Input Ratio Function of Flow Fraction Curve Name",
         "  Curve Quadratic,         !- Part Load Fraction Correlation Curve Name",
         "  ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name",
-        "  -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  -8.0,                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
         "  ,                        !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}",
-        "  5,                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}",
-        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  5.0,                     !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}",
+        "  0.0,                     !- Crankcase Heater Capacity {W}",
         "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
         "  Resistive,               !- Defrost Strategy",
         "  Timed,                   !- Defrost Control",
         "  0.166667,                !- Defrost Time Period Fraction",
-        "  2000,                    !- Resistive Defrost Heater Capacity {W}",
+        "  2000.0,                  !- Resistive Defrost Heater Capacity {W}",
         "  ,                        !- Region number for calculating HSPF",
         "  ,                        !- Evaporator Air Inlet Node Name",
         "  ,                        !- Zone Name for Evaporator Placement",
@@ -4484,23 +4484,23 @@ TEST_F(EnergyPlusFixture, ZonePTHP_ElectricityRateTest)
         "  Curve Biquadratic,       !- Energy Input Ratio Function of Temperature Curve Name",
         "  Curve Quadratic,         !- Energy Input Ratio Function of Flow Fraction Curve Name",
         "  Curve Quadratic,         !- Part Load Fraction Correlation Curve Name",
-        "  -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  -25.0,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
         "  ,                        !- Nominal Time for Condensate Removal to Begin {s}",
         "  ,                        !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
         "  ,                        !- Maximum Cycling Rate {cycles/hr}",
         "  ,                        !- Latent Capacity Time Constant {s}",
         "  ,                        !- Condenser Air Inlet Node Name",
         "  AirCooled,               !- Condenser Type",
-        "  0,                       !- Evaporative Condenser Effectiveness {dimensionless}",
+        "  0.0,                     !- Evaporative Condenser Effectiveness {dimensionless}",
         "  Autosize,                !- Evaporative Condenser Air Flow Rate {m3/s}",
         "  Autosize,                !- Evaporative Condenser Pump Rated Power Consumption {W}",
-        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  0.0,                     !- Crankcase Heater Capacity {W}",
         "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  0,                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  0.0,                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
         "  ,                        !- Supply Water Storage Tank Name",
         "  ,                        !- Condensate Collection Water Storage Tank Name",
-        "  0,                       !- Basin Heater Capacity {W/K}",
-        "  10;                      !- Basin Heater Setpoint Temperature {C}",
+        "  0.0,                     !- Basin Heater Capacity {W/K}",
+        "  10.0;                    !- Basin Heater Setpoint Temperature {C}",
 
         "Curve:Biquadratic,",
         "  Curve Biquadratic,       !- Name",
@@ -4510,23 +4510,23 @@ TEST_F(EnergyPlusFixture, ZonePTHP_ElectricityRateTest)
         "  0.0,                     !- Coefficient4 y",
         "  0.0,                     !- Coefficient5 y**2",
         "  0.0,                     !- Coefficient6 x*y",
-        "  -50,                     !- Minimum Value of x",
-        "  50,                      !- Maximum Value of x",
-        "  -50,                     !- Minimum Value of y",
-        "  50;                      !- Maximum Value of y",
+        "  -50.0,                   !- Minimum Value of x",
+        "  50.0,                    !- Maximum Value of x",
+        "  -50.0,                   !- Minimum Value of y",
+        "  50.0;                    !- Maximum Value of y",
 
         "Curve:Quadratic,",
         "  Curve Quadratic,         !- Name",
         "  1.0,                     !- Coefficient1 Constant",
         "  0.0,                     !- Coefficient2 x",
-        "  0,                       !- Coefficient3 x**2",
+        "  0.0,                     !- Coefficient3 x**2",
         "  0.0,                     !- Minimum Value of x",
         "  5.0;                     !- Maximum Value of x",
 
         "Coil:Heating:Electric,",
         "  PTHP Thermal Zone one Supp EL Htg Coil,  !- Name",
         "  FanAndCoilAvailSched,    !- Availability Schedule Name",
-        "  1,                       !- Efficiency",
+        "  1.0,                     !- Efficiency",
         "  30000.0,                 !- Nominal Capacity {W}",
         "  PTHP Thermal Zone One Fan Outlet Node,  !- Air Inlet Node Name",
         "  Thermal Zone One Inlet Node;  !- Air Outlet Node Name",
@@ -4568,8 +4568,8 @@ TEST_F(EnergyPlusFixture, ZonePTHP_ElectricityRateTest)
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete,                !- Numeric Type",
         "  Availability;            !- Unit Type",
     });
@@ -4786,7 +4786,7 @@ AvailabilityManager:NightCycle,
   CycleOnControlZone,      !- Control Type
   0.2,                     !- Thermostat Tolerance {deltaC}
   ThermostatWithMinimumRunTime,  !- Cycling Run Time Control Type
-  300,                     !- Cycling Run Time {s}
+  300.0,                   !- Cycling Run Time {s}
   SPACE1-1;                !- Control Zone or Zone List Name
 
 OutdoorAir:Mixer,
@@ -4878,10 +4878,10 @@ Curve:Quadratic,
 
 Zone,
   SPACE1-1,                !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   1,                       !- Type
   1,                       !- Multiplier
   2.438400269,             !- Ceiling Height {m}

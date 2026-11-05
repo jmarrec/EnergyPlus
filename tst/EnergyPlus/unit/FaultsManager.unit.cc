@@ -152,17 +152,17 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value",
+        "  0.0,                     !- Lower Limit Value",
         "  1.5,                     !- Upper Limit Value",
         "  Continuous;              !- Numeric Type",
 
         "ScheduleTypeLimits,",
         "  OnOff,                   !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
-        "Schedule:Constant,Always On Discrete,OnOff,1;",
+        "Schedule:Constant,Always On Discrete,OnOff,1.0;",
 
         "Schedule:Compact,",
         "  AvailSched,              !- Name",
@@ -182,10 +182,10 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
         "  Fan CV,                  !- Name",
         "  Always On Discrete,      !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  150,                     !- Pressure Rise {Pa}",
+        "  150.0,                   !- Pressure Rise {Pa}",
         "  Autosize,                !- Maximum Flow Rate {m3/s}",
         "  0.93,                    !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  Node 21,                 !- Air Inlet Node Name",
         "  Node 38;                 !- Air Outlet Node Name",
 
@@ -199,11 +199,11 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
 
         "Curve:Cubic,",
         "  Fouled Fan Curve,        !- Name",
-        "  1015,                    !- Coefficient1 Constant",
-        "  -1750,                   !- Coefficient2 x",
-        "  59050,                   !- Coefficient3 x**2",
-        "  -1624000,                !- Coefficient4 x**3",
-        "  0,                       !- Minimum Value of x",
+        "  1015.0,                  !- Coefficient1 Constant",
+        "  -1750.0,                 !- Coefficient2 x",
+        "  59050.0,                 !- Coefficient3 x**2",
+        "  -1624000.0,              !- Coefficient4 x**3",
+        "  0.0,                     !- Minimum Value of x",
         "  0.09,                    !- Maximum Value of x",
         "  ,                        !- Minimum Curve Output",
         "  ,                        !- Maximum Curve Output",
@@ -239,17 +239,17 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value",
+        "  0.0,                     !- Lower Limit Value",
         "  1.5,                     !- Upper Limit Value",
         "  Continuous;              !- Numeric Type",
 
         "ScheduleTypeLimits,",
         "  OnOff,                   !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
-        "Schedule:Constant,Always On Discrete,OnOff,1;",
+        "Schedule:Constant,Always On Discrete,OnOff,1.0;",
 
         "Schedule:Compact,",
         "  AvailSched,              !- Name",
@@ -269,10 +269,10 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
         "  Fan CV,                  !- Name",
         "  Always On Discrete,      !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  400,                     !- Pressure Rise {Pa}",
+        "  400.0,                   !- Pressure Rise {Pa}",
         "  0.114,                   !- Maximum Flow Rate {m3/s}",
         "  0.93,                    !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  Node 21,                 !- Air Inlet Node Name",
         "  Node 38;                 !- Air Outlet Node Name",
 
@@ -286,11 +286,11 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
 
         "Curve:Cubic,",
         "  Fouled Fan Curve,        !- Name",
-        "  1015,                    !- Coefficient1 Constant",
-        "  -1750,                   !- Coefficient2 x",
-        "  59050,                   !- Coefficient3 x**2",
-        "  -1624000,                !- Coefficient4 x**3",
-        "  0,                       !- Minimum Value of x",
+        "  1015.0,                  !- Coefficient1 Constant",
+        "  -1750.0,                 !- Coefficient2 x",
+        "  59050.0,                 !- Coefficient3 x**2",
+        "  -1624000.0,              !- Coefficient4 x**3",
+        "  0.0,                     !- Minimum Value of x",
         "  0.09,                    !- Maximum Value of x",
         "  ,                        !- Minimum Curve Output",
         "  ,                        !- Maximum Curve Output",
@@ -584,7 +584,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_EconomizerFaultGetInput)
         "  ,                        !- Severity Schedule Name",
         "  Controller:OutdoorAir,   !- Controller Object Type",
         "  VAV_1_OA_Controller,     !- Controller Object Name",
-        "  5000;                    !- Enthalpy Sensor Offset {J/kg}",
+        "  5000.0;                  !- Enthalpy Sensor Offset {J/kg}",
 
         "FaultModel:TemperatureSensorOffset:ReturnAir,",
         "  RATFault,                !- Name",
@@ -600,7 +600,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_EconomizerFaultGetInput)
         "  ,                        !- Severity Schedule Name",
         "  Controller:OutdoorAir,   !- Controller Object Type",
         "  VAV_2_OA_Controller,     !- Controller Object Name",
-        "  -2000;                   !- Enthalpy Sensor Offset {J/kg}",
+        "  -2000.0;                 !- Enthalpy Sensor Offset {J/kg}",
     });
 
     // Process inputs
@@ -740,8 +740,8 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_AssignmentAndCalc)
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Continuous;              !- Numeric Type",
 
         "Schedule:Compact,",
@@ -769,10 +769,10 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_AssignmentAndCalc)
         "  AHU HW Heating Coil Air Outlet Node,  !- Air Outlet Node Name",
         "  UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method",
         "  438.32,                  !- Rated Capacity {W}",
-        "  80,                      !- Rated Inlet Water Temperature {C}",
-        "  16,                      !- Rated Inlet Air Temperature {C}",
-        "  70,                      !- Rated Outlet Water Temperature {C}",
-        "  35,                      !- Rated Outlet Air Temperature {C}",
+        "  80.0,                    !- Rated Inlet Water Temperature {C}",
+        "  16.0,                    !- Rated Inlet Air Temperature {C}",
+        "  70.0,                    !- Rated Outlet Water Temperature {C}",
+        "  35.0,                    !- Rated Outlet Air Temperature {C}",
         "  0.5;                     !- Rated Ratio for Air and Water Convection",
 
         "FaultModel:Fouling:Coil,",

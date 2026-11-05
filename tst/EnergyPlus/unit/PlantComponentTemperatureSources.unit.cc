@@ -69,7 +69,7 @@ TEST_F(EnergyPlusFixture, TestPlantComponentTemperatureSource)
         "  FluidSource Outlet Node,  !- Outlet Node",
         "  0.001,                   !- Design Volume Flow Rate {m3/s}",
         "  Constant,                !- Temperature Specification Type",
-        "  8,                       !- Source Temperature {C}",
+        "  8.0,                     !- Source Temperature {C}",
         "  ;                        !- Source Temperature Schedule Name {C}",
     });
     ASSERT_TRUE(process_idf(idf_objects));

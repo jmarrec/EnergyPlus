@@ -462,10 +462,10 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -492,10 +492,10 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
         "  ,                        !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  0.548,0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0.548,0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5.548,0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5.548,0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.548,0.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.548,0.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.548,0.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.548,0.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall001,           !- Name",
@@ -509,10 +509,10 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  15.24,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  15.24,0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  15.24,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall002,           !- Name",
@@ -526,9 +526,9 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  15.24,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  15.24,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  15.24,15.24,0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
         "  15.24,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
@@ -544,9 +544,9 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
         "  15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  15.24,15.24,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,15.24,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall004,           !- Name",
@@ -560,10 +560,10 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,15.24,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Flr001,            !- Name",
@@ -592,7 +592,7 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
         "  0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
         "  0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 2 {m}",
@@ -700,10 +700,10 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -730,10 +730,10 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
         "  ,                        !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  0.548,0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0.548,0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5.548,0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5.548,0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.548,0.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.548,0.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.548,0.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.548,0.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall001,           !- Name",
@@ -747,10 +747,10 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  15.24,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  15.24,0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  15.24,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall002,           !- Name",
@@ -764,9 +764,9 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  15.24,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  15.24,0,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  15.24,15.24,0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
         "  15.24,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
@@ -782,9 +782,9 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
         "  15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  15.24,15.24,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,15.24,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall004,           !- Name",
@@ -798,10 +798,10 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  0,15.24,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  0,0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  0.0,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Flr001,            !- Name",
@@ -830,7 +830,7 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
         "  ,                        !- Outside Boundary Condition Object",
         "  SunExposed,              !- Sun Exposure",
         "  WindExposed,             !- Wind Exposure",
-        "  0,                       !- View Factor to Ground",
+        "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
         "  0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}",
         "  0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 2 {m}",
@@ -3179,12 +3179,12 @@ TEST_F(ConvectionCoefficientsFixture, TestSurfaceConvectionArrayAllocation1)
         "  FakeSurface,             !- Surface Name",
         "  Inside,                  !- Convection Coefficient 1 Location",
         "  Value,                   !- Convection Coefficient 1 Type",
-        "  1,                       !- Convection Coefficient 1 {W/m2-K}",
+        "  1.0,                     !- Convection Coefficient 1 {W/m2-K}",
         "  FakeSchName,             !- Convection Coefficient 1 Schedule Name",
         "  FakeCurve,               !- Convection Coefficient 1 User Curve Name",
         "  Outside,                 !- Convection Coefficient 2 Location",
         "  Value,                   !- Convection Coefficient 2 Type",
-        "  10;                      !- Convection Coefficient 2 {W/m2-K}",
+        "  10.0;                    !- Convection Coefficient 2 {W/m2-K}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3211,12 +3211,12 @@ TEST_F(ConvectionCoefficientsFixture, TestSurfaceConvectionArrayAllocation2)
         "  FakeSurface,             !- Surface Name",
         "  Outside,                 !- Convection Coefficient 1 Location",
         "  Value,                   !- Convection Coefficient 1 Type",
-        "  1,                       !- Convection Coefficient 1 {W/m2-K}",
+        "  1.0,                     !- Convection Coefficient 1 {W/m2-K}",
         "  FakeSchName,             !- Convection Coefficient 1 Schedule Name",
         "  FakeCurve,               !- Convection Coefficient 1 User Curve Name",
         "  Inside,                  !- Convection Coefficient 2 Location",
         "  Value,                   !- Convection Coefficient 2 Type",
-        "  10;                      !- Convection Coefficient 2 {W/m2-K}",
+        "  10.0;                    !- Convection Coefficient 2 {W/m2-K}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3268,7 +3268,7 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
 
         "Building,",
         "  Building 1,              !- Name",
-        "  20,                      !- North Axis {deg}",
+        "  20.0,                    !- North Axis {deg}",
         "  ,                        !- Terrain",
         "  ,                        !- Loads Convergence Tolerance Value {W}",
         "  ,                        !- Temperature Convergence Tolerance Value {deltaC}",
@@ -3278,10 +3278,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
 
         "Zone,",
         "  Zone1,                   !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -3315,10 +3315,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  -7.07106781186548,-12.2474487139159,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -7.07106781186548,-12.2474487139159,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  12.2474487139159,-7.07106781186548,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  12.2474487139159,-7.07106781186548,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -7.07106781186548,-12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -7.07106781186548,-12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  12.2474487139159,-7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  12.2474487139159,-7.07106781186548,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  2-WEST - ABS AZIMUTH 255.00,  !- Name",
@@ -3332,10 +3332,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  -12.2474487139159,7.07106781186548,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -12.2474487139159,7.07106781186548,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -7.07106781186548,-12.2474487139159,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -7.07106781186548,-12.2474487139159,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -12.2474487139159,7.07106781186548,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -12.2474487139159,7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -7.07106781186548,-12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -7.07106781186548,-12.2474487139159,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  3-EAST - ABS AZIMUTH 75.00,  !- Name",
@@ -3349,10 +3349,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  12.2474487139159,-7.07106781186548,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  12.2474487139159,-7.07106781186548,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  7.07106781186548,12.2474487139159,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  7.07106781186548,12.2474487139159,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  12.2474487139159,-7.07106781186548,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  12.2474487139159,-7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  7.07106781186548,12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  7.07106781186548,12.2474487139159,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  4-NORTH - ABS AZIMUTH 345.00,  !- Name",
@@ -3366,10 +3366,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  7.07106781186548,12.2474487139159,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  7.07106781186548,12.2474487139159,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -12.2474487139159,7.07106781186548,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -12.2474487139159,7.07106781186548,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  7.07106781186548,12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  7.07106781186548,12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -12.2474487139159,7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -12.2474487139159,7.07106781186548,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  FLOOR,                   !- Name",
@@ -3383,10 +3383,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
         "  NoWind,                  !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  12.2474487139159,-7.07106781186548,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -7.07106781186548,-12.2474487139159,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -12.2474487139159,7.07106781186548,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  7.07106781186548,12.2474487139159,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  12.2474487139159,-7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -7.07106781186548,-12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -12.2474487139159,7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  7.07106781186548,12.2474487139159,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  ROOF,                    !- Name",
@@ -3400,10 +3400,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  7.07106781186548,12.2474487139159,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -12.2474487139159,7.07106781186548,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -7.07106781186548,-12.2474487139159,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  12.2474487139159,-7.07106781186548,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  7.07106781186548,12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -12.2474487139159,7.07106781186548,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -7.07106781186548,-12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  12.2474487139159,-7.07106781186548,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3491,7 +3491,7 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
 
         "Building,",
         "  Building 1,              !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  ,                        !- Terrain",
         "  ,                        !- Loads Convergence Tolerance Value {W}",
         "  ,                        !- Temperature Convergence Tolerance Value {deltaC}",
@@ -3501,10 +3501,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
 
         "Zone,",
         "  Zone1,                   !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -3538,10 +3538,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  -20,-20,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -20,-20,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  20,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  20,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -20.0,-20.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -20.0,-20.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  20.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  20.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  2-WEST - ABS AZIMUTH 284.04,  !- Name",
@@ -3555,10 +3555,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  -10,20,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -10,20,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -20,-20,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -20,-20,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -10.0,20.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -10.0,20.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -20.0,-20.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -20.0,-20.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  3-EAST - ABS AZIMUTH 63.43,  !- Name",
@@ -3572,10 +3572,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  20,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  20,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10,15,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10,15,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  20.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  20.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,15.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,15.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  4-NORTH - ABS AZIMUTH 14.04,  !- Name",
@@ -3589,10 +3589,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  10,15,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  10,15,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -10,20,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -10,20,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  10.0,15.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  10.0,15.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -10.0,20.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -10.0,20.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  FLOOR,                   !- Name",
@@ -3606,10 +3606,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
         "  NoWind,                  !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  20,-5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -20,-20,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -10,20,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10,15,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  20.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -20.0,-20.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -10.0,20.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,15.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  ROOF,                    !- Name",
@@ -3623,10 +3623,10 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  10,15,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -10,20,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -20,-20,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  20,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  10.0,15.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -10.0,20.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -20.0,-20.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  20.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4086,10 +4086,10 @@ TEST_F(ConvectionCoefficientsFixture, SurroundingSurfacesHRadCoefTest)
 
 Zone,
   Zone,                    !- Name
-  0,                       !- Direction of Relative North {deg}
+  0.0,                     !- Direction of Relative North {deg}
   6.0,                     !- X Origin {m}
   6.0,                     !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Z Origin {m}
   1,                       !- Type
   1,                       !- Multiplier
   Autocalculate,           !- Ceiling Height {m}
@@ -4244,10 +4244,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   1.0,                     !- View Factor to Ground
   4,                       !- Number of Vertices
-  0.0,0.0,0,  !- X,Y,Z ==> Vertex 1 {m}
-  0.0,10.0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  10.0,10.0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  10.0,0.0,0;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,10.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  10.0,10.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  10.0,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
     )IDF";
 

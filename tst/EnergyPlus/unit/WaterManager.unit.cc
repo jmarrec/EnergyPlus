@@ -74,7 +74,7 @@ TEST_F(EnergyPlusFixture, WaterManager_NormalAnnualPrecipitation)
         "  PrecipitationSchd,       !- Precipitation Rates Schedule Name",
         "  0.80771;                 !- Average Total Annual Precipitation {m/yr}",
 
-        "Schedule:Constant,PrecipitationSchd,,1;",
+        "Schedule:Constant,PrecipitationSchd,,1.0;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -109,7 +109,7 @@ TEST_F(EnergyPlusFixture, WaterManager_UpdatePrecipitation)
         "  PrecipitationSchd,       !- Precipitation Rates Schedule Name",
         "  0.75;                    !- Average Total Annual Precipitation {m/yr}",
 
-        "Schedule:Constant,PrecipitationSchd,,1;",
+        "Schedule:Constant,PrecipitationSchd,,1.0;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -148,7 +148,7 @@ TEST_F(EnergyPlusFixture, WaterManager_ZeroAnnualPrecipitation)
         "  PrecipitationSchd,       !- Precipitation Rates Schedule Name",
         "  0.0;                     !- Average Total Annual Precipitation {m/yr}",
 
-        "Schedule:Constant,PrecipitationSchd,,1;",
+        "Schedule:Constant,PrecipitationSchd,,1.0;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -177,14 +177,14 @@ TEST_F(EnergyPlusFixture, WaterManager_Fill)
         "WaterUse:Storage,",
         "  Cooling Tower Water Storage Tank,  !- Name",
         "  Mains,                   !- Water Quality Subcategory",
-        "  3,                       !- Maximum Capacity {m3}",
+        "  3.0,                     !- Maximum Capacity {m3}",
         "  0.25,                    !- Initial Volume {m3}",
         "  0.003,                   !- Design In Flow Rate {m3/s}",
         "  ,                        !- Design Out Flow Rate {m3/s}",
         "  ,                        !- Overflow Destination",
         "  GroundwaterWell,         !- Type of Supply Controlled by Float Valve",
         "  0.2,                     !- Float Valve On Capacity {m3}",
-        "  3,                       !- Float Valve Off Capacity {m3}",
+        "  3.0,                     !- Float Valve Off Capacity {m3}",
         "  0.1,                     !- Backup Mains Capacity {m3}",
         "  ,                        !- Other Tank Name",
         "  ScheduledTemperature,    !- Water Thermal Mode",
@@ -202,7 +202,7 @@ TEST_F(EnergyPlusFixture, WaterManager_Fill)
         "  ,                        !- Pump Depth {m}",
         "  0.003,                   !- Pump Rated Flow Rate {m3/s}",
         "  ,                        !- Pump Rated Head {Pa}",
-        "  1500,                    !- Pump Rated Power Consumption {W}",
+        "  1500.0,                  !- Pump Rated Power Consumption {W}",
         "  ,                        !- Pump Efficiency",
         "  ,                        !- Well Recovery Rate {m3/s}",
         "  ,                        !- Nominal Well Storage Volume {m3}",
@@ -308,14 +308,14 @@ TEST_F(EnergyPlusFixture, WaterManager_MainsWater_Meter_Test)
         "WaterUse:Storage,",
         "  Cooling Tower Water Storage Tank,  !- Name",
         "  ,                        !- Water Quality Subcategory",
-        "  3,                       !- Maximum Capacity {m3}",
+        "  3.0,                     !- Maximum Capacity {m3}",
         "  0.25,                    !- Initial Volume {m3}",
         "  0.003,                   !- Design In Flow Rate {m3/s}",
         "  ,                        !- Design Out Flow Rate {m3/s}",
         "  ,                        !- Overflow Destination",
         "  GroundwaterWell,         !- Type of Supply Controlled by Float Valve",
         "  0.2,                     !- Float Valve On Capacity {m3}",
-        "  3,                       !- Float Valve Off Capacity {m3}",
+        "  3.0,                     !- Float Valve Off Capacity {m3}",
         "  0.1,                     !- Backup Mains Capacity {m3}",
         "  ,                        !- Other Tank Name",
         "  ScheduledTemperature,    !- Water Thermal Mode",
@@ -333,7 +333,7 @@ TEST_F(EnergyPlusFixture, WaterManager_MainsWater_Meter_Test)
         "  ,                        !- Pump Depth {m}",
         "  0.003,                   !- Pump Rated Flow Rate {m3/s}",
         "  ,                        !- Pump Rated Head {Pa}",
-        "  1500,                    !- Pump Rated Power Consumption {W}",
+        "  1500.0,                  !- Pump Rated Power Consumption {W}",
         "  ,                        !- Pump Efficiency",
         "  ,                        !- Well Recovery Rate {m3/s}",
         "  ,                        !- Nominal Well Storage Volume {m3}",

@@ -80,7 +80,7 @@ TEST_F(EnergyPlusFixture, HighTempRadiantSystemTest_GetHighTempRadiantSystem)
         "  ,                        !- Availability Schedule Name",
         "  ZONE1,                   !- Zone Name",
         "  HeatingDesignCapacity,   !- Heating Design Capacity Method",
-        "  10000,                   !- Heating Design Capacity {W}",
+        "  10000.0,                 !- Heating Design Capacity {W}",
         "  ,                        !- Heating Design Capacity Per Floor Area {W/m2}",
         "  ,                        !- Fraction of Autosized Heating Design Capacity",
         "  Electricity,             !- Fuel Type",

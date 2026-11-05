@@ -125,10 +125,10 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilHeatingTest)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -170,7 +170,7 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilHeatingTest)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -455,10 +455,10 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilCoolingTest)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -786,10 +786,10 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -831,7 +831,7 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -1203,10 +1203,10 @@ TEST_F(EnergyPlusFixture, ElectricCoilFanCoilHeatingTest)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -1248,7 +1248,7 @@ TEST_F(EnergyPlusFixture, ElectricCoilFanCoilHeatingTest)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -1530,10 +1530,10 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilCoolingTest)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -1912,10 +1912,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -1957,7 +1957,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -2338,10 +2338,10 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -2386,7 +2386,7 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
         "  Zone1OAMixOut,           !- Air Inlet Node Name",
         "  Zone1FCFanOut;           !- Air Outlet Node Name",
 
-        "Schedule:Constant,FCAvailSch,FRACTION,1;",
+        "Schedule:Constant,FCAvailSch,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -2721,10 +2721,10 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -2766,7 +2766,7 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -3148,10 +3148,10 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -3193,7 +3193,7 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -3209,9 +3209,9 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
         "  0.6,                     !- Design Maximum Air Flow Rate {m3/s}",
         "  Discrete,                !- Speed Control Method",
         "  0.0,                     !- Electric Power Minimum Flow Rate Fraction",
-        "  75,                      !- Design Pressure Rise {Pa}",
+        "  75.0,                    !- Design Pressure Rise {Pa}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Air Stream Fraction",
+        "  1.0,                     !- Motor In Air Stream Fraction",
         "  ,                        !- Design Electric Power Consumption {W}",
         "  TotalEfficiencyAndPressure,  !- Design Power Sizing Method",
         "  ,                        !- Electric Power Per Unit Flow Rate {W/(m3/s)}",
@@ -3548,10 +3548,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -3593,7 +3593,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -3609,9 +3609,9 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
         "  0.5,                     !- Design Maximum Air Flow Rate {m3/s}",
         "  Discrete,                !- Speed Control Method",
         "  0.0,                     !- Electric Power Minimum Flow Rate Fraction",
-        "  75,                      !- Design Pressure Rise {Pa}",
+        "  75.0,                    !- Design Pressure Rise {Pa}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Air Stream Fraction",
+        "  1.0,                     !- Motor In Air Stream Fraction",
         "  ,                        !- Design Electric Power Consumption {W}",
         "  TotalEfficiencyAndPressure,  !- Design Power Sizing Method",
         "  ,                        !- Electric Power Per Unit Flow Rate {W/(m3/s)}",
@@ -3647,7 +3647,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
         "Coil:Heating:Electric,",
         "  Zone1FanCoilHeatingCoil,  !- Name",
         "  FanAndCoilAvailSched,    !- Availability Schedule Name",
-        "  1,                       !- Efficiency",
+        "  1.0,                     !- Efficiency",
         "  10000.0,                 !- Nominal Capacity {W}",
         "  Zone1FanCoilCCOutletNode,  !- Air Inlet Node Name",
         "  Zone1FanCoilAirOutletNode;  !- Air Outlet Node Name",
@@ -3681,7 +3681,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
         "  ,                        !- Design Specification ZoneHVAC Sizing Object Name",
         "  CyclingFanOperatingSch;  !- Supply Air Fan Operating Mode Schedule Name",
 
-        "Schedule:Constant,CyclingFanOperatingSch,FRACTION,0;",
+        "Schedule:Constant,CyclingFanOperatingSch,FRACTION,0.0;",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -3909,10 +3909,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -3954,7 +3954,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -3970,9 +3970,9 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
         "  0.5,                     !- Design Maximum Air Flow Rate {m3/s}",
         "  Discrete,                !- Speed Control Method",
         "  0.0,                     !- Electric Power Minimum Flow Rate Fraction",
-        "  75,                      !- Design Pressure Rise {Pa}",
+        "  75.0,                    !- Design Pressure Rise {Pa}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Air Stream Fraction",
+        "  1.0,                     !- Motor In Air Stream Fraction",
         "  ,                        !- Design Electric Power Consumption {W}",
         "  TotalEfficiencyAndPressure,  !- Design Power Sizing Method",
         "  ,                        !- Electric Power Per Unit Flow Rate {W/(m3/s)}",
@@ -4008,7 +4008,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
         "Coil:Heating:Electric,",
         "  Zone1FanCoilHeatingCoil,  !- Name",
         "  FanAndCoilAvailSched,    !- Availability Schedule Name",
-        "  1,                       !- Efficiency",
+        "  1.0,                     !- Efficiency",
         "  10000.0,                 !- Nominal Capacity {W}",
         "  Zone1FanCoilCCOutletNode,  !- Air Inlet Node Name",
         "  Zone1FanCoilAirOutletNode;  !- Air Outlet Node Name",
@@ -4042,7 +4042,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
         "  ,                        !- Design Specification ZoneHVAC Sizing Object Name",
         "  ContsFanOperatingSch;    !- Supply Air Fan Operating Mode Schedule Name",
 
-        "Schedule:Constant,ContsFanOperatingSch,FRACTION,1;",
+        "Schedule:Constant,ContsFanOperatingSch,FRACTION,1.0;",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4269,10 +4269,10 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  EAST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -4314,7 +4314,7 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
         "  Zone1FanCoilExhNode,     !- Relief Air Stream Node Name",
         "  Zone1FanCoilAirInletNode;  !- Return Air Stream Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
@@ -4330,9 +4330,9 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
         "  0.5,                     !- Design Maximum Air Flow Rate {m3/s}",
         "  Discrete,                !- Speed Control Method",
         "  0.0,                     !- Electric Power Minimum Flow Rate Fraction",
-        "  75,                      !- Design Pressure Rise {Pa}",
+        "  75.0,                    !- Design Pressure Rise {Pa}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Air Stream Fraction",
+        "  1.0,                     !- Motor In Air Stream Fraction",
         "  ,                        !- Design Electric Power Consumption {W}",
         "  TotalEfficiencyAndPressure,  !- Design Power Sizing Method",
         "  ,                        !- Electric Power Per Unit Flow Rate {W/(m3/s)}",
@@ -4368,7 +4368,7 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
         "Coil:Heating:Electric,",
         "  Zone1FanCoilHeatingCoil,  !- Name",
         "  FanAndCoilAvailSched,    !- Availability Schedule Name",
-        "  1,                       !- Efficiency",
+        "  1.0,                     !- Efficiency",
         "  10000.0,                 !- Nominal Capacity {W}",
         "  Zone1FanCoilCCOutletNode,  !- Air Inlet Node Name",
         "  Zone1FanCoilAirOutletNode;  !- Air Outlet Node Name",
@@ -4402,7 +4402,7 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
         "  ,                        !- Design Specification ZoneHVAC Sizing Object Name",
         "  ContsFanOperatingSch;    !- Supply Air Fan Operating Mode Schedule Name",
 
-        "Schedule:Constant,ContsFanOperatingSch,FRACTION,1;",
+        "Schedule:Constant,ContsFanOperatingSch,FRACTION,1.0;",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4600,10 +4600,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  WEST ZONE,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
         "  Autocalculate,           !- Ceiling Height {m}",
@@ -4669,10 +4669,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
         "  FanCoilFan,              !- Name",
         "  FanAndCoilAvailSched,    !- Availability Schedule Name",
         "  0.5,                     !- Fan Total Efficiency",
-        "  75,                      !- Pressure Rise {Pa}",
+        "  75.0,                    !- Pressure Rise {Pa}",
         "  0.5,                     !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  FanCoilOAMixerOutletNode,  !- Air Inlet Node Name",
         "  FanCoilFanOutletNode;    !- Air Outlet Node Name",
 
@@ -4696,12 +4696,12 @@ TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
         "Coil:Heating:Electric,",
         "  FanCoilElecHeatingCoil,  !- Name",
         "  FanAndCoilAvailSched,    !- Availability Schedule Name",
-        "  1,                       !- Efficiency",
+        "  1.0,                     !- Efficiency",
         "  6000.0,                  !- Nominal Capacity {W}",
         "  FanCoilCCOutletNode,     !- Air Inlet Node Name",
         "  FanCoilAirOutletNode;    !- Air Outlet Node Name",
 
-        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1;",
+        "Schedule:Constant,FanAndCoilAvailSched,FRACTION,1.0;",
 
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",

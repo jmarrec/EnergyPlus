@@ -75,16 +75,16 @@ static std::string_view constexpr oneZoneBuildingWithIdealLoads = R"IDF(
 ScheduleTypeLimits,
   Any Number;              !- Name
 
-Schedule:Constant,Always On,Any Number,1;
+Schedule:Constant,Always On,Any Number,1.0;
 
-Schedule:Constant,Always Off,Any Number,0;
+Schedule:Constant,Always Off,Any Number,0.0;
 
 Zone,
   Zone_1,                  !- Name
   ,                        !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1,                       !- Multiplier
   ,                        !- Ceiling Height {m}
@@ -114,10 +114,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  10,5,0,  !- X,Y,Z ==> Vertex 1 {m}
-  10,-5,0,  !- X,Y,Z ==> Vertex 2 {m}
-  -10,-5,0,  !- X,Y,Z ==> Vertex 3 {m}
-  -10,5,0;  !- X,Y,Z ==> Vertex 4 {m}
+  10.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  10.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  -10.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  -10.0,5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   Space_1 RoofCeiling,     !- Name
@@ -131,10 +131,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  -10,5,3,  !- X,Y,Z ==> Vertex 1 {m}
-  -10,-5,3,  !- X,Y,Z ==> Vertex 2 {m}
-  10,-5,3,  !- X,Y,Z ==> Vertex 3 {m}
-  10,5,3;  !- X,Y,Z ==> Vertex 4 {m}
+  -10.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}
+  -10.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}
+  10.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}
+  10.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 1,          !- Name
@@ -148,10 +148,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  10,5,3,  !- X,Y,Z ==> Vertex 1 {m}
-  10,-5,3,  !- X,Y,Z ==> Vertex 2 {m}
-  10,-5,0,  !- X,Y,Z ==> Vertex 3 {m}
-  10,5,0;  !- X,Y,Z ==> Vertex 4 {m}
+  10.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}
+  10.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}
+  10.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  10.0,5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 2,          !- Name
@@ -165,10 +165,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  10,-5,3,  !- X,Y,Z ==> Vertex 1 {m}
-  -10,-5,3,  !- X,Y,Z ==> Vertex 2 {m}
-  -10,-5,0,  !- X,Y,Z ==> Vertex 3 {m}
-  10,-5,0;  !- X,Y,Z ==> Vertex 4 {m}
+  10.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}
+  -10.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}
+  -10.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  10.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 3,          !- Name
@@ -182,10 +182,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  -10,-5,3,  !- X,Y,Z ==> Vertex 1 {m}
-  -10,5,3,  !- X,Y,Z ==> Vertex 2 {m}
-  -10,5,0,  !- X,Y,Z ==> Vertex 3 {m}
-  -10,-5,0;  !- X,Y,Z ==> Vertex 4 {m}
+  -10.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}
+  -10.0,5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}
+  -10.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  -10.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   Space_1 Wall 4,          !- Name
@@ -199,10 +199,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   ,                        !- Number of Vertices
-  -10,5,3,  !- X,Y,Z ==> Vertex 1 {m}
-  10,5,3,  !- X,Y,Z ==> Vertex 2 {m}
-  10,5,0,  !- X,Y,Z ==> Vertex 3 {m}
-  -10,5,0;  !- X,Y,Z ==> Vertex 4 {m}
+  -10.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}
+  10.0,5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}
+  10.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  -10.0,5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 Material,
   Material 1,              !- Name
@@ -210,7 +210,7 @@ Material,
   0.1,                     !- Thickness {m}
   0.1,                     !- Conductivity {W/m-K}
   0.1,                     !- Density {kg/m3}
-  1400,                    !- Specific Heat {J/kg-K}
+  1400.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -443,14 +443,14 @@ Curve:Quadratic,
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
   Always On,               !- Availability Schedule Name
-  5,                       !- Rated Coil Cooling Capacity {W}
+  5.0,                     !- Rated Coil Cooling Capacity {W}
   1.66666666666667,        !- Operating Temperature {C}
   -6.11111111111111,       !- Rated Cooling Source Temperature {C}
   0.0,                     !- Rated Total Heating Power {W}
   Always On,               !- Heating Power Schedule Name
-  5,                       !- Rated Cooling Coil Fan Power {W}
+  5.0,                     !- Rated Cooling Coil Fan Power {W}
   0.0,                     !- Rated Circulation Fan Power {W}
-  5,                       !- Rated Total Lighting Power {W}
+  5.0,                     !- Rated Total Lighting Power {W}
   Always On,               !- Lighting Schedule Name
   Electric,                !- Defrost Type
   TimeSchedule,            !- Defrost Control Type
@@ -460,7 +460,7 @@ Refrigeration:WalkIn,
   ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}
   ,                        !- Restocking Schedule Name
   ,                        !- Average Refrigerant Charge Inventory {kg}
-  1,                       !- Insulated Floor Surface Area {m2}
+  1.0,                     !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
   ZONE_1,                  !- Zone 1 Name
   6.504,                   !- Total Insulated Surface Area Facing Zone 1 {m2}
@@ -543,14 +543,14 @@ Refrigeration:CaseAndWalkInList,
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
   Always On,               !- Availability Schedule Name
-  5,                       !- Rated Coil Cooling Capacity {W}
+  5.0,                     !- Rated Coil Cooling Capacity {W}
   1.66666666666667,        !- Operating Temperature {C}
   -6.11111111111111,       !- Rated Cooling Source Temperature {C}
   0.0,                     !- Rated Total Heating Power {W}
   Always On,               !- Heating Power Schedule Name
-  5,                       !- Rated Cooling Coil Fan Power {W}
+  5.0,                     !- Rated Cooling Coil Fan Power {W}
   0.0,                     !- Rated Circulation Fan Power {W}
-  5,                       !- Rated Total Lighting Power {W}
+  5.0,                     !- Rated Total Lighting Power {W}
   Always On,               !- Lighting Schedule Name
   Electric,                !- Defrost Type
   TimeSchedule,            !- Defrost Control Type
@@ -560,7 +560,7 @@ Refrigeration:WalkIn,
   ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}
   ,                        !- Restocking Schedule Name
   ,                        !- Average Refrigerant Charge Inventory {kg}
-  1,                       !- Insulated Floor Surface Area {m2}
+  1.0,                     !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
   ZONE_1,                  !- Zone 1 Name
   6.504,                   !- Total Insulated Surface Area Facing Zone 1 {m2}
@@ -644,14 +644,14 @@ Refrigeration:CaseAndWalkInList,
 Refrigeration:WalkIn,
   RefrigerationWalkIn,     !- Name
   Always On,               !- Availability Schedule Name
-  5,                       !- Rated Coil Cooling Capacity {W}
+  5.0,                     !- Rated Coil Cooling Capacity {W}
   1.66666666666667,        !- Operating Temperature {C}
   -6.11111111111111,       !- Rated Cooling Source Temperature {C}
   0.0,                     !- Rated Total Heating Power {W}
   Always On,               !- Heating Power Schedule Name
-  5,                       !- Rated Cooling Coil Fan Power {W}
+  5.0,                     !- Rated Cooling Coil Fan Power {W}
   0.0,                     !- Rated Circulation Fan Power {W}
-  5,                       !- Rated Total Lighting Power {W}
+  5.0,                     !- Rated Total Lighting Power {W}
   Always On,               !- Lighting Schedule Name
   Electric,                !- Defrost Type
   TimeSchedule,            !- Defrost Control Type
@@ -661,7 +661,7 @@ Refrigeration:WalkIn,
   ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}
   ,                        !- Restocking Schedule Name
   ,                        !- Average Refrigerant Charge Inventory {kg}
-  1,                       !- Insulated Floor Surface Area {m2}
+  1.0,                     !- Insulated Floor Surface Area {m2}
   0.17744571875,           !- Insulated Floor U-Value {W/m2-K}
   ZONE_1,                  !- Zone 1 Name
   6.504,                   !- Total Insulated Surface Area Facing Zone 1 {m2}
@@ -757,9 +757,9 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "Zone,",
         "  Basic Zone,              !- Name",
         "  ,                        !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -823,10 +823,10 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Basic Zone PTAC Fan,     !- Name",
         "  ,                        !- Availability Schedule Name",
         "  0.6,                     !- Fan Total Efficiency",
-        "  250,                     !- Pressure Rise {Pa}",
+        "  250.0,                   !- Pressure Rise {Pa}",
         "  Autosize,                !- Maximum Flow Rate {m3/s}",
         "  0.8,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  Basic Zone PTAC Heating Coil Outlet Node,  !- Air Inlet Node Name",
         "  Basic Zone Inlet Node,   !- Air Outlet Node Name",
         "  Generic Curve,           !- Fan Power Ratio Function of Speed Ratio Curve Name",
@@ -838,20 +838,20 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Availability Schedule Name",
         "  NaturalGas,              !- Fuel Type",
         "  0.8,                     !- Burner Efficiency",
-        "  1,                       !- Nominal Capacity {W}",
+        "  1.0,                     !- Nominal Capacity {W}",
         "  Basic Zone PTAC Cooling Coil Outlet Node,  !- Air Inlet Node Name",
         "  Basic Zone PTAC Heating Coil Outlet Node,  !- Air Outlet Node Name",
         "  ,                        !- Temperature Setpoint Node Name",
-        "  0,                       !- On Cycle Parasitic Electric Load {W}",
+        "  0.0,                     !- On Cycle Parasitic Electric Load {W}",
         "  ,                        !- Part Load Fraction Correlation Curve Name",
-        "  0;                       !- Off Cycle Parasitic Fuel Load {W}",
+        "  0.0;                     !- Off Cycle Parasitic Fuel Load {W}",
 
         "Coil:Cooling:DX:SingleSpeed,",
         "  Basic Zone PTAC Cooling Coil,  !- Name",
         "  ,                        !- Availability Schedule Name",
         "  Autosize,                !- Gross Rated Total Cooling Capacity {W}",
         "  Autosize,                !- Gross Rated Sensible Heat Ratio",
-        "  3,                       !- Gross Rated Cooling COP {W/W}",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
         "  Autosize,                !- Rated Air Flow Rate {m3/s}",
         "  773.3,                   !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
         "  934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
@@ -862,30 +862,30 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Generic Curve,           !- Energy Input Ratio Function of Temperature Curve Name",
         "  Generic Curve,           !- Energy Input Ratio Function of Flow Fraction Curve Name",
         "  Generic Curve,           !- Part Load Fraction Correlation Curve Name",
-        "  -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
-        "  0,                       !- Nominal Time for Condensate Removal to Begin {s}",
-        "  0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
-        "  0,                       !- Maximum Cycling Rate {cycles/hr}",
-        "  0,                       !- Latent Capacity Time Constant {s}",
+        "  -25.0,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  0.0,                     !- Nominal Time for Condensate Removal to Begin {s}",
+        "  0.0,                     !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
+        "  0.0,                     !- Maximum Cycling Rate {cycles/hr}",
+        "  0.0,                     !- Latent Capacity Time Constant {s}",
         "  ,                        !- Condenser Air Inlet Node Name",
         "  AirCooled,               !- Condenser Type",
-        "  0,                       !- Evaporative Condenser Effectiveness {dimensionless}",
+        "  0.0,                     !- Evaporative Condenser Effectiveness {dimensionless}",
         "  Autosize,                !- Evaporative Condenser Air Flow Rate {m3/s}",
         "  Autosize,                !- Evaporative Condenser Pump Rated Power Consumption {W}",
-        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  0.0,                     !- Crankcase Heater Capacity {W}",
         "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  0,                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  0.0,                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
         "  ,                        !- Supply Water Storage Tank Name",
         "  ,                        !- Condensate Collection Water Storage Tank Name",
-        "  0,                       !- Basin Heater Capacity {W/K}",
-        "  10;                      !- Basin Heater Setpoint Temperature {C}",
+        "  0.0,                     !- Basin Heater Capacity {W/K}",
+        "  10.0;                    !- Basin Heater Setpoint Temperature {C}",
 
         "Zone,",
         "  Refrig Cond AC Zone,     !- Name",
         "  ,                        !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -937,7 +937,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond AC PTAC Demand Side Outlet Node,  !- Demand Side Outlet Node Name",
         "  Refrig Cond AC PTAC Demand Side Inlet Node,  !- Demand Side Inlet Node Names",
         "  Refrig Cond AC PTAC Supply Side Outlet Node,  !- Supply Side Outlet Node Names",
-        "  1;                       !- Design Return Air Flow Fraction of Supply Air Flow",
+        "  1.0;                     !- Design Return Air Flow Fraction of Supply Air Flow",
 
         "BranchList,",
         "  Refrig Cond AC PTAC Supply Branch List,  !- Name",
@@ -983,15 +983,15 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond AC PTAC Supply Side Inlet Node,  !- Return Air Node Name",
         "  Refrig Cond AC PTAC Mixed Air Node,  !- Mixed Air Node Name",
         "  Refrig Cond AC PTAC OA Node,  !- Actuator Node Name",
-        "  0,                       !- Minimum Outdoor Air Flow Rate {m3/s}",
+        "  0.0,                     !- Minimum Outdoor Air Flow Rate {m3/s}",
         "  Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}",
         "  NoEconomizer,            !- Economizer Control Type",
         "  ModulateFlow,            !- Economizer Control Action Type",
-        "  28,                      !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
-        "  64000,                   !- Economizer Maximum Limit Enthalpy {J/kg}",
+        "  28.0,                    !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
+        "  64000.0,                 !- Economizer Maximum Limit Enthalpy {J/kg}",
         "  ,                        !- Economizer Maximum Limit Dewpoint Temperature {C}",
         "  ,                        !- Electronic Enthalpy Limit Curve Name",
-        "  -100,                    !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
+        "  -100.0,                  !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
         "  NoLockout,               !- Lockout Type",
         "  FixedMinimum,            !- Minimum Limit Type",
         "  ,                        !- Minimum Outdoor Air Schedule Name",
@@ -1036,7 +1036,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Availability Schedule Name",
         "  Autosize,                !- Gross Rated Total Cooling Capacity {W}",
         "  Autosize,                !- Gross Rated Sensible Heat Ratio",
-        "  3,                       !- Gross Rated Cooling COP {W/W}",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
         "  Autosize,                !- Rated Air Flow Rate {m3/s}",
         "  773.3,                   !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
         "  934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
@@ -1047,23 +1047,23 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Generic Curve,           !- Energy Input Ratio Function of Temperature Curve Name",
         "  Generic Curve,           !- Energy Input Ratio Function of Flow Fraction Curve Name",
         "  Generic Curve,           !- Part Load Fraction Correlation Curve Name",
-        "  -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
-        "  0,                       !- Nominal Time for Condensate Removal to Begin {s}",
-        "  0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
-        "  0,                       !- Maximum Cycling Rate {cycles/hr}",
-        "  0,                       !- Latent Capacity Time Constant {s}",
+        "  -25.0,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  0.0,                     !- Nominal Time for Condensate Removal to Begin {s}",
+        "  0.0,                     !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
+        "  0.0,                     !- Maximum Cycling Rate {cycles/hr}",
+        "  0.0,                     !- Latent Capacity Time Constant {s}",
         "  ,                        !- Condenser Air Inlet Node Name",
         "  AirCooled,               !- Condenser Type",
         "  0.9,                     !- Evaporative Condenser Effectiveness {dimensionless}",
         "  Autosize,                !- Evaporative Condenser Air Flow Rate {m3/s}",
         "  Autosize,                !- Evaporative Condenser Pump Rated Power Consumption {W}",
-        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  0.0,                     !- Crankcase Heater Capacity {W}",
         "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
         "  ,                        !- Supply Water Storage Tank Name",
         "  ,                        !- Condensate Collection Water Storage Tank Name",
-        "  0,                       !- Basin Heater Capacity {W/K}",
-        "  2;                       !- Basin Heater Setpoint Temperature {C}",
+        "  0.0,                     !- Basin Heater Capacity {W/K}",
+        "  2.0;                     !- Basin Heater Setpoint Temperature {C}",
 
         "Coil:Heating:Desuperheater,",
         "  Refrig Cond AC PTAC Desuperheater,  !- Name",
@@ -1084,18 +1084,18 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond AC PTAC Desuperheater Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Cond AC PTAC Heating Coil Outlet Node,  !- Air Outlet Node Name",
         "  Refrig Cond AC PTAC Heating Coil Outlet Node,  !- Temperature Setpoint Node Name",
-        "  0,                       !- On Cycle Parasitic Electric Load {W}",
+        "  0.0,                     !- On Cycle Parasitic Electric Load {W}",
         "  ,                        !- Part Load Fraction Correlation Curve Name",
-        "  0;                       !- Off Cycle Parasitic Fuel Load {W}",
+        "  0.0;                     !- Off Cycle Parasitic Fuel Load {W}",
 
         "Fan:ConstantVolume,",
         "  Refrig Cond AC PTAC Fan,  !- Name",
         "  ,                        !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  500,                     !- Pressure Rise {Pa}",
+        "  500.0,                   !- Pressure Rise {Pa}",
         "  Autosize,                !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  Refrig Cond AC PTAC Heating Coil Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Cond AC PTAC Supply Side Outlet Node;  !- Air Outlet Node Name",
 
@@ -1105,12 +1105,12 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Refrigeration Transfer Load or TransferLoad List Name",
         "  Refrig Cond AC Refrig Condenser,  !- Refrigeration Condenser Name",
         "  Refrig Cond AC Refrig Compressor,  !- Compressor or CompressorList Name",
-        "  20,                      !- Minimum Condensing Temperature {C}",
+        "  20.0,                    !- Minimum Condensing Temperature {C}",
         "  R407a,                   !- Refrigeration System Working Fluid Type",
         "  ConstantSuctionTemperature,  !- Suction Temperature Control Type",
         "  ,                        !- Mechanical Subcooler Name",
         "  ,                        !- Liquid Suction Heat Exchanger Subcooler Name",
-        "  0,                       !- Sum UA Suction Piping {W/K}",
+        "  0.0,                     !- Sum UA Suction Piping {W/K}",
         "  Refrig Cond AC Zone,     !- Suction Piping Zone Name",
         "  General,                 !- End-Use Subcategory",
         "  1,                       !- Number of Compressor Stages",
@@ -1126,70 +1126,70 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond AC Case,     !- Name",
         "  ,                        !- Availability Schedule Name",
         "  Refrig Cond AC Zone,     !- Zone Name",
-        "  24,                      !- Rated Ambient Temperature {C}",
-        "  55,                      !- Rated Ambient Relative Humidity {percent}",
-        "  1406,                    !- Rated Total Cooling Capacity per Unit Length {W/m}",
+        "  24.0,                    !- Rated Ambient Temperature {C}",
+        "  55.0,                    !- Rated Ambient Relative Humidity {percent}",
+        "  1406.0,                  !- Rated Total Cooling Capacity per Unit Length {W/m}",
         "  0.3,                     !- Rated Latent Heat Ratio",
         "  0.85,                    !- Rated Runtime Fraction",
         "  2.19,                    !- Case Length {m}",
-        "  4,                       !- Case Operating Temperature {C}",
+        "  4.0,                     !- Case Operating Temperature {C}",
         "  CaseTemperatureMethod,   !- Latent Case Credit Curve Type",
         "  Generic Curve,           !- Latent Case Credit Curve Name",
-        "  30,                      !- Standard Case Fan Power per Unit Length {W/m}",
-        "  30,                      !- Operating Case Fan Power per Unit Length {W/m}",
-        "  20,                      !- Standard Case Lighting Power per Unit Length {W/m}",
-        "  20,                      !- Installed Case Lighting Power per Unit Length {W/m}",
+        "  30.0,                    !- Standard Case Fan Power per Unit Length {W/m}",
+        "  30.0,                    !- Operating Case Fan Power per Unit Length {W/m}",
+        "  20.0,                    !- Standard Case Lighting Power per Unit Length {W/m}",
+        "  20.0,                    !- Installed Case Lighting Power per Unit Length {W/m}",
         "  ,                        !- Case Lighting Schedule Name",
-        "  1,                       !- Fraction of Lighting Energy to Case",
-        "  0,                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
-        "  0,                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Lighting Energy to Case",
+        "  0.0,                     !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  0.0,                     !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
         "  None,                    !- Anti-Sweat Heater Control Type",
-        "  -10,                     !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
+        "  -10.0,                   !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
         "  1.5,                     !- Case Height {m}",
-        "  1,                       !- Fraction of Anti-Sweat Heater Energy to Case",
-        "  0,                       !- Case Defrost Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Anti-Sweat Heater Energy to Case",
+        "  0.0,                     !- Case Defrost Power per Unit Length {W/m}",
         "  OffCycle,                !- Case Defrost Type",
         "  AlwaysOn,                !- Case Defrost Schedule Name",
         "  ,                        !- Case Defrost Drip-Down Schedule Name",
         "  None,                    !- Defrost Energy Correction Curve Type",
         "  ,                        !- Defrost Energy Correction Curve Name",
-        "  0,                       !- Under Case HVAC Return Air Fraction",
+        "  0.0,                     !- Under Case HVAC Return Air Fraction",
         "  ,                        !- Refrigerated Case Restocking Schedule Name",
         "  ,                        !- Case Credit Fraction Schedule Name",
-        "  -7,                      !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
-        "  0;                       !- Average Refrigerant Charge Inventory {kg/m}",
+        "  -7.0,                    !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
+        "  0.0;                     !- Average Refrigerant Charge Inventory {kg/m}",
 
         "Refrigeration:WalkIn,",
         "  Refrig Cond AC WalkIn,   !- Name",
         "  ,                        !- Availability Schedule Name",
-        "  4744,                    !- Rated Coil Cooling Capacity {W}",
-        "  4,                       !- Operating Temperature {C}",
-        "  -6,                      !- Rated Cooling Source Temperature {C}",
-        "  0,                       !- Rated Total Heating Power {W}",
+        "  4744.0,                  !- Rated Coil Cooling Capacity {W}",
+        "  4.0,                     !- Operating Temperature {C}",
+        "  -6.0,                    !- Rated Cooling Source Temperature {C}",
+        "  0.0,                     !- Rated Total Heating Power {W}",
         "  ,                        !- Heating Power Schedule Name",
-        "  308,                     !- Rated Cooling Coil Fan Power {W}",
-        "  0,                       !- Rated Circulation Fan Power {W}",
-        "  100,                     !- Rated Total Lighting Power {W}",
+        "  308.0,                   !- Rated Cooling Coil Fan Power {W}",
+        "  0.0,                     !- Rated Circulation Fan Power {W}",
+        "  100.0,                   !- Rated Total Lighting Power {W}",
         "  ,                        !- Lighting Schedule Name",
         "  Electric,                !- Defrost Type",
         "  TimeSchedule,            !- Defrost Control Type",
         "  AlwaysOn,                !- Defrost Schedule Name",
         "  ,                        !- Defrost Drip-Down Schedule Name",
-        "  2400,                    !- Defrost Power {W}",
+        "  2400.0,                  !- Defrost Power {W}",
         "  ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}",
         "  ,                        !- Restocking Schedule Name",
-        "  0,                       !- Average Refrigerant Charge Inventory {kg}",
-        "  13,                      !- Insulated Floor Surface Area {m2}",
+        "  0.0,                     !- Average Refrigerant Charge Inventory {kg}",
+        "  13.0,                    !- Insulated Floor Surface Area {m2}",
         "  0.25,                    !- Insulated Floor U-Value {W/m2-K}",
         "  Refrig Cond AC Zone,     !- Zone 1 Name",
-        "  55,                      !- Total Insulated Surface Area Facing Zone 1 {m2}",
+        "  55.0,                    !- Total Insulated Surface Area Facing Zone 1 {m2}",
         "  0.3,                     !- Insulated Surface U-Value Facing Zone 1 {W/m2-K}",
-        "  0,                       !- Area of Glass Reach In Doors Facing Zone 1 {m2}",
+        "  0.0,                     !- Area of Glass Reach In Doors Facing Zone 1 {m2}",
         "  1.5,                     !- Height of Glass Reach In Doors Facing Zone 1 {m}",
         "  1.136,                   !- Glass Reach In Door U Value Facing Zone 1 {W/m2-K}",
         "  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone 1",
-        "  2,                       !- Area of Stocking Doors Facing Zone 1 {m2}",
-        "  2,                       !- Height of Stocking Doors Facing Zone 1 {m}",
+        "  2.0,                     !- Area of Stocking Doors Facing Zone 1 {m2}",
+        "  2.0,                     !- Height of Stocking Doors Facing Zone 1 {m}",
         "  0.3785,                  !- Stocking Door U Value Facing Zone 1 {W/m2-K}",
         "  ,                        !- Stocking Door Opening Schedule Name Facing Zone 1",
         "  None;                    !- Stocking Door Opening Protection Type Facing Zone 1",
@@ -1197,15 +1197,15 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "Refrigeration:Condenser:AirCooled,",
         "  Refrig Cond AC Refrig Condenser,  !- Name",
         "  Condenser Curve,         !- Rated Effective Total Heat Rejection Rate Curve Name",
-        "  0,                       !- Rated Subcooling Temperature Difference {deltaC}",
+        "  0.0,                     !- Rated Subcooling Temperature Difference {deltaC}",
         "  VariableSpeed,           !- Condenser Fan Speed Control Type",
-        "  2000,                    !- Rated Fan Power {W}",
+        "  2000.0,                  !- Rated Fan Power {W}",
         "  ,                        !- Minimum Fan Air Flow Ratio {dimensionless}",
         "  Refrig Cond AC Outdoor Air Node,  !- Air Inlet Node Name or Zone Name",
         "  General,                 !- End-Use Subcategory",
-        "  0,                       !- Condenser Refrigerant Operating Charge Inventory {kg}",
-        "  0,                       !- Condensate Receiver Refrigerant Inventory {kg}",
-        "  0;                       !- Condensate Piping Refrigerant Inventory {kg}",
+        "  0.0,                     !- Condenser Refrigerant Operating Charge Inventory {kg}",
+        "  0.0,                     !- Condensate Receiver Refrigerant Inventory {kg}",
+        "  0.0;                     !- Condensate Piping Refrigerant Inventory {kg}",
 
         "OutdoorAir:Node,",
         "  Refrig Cond AC Outdoor Air Node;  !- Name",
@@ -1217,16 +1217,16 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Rated Superheat {deltaC}",
         "  18.3,                    !- Rated Return Gas Temperature {C}",
         "  ,                        !- Rated Liquid Temperature {C}",
-        "  0,                       !- Rated Subcooling {deltaC}",
+        "  0.0,                     !- Rated Subcooling {deltaC}",
         "  General,                 !- End-Use Subcategory",
         "  Subcritical;             !- Mode of Operation",
 
         "Zone,",
         "  Refrig Cond WC Zone,     !- Name",
         "  ,                        !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -1278,7 +1278,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond WC PTAC Demand Side Outlet Node,  !- Demand Side Outlet Node Name",
         "  Refrig Cond WC PTAC Demand Side Inlet Node,  !- Demand Side Inlet Node Names",
         "  Refrig Cond WC PTAC Supply Side Outlet Node,  !- Supply Side Outlet Node Names",
-        "  1;                       !- Design Return Air Flow Fraction of Supply Air Flow",
+        "  1.0;                     !- Design Return Air Flow Fraction of Supply Air Flow",
 
         "BranchList,",
         "  Refrig Cond WC PTAC Supply Branch List,  !- Name",
@@ -1324,15 +1324,15 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond WC PTAC Supply Side Inlet Node,  !- Return Air Node Name",
         "  Refrig Cond WC PTAC Mixed Air Node,  !- Mixed Air Node Name",
         "  Refrig Cond WC PTAC OA Node,  !- Actuator Node Name",
-        "  0,                       !- Minimum Outdoor Air Flow Rate {m3/s}",
+        "  0.0,                     !- Minimum Outdoor Air Flow Rate {m3/s}",
         "  Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}",
         "  NoEconomizer,            !- Economizer Control Type",
         "  ModulateFlow,            !- Economizer Control Action Type",
-        "  28,                      !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
-        "  64000,                   !- Economizer Maximum Limit Enthalpy {J/kg}",
+        "  28.0,                    !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
+        "  64000.0,                 !- Economizer Maximum Limit Enthalpy {J/kg}",
         "  ,                        !- Economizer Maximum Limit Dewpoint Temperature {C}",
         "  ,                        !- Electronic Enthalpy Limit Curve Name",
-        "  -100,                    !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
+        "  -100.0,                  !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
         "  NoLockout,               !- Lockout Type",
         "  FixedMinimum,            !- Minimum Limit Type",
         "  ,                        !- Minimum Outdoor Air Schedule Name",
@@ -1377,7 +1377,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Availability Schedule Name",
         "  Autosize,                !- Gross Rated Total Cooling Capacity {W}",
         "  Autosize,                !- Gross Rated Sensible Heat Ratio",
-        "  3,                       !- Gross Rated Cooling COP {W/W}",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
         "  Autosize,                !- Rated Air Flow Rate {m3/s}",
         "  773.3,                   !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
         "  934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
@@ -1388,23 +1388,23 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Generic Curve,           !- Energy Input Ratio Function of Temperature Curve Name",
         "  Generic Curve,           !- Energy Input Ratio Function of Flow Fraction Curve Name",
         "  Generic Curve,           !- Part Load Fraction Correlation Curve Name",
-        "  -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
-        "  0,                       !- Nominal Time for Condensate Removal to Begin {s}",
-        "  0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
-        "  0,                       !- Maximum Cycling Rate {cycles/hr}",
-        "  0,                       !- Latent Capacity Time Constant {s}",
+        "  -25.0,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  0.0,                     !- Nominal Time for Condensate Removal to Begin {s}",
+        "  0.0,                     !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
+        "  0.0,                     !- Maximum Cycling Rate {cycles/hr}",
+        "  0.0,                     !- Latent Capacity Time Constant {s}",
         "  ,                        !- Condenser Air Inlet Node Name",
         "  AirCooled,               !- Condenser Type",
         "  0.9,                     !- Evaporative Condenser Effectiveness {dimensionless}",
         "  Autosize,                !- Evaporative Condenser Air Flow Rate {m3/s}",
         "  Autosize,                !- Evaporative Condenser Pump Rated Power Consumption {W}",
-        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  0.0,                     !- Crankcase Heater Capacity {W}",
         "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
         "  ,                        !- Supply Water Storage Tank Name",
         "  ,                        !- Condensate Collection Water Storage Tank Name",
-        "  0,                       !- Basin Heater Capacity {W/K}",
-        "  2;                       !- Basin Heater Setpoint Temperature {C}",
+        "  0.0,                     !- Basin Heater Capacity {W/K}",
+        "  2.0;                     !- Basin Heater Setpoint Temperature {C}",
 
         "Coil:Heating:Desuperheater,",
         "  Refrig Cond WC PTAC Desuperheater,  !- Name",
@@ -1425,18 +1425,18 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond WC PTAC Desuperheater Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Cond WC PTAC Heating Coil Outlet Node,  !- Air Outlet Node Name",
         "  Refrig Cond WC PTAC Heating Coil Outlet Node,  !- Temperature Setpoint Node Name",
-        "  0,                       !- On Cycle Parasitic Electric Load {W}",
+        "  0.0,                     !- On Cycle Parasitic Electric Load {W}",
         "  ,                        !- Part Load Fraction Correlation Curve Name",
-        "  0;                       !- Off Cycle Parasitic Fuel Load {W}",
+        "  0.0;                     !- Off Cycle Parasitic Fuel Load {W}",
 
         "Fan:ConstantVolume,",
         "  Refrig Cond WC PTAC Fan,  !- Name",
         "  ,                        !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  500,                     !- Pressure Rise {Pa}",
+        "  500.0,                   !- Pressure Rise {Pa}",
         "  Autosize,                !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  Refrig Cond WC PTAC Heating Coil Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Cond WC PTAC Supply Side Outlet Node;  !- Air Outlet Node Name",
 
@@ -1446,12 +1446,12 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Refrigeration Transfer Load or TransferLoad List Name",
         "  Refrig Cond WC Refrig Condenser,  !- Refrigeration Condenser Name",
         "  Refrig Cond WC Refrig Compressor,  !- Compressor or CompressorList Name",
-        "  20,                      !- Minimum Condensing Temperature {C}",
+        "  20.0,                    !- Minimum Condensing Temperature {C}",
         "  R407a,                   !- Refrigeration System Working Fluid Type",
         "  ConstantSuctionTemperature,  !- Suction Temperature Control Type",
         "  ,                        !- Mechanical Subcooler Name",
         "  ,                        !- Liquid Suction Heat Exchanger Subcooler Name",
-        "  0,                       !- Sum UA Suction Piping {W/K}",
+        "  0.0,                     !- Sum UA Suction Piping {W/K}",
         "  Refrig Cond WC Zone,     !- Suction Piping Zone Name",
         "  General,                 !- End-Use Subcategory",
         "  1,                       !- Number of Compressor Stages",
@@ -1467,70 +1467,70 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond WC Case,     !- Name",
         "  ,                        !- Availability Schedule Name",
         "  Refrig Cond WC Zone,     !- Zone Name",
-        "  24,                      !- Rated Ambient Temperature {C}",
-        "  55,                      !- Rated Ambient Relative Humidity {percent}",
-        "  1406,                    !- Rated Total Cooling Capacity per Unit Length {W/m}",
+        "  24.0,                    !- Rated Ambient Temperature {C}",
+        "  55.0,                    !- Rated Ambient Relative Humidity {percent}",
+        "  1406.0,                  !- Rated Total Cooling Capacity per Unit Length {W/m}",
         "  0.3,                     !- Rated Latent Heat Ratio",
         "  0.85,                    !- Rated Runtime Fraction",
         "  2.19,                    !- Case Length {m}",
-        "  4,                       !- Case Operating Temperature {C}",
+        "  4.0,                     !- Case Operating Temperature {C}",
         "  CaseTemperatureMethod,   !- Latent Case Credit Curve Type",
         "  Generic Curve,           !- Latent Case Credit Curve Name",
-        "  30,                      !- Standard Case Fan Power per Unit Length {W/m}",
-        "  30,                      !- Operating Case Fan Power per Unit Length {W/m}",
-        "  20,                      !- Standard Case Lighting Power per Unit Length {W/m}",
-        "  20,                      !- Installed Case Lighting Power per Unit Length {W/m}",
+        "  30.0,                    !- Standard Case Fan Power per Unit Length {W/m}",
+        "  30.0,                    !- Operating Case Fan Power per Unit Length {W/m}",
+        "  20.0,                    !- Standard Case Lighting Power per Unit Length {W/m}",
+        "  20.0,                    !- Installed Case Lighting Power per Unit Length {W/m}",
         "  ,                        !- Case Lighting Schedule Name",
-        "  1,                       !- Fraction of Lighting Energy to Case",
-        "  0,                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
-        "  0,                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Lighting Energy to Case",
+        "  0.0,                     !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  0.0,                     !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
         "  None,                    !- Anti-Sweat Heater Control Type",
-        "  -10,                     !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
+        "  -10.0,                   !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
         "  1.5,                     !- Case Height {m}",
-        "  1,                       !- Fraction of Anti-Sweat Heater Energy to Case",
-        "  0,                       !- Case Defrost Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Anti-Sweat Heater Energy to Case",
+        "  0.0,                     !- Case Defrost Power per Unit Length {W/m}",
         "  OffCycle,                !- Case Defrost Type",
         "  AlwaysOn,                !- Case Defrost Schedule Name",
         "  ,                        !- Case Defrost Drip-Down Schedule Name",
         "  None,                    !- Defrost Energy Correction Curve Type",
         "  ,                        !- Defrost Energy Correction Curve Name",
-        "  0,                       !- Under Case HVAC Return Air Fraction",
+        "  0.0,                     !- Under Case HVAC Return Air Fraction",
         "  ,                        !- Refrigerated Case Restocking Schedule Name",
         "  ,                        !- Case Credit Fraction Schedule Name",
-        "  -7,                      !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
-        "  0;                       !- Average Refrigerant Charge Inventory {kg/m}",
+        "  -7.0,                    !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
+        "  0.0;                     !- Average Refrigerant Charge Inventory {kg/m}",
 
         "Refrigeration:WalkIn,",
         "  Refrig Cond WC WalkIn,   !- Name",
         "  ,                        !- Availability Schedule Name",
-        "  4744,                    !- Rated Coil Cooling Capacity {W}",
-        "  4,                       !- Operating Temperature {C}",
-        "  -6,                      !- Rated Cooling Source Temperature {C}",
-        "  0,                       !- Rated Total Heating Power {W}",
+        "  4744.0,                  !- Rated Coil Cooling Capacity {W}",
+        "  4.0,                     !- Operating Temperature {C}",
+        "  -6.0,                    !- Rated Cooling Source Temperature {C}",
+        "  0.0,                     !- Rated Total Heating Power {W}",
         "  ,                        !- Heating Power Schedule Name",
-        "  308,                     !- Rated Cooling Coil Fan Power {W}",
-        "  0,                       !- Rated Circulation Fan Power {W}",
-        "  100,                     !- Rated Total Lighting Power {W}",
+        "  308.0,                   !- Rated Cooling Coil Fan Power {W}",
+        "  0.0,                     !- Rated Circulation Fan Power {W}",
+        "  100.0,                   !- Rated Total Lighting Power {W}",
         "  ,                        !- Lighting Schedule Name",
         "  Electric,                !- Defrost Type",
         "  TimeSchedule,            !- Defrost Control Type",
         "  AlwaysOn,                !- Defrost Schedule Name",
         "  ,                        !- Defrost Drip-Down Schedule Name",
-        "  2400,                    !- Defrost Power {W}",
+        "  2400.0,                  !- Defrost Power {W}",
         "  ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}",
         "  ,                        !- Restocking Schedule Name",
-        "  0,                       !- Average Refrigerant Charge Inventory {kg}",
-        "  13,                      !- Insulated Floor Surface Area {m2}",
+        "  0.0,                     !- Average Refrigerant Charge Inventory {kg}",
+        "  13.0,                    !- Insulated Floor Surface Area {m2}",
         "  0.25,                    !- Insulated Floor U-Value {W/m2-K}",
         "  Refrig Cond WC Zone,     !- Zone 1 Name",
-        "  55,                      !- Total Insulated Surface Area Facing Zone 1 {m2}",
+        "  55.0,                    !- Total Insulated Surface Area Facing Zone 1 {m2}",
         "  0.3,                     !- Insulated Surface U-Value Facing Zone 1 {W/m2-K}",
-        "  0,                       !- Area of Glass Reach In Doors Facing Zone 1 {m2}",
+        "  0.0,                     !- Area of Glass Reach In Doors Facing Zone 1 {m2}",
         "  1.5,                     !- Height of Glass Reach In Doors Facing Zone 1 {m}",
         "  1.136,                   !- Glass Reach In Door U Value Facing Zone 1 {W/m2-K}",
         "  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone 1",
-        "  2,                       !- Area of Stocking Doors Facing Zone 1 {m2}",
-        "  2,                       !- Height of Stocking Doors Facing Zone 1 {m}",
+        "  2.0,                     !- Area of Stocking Doors Facing Zone 1 {m2}",
+        "  2.0,                     !- Height of Stocking Doors Facing Zone 1 {m}",
         "  0.3785,                  !- Stocking Door U Value Facing Zone 1 {W/m2-K}",
         "  ,                        !- Stocking Door Opening Schedule Name Facing Zone 1",
         "  None;                    !- Stocking Door Opening Protection Type Facing Zone 1",
@@ -1564,16 +1564,16 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Rated Superheat {deltaC}",
         "  18.3,                    !- Rated Return Gas Temperature {C}",
         "  ,                        !- Rated Liquid Temperature {C}",
-        "  0,                       !- Rated Subcooling {deltaC}",
+        "  0.0,                     !- Rated Subcooling {deltaC}",
         "  General,                 !- End-Use Subcategory",
         "  Subcritical;             !- Mode of Operation",
 
         "Zone,",
         "  Refrig Cond EC Zone,     !- Name",
         "  ,                        !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -1625,7 +1625,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond EC PTAC Demand Side Outlet Node,  !- Demand Side Outlet Node Name",
         "  Refrig Cond EC PTAC Demand Side Inlet Node,  !- Demand Side Inlet Node Names",
         "  Refrig Cond EC PTAC Supply Side Outlet Node,  !- Supply Side Outlet Node Names",
-        "  1;                       !- Design Return Air Flow Fraction of Supply Air Flow",
+        "  1.0;                     !- Design Return Air Flow Fraction of Supply Air Flow",
 
         "BranchList,",
         "  Refrig Cond EC PTAC Supply Branch List,  !- Name",
@@ -1671,15 +1671,15 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond EC PTAC Supply Side Inlet Node,  !- Return Air Node Name",
         "  Refrig Cond EC PTAC Mixed Air Node,  !- Mixed Air Node Name",
         "  Refrig Cond EC PTAC OA Node,  !- Actuator Node Name",
-        "  0,                       !- Minimum Outdoor Air Flow Rate {m3/s}",
+        "  0.0,                     !- Minimum Outdoor Air Flow Rate {m3/s}",
         "  Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}",
         "  NoEconomizer,            !- Economizer Control Type",
         "  ModulateFlow,            !- Economizer Control Action Type",
-        "  28,                      !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
-        "  64000,                   !- Economizer Maximum Limit Enthalpy {J/kg}",
+        "  28.0,                    !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
+        "  64000.0,                 !- Economizer Maximum Limit Enthalpy {J/kg}",
         "  ,                        !- Economizer Maximum Limit Dewpoint Temperature {C}",
         "  ,                        !- Electronic Enthalpy Limit Curve Name",
-        "  -100,                    !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
+        "  -100.0,                  !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
         "  NoLockout,               !- Lockout Type",
         "  FixedMinimum,            !- Minimum Limit Type",
         "  ,                        !- Minimum Outdoor Air Schedule Name",
@@ -1724,7 +1724,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Availability Schedule Name",
         "  Autosize,                !- Gross Rated Total Cooling Capacity {W}",
         "  Autosize,                !- Gross Rated Sensible Heat Ratio",
-        "  3,                       !- Gross Rated Cooling COP {W/W}",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
         "  Autosize,                !- Rated Air Flow Rate {m3/s}",
         "  773.3,                   !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
         "  934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
@@ -1735,23 +1735,23 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Generic Curve,           !- Energy Input Ratio Function of Temperature Curve Name",
         "  Generic Curve,           !- Energy Input Ratio Function of Flow Fraction Curve Name",
         "  Generic Curve,           !- Part Load Fraction Correlation Curve Name",
-        "  -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
-        "  0,                       !- Nominal Time for Condensate Removal to Begin {s}",
-        "  0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
-        "  0,                       !- Maximum Cycling Rate {cycles/hr}",
-        "  0,                       !- Latent Capacity Time Constant {s}",
+        "  -25.0,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  0.0,                     !- Nominal Time for Condensate Removal to Begin {s}",
+        "  0.0,                     !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
+        "  0.0,                     !- Maximum Cycling Rate {cycles/hr}",
+        "  0.0,                     !- Latent Capacity Time Constant {s}",
         "  ,                        !- Condenser Air Inlet Node Name",
         "  AirCooled,               !- Condenser Type",
         "  0.9,                     !- Evaporative Condenser Effectiveness {dimensionless}",
         "  Autosize,                !- Evaporative Condenser Air Flow Rate {m3/s}",
         "  Autosize,                !- Evaporative Condenser Pump Rated Power Consumption {W}",
-        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  0.0,                     !- Crankcase Heater Capacity {W}",
         "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
         "  ,                        !- Supply Water Storage Tank Name",
         "  ,                        !- Condensate Collection Water Storage Tank Name",
-        "  0,                       !- Basin Heater Capacity {W/K}",
-        "  2;                       !- Basin Heater Setpoint Temperature {C}",
+        "  0.0,                     !- Basin Heater Capacity {W/K}",
+        "  2.0;                     !- Basin Heater Setpoint Temperature {C}",
 
         "Coil:Heating:Desuperheater,",
         "  Refrig Cond EC PTAC Desuperheater,  !- Name",
@@ -1772,18 +1772,18 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond EC PTAC Desuperheater Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Cond EC PTAC Heating Coil Outlet Node,  !- Air Outlet Node Name",
         "  Refrig Cond EC PTAC Heating Coil Outlet Node,  !- Temperature Setpoint Node Name",
-        "  0,                       !- On Cycle Parasitic Electric Load {W}",
+        "  0.0,                     !- On Cycle Parasitic Electric Load {W}",
         "  ,                        !- Part Load Fraction Correlation Curve Name",
-        "  0;                       !- Off Cycle Parasitic Fuel Load {W}",
+        "  0.0;                     !- Off Cycle Parasitic Fuel Load {W}",
 
         "Fan:ConstantVolume,",
         "  Refrig Cond EC PTAC Fan,  !- Name",
         "  ,                        !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  500,                     !- Pressure Rise {Pa}",
+        "  500.0,                   !- Pressure Rise {Pa}",
         "  Autosize,                !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  Refrig Cond EC PTAC Heating Coil Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Cond EC PTAC Supply Side Outlet Node;  !- Air Outlet Node Name",
 
@@ -1793,12 +1793,12 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Refrigeration Transfer Load or TransferLoad List Name",
         "  Refrig Cond EC Refrig Condenser,  !- Refrigeration Condenser Name",
         "  Refrig Cond EC Refrig Compressor,  !- Compressor or CompressorList Name",
-        "  20,                      !- Minimum Condensing Temperature {C}",
+        "  20.0,                    !- Minimum Condensing Temperature {C}",
         "  R407a,                   !- Refrigeration System Working Fluid Type",
         "  ConstantSuctionTemperature,  !- Suction Temperature Control Type",
         "  ,                        !- Mechanical Subcooler Name",
         "  ,                        !- Liquid Suction Heat Exchanger Subcooler Name",
-        "  0,                       !- Sum UA Suction Piping {W/K}",
+        "  0.0,                     !- Sum UA Suction Piping {W/K}",
         "  Refrig Cond EC Zone,     !- Suction Piping Zone Name",
         "  General,                 !- End-Use Subcategory",
         "  1,                       !- Number of Compressor Stages",
@@ -1814,70 +1814,70 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Cond EC Case,     !- Name",
         "  ,                        !- Availability Schedule Name",
         "  Refrig Cond EC Zone,     !- Zone Name",
-        "  24,                      !- Rated Ambient Temperature {C}",
-        "  55,                      !- Rated Ambient Relative Humidity {percent}",
-        "  1406,                    !- Rated Total Cooling Capacity per Unit Length {W/m}",
+        "  24.0,                    !- Rated Ambient Temperature {C}",
+        "  55.0,                    !- Rated Ambient Relative Humidity {percent}",
+        "  1406.0,                  !- Rated Total Cooling Capacity per Unit Length {W/m}",
         "  0.3,                     !- Rated Latent Heat Ratio",
         "  0.85,                    !- Rated Runtime Fraction",
         "  2.19,                    !- Case Length {m}",
-        "  4,                       !- Case Operating Temperature {C}",
+        "  4.0,                     !- Case Operating Temperature {C}",
         "  CaseTemperatureMethod,   !- Latent Case Credit Curve Type",
         "  Generic Curve,           !- Latent Case Credit Curve Name",
-        "  30,                      !- Standard Case Fan Power per Unit Length {W/m}",
-        "  30,                      !- Operating Case Fan Power per Unit Length {W/m}",
-        "  20,                      !- Standard Case Lighting Power per Unit Length {W/m}",
-        "  20,                      !- Installed Case Lighting Power per Unit Length {W/m}",
+        "  30.0,                    !- Standard Case Fan Power per Unit Length {W/m}",
+        "  30.0,                    !- Operating Case Fan Power per Unit Length {W/m}",
+        "  20.0,                    !- Standard Case Lighting Power per Unit Length {W/m}",
+        "  20.0,                    !- Installed Case Lighting Power per Unit Length {W/m}",
         "  ,                        !- Case Lighting Schedule Name",
-        "  1,                       !- Fraction of Lighting Energy to Case",
-        "  0,                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
-        "  0,                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Lighting Energy to Case",
+        "  0.0,                     !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  0.0,                     !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
         "  None,                    !- Anti-Sweat Heater Control Type",
-        "  -10,                     !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
+        "  -10.0,                   !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
         "  1.5,                     !- Case Height {m}",
-        "  1,                       !- Fraction of Anti-Sweat Heater Energy to Case",
-        "  0,                       !- Case Defrost Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Anti-Sweat Heater Energy to Case",
+        "  0.0,                     !- Case Defrost Power per Unit Length {W/m}",
         "  OffCycle,                !- Case Defrost Type",
         "  AlwaysOn,                !- Case Defrost Schedule Name",
         "  ,                        !- Case Defrost Drip-Down Schedule Name",
         "  None,                    !- Defrost Energy Correction Curve Type",
         "  ,                        !- Defrost Energy Correction Curve Name",
-        "  0,                       !- Under Case HVAC Return Air Fraction",
+        "  0.0,                     !- Under Case HVAC Return Air Fraction",
         "  ,                        !- Refrigerated Case Restocking Schedule Name",
         "  ,                        !- Case Credit Fraction Schedule Name",
-        "  -7,                      !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
-        "  0;                       !- Average Refrigerant Charge Inventory {kg/m}",
+        "  -7.0,                    !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
+        "  0.0;                     !- Average Refrigerant Charge Inventory {kg/m}",
 
         "Refrigeration:WalkIn,",
         "  Refrig Cond EC WalkIn,   !- Name",
         "  ,                        !- Availability Schedule Name",
-        "  4744,                    !- Rated Coil Cooling Capacity {W}",
-        "  4,                       !- Operating Temperature {C}",
-        "  -6,                      !- Rated Cooling Source Temperature {C}",
-        "  0,                       !- Rated Total Heating Power {W}",
+        "  4744.0,                  !- Rated Coil Cooling Capacity {W}",
+        "  4.0,                     !- Operating Temperature {C}",
+        "  -6.0,                    !- Rated Cooling Source Temperature {C}",
+        "  0.0,                     !- Rated Total Heating Power {W}",
         "  ,                        !- Heating Power Schedule Name",
-        "  308,                     !- Rated Cooling Coil Fan Power {W}",
-        "  0,                       !- Rated Circulation Fan Power {W}",
-        "  100,                     !- Rated Total Lighting Power {W}",
+        "  308.0,                   !- Rated Cooling Coil Fan Power {W}",
+        "  0.0,                     !- Rated Circulation Fan Power {W}",
+        "  100.0,                   !- Rated Total Lighting Power {W}",
         "  ,                        !- Lighting Schedule Name",
         "  Electric,                !- Defrost Type",
         "  TimeSchedule,            !- Defrost Control Type",
         "  AlwaysOn,                !- Defrost Schedule Name",
         "  ,                        !- Defrost Drip-Down Schedule Name",
-        "  2400,                    !- Defrost Power {W}",
+        "  2400.0,                  !- Defrost Power {W}",
         "  ,                        !- Temperature Termination Defrost Fraction to Ice {dimensionless}",
         "  ,                        !- Restocking Schedule Name",
-        "  0,                       !- Average Refrigerant Charge Inventory {kg}",
-        "  13,                      !- Insulated Floor Surface Area {m2}",
+        "  0.0,                     !- Average Refrigerant Charge Inventory {kg}",
+        "  13.0,                    !- Insulated Floor Surface Area {m2}",
         "  0.25,                    !- Insulated Floor U-Value {W/m2-K}",
         "  Refrig Cond EC Zone,     !- Zone 1 Name",
-        "  55,                      !- Total Insulated Surface Area Facing Zone 1 {m2}",
+        "  55.0,                    !- Total Insulated Surface Area Facing Zone 1 {m2}",
         "  0.3,                     !- Insulated Surface U-Value Facing Zone 1 {W/m2-K}",
-        "  0,                       !- Area of Glass Reach In Doors Facing Zone 1 {m2}",
+        "  0.0,                     !- Area of Glass Reach In Doors Facing Zone 1 {m2}",
         "  1.5,                     !- Height of Glass Reach In Doors Facing Zone 1 {m}",
         "  1.136,                   !- Glass Reach In Door U Value Facing Zone 1 {W/m2-K}",
         "  ,                        !- Glass Reach In Door Opening Schedule Name Facing Zone 1",
-        "  2,                       !- Area of Stocking Doors Facing Zone 1 {m2}",
-        "  2,                       !- Height of Stocking Doors Facing Zone 1 {m}",
+        "  2.0,                     !- Area of Stocking Doors Facing Zone 1 {m2}",
+        "  2.0,                     !- Height of Stocking Doors Facing Zone 1 {m}",
         "  0.3785,                  !- Stocking Door U Value Facing Zone 1 {W/m2-K}",
         "  ,                        !- Stocking Door Opening Schedule Name Facing Zone 1",
         "  None;                    !- Stocking Door Opening Protection Type Facing Zone 1",
@@ -1917,16 +1917,16 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Rated Superheat {deltaC}",
         "  18.3,                    !- Rated Return Gas Temperature {C}",
         "  ,                        !- Rated Liquid Temperature {C}",
-        "  0,                       !- Rated Subcooling {deltaC}",
+        "  0.0,                     !- Rated Subcooling {deltaC}",
         "  General,                 !- End-Use Subcategory",
         "  Subcritical;             !- Mode of Operation",
 
         "Zone,",
         "  Refrig Comp Rack Zone,   !- Name",
         "  ,                        !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -1978,7 +1978,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Comp Rack PTAC Demand Side Outlet Node,  !- Demand Side Outlet Node Name",
         "  Refrig Comp Rack PTAC Demand Side Inlet Node,  !- Demand Side Inlet Node Names",
         "  Refrig Comp Rack PTAC Supply Side Outlet Node,  !- Supply Side Outlet Node Names",
-        "  1;                       !- Design Return Air Flow Fraction of Supply Air Flow",
+        "  1.0;                     !- Design Return Air Flow Fraction of Supply Air Flow",
 
         "BranchList,",
         "  Refrig Comp Rack PTAC Supply Branch List,  !- Name",
@@ -2024,15 +2024,15 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Comp Rack PTAC Supply Side Inlet Node,  !- Return Air Node Name",
         "  Refrig Comp Rack PTAC Mixed Air Node,  !- Mixed Air Node Name",
         "  Refrig Comp Rack PTAC OA Node,  !- Actuator Node Name",
-        "  0,                       !- Minimum Outdoor Air Flow Rate {m3/s}",
+        "  0.0,                     !- Minimum Outdoor Air Flow Rate {m3/s}",
         "  Autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}",
         "  NoEconomizer,            !- Economizer Control Type",
         "  ModulateFlow,            !- Economizer Control Action Type",
-        "  28,                      !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
-        "  64000,                   !- Economizer Maximum Limit Enthalpy {J/kg}",
+        "  28.0,                    !- Economizer Maximum Limit Dry-Bulb Temperature {C}",
+        "  64000.0,                 !- Economizer Maximum Limit Enthalpy {J/kg}",
         "  ,                        !- Economizer Maximum Limit Dewpoint Temperature {C}",
         "  ,                        !- Electronic Enthalpy Limit Curve Name",
-        "  -100,                    !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
+        "  -100.0,                  !- Economizer Minimum Limit Dry-Bulb Temperature {C}",
         "  NoLockout,               !- Lockout Type",
         "  FixedMinimum,            !- Minimum Limit Type",
         "  ,                        !- Minimum Outdoor Air Schedule Name",
@@ -2077,7 +2077,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  ,                        !- Availability Schedule Name",
         "  Autosize,                !- Gross Rated Total Cooling Capacity {W}",
         "  Autosize,                !- Gross Rated Sensible Heat Ratio",
-        "  3,                       !- Gross Rated Cooling COP {W/W}",
+        "  3.0,                     !- Gross Rated Cooling COP {W/W}",
         "  Autosize,                !- Rated Air Flow Rate {m3/s}",
         "  773.3,                   !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
         "  934.4,                   !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}",
@@ -2088,23 +2088,23 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Generic Curve,           !- Energy Input Ratio Function of Temperature Curve Name",
         "  Generic Curve,           !- Energy Input Ratio Function of Flow Fraction Curve Name",
         "  Generic Curve,           !- Part Load Fraction Correlation Curve Name",
-        "  -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
-        "  0,                       !- Nominal Time for Condensate Removal to Begin {s}",
-        "  0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
-        "  0,                       !- Maximum Cycling Rate {cycles/hr}",
-        "  0,                       !- Latent Capacity Time Constant {s}",
+        "  -25.0,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "  0.0,                     !- Nominal Time for Condensate Removal to Begin {s}",
+        "  0.0,                     !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}",
+        "  0.0,                     !- Maximum Cycling Rate {cycles/hr}",
+        "  0.0,                     !- Latent Capacity Time Constant {s}",
         "  ,                        !- Condenser Air Inlet Node Name",
         "  AirCooled,               !- Condenser Type",
         "  0.9,                     !- Evaporative Condenser Effectiveness {dimensionless}",
         "  Autosize,                !- Evaporative Condenser Air Flow Rate {m3/s}",
         "  Autosize,                !- Evaporative Condenser Pump Rated Power Consumption {W}",
-        "  0,                       !- Crankcase Heater Capacity {W}",
+        "  0.0,                     !- Crankcase Heater Capacity {W}",
         "  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name",
-        "  10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
+        "  10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}",
         "  ,                        !- Supply Water Storage Tank Name",
         "  ,                        !- Condensate Collection Water Storage Tank Name",
-        "  0,                       !- Basin Heater Capacity {W/K}",
-        "  2;                       !- Basin Heater Setpoint Temperature {C}",
+        "  0.0,                     !- Basin Heater Capacity {W/K}",
+        "  2.0;                     !- Basin Heater Setpoint Temperature {C}",
 
         "Coil:Heating:Desuperheater,",
         "  Refrig Comp Rack PTAC Desuperheater,  !- Name",
@@ -2125,18 +2125,18 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Comp Rack PTAC Desuperheater Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Comp Rack PTAC Heating Coil Outlet Node,  !- Air Outlet Node Name",
         "  Refrig Comp Rack PTAC Heating Coil Outlet Node,  !- Temperature Setpoint Node Name",
-        "  0,                       !- On Cycle Parasitic Electric Load {W}",
+        "  0.0,                     !- On Cycle Parasitic Electric Load {W}",
         "  ,                        !- Part Load Fraction Correlation Curve Name",
-        "  0;                       !- Off Cycle Parasitic Fuel Load {W}",
+        "  0.0;                     !- Off Cycle Parasitic Fuel Load {W}",
 
         "Fan:ConstantVolume,",
         "  Refrig Comp Rack PTAC Fan,  !- Name",
         "  ,                        !- Availability Schedule Name",
         "  0.7,                     !- Fan Total Efficiency",
-        "  500,                     !- Pressure Rise {Pa}",
+        "  500.0,                   !- Pressure Rise {Pa}",
         "  Autosize,                !- Maximum Flow Rate {m3/s}",
         "  0.9,                     !- Motor Efficiency",
-        "  1,                       !- Motor In Airstream Fraction",
+        "  1.0,                     !- Motor In Airstream Fraction",
         "  Refrig Comp Rack PTAC Heating Coil Outlet Node,  !- Air Inlet Node Name",
         "  Refrig Comp Rack PTAC Supply Side Outlet Node;  !- Air Outlet Node Name",
 
@@ -2171,67 +2171,67 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  Refrig Comp Rack Case,   !- Name",
         "  ,                        !- Availability Schedule Name",
         "  Refrig Comp Rack Zone,   !- Zone Name",
-        "  24,                      !- Rated Ambient Temperature {C}",
-        "  55,                      !- Rated Ambient Relative Humidity {percent}",
-        "  1406,                    !- Rated Total Cooling Capacity per Unit Length {W/m}",
+        "  24.0,                    !- Rated Ambient Temperature {C}",
+        "  55.0,                    !- Rated Ambient Relative Humidity {percent}",
+        "  1406.0,                  !- Rated Total Cooling Capacity per Unit Length {W/m}",
         "  0.3,                     !- Rated Latent Heat Ratio",
         "  0.85,                    !- Rated Runtime Fraction",
         "  2.19,                    !- Case Length {m}",
-        "  4,                       !- Case Operating Temperature {C}",
+        "  4.0,                     !- Case Operating Temperature {C}",
         "  CaseTemperatureMethod,   !- Latent Case Credit Curve Type",
         "  Generic Curve,           !- Latent Case Credit Curve Name",
-        "  30,                      !- Standard Case Fan Power per Unit Length {W/m}",
-        "  30,                      !- Operating Case Fan Power per Unit Length {W/m}",
-        "  20,                      !- Standard Case Lighting Power per Unit Length {W/m}",
-        "  20,                      !- Installed Case Lighting Power per Unit Length {W/m}",
+        "  30.0,                    !- Standard Case Fan Power per Unit Length {W/m}",
+        "  30.0,                    !- Operating Case Fan Power per Unit Length {W/m}",
+        "  20.0,                    !- Standard Case Lighting Power per Unit Length {W/m}",
+        "  20.0,                    !- Installed Case Lighting Power per Unit Length {W/m}",
         "  ,                        !- Case Lighting Schedule Name",
-        "  1,                       !- Fraction of Lighting Energy to Case",
-        "  0,                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
-        "  0,                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Lighting Energy to Case",
+        "  0.0,                     !- Case Anti-Sweat Heater Power per Unit Length {W/m}",
+        "  0.0,                     !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}",
         "  None,                    !- Anti-Sweat Heater Control Type",
-        "  -10,                     !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
+        "  -10.0,                   !- Humidity at Zero Anti-Sweat Heater Energy {percent}",
         "  1.5,                     !- Case Height {m}",
-        "  1,                       !- Fraction of Anti-Sweat Heater Energy to Case",
-        "  0,                       !- Case Defrost Power per Unit Length {W/m}",
+        "  1.0,                     !- Fraction of Anti-Sweat Heater Energy to Case",
+        "  0.0,                     !- Case Defrost Power per Unit Length {W/m}",
         "  OffCycle,                !- Case Defrost Type",
         "  AlwaysOn,                !- Case Defrost Schedule Name",
         "  ,                        !- Case Defrost Drip-Down Schedule Name",
         "  None,                    !- Defrost Energy Correction Curve Type",
         "  ,                        !- Defrost Energy Correction Curve Name",
-        "  0,                       !- Under Case HVAC Return Air Fraction",
+        "  0.0,                     !- Under Case HVAC Return Air Fraction",
         "  ,                        !- Refrigerated Case Restocking Schedule Name",
         "  ,                        !- Case Credit Fraction Schedule Name",
-        "  -7,                      !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
-        "  0;                       !- Average Refrigerant Charge Inventory {kg/m}",
+        "  -7.0,                    !- Design Evaporator Temperature or Brine Inlet Temperature {C}",
+        "  0.0;                     !- Average Refrigerant Charge Inventory {kg/m}",
 
         "ScheduleTypeLimits,",
         "  OnOff,                   !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete,                !- Numeric Type",
         "  Availability;            !- Unit Type",
 
-        "Schedule:Constant,AlwaysOn,OnOff,1;",
+        "Schedule:Constant,AlwaysOn,OnOff,1.0;",
 
         "Curve:Cubic,",
         "  Generic Curve,           !- Name",
-        "  1,                       !- Coefficient1 Constant",
-        "  0,                       !- Coefficient2 x",
-        "  0,                       !- Coefficient3 x**2",
-        "  0,                       !- Coefficient4 x**3",
-        "  0,                       !- Minimum Value of x",
-        "  1;                       !- Maximum Value of x",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Coefficient4 x**3",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.0;                     !- Maximum Value of x",
 
         "Curve:Linear,",
         "  Condenser Curve,         !- Name",
-        "  0,                       !- Coefficient1 Constant",
-        "  14704,                   !- Coefficient2 x",
-        "  5,                       !- Minimum Value of x",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  14704.0,                 !- Coefficient2 x",
+        "  5.0,                     !- Minimum Value of x",
         "  22.2;                    !- Maximum Value of x",
 
         "Curve:Bicubic,",
         "  Capacity Curve,          !- Name",
-        "  22520,                   !- Coefficient1 Constant",
+        "  22520.0,                 !- Coefficient1 Constant",
         "  755.9,                   !- Coefficient2 x",
         "  9.047,                   !- Coefficient3 x**2",
         "  -69.75,                  !- Coefficient4 y",
@@ -2243,7 +2243,7 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
         "  -0.04638,                !- Coefficient10 x*y**2",
         "  -17.8,                   !- Minimum Value of x",
         "  4.4,                     !- Maximum Value of x",
-        "  10,                      !- Minimum Value of y",
+        "  10.0,                    !- Minimum Value of y",
         "  48.9,                    !- Maximum Value of y",
         "  ,                        !- Minimum Curve Output",
         "  ,                        !- Maximum Curve Output",
@@ -2257,10 +2257,10 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
 
         "FluidProperties:Temperatures,",
         "  R407aSaturatedTemperatures,  !- Name",
-        "  -45,-40,-35,-30,-25,-20,-15,",
-        "  -10,-5,0,5,10,15,20,",
-        "  25,30,35,40,45,50,55,",
-        "  60,65,70,75;",
+        "  -45.0,-40.0,-35.0,-30.0,-25.0,-20.0,-15.0,",
+        "  -10.0,-5.0,0.0,5.0,10.0,15.0,20.0,",
+        "  25.0,30.0,35.0,40.0,45.0,50.0,55.0,",
+        "  60.0,65.0,70.0,75.0;",
 
         "FluidProperties:Saturated,",
         "  R407a,                   !- Fluid Name",
@@ -2334,14 +2334,14 @@ TEST_F(EnergyPlusFixture, DesuperheaterRefrigeration)
 
         "FluidProperties:Temperatures,",
         "  R407aSuperHeatTemperatures,  !- Name",
-        "  -45,-40,-35,-30,-25,-20,-15,",
-        "  -10,-5,0,5,10,15,20,",
-        "  25,30,35,40,45,50,55,",
-        "  60,65,70,75,85,90,95,",
-        "  100,105,110,115,120,125,130,",
-        "  135,140,145,150,155,160,165,",
-        "  170,175,180,185,190,195,200,",
-        "  205;",
+        "  -45.0,-40.0,-35.0,-30.0,-25.0,-20.0,-15.0,",
+        "  -10.0,-5.0,0.0,5.0,10.0,15.0,20.0,",
+        "  25.0,30.0,35.0,40.0,45.0,50.0,55.0,",
+        "  60.0,65.0,70.0,75.0,85.0,90.0,95.0,",
+        "  100.0,105.0,110.0,115.0,120.0,125.0,130.0,",
+        "  135.0,140.0,145.0,150.0,155.0,160.0,165.0,",
+        "  170.0,175.0,180.0,185.0,190.0,195.0,200.0,",
+        "  205.0;",
 
         "FluidProperties:Superheated,",
         "  R407a,                   !- Fluid Name",

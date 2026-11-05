@@ -58,7 +58,7 @@ TEST_F(EnergyPlusFixture, GroundHeatExchangerTest_GetVertArray)
     std::string const idf_objects = delimited_string({
         "GroundHeatExchanger:Vertical:Properties,",
         "  GHE-1 Props,             !- Name",
-        "  1,                       !- Depth of Top of Borehole {m}",
+        "  1.0,                     !- Depth of Top of Borehole {m}",
         "  76.2,                    !- Borehole Length {m}",
         "  0.288,                   !- Borehole Diameter {m}",
         "  3.0,                     !- Grout Thermal Conductivity {W/m-K}",
@@ -74,7 +74,7 @@ TEST_F(EnergyPlusFixture, GroundHeatExchangerTest_GetVertArray)
         "  GHE-1 Props,             !- GHE:Vertical:Properties Object Name",
         "  2,                       !- Number of Boreholes in X-Direction",
         "  2,                       !- Number of Boreholes in Y-Direction",
-        "  2;                       !- Borehole Spacing {m}",
+        "  2.0;                     !- Borehole Spacing {m}",
 
         "GroundHeatExchanger:System,",
         "  Vertical GHE 1x4 Std,    !- Name",
@@ -94,11 +94,11 @@ TEST_F(EnergyPlusFixture, GroundHeatExchangerTest_GetVertArray)
         "Site:GroundTemperature:Undisturbed:KusudaAchenbach,",
         "  KATemps,                 !- Name",
         "  1.8,                     !- Soil Thermal Conductivity {W/m-K}",
-        "  920,                     !- Soil Density {kg/m3}",
-        "  2200,                    !- Soil Specific Heat {J/kg-K}",
+        "  920.0,                   !- Soil Density {kg/m3}",
+        "  2200.0,                  !- Soil Specific Heat {J/kg-K}",
         "  15.5,                    !- Average Soil Surface Temperature {C}",
         "  3.2,                     !- Average Amplitude of Surface Temperature {deltaC}",
-        "  8;                       !- Phase Shift of Minimum Surface Temperature {days}",
+        "  8.0;                     !- Phase Shift of Minimum Surface Temperature {days}",
     });
 
     // Setup

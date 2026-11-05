@@ -87,9 +87,9 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_WaterCooled_Autosize)
         "  Chiller Cnd Outlet,      !- Condenser Outlet Node Name",
         "  WaterCooled,             !- Condenser Type",
         "  ConstantFlow,            !- Chiller Flow Mode",
-        "  1,                       !- Sizing Factor",
+        "  1.0,                     !- Sizing Factor",
         "  ,                        !- Basin Heater Capacity {W/K}",
-        "  2,                       !- Basin Heater Setpoint Temperature {C}",
+        "  2.0,                     !- Basin Heater Setpoint Temperature {C}",
         "  ,                        !- Basin Heater Operating Schedule Name",
         "  ThermoCapFracCurve;      !- Thermosiphon Capacity Fraction Curve Name",
 
@@ -230,9 +230,9 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_Default_Des_Cond_Evap_Temps)
         "  Chiller 1 Cnd Outlet,    !- Condenser Outlet Node Name",
         "  WaterCooled,             !- Condenser Type",
         "  ConstantFlow,            !- Chiller Flow Mode",
-        "  1,                       !- Sizing Factor",
+        "  1.0,                     !- Sizing Factor",
         "  ,                        !- Basin Heater Capacity {W/K}",
-        "  2;                       !- Basin Heater Setpoint Temperature {C}",
+        "  2.0;                     !- Basin Heater Setpoint Temperature {C}",
 
         "Chiller:ConstantCOP,",
         "  Chiller_2_AirCooled,     !- Name",
@@ -246,9 +246,9 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_Default_Des_Cond_Evap_Temps)
         "  Chiller 2 Cnd Outlet,    !- Condenser Outlet Node Name",
         "  AirCooled,               !- Condenser Type",
         "  ConstantFlow,            !- Chiller Flow Mode",
-        "  1,                       !- Sizing Factor",
+        "  1.0,                     !- Sizing Factor",
         "  ,                        !- Basin Heater Capacity {W/K}",
-        "  2;                       !- Basin Heater Setpoint Temperature {C}",
+        "  2.0;                     !- Basin Heater Setpoint Temperature {C}",
 
         "Chiller:ConstantCOP,",
         "  Chiller_3_EvapCooled,    !- Name",
@@ -262,9 +262,9 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_Default_Des_Cond_Evap_Temps)
         "  Chiller 3 Cnd Outlet,    !- Condenser Outlet Node Name",
         "  EvaporativelyCooled,     !- Condenser Type",
         "  ConstantFlow,            !- Chiller Flow Mode",
-        "  1,                       !- Sizing Factor",
+        "  1.0,                     !- Sizing Factor",
         "  ,                        !- Basin Heater Capacity {W/K}",
-        "  2;                       !- Basin Heater Setpoint Temperature {C}",
+        "  2.0;                     !- Basin Heater Setpoint Temperature {C}",
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));

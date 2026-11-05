@@ -1191,10 +1191,10 @@ TEST_F(EnergyPlusFixture, ZoneTempPredictorCorrector_WrongControlTypeSchedule)
     std::string const idf_objects = delimited_string({
         "Zone,",
         "  Zone1,                   !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -1212,18 +1212,18 @@ TEST_F(EnergyPlusFixture, ZoneTempPredictorCorrector_WrongControlTypeSchedule)
         "  ThermostatSetpoint:SingleCooling,  !- Control 1 Object Type",
         "  Thermostat Setpoint Single Cooling;  !- Control 1 Name",
 
-        "Schedule:Constant,Single HEATING Control Type Sched,Control Type,1;", // <-------- 1 = Single Heating, which is WRONG
+        "Schedule:Constant,Single HEATING Control Type Sched,Control Type,1.0;", // <-------- 1 = Single Heating, which is WRONG
 
         "ThermostatSetpoint:SingleCooling,",
         "  Thermostat Setpoint Single Cooling,  !- Name",
         "  Always 26C;              !- Setpoint Temperature Schedule Name",
 
-        "Schedule:Constant,Always 26C,Temperature,26;",
+        "Schedule:Constant,Always 26C,Temperature,26.0;",
 
         "ScheduleTypeLimits,",
         "  Control Type,            !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  4,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  4.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "ScheduleTypeLimits,",
@@ -2050,8 +2050,8 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_Test)
 
         "ScheduleTypeLimits,",
         "  Control Type,            !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  4,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  4.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -2128,19 +2128,19 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_Test)
 
         "Zone,",
         "  TheZone,                 !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1;                       !- Multiplier",
 
         "Zone,",
         "  AnotherZone,             !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1;                       !- Multiplier",
     });
@@ -2164,11 +2164,11 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_CutoutDifferentialIgnoredForSingle
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Control Type,            !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  4,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  4.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
-        "Schedule:Constant,Zone Control Type Schedule,Control Type,3;",
+        "Schedule:Constant,Zone Control Type Schedule,Control Type,3.0;",
 
         "Schedule:Constant,Setpoint Schedule,,22.0;",
 
@@ -2186,10 +2186,10 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_CutoutDifferentialIgnoredForSingle
 
         "Zone,",
         "  Zone,                    !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1;                       !- Multiplier",
     });
@@ -2216,8 +2216,8 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_ITEApproachTempWarning)
 
         "ScheduleTypeLimits,",
         "  Control Type,            !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  4,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  4.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -2256,10 +2256,10 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_ITEApproachTempWarning)
 
         "Zone,",
         "  East Zone,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1;                       !- Multiplier",
     });
@@ -2293,11 +2293,11 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_ITEApproachTempNoWarningForInactiv
     std::string const idf_objects = delimited_string({
         "ScheduleTypeLimits,",
         "  Control Type,            !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  4,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  4.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
-        "Schedule:Constant,Zone Control Type Sched,Control Type,1;",
+        "Schedule:Constant,Zone Control Type Sched,Control Type,1.0;",
 
         "Schedule:Constant,Heating Setpoints,,20.0;",
 
@@ -2324,10 +2324,10 @@ TEST_F(EnergyPlusFixture, GetZoneAirSetPoints_ITEApproachTempNoWarningForInactiv
 
         "Zone,",
         "  East Zone,               !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1;                       !- Multiplier",
     });

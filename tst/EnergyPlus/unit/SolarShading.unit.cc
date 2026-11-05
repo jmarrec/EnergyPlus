@@ -520,7 +520,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -568,8 +568,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -708,14 +708,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
-        "  0,                       !- Ceiling Height {m}",
-        "  0;                       !- Volume {m3}",
+        "  0.0,                     !- Ceiling Height {m}",
+        "  0.0;                     !- Volume {m3}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-North,        !- Name",
@@ -729,10 +729,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -746,10 +746,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -763,10 +763,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -780,10 +780,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -797,10 +797,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:floor,             !- Name",
@@ -814,10 +814,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -829,10 +829,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -867,10 +867,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_FigureSolarBeamAtTimestep)
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
@@ -951,7 +951,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -1000,8 +1000,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -1140,14 +1140,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
-        "  0,                       !- Ceiling Height {m}",
-        "  0;                       !- Volume {m3}",
+        "  0.0,                     !- Ceiling Height {m}",
+        "  0.0;                     !- Volume {m3}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-North,        !- Name",
@@ -1161,10 +1161,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -1178,10 +1178,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -1195,10 +1195,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -1212,10 +1212,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -1229,10 +1229,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "SurfaceProperty:LocalEnvironment,",
         "  LocEnv:Zn001:roof,       !- Name",
@@ -1260,10 +1260,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -1275,10 +1275,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -1313,10 +1313,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_ExternalShadingIO)
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
@@ -1407,7 +1407,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -1459,8 +1459,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -1599,14 +1599,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
-        "  0,                       !- Ceiling Height {m}",
-        "  0;                       !- Volume {m3}",
+        "  0.0,                     !- Ceiling Height {m}",
+        "  0.0;                     !- Volume {m3}",
 
         "ZoneList,",
         "  ShadingZoneGroup,        !- Name",
@@ -1624,10 +1624,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -1641,10 +1641,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -1658,10 +1658,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -1675,10 +1675,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -1692,10 +1692,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  ExtShadingSch:Zn001:roof,  !- Name",
@@ -1716,10 +1716,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -1731,10 +1731,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -1769,10 +1769,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_DisableGroupSelfShading)
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
@@ -1838,7 +1838,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -1886,8 +1886,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -2026,14 +2026,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
-        "  0,                       !- Ceiling Height {m}",
-        "  0;                       !- Volume {m3}",
+        "  0.0,                     !- Ceiling Height {m}",
+        "  0.0;                     !- Volume {m3}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-North,        !- Name",
@@ -2047,10 +2047,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -2064,10 +2064,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -2081,10 +2081,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -2098,10 +2098,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -2115,10 +2115,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:floor,             !- Name",
@@ -2132,10 +2132,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -2147,10 +2147,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -2185,10 +2185,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonClippingDirect)
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
@@ -2380,7 +2380,7 @@ Timestep,4;
 
 Building,
   Non-convex,              !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   City,                    !- Terrain
   0.5,                     !- Loads Convergence Tolerance Value {W}
   0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -2395,10 +2395,10 @@ GlobalGeometryRules,
 
 Zone,
   Zone A,                  !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1;                       !- Multiplier
 
@@ -2414,10 +2414,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,0;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   69C03D,                  !- Name
@@ -2431,12 +2431,12 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   6,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
-  0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
+  0.0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
   5BB552,                  !- Name
@@ -2452,9 +2452,9 @@ BuildingSurface:Detailed,
   6,                       !- Number of Vertices
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 4 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 5 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 5 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
@@ -2470,9 +2470,9 @@ BuildingSurface:Detailed,
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
   6.096,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   C292CF,                  !- Name
@@ -2486,10 +2486,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   319080,                  !- Name
@@ -2503,8 +2503,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -2520,9 +2520,9 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
@@ -2537,8 +2537,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -2562,8 +2562,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.038037600000000005,    !- Thickness {m}
   0.0288,                  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}
-  1465;                    !- Specific Heat {J/kg-K}
+  32.0,                    !- Density {kg/m3}
+  1465.0;                  !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
@@ -2571,7 +2571,7 @@ Material,
   0.08889999999999999,     !- Thickness {m}
   0.08389829384297165,     !- Conductivity {W/m-K}
   8.17,                    !- Density {kg/m3}
-  837;                     !- Specific Heat {J/kg-K}
+  837.0;                   !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
@@ -2589,8 +2589,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
-  800,                     !- Density {kg/m3}
-  1090,                    !- Specific Heat {J/kg-K}
+  800.0,                   !- Density {kg/m3}
+  1090.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -2600,8 +2600,8 @@ Material,
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
-  1856,                    !- Density {kg/m3}
-  840,                     !- Specific Heat {J/kg-K}
+  1856.0,                  !- Density {kg/m3}
+  840.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -2703,7 +2703,7 @@ Timestep,4;
 
 Building,
   Non-convex,              !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   City,                    !- Terrain
   0.5,                     !- Loads Convergence Tolerance Value {W}
   0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -2718,10 +2718,10 @@ GlobalGeometryRules,
 
 Zone,
   Zone A,                  !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1;                       !- Multiplier
 
@@ -2737,10 +2737,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,0;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   69C03D,                  !- Name
@@ -2754,12 +2754,12 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   6,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
-  0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
+  0.0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
   5BB552,                  !- Name
@@ -2775,9 +2775,9 @@ BuildingSurface:Detailed,
   6,                       !- Number of Vertices
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 4 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 5 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 5 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
@@ -2793,9 +2793,9 @@ BuildingSurface:Detailed,
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
   6.096,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   C292CF,                  !- Name
@@ -2809,10 +2809,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   319080,                  !- Name
@@ -2826,8 +2826,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -2843,9 +2843,9 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
@@ -2860,8 +2860,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -2885,8 +2885,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.038037600000000005,    !- Thickness {m}
   0.0288,                  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}
-  1465;                    !- Specific Heat {J/kg-K}
+  32.0,                    !- Density {kg/m3}
+  1465.0;                  !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
@@ -2894,7 +2894,7 @@ Material,
   0.08889999999999999,     !- Thickness {m}
   0.08389829384297165,     !- Conductivity {W/m-K}
   8.17,                    !- Density {kg/m3}
-  837;                     !- Specific Heat {J/kg-K}
+  837.0;                   !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
@@ -2912,8 +2912,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
-  800,                     !- Density {kg/m3}
-  1090,                    !- Specific Heat {J/kg-K}
+  800.0,                   !- Density {kg/m3}
+  1090.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -2923,8 +2923,8 @@ Material,
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
-  1856,                    !- Density {kg/m3}
-  840,                     !- Specific Heat {J/kg-K}
+  1856.0,                  !- Density {kg/m3}
+  840.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -3014,7 +3014,7 @@ Timestep,4;
 
 Building,
   Non-convex,              !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   City,                    !- Terrain
   0.5,                     !- Loads Convergence Tolerance Value {W}
   0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -3029,10 +3029,10 @@ GlobalGeometryRules,
 
 Zone,
   Zone A,                  !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1;                       !- Multiplier
 
@@ -3048,10 +3048,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,0;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   69C03D,                  !- Name
@@ -3065,12 +3065,12 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   6,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
-  0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
+  0.0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
   5BB552,                  !- Name
@@ -3086,9 +3086,9 @@ BuildingSurface:Detailed,
   6,                       !- Number of Vertices
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 4 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 5 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 5 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
@@ -3104,9 +3104,9 @@ BuildingSurface:Detailed,
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
   6.096,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   C292CF,                  !- Name
@@ -3120,10 +3120,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   319080,                  !- Name
@@ -3137,8 +3137,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -3154,9 +3154,9 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
@@ -3171,8 +3171,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -3196,8 +3196,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.038037600000000005,    !- Thickness {m}
   0.0288,                  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}
-  1465;                    !- Specific Heat {J/kg-K}
+  32.0,                    !- Density {kg/m3}
+  1465.0;                  !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
@@ -3205,7 +3205,7 @@ Material,
   0.08889999999999999,     !- Thickness {m}
   0.08389829384297165,     !- Conductivity {W/m-K}
   8.17,                    !- Density {kg/m3}
-  837;                     !- Specific Heat {J/kg-K}
+  837.0;                   !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
@@ -3223,8 +3223,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
-  800,                     !- Density {kg/m3}
-  1090,                    !- Specific Heat {J/kg-K}
+  800.0,                   !- Density {kg/m3}
+  1090.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -3234,8 +3234,8 @@ Material,
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
-  1856,                    !- Density {kg/m3}
-  840,                     !- Specific Heat {J/kg-K}
+  1856.0,                  !- Density {kg/m3}
+  840.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -3467,7 +3467,7 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -3515,8 +3515,8 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -3641,14 +3641,14 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
-        "  0,                       !- Ceiling Height {m}",
-        "  0;                       !- Volume {m3}",
+        "  0.0,                     !- Ceiling Height {m}",
+        "  0.0;                     !- Volume {m3}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-North,        !- Name",
@@ -3662,10 +3662,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -3679,10 +3679,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -3696,10 +3696,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -3713,10 +3713,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -3730,10 +3730,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:floor,             !- Name",
@@ -3747,10 +3747,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -3762,10 +3762,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -3800,10 +3800,10 @@ TEST_F(EnergyPlusFixture, SolarShading_TestSurfsPropertyViewFactor)
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
@@ -3960,7 +3960,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
 
         "Building,",
         "  Building 1,              !- Name",
-        "  20,                      !- North Axis {deg}",
+        "  20.0,                    !- North Axis {deg}",
         "  ,                        !- Terrain",
         "  ,                        !- Loads Convergence Tolerance Value {W}",
         "  ,                        !- Temperature Convergence Tolerance Value {deltaC}",
@@ -3970,10 +3970,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
 
         "Zone,",
         "  Zone1,                   !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  ,                        !- Type",
         "  1,                       !- Multiplier",
         "  ,                        !- Ceiling Height {m}",
@@ -4007,10 +4007,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  -7.07106781186548,-12.2474487139159,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -7.07106781186548,-12.2474487139159,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  12.2474487139159,-7.07106781186548,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  12.2474487139159,-7.07106781186548,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -7.07106781186548,-12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -7.07106781186548,-12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  12.2474487139159,-7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  12.2474487139159,-7.07106781186548,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  2-WEST - ABS AZIMUTH 255.00,  !- Name",
@@ -4024,10 +4024,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  -12.2474487139159,7.07106781186548,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -12.2474487139159,7.07106781186548,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -7.07106781186548,-12.2474487139159,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -7.07106781186548,-12.2474487139159,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -12.2474487139159,7.07106781186548,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -12.2474487139159,7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -7.07106781186548,-12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -7.07106781186548,-12.2474487139159,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  3-EAST - ABS AZIMUTH 75.00,  !- Name",
@@ -4041,10 +4041,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  12.2474487139159,-7.07106781186548,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  12.2474487139159,-7.07106781186548,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  7.07106781186548,12.2474487139159,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  7.07106781186548,12.2474487139159,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  12.2474487139159,-7.07106781186548,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  12.2474487139159,-7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  7.07106781186548,12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  7.07106781186548,12.2474487139159,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  4-NORTH - ABS AZIMUTH 345.00,  !- Name",
@@ -4058,10 +4058,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  7.07106781186548,12.2474487139159,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  7.07106781186548,12.2474487139159,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -12.2474487139159,7.07106781186548,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -12.2474487139159,7.07106781186548,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  7.07106781186548,12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  7.07106781186548,12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -12.2474487139159,7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -12.2474487139159,7.07106781186548,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  FLOOR,                   !- Name",
@@ -4075,10 +4075,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
         "  NoWind,                  !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  12.2474487139159,-7.07106781186548,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -7.07106781186548,-12.2474487139159,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -12.2474487139159,7.07106781186548,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  7.07106781186548,12.2474487139159,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  12.2474487139159,-7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -7.07106781186548,-12.2474487139159,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -12.2474487139159,7.07106781186548,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  7.07106781186548,12.2474487139159,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  ROOF,                    !- Name",
@@ -4092,10 +4092,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CTRANS)
         "  WindExposed,             !- Wind Exposure",
         "  ,                        !- View Factor to Ground",
         "  ,                        !- Number of Vertices",
-        "  7.07106781186548,12.2474487139159,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -12.2474487139159,7.07106781186548,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -7.07106781186548,-12.2474487139159,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  12.2474487139159,-7.07106781186548,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  7.07106781186548,12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -12.2474487139159,7.07106781186548,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -7.07106781186548,-12.2474487139159,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  12.2474487139159,-7.07106781186548,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4205,7 +4205,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -4253,8 +4253,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -4379,14 +4379,14 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
 
         "Zone,",
         "  ZONE ONE,                !- Name",
-        "  0,                       !- Direction of Relative North {deg}",
-        "  0,                       !- X Origin {m}",
-        "  0,                       !- Y Origin {m}",
-        "  0,                       !- Z Origin {m}",
+        "  0.0,                     !- Direction of Relative North {deg}",
+        "  0.0,                     !- X Origin {m}",
+        "  0.0,                     !- Y Origin {m}",
+        "  0.0,                     !- Z Origin {m}",
         "  1,                       !- Type",
         "  1,                       !- Multiplier",
-        "  0,                       !- Ceiling Height {m}",
-        "  0;                       !- Volume {m3}",
+        "  0.0,                     !- Ceiling Height {m}",
+        "  0.0;                     !- Volume {m3}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-North,        !- Name",
@@ -4400,10 +4400,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -4417,10 +4417,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -4434,10 +4434,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -4451,10 +4451,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -4468,10 +4468,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:floor,             !- Name",
@@ -4485,10 +4485,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -4500,10 +4500,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -4538,10 +4538,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
@@ -4552,10 +4552,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_Warn_Pixel_Count_and_TM_Schedule)
         "  Zn001:Wall-South:Shade002,  !- Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,5.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,5.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,5.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,5.0;  !- X,Y,Z ==> Vertex 4 {m}",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -4715,7 +4715,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -4794,10 +4794,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -4845,10 +4845,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -4862,20 +4862,20 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Shading:Zone:Detailed,",
         "  Zn001:Wall-South:Shade001,  !- Name",
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  OverhangTransmittance,   !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  OverhangTransmittance,   !- Name",
@@ -4891,10 +4891,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap)
         "  Zn001:Wall-South:Tree,   !- Name",
         "  TreeTransmittance,       !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-8,10,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-8,2,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-8,2,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-8,10;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-8.0,10.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-8.0,2.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-8.0,2.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-8.0,10.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  TreeTransmittance,       !- Name",
@@ -5168,7 +5168,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap2)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -5247,10 +5247,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap2)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -5298,10 +5298,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap2)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -5315,19 +5315,19 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap2)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Shading:Building:Detailed,",
         "  Zn001:Wall-South:Shade1,  !- Name",
         "  Shade1Transmittance,     !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -10,-8,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -10,-8,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10,-8,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10,-8,20;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -10.0,-8.0,20.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -10.0,-8.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,-8.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,-8.0,20.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  Shade1Transmittance,     !- Name",
@@ -5343,10 +5343,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap2)
         "  Zn001:Wall-South:Shade2,  !- Name",
         "  Shade2Transmittance,     !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -10,-9,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -10,-9,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10,-9,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10,-9,20;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -10.0,-9.0,20.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -10.0,-9.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,-9.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,-9.0,20.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  Shade2Transmittance,     !- Name",
@@ -5537,7 +5537,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -5616,10 +5616,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -5667,10 +5667,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -5684,19 +5684,19 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Shading:Building:Detailed,",
         "  Zn001:Wall-South:Shade1,  !- Name",
         "  Shade1Transmittance,     !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -10,-8,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -10,-8,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10,-8,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10,-8,20;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -10.0,-8.0,20.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -10.0,-8.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,-8.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,-8.0,20.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  Shade1Transmittance,     !- Name",
@@ -5712,10 +5712,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
         "  Zn001:Wall-South:Shade2,  !- Name",
         "  Shade2Transmittance,     !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -10,-9,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -10,-9,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10,-9,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10,-9,20;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -10.0,-9.0,20.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -10.0,-9.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,-9.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,-9.0,20.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  Shade2Transmittance,     !- Name",
@@ -5731,10 +5731,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_PolygonOverlap3)
         "  Zn001:Wall-South:Shade3,  !- Name",
         "  Shade3Transmittance,     !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -10,-9,20,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -10,-9,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  10,-9,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  10,-9,20;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -10.0,-9.0,20.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -10.0,-9.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  10.0,-9.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  10.0,-9.0,20.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "Schedule:Compact,",
         "  Shade3Transmittance,     !- Name",
@@ -5877,7 +5877,7 @@ Timestep,4;
 
 Building,
   Non-convex,              !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   City,                    !- Terrain
   0.5,                     !- Loads Convergence Tolerance Value {W}
   0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -5892,10 +5892,10 @@ GlobalGeometryRules,
 
 Zone,
   Zone A,                  !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1;                       !- Multiplier
 
@@ -5913,10 +5913,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,0;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 SurfaceProperty:LocalEnvironment,
   LocEnv:A48756,           !- Name
@@ -5937,12 +5937,12 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   6,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
-  0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
+  0.0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
   5BB552,                  !- Name
@@ -5958,9 +5958,9 @@ BuildingSurface:Detailed,
   6,                       !- Number of Vertices
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 4 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 5 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 5 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 SurfaceProperty:LocalEnvironment,
@@ -5983,9 +5983,9 @@ BuildingSurface:Detailed,
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
   6.096,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
 SurfaceProperty:LocalEnvironment,
   LocEnv:682F88,           !- Name
@@ -6006,10 +6006,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 SurfaceProperty:LocalEnvironment,
   LocEnv:C292CF,           !- Name
@@ -6030,8 +6030,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -6054,9 +6054,9 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 SurfaceProperty:LocalEnvironment,
@@ -6078,8 +6078,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -6118,8 +6118,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.038037600000000005,    !- Thickness {m}
   0.0288,                  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}
-  1465;                    !- Specific Heat {J/kg-K}
+  32.0,                    !- Density {kg/m3}
+  1465.0;                  !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
@@ -6127,7 +6127,7 @@ Material,
   0.08889999999999999,     !- Thickness {m}
   0.08389829384297165,     !- Conductivity {W/m-K}
   8.17,                    !- Density {kg/m3}
-  837;                     !- Specific Heat {J/kg-K}
+  837.0;                   !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
@@ -6145,8 +6145,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
-  800,                     !- Density {kg/m3}
-  1090,                    !- Specific Heat {J/kg-K}
+  800.0,                   !- Density {kg/m3}
+  1090.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -6156,8 +6156,8 @@ Material,
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
-  1856,                    !- Density {kg/m3}
-  840,                     !- Specific Heat {J/kg-K}
+  1856.0,                  !- Density {kg/m3}
+  840.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -6261,7 +6261,7 @@ Timestep,4;
 
 Building,
   Non-convex,              !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   City,                    !- Terrain
   0.5,                     !- Loads Convergence Tolerance Value {W}
   0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -6276,10 +6276,10 @@ GlobalGeometryRules,
 
 Zone,
   Zone A,                  !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1;                       !- Multiplier
 
@@ -6297,10 +6297,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,0;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   WALL1NOTOK,              !- Name
@@ -6314,12 +6314,12 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   6,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
-  0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
+  0.0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
   Zn001:Wall001,           !- Name
@@ -6335,9 +6335,9 @@ BuildingSurface:Detailed,
   6,                       !- Number of Vertices
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 4 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 5 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 5 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
@@ -6353,9 +6353,9 @@ BuildingSurface:Detailed,
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
   6.096,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   ZN001:WALL003,           !- Name
@@ -6369,10 +6369,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   ZN001:WALL004,           !- Name
@@ -6386,8 +6386,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -6403,9 +6403,9 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
@@ -6420,8 +6420,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -6453,8 +6453,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.038037600000000005,    !- Thickness {m}
   0.0288,                  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}
-  1465;                    !- Specific Heat {J/kg-K}
+  32.0,                    !- Density {kg/m3}
+  1465.0;                  !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
@@ -6462,7 +6462,7 @@ Material,
   0.08889999999999999,     !- Thickness {m}
   0.08389829384297165,     !- Conductivity {W/m-K}
   8.17,                    !- Density {kg/m3}
-  837;                     !- Specific Heat {J/kg-K}
+  837.0;                   !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
@@ -6480,8 +6480,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
-  800,                     !- Density {kg/m3}
-  1090,                    !- Specific Heat {J/kg-K}
+  800.0,                   !- Density {kg/m3}
+  1090.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -6491,8 +6491,8 @@ Material,
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
-  1856,                    !- Density {kg/m3}
-  840,                     !- Specific Heat {J/kg-K}
+  1856.0,                  !- Density {kg/m3}
+  840.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -6601,7 +6601,7 @@ Timestep,4;
 
 Building,
   Non-convex,              !- Name
-  0,                       !- North Axis {deg}
+  0.0,                     !- North Axis {deg}
   City,                    !- Terrain
   0.5,                     !- Loads Convergence Tolerance Value {W}
   0.5,                     !- Temperature Convergence Tolerance Value {deltaC}
@@ -6616,10 +6616,10 @@ GlobalGeometryRules,
 
 Zone,
   Zone A,                  !- Name
-  0,                       !- Direction of Relative North {deg}
-  0,                       !- X Origin {m}
-  0,                       !- Y Origin {m}
-  0,                       !- Z Origin {m}
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
   ,                        !- Type
   1;                       !- Multiplier
 
@@ -6637,10 +6637,10 @@ BuildingSurface:Detailed,
   NoWind,                  !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,0;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   WALL1NOTOK,              !- Name
@@ -6654,12 +6654,12 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   6,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
-  0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 5 {m}
+  0.0,3.048,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 SurfaceProperty:LocalEnvironment,
   LocEnv:WALL1NOTOK,       !- Name
@@ -6682,9 +6682,9 @@ BuildingSurface:Detailed,
   6,                       !- Number of Vertices
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 4 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 5 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 5 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 6 {m}
 
 BuildingSurface:Detailed,
@@ -6700,9 +6700,9 @@ BuildingSurface:Detailed,
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
   6.096,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  6.096,6.096,0,  !- X,Y,Z ==> Vertex 2 {m}
-  0,6.096,0,  !- X,Y,Z ==> Vertex 3 {m}
-  0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
+  6.096,6.096,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   C292CF,                  !- Name
@@ -6716,10 +6716,10 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-  6.096,0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  6.096,0.0,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
   319080,                  !- Name
@@ -6733,8 +6733,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -6750,9 +6750,9 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
-  0,0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
-  6.096,0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,3.048,3.048,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,3.048,  !- X,Y,Z ==> Vertex 2 {m}
+  6.096,0.0,3.048,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,3.048,3.048;  !- X,Y,Z ==> Vertex 4 {m}
 
 BuildingSurface:Detailed,
@@ -6767,8 +6767,8 @@ BuildingSurface:Detailed,
   WindExposed,             !- Wind Exposure
   ,                        !- View Factor to Ground
   4,                       !- Number of Vertices
-  0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
-  0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,6.096,6.096,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,3.048,6.096,  !- X,Y,Z ==> Vertex 2 {m}
   6.096,3.048,6.096,  !- X,Y,Z ==> Vertex 3 {m}
   6.096,6.096,6.096;  !- X,Y,Z ==> Vertex 4 {m}
 
@@ -6807,8 +6807,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.038037600000000005,    !- Thickness {m}
   0.0288,                  !- Conductivity {W/m-K}
-  32,                      !- Density {kg/m3}
-  1465;                    !- Specific Heat {J/kg-K}
+  32.0,                    !- Density {kg/m3}
+  1465.0;                  !- Specific Heat {J/kg-K}
 
 Material,
   Wall Cavity Effective Insulation,  !- Name
@@ -6816,7 +6816,7 @@ Material,
   0.08889999999999999,     !- Thickness {m}
   0.08389829384297165,     !- Conductivity {W/m-K}
   8.17,                    !- Density {kg/m3}
-  837;                     !- Specific Heat {J/kg-K}
+  837.0;                   !- Specific Heat {J/kg-K}
 
 Construction,
   Exterior Wall,           !- Name
@@ -6834,8 +6834,8 @@ Material,
   MediumSmooth,            !- Roughness
   0.016,                   !- Thickness {m}
   0.1622,                  !- Conductivity {W/m-K}
-  800,                     !- Density {kg/m3}
-  1090,                    !- Specific Heat {J/kg-K}
+  800.0,                   !- Density {kg/m3}
+  1090.0,                  !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -6845,8 +6845,8 @@ Material,
   Smooth,                  !- Roughness
   0.01015,                 !- Thickness {m}
   0.72,                    !- Conductivity {W/m-K}
-  1856,                    !- Density {kg/m3}
-  840,                     !- Specific Heat {J/kg-K}
+  1856.0,                  !- Density {kg/m3}
+  840.0,                   !- Specific Heat {J/kg-K}
   0.9,                     !- Thermal Absorptance
   0.7,                     !- Solar Absorptance
   0.7;                     !- Visible Absorptance
@@ -7212,7 +7212,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -7239,8 +7239,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -7330,10 +7330,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -7347,10 +7347,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -7364,10 +7364,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -7381,10 +7381,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -7398,10 +7398,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:floor,             !- Name",
@@ -7415,10 +7415,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Floor:Win001,      !- Name",
@@ -7430,10 +7430,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -4,4,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  4,4,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  4,-4,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -4,-4,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -4.0,4.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  4.0,4.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  4.0,-4.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -4.0,-4.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -7445,10 +7445,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -7483,10 +7483,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_Detaile
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",
@@ -7567,7 +7567,7 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
     std::string const idf_objects = delimited_string({
         "Building,",
         "  DemoFDT,                 !- Name",
-        "  0,                       !- North Axis {deg}",
+        "  0.0,                     !- North Axis {deg}",
         "  Suburbs,                 !- Terrain",
         "  0.039999999,             !- Loads Convergence Tolerance Value {W}",
         "  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}",
@@ -7594,8 +7594,8 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
 
         "ScheduleTypeLimits,",
         "  ON/OFF,                  !- Name",
-        "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  0.0,                     !- Lower Limit Value",
+        "  1.0,                     !- Upper Limit Value",
         "  Discrete;                !- Numeric Type",
 
         "Schedule:Compact,",
@@ -7734,10 +7734,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-East,         !- Name",
@@ -7751,10 +7751,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-South,        !- Name",
@@ -7768,10 +7768,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:Wall-West,         !- Name",
@@ -7785,10 +7785,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  WindExposed,             !- Wind Exposure",
         "  0.5,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  -5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  -5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:roof,              !- Name",
@@ -7802,10 +7802,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,-5,3,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,-5,3,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,5,3,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,5,3;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,-5.0,3.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,5.0,3.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,5.0,3.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "BuildingSurface:Detailed,",
         "  Zn001:floor,             !- Name",
@@ -7819,10 +7819,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  WindExposed,             !- Wind Exposure",
         "  0.0,                     !- View Factor to Ground",
         "  4,                       !- Number of Vertices",
-        "  -5,5,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  5,5,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  5,-5,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -5,-5,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  5.0,5.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  5.0,-5.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -5.0,-5.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Floor:Win001,      !- Name",
@@ -7834,10 +7834,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -4,4,0,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  4,4,0,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  4,-4,0,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  -4,-4,0;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -4.0,4.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  4.0,4.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  4.0,-4.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  -4.0,-4.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "FenestrationSurface:Detailed,",
         "  Zn001:Wall-South:Win001,  !- Name",
@@ -7849,10 +7849,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  TestFrameAndDivider,     !- Frame and Divider Name",
         "  1,                       !- Multiplier",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-5,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-5,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-5.0,0.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "WindowProperty:FrameAndDivider,",
         "  TestFrameAndDivider,     !- Name",
@@ -7887,10 +7887,10 @@ TEST_F(EnergyPlusFixture, SolarShadingTest_CalcInteriorSolarDistribution_EQL)
         "  Zn001:Wall-South,        !- Base Surface Name",
         "  SunShading,              !- Transmittance Schedule Name",
         "  4,                       !- Number of Vertices",
-        "  -3,-5,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
-        "  -3,-6,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
-        "  3,-6,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
-        "  3,-5,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
+        "  -3.0,-5.0,2.5,  !- X,Y,Z ==> Vertex 1 {m}",
+        "  -3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 2 {m}",
+        "  3.0,-6.0,2.5,  !- X,Y,Z ==> Vertex 3 {m}",
+        "  3.0,-5.0,2.5;  !- X,Y,Z ==> Vertex 4 {m}",
 
         "ShadingProperty:Reflectance,",
         "  Zn001:Wall-South:Shade001,  !- Shading Surface Name",

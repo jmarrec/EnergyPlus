@@ -1882,8 +1882,8 @@ TEST_F(EnergyPlusFixture, EMS_WeatherDataActuators)
         "  ,                        !- Humidity Condition Day Schedule Name",
         "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
         "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
-        "  8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "  97620,                   !- Barometric Pressure {Pa}",
+        "  8.0,                     !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "  97620.0,                 !- Barometric Pressure {Pa}",
         "  5.0,                     !- Wind Speed {m/s}",
         "  180.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
@@ -2025,8 +2025,8 @@ TEST_F(EnergyPlusFixture, EMS_TodayTomorrowFunctions)
         "  ,                        !- Humidity Condition Day Schedule Name",
         "  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
         "  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
-        "  8,                       !- Daily Wet-Bulb Temperature Range {deltaC}",
-        "  97620,                   !- Barometric Pressure {Pa}",
+        "  8.0,                     !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "  97620.0,                 !- Barometric Pressure {Pa}",
         "  5.0,                     !- Wind Speed {m/s}",
         "  180.0,                   !- Wind Direction {deg}",
         "  No,                      !- Rain Indicator",
@@ -2459,9 +2459,9 @@ TEST_F(EnergyPlusFixture, EMSManager_TrendValue_to_Actuator)
 {
     // Test for #10279 - Make sure that assigning the result of a TendVariable @TrendValue results in proper actuator behavior
     std::string const idf_objects = delimited_string({
-        "Schedule:Constant,Actuated Schedule Direct,,18;",
+        "Schedule:Constant,Actuated Schedule Direct,,18.0;",
 
-        "Schedule:Constant,Actuated Schedule Indirect,,18;",
+        "Schedule:Constant,Actuated Schedule Indirect,,18.0;",
 
         "EnergyManagementSystem:GlobalVariable,",
         "  argTrendValue,           !- Erl Variable 1 Name",

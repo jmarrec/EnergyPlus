@@ -219,7 +219,7 @@ TEST_F(EnergyPlusFixture, EvapCoolers_SizeIndEvapCoolerTest)
         "  ,                        !- Relief Air Inlet Node Name",
         "  ,                        !- Water Supply Storage Tank Name",
         "  0.0,                     !- Drift Loss Fraction",
-        "  3;                       !- Blowdown Concentration Ratio",
+        "  3.0;                     !- Blowdown Concentration Ratio",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -301,7 +301,7 @@ TEST_F(EnergyPlusFixture, EvapCoolers_SizeDirEvapCoolerTest)
         "  Zone Inlet Node,         !- Sensor Node Name",
         "  ,                        !- Water Supply Storage Tank Name",
         "  0.0,                     !- Drift Loss Fraction",
-        "  3;                       !- Blowdown Concentration Ratio",
+        "  3.0;                     !- Blowdown Concentration Ratio",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -607,7 +607,7 @@ TEST_F(EnergyPlusFixture, DefaultAutosizeIndEvapCoolerTest)
         "  ,                        !- Relief Air Inlet Node Name",
         "  ,                        !- Water Supply Storage Tank Name",
         "  0.0,                     !- Drift Loss Fraction",
-        "  3;                       !- Blowdown Concentration Ratio",
+        "  3.0;                     !- Blowdown Concentration Ratio",
 
         "Schedule:Constant,ALWAYS_ON,,1.0;",
     });
@@ -689,7 +689,7 @@ TEST_F(EnergyPlusFixture, DefaultAutosizeDirEvapCoolerTest)
         "  Zone Inlet Node,         !- Sensor Node Name",
         "  ,                        !- Water Supply Storage Tank Name",
         "  0.0,                     !- Drift Loss Fraction",
-        "  3;                       !- Blowdown Concentration Ratio",
+        "  3.0;                     !- Blowdown Concentration Ratio",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -841,7 +841,7 @@ TEST_F(EnergyPlusFixture, DirectEvapCoolerAutosizeWithoutSysSizingRunDone)
         "  0.7,                     !- Cooler Design Effectiveness",
         "  ,                        !- Effectiveness Flow Ratio Modifier Curve Name",
         "  ,                        !- Primary Air Design Flow Rate {m3/s}",
-        "  440,                     !- Recirculating Water Pump Design Power {W}",
+        "  440.0,                   !- Recirculating Water Pump Design Power {W}",
         "  1.0,                     !- Design Water Pump Power Per Unit Flow Rate {W/(m3/s)}",
         "  ,                        !- Water Pump Power Modifier Curve Name",
         "  Fan Outlet Node,         !- Air Inlet Node Name",
@@ -849,7 +849,7 @@ TEST_F(EnergyPlusFixture, DirectEvapCoolerAutosizeWithoutSysSizingRunDone)
         "  Zone Inlet Node,         !- Sensor Node Name",
         "  ,                        !- Water Supply Storage Tank Name",
         "  0.0,                     !- Drift Loss Fraction",
-        "  3;                       !- Blowdown Concentration Ratio",
+        "  3.0;                     !- Blowdown Concentration Ratio",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -892,7 +892,7 @@ TEST_F(EnergyPlusFixture, EvapCoolerAirLoopPumpCycling)
         "  ,                        !- Availability Schedule Name",
         "  0.6,                     !- Direct Pad Area {m2}",
         "  0.17,                    !- Direct Pad Depth {m}",
-        "  60,                      !- Recirculating Water Pump Power Consumption {W}",
+        "  60.0,                    !- Recirculating Water Pump Power Consumption {W}",
         "  ZoneEvapCool Fan outlet,  !- Air Inlet Node Name",
         "  ZoneEvapCool Inlet Node,  !- Air Outlet Node Name",
         "  ;                        !- Control Type",
