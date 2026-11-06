@@ -75280,25 +75280,25 @@ Chiller:Electric:ASHRAE205,
   A9,  \field Chilled Water Outlet Node Name
        \type node
        \required-field
-  A10, \field Chilled Water Maximum Requested Flow Rate
+  N3 , \field Chilled Water Maximum Requested Flow Rate
        \type real
        \units m3/s
        \minimum> 0
        \autosizable
        \ip-units gal/min
        \default autosize
-  A11, \field Condenser Inlet Node Name
+  A10, \field Condenser Inlet Node Name
        \type node
-  A12, \field Condenser Outlet Node Name
+  A11, \field Condenser Outlet Node Name
        \type node
-  A13, \field Condenser Maximum Requested Flow Rate
+  N4 , \field Condenser Maximum Requested Flow Rate
        \type real
        \units m3/s
        \minimum> 0
        \autosizable
        \ip-units gal/min
        \default autosize
-  A14, \field Chiller Flow Mode
+  A12, \field Chiller Flow Mode
        \note Select operating mode for fluid flow through the chiller. "NotModulated" is for
        \note either variable or constant pumping with flow controlled by the external plant system.
        \note "ConstantFlow" is for constant pumping with flow controlled by chiller to operate at
@@ -75309,35 +75309,35 @@ Chiller:Electric:ASHRAE205,
        \key LeavingSetpointModulated
        \key NotModulated
        \default NotModulated
-  A15, \field Oil Cooler Inlet Node Name
+  A13, \field Oil Cooler Inlet Node Name
        \note Use if the oil cooler uses an external cooling loop, otherwise the oil cooler will add
        \note heat to the ambient conditions (i.e., it is air cooled).
        \type node
-  A16, \field Oil Cooler Outlet Node Name
+  A14, \field Oil Cooler Outlet Node Name
        \type node
-  A17, \field Oil Cooler Design Flow Rate
+  N5 , \field Oil Cooler Design Flow Rate
        \type real
        \units m3/s
        \minimum> 0
        \ip-units gal/min
-  A18, \field Auxiliary Inlet Node Name
+  A15, \field Auxiliary Inlet Node Name
        \note Use if the auxiliary components of the chiller use an external cooling loop, otherwise
        \note the auxiliary components will add heat to the ambient conditions (i.e., they are air cooled).
        \type node
-  A19, \field Auxiliary Outlet Node Name
+  A16, \field Auxiliary Outlet Node Name
        \type node
-  A20, \field Auxiliary Cooling Design Flow Rate
+  N6 , \field Auxiliary Cooling Design Flow Rate
        \type real
        \units m3/s
        \minimum> 0
        \ip-units gal/min
-  A21, \field Heat Recovery Inlet Node Name
+  A17, \field Heat Recovery Inlet Node Name
        \note Not yet implemented / reserved for future use. Heat recovery is not yet within scope of ASHRAE Standard 205.
        \type node
-  A22, \field Heat Recovery Outlet Node Name
+  A18, \field Heat Recovery Outlet Node Name
        \note Not yet implemented / reserved for future use. Heat recovery is not yet within scope of ASHRAE Standard 205.
        \type node
-  A23; \field End-Use Subcategory
+  A19; \field End-Use Subcategory
        \note Any text may be used here to categorize the end-uses in the ABUPS End Uses by Subcategory table.
        \type alpha
        \retaincase
