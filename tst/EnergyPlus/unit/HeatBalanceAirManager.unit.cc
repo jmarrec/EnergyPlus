@@ -75,16 +75,16 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_RoomAirModelType_Test)
     // Issue User file with RoomAirSettings:AirflowNetwork is failing with fatal error #6086
 
     std::string const idf_objects = delimited_string({
-        "  RoomAirModelType,",
+        "RoomAirModelType,",
         "  Skinny_Model,            !- Name",
         "  South Skin,              !- Zone Name",
-        "  AirflowNetwork,          !- Room - Air Modeling Type",
+        "  AirflowNetwork,          !- Room-Air Modeling Type",
         "  Direct;                  !- Air Temperature Coupling Strategy",
 
-        "  RoomAirModelType,",
+        "RoomAirModelType,",
         "  Phat_Model,              !- Name",
         "  Thermal Zone,            !- Zone Name",
-        "  AirflowNetwork,          !- Room - Air Modeling Type",
+        "  AirflowNetwork,          !- Room-Air Modeling Type",
         "  Direct;                  !- Air Temperature Coupling Strategy",
     });
 
