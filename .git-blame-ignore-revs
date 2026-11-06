@@ -539,3 +539,6 @@ c52230939b1c05078af093479e7ad8fd68068931
 de3778bc1cfa756d84cc3e925e811fea4b232765
 8b1dd8074891e1baa85e72799d861c143d479798
 1ccaafed343cc3f6d58cea99275a9001ccfd29a4
+
+# [chore] Reformat all files via energyplus-toolkit format hooks [Julien Marrec, 2026-11-06]
+d9671297cff546972949c4a3fbd9df537f8918d3
