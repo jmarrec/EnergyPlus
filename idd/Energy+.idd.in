@@ -19918,6 +19918,7 @@ GroundHeatTransfer:Control,
 GroundHeatTransfer:Slab:Materials,
     \memo Object gives an overall description of the slab ground heat transfer model.
         N1, \field NMAT: Number of materials
+            \type integer
             \note This field specifies the number of different materials that will be used in the model.
             \note Typically only a ground material and a slab material are used. (2 materials)
             \minimum> 0
@@ -20069,6 +20070,7 @@ GroundHeatTransfer:Slab:BldgProps,
           \default 10
           \minimum 1
       N2, \field Shape: Slab shape
+          \type integer
           \note Use only the value 0 here. Only a rectangular shape is implemented.
           \minimum 0
           \maximum 0
@@ -20294,6 +20296,7 @@ GroundHeatTransfer:Basement:SimParameters,
           \minimum> 0.0
           \maximum 1.0
       N2; \field IYRS: Maximum number of yearly iterations:
+         \type integer
          \note typically 15-30]
           \minimum 0
           \default 15
@@ -20303,6 +20306,7 @@ GroundHeatTransfer:Basement:MatlProps,
          \memo transfer simulation. Only the Foundation Wall, Floor Slab, Soil,
          \memo and Gravel properties are currently used.
      N1, \field NMAT: Number of materials in this domain
+         \type integer
          \maximum 6
           \required-field
      N2, \field Density for Foundation Wall
