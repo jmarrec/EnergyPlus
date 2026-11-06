@@ -60,23 +60,22 @@ TEST_F(AutoSizingFixture, HeatingCapacitySizingGauntlet)
 {
     // fan heat is needed for DOAS systems
     std::string const idf_objects = delimited_string({
-
-        "  Fan:SystemModel,",
-        "    MyFan,                       !- Name",
-        "    ,                            !- Availability Schedule Name",
-        "    TestFanAirInletNode,         !- Air Inlet Node Name",
-        "    TestFanOutletNode,           !- Air Outlet Node Name",
-        "    0.2,                         !- Design Maximum Air Flow Rate",
-        "    Discrete ,                   !- Speed Control Method",
-        "    0.0,                         !- Electric Power Minimum Flow Rate Fraction",
-        "    100.0,                       !- Design Pressure Rise",
-        "    0.9 ,                        !- Motor Efficiency",
-        "    1.0 ,                        !- Motor In Air Stream Fraction",
-        "    AUTOSIZE,                    !- Design Electric Power Consumption",
-        "    TotalEfficiencyAndPressure,  !- Design Power Sizing Method",
-        "    ,                            !- Electric Power Per Unit Flow Rate",
-        "    ,                            !- Electric Power Per Unit Flow Rate Per Unit Pressure",
-        "    0.50;                        !- Fan Total Efficiency",
+        "Fan:SystemModel,",
+        "  MyFan,                   !- Name",
+        "  ,                        !- Availability Schedule Name",
+        "  TestFanAirInletNode,     !- Air Inlet Node Name",
+        "  TestFanOutletNode,       !- Air Outlet Node Name",
+        "  0.2,                     !- Design Maximum Air Flow Rate {m3/s}",
+        "  Discrete,                !- Speed Control Method",
+        "  0.0,                     !- Electric Power Minimum Flow Rate Fraction",
+        "  100.0,                   !- Design Pressure Rise {Pa}",
+        "  0.9,                     !- Motor Efficiency",
+        "  1.0,                     !- Motor In Air Stream Fraction",
+        "  Autosize,                !- Design Electric Power Consumption {W}",
+        "  TotalEfficiencyAndPressure,  !- Design Power Sizing Method",
+        "  ,                        !- Electric Power Per Unit Flow Rate {W/(m3/s)}",
+        "  ,                        !- Electric Power Per Unit Flow Rate Per Unit Pressure {W/((m3/s)-Pa)}",
+        "  0.5;                     !- Fan Total Efficiency",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
