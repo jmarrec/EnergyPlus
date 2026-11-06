@@ -160,46 +160,25 @@ TEST_F(EnergyPlusFixture, OutputReportData_getVariableKeys)
 TEST_F(EnergyPlusFixture, OutputReportData_Regex)
 {
     std::string const idf_objects = delimited_string({
-        " Output:Variable,",
-        "Outside Air Inlet Node,",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "Relief Air Outlet Node,",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "(Relief|Outside) Air (Outlet|Inlet) Node,",
-        "System Node Temperature,",
-        "timestep;",
-        " Output:Variable,",
-        "Mixed Air Node,",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "(Mixed|Single) Air Node,",
-        "System Node Temperature,",
-        "timestep;",
-        " Output:Variable,",
-        "*,",
-        "Unitary System Compressor Part Load Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        ".*,",
-        "Zone Air System Sensible Heating Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "SALESFLOOR OUTLET NODE,",
-        "System Node Temperature,",
-        "timestep;",
-        " Output:Variable,",
-        "BackRoom(.*),",
-        "System Node Temperature,",
-        "timestep;",
-        " Output:Variable,",
-        "(.*)N(ode|ODE),",
-        "System Node Humidity Ratio,",
-        "timestep;",
+        "Output:Variable,Outside Air Inlet Node,System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,Relief Air Outlet Node,System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,(Relief|Outside) Air (Outlet|Inlet) Node,System Node Temperature,Timestep;",
+
+        "Output:Variable,Mixed Air Node,System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,(Mixed|Single) Air Node,System Node Temperature,Timestep;",
+
+        "Output:Variable,*,Unitary System Compressor Part Load Ratio,Timestep;",
+
+        "Output:Variable,.*,Zone Air System Sensible Heating Rate,Timestep;",
+
+        "Output:Variable,SALESFLOOR OUTLET NODE,System Node Temperature,Timestep;",
+
+        "Output:Variable,BackRoom(.*),System Node Temperature,Timestep;",
+
+        "Output:Variable,(.*)N(ode|ODE),System Node Humidity Ratio,Timestep;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -227,30 +206,17 @@ TEST_F(EnergyPlusFixture, OutputReportData_Regex)
 TEST_F(EnergyPlusFixture, OutputReportData_Regex_Plus)
 {
     std::string const idf_objects = delimited_string({
-        " Output:Variable,",
-        "(.+)Inlet(.+),",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "(.+)Inlet,",
-        "System Node Humidity Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        "(.+)Node,",
-        "Zone Air System Sensible Heating Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "Outside Air (.+) Node,",
-        "Unitary System Compressor Part Load Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        "Outside Air .+ Node,",
-        "Unitary System Load Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        ".+,",
-        "System Node Temperature,",
-        "timestep;",
+        "Output:Variable,(.+)Inlet(.+),System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,(.+)Inlet,System Node Humidity Ratio,Timestep;",
+
+        "Output:Variable,(.+)Node,Zone Air System Sensible Heating Rate,Timestep;",
+
+        "Output:Variable,Outside Air (.+) Node,Unitary System Compressor Part Load Ratio,Timestep;",
+
+        "Output:Variable,Outside Air .+ Node,Unitary System Load Ratio,Timestep;",
+
+        "Output:Variable,.+,System Node Temperature,Timestep;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_EQ(state->dataOutput->NumConsideredOutputVariables, 6);
@@ -268,34 +234,19 @@ TEST_F(EnergyPlusFixture, OutputReportData_Regex_Plus)
 TEST_F(EnergyPlusFixture, OutputReportData_Regex_Star)
 {
     std::string const idf_objects = delimited_string({
-        " Output:Variable,",
-        "(.*)Inlet(.*),",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "(.*)Inlet,",
-        "System Node Humidity Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        "(.*)Node,",
-        "Zone Air System Sensible Heating Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "Outside Air(.*) Node,",
-        "Unitary System Compressor Part Load Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        "Outside Air.* Node,",
-        "Unitary System Load Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        ".*,",
-        "System Node Temperature,",
-        "timestep;",
-        " Output:Variable,",
-        "*,",
-        "Refrigeration Compressor Rack Electric Power,",
-        "timestep;",
+        "Output:Variable,(.*)Inlet(.*),System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,(.*)Inlet,System Node Humidity Ratio,Timestep;",
+
+        "Output:Variable,(.*)Node,Zone Air System Sensible Heating Rate,Timestep;",
+
+        "Output:Variable,Outside Air(.*) Node,Unitary System Compressor Part Load Ratio,Timestep;",
+
+        "Output:Variable,Outside Air.* Node,Unitary System Load Ratio,Timestep;",
+
+        "Output:Variable,.*,System Node Temperature,Timestep;",
+
+        "Output:Variable,*,Refrigeration Compressor Rack Electric Power,Timestep;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -325,22 +276,13 @@ TEST_F(EnergyPlusFixture, OutputReportData_Regex_Star)
 TEST_F(EnergyPlusFixture, OutputReportData_Regex_Pipe)
 {
     std::string const idf_objects = delimited_string({
-        " Output:Variable,",
-        "SalesFloor I(nlet|NLET) Node,",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "SalesFloor O(utlet|UTLET) Node,",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "System (Inlet|Outlet) Node,",
-        "Unitary System Compressor Part Load Ratio,",
-        "timestep;",
-        " Output:Variable,",
-        "(BackRoom|BACKROOM|SALESFLOOR|SalesFloor) (Outlet|OUTLET) (NODE|Node),",
-        "System Node Humidity Ratio,",
-        "timestep;",
+        "Output:Variable,SalesFloor I(nlet|NLET) Node,System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,SalesFloor O(utlet|UTLET) Node,System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,System (Inlet|Outlet) Node,Unitary System Compressor Part Load Ratio,Timestep;",
+
+        "Output:Variable,(BackRoom|BACKROOM|SALESFLOOR|SalesFloor) (Outlet|OUTLET) (NODE|Node),System Node Humidity Ratio,Timestep;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -429,14 +371,9 @@ TEST_F(EnergyPlusFixture, OutputReportData_Regex_SpecChars)
 TEST_F(EnergyPlusFixture, OutputReportData_Regex_Carrot)
 {
     std::string const idf_objects = delimited_string({
-        " Output:Variable,",
-        "^Inlet(.*)Node,",
-        "System Node Mass Flow Rate,",
-        "timestep;",
-        " Output:Variable,",
-        "[^0-9]+,",
-        "System Node Humidity Ratio,",
-        "timestep;",
+        "Output:Variable,^Inlet(.*)Node,System Node Mass Flow Rate,Timestep;",
+
+        "Output:Variable,[^0-9]+,System Node Humidity Ratio,Timestep;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 
@@ -451,10 +388,7 @@ TEST_F(EnergyPlusFixture, OutputReportData_Regex_Carrot)
 TEST_F(EnergyPlusFixture, OutputReportData_Regex_Dollar)
 {
     std::string const idf_objects = delimited_string({
-        " Output:Variable,",
-        "(.*)Node$,",
-        "System Node Mass Flow Rate,",
-        "timestep;",
+        "Output:Variable,(.*)Node$,System Node Mass Flow Rate,Timestep;",
     });
     ASSERT_TRUE(process_idf(idf_objects));
 

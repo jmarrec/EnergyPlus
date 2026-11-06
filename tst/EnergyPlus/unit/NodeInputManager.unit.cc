@@ -68,27 +68,28 @@ namespace EnergyPlus {
 TEST_F(EnergyPlusFixture, NodeMoreInfoEMSsensorCheck1)
 {
     std::string const idf_objects = delimited_string({
-        "OutdoorAir:Node, Test node;",
+        "OutdoorAir:Node,",
+        "  Test node;               !- Name",
 
         "EnergyManagementSystem:Sensor,",
-        "test_node_wb,",
-        "Test Node, ",
-        "System Node Wetbulb Temperature;",
+        "  test_node_wb,            !- Name",
+        "  Test Node,               !- Output:Variable or Output:Meter Index Key Name",
+        "  System Node Wetbulb Temperature;  !- Output:Variable or Output:Meter Name",
 
         "EnergyManagementSystem:Sensor,",
-        "test_node_rh,",
-        "Test Node, ",
-        "System Node Relative Humidity;",
+        "  test_node_rh,            !- Name",
+        "  Test Node,               !- Output:Variable or Output:Meter Index Key Name",
+        "  System Node Relative Humidity;  !- Output:Variable or Output:Meter Name",
 
         "EnergyManagementSystem:Sensor,",
-        "test_node_dp,",
-        "Test Node, ",
-        "System Node Dewpoint Temperature;",
+        "  test_node_dp,            !- Name",
+        "  Test Node,               !- Output:Variable or Output:Meter Index Key Name",
+        "  System Node Dewpoint Temperature;  !- Output:Variable or Output:Meter Name",
 
         "EnergyManagementSystem:Sensor,",
-        "test_node_cp,",
-        "Test Node, ",
-        "System Node Specific Heat;",
+        "  test_node_cp,            !- Name",
+        "  Test Node,               !- Output:Variable or Output:Meter Index Key Name",
+        "  System Node Specific Heat;  !- Output:Variable or Output:Meter Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

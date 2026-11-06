@@ -91,1708 +91,1707 @@
 ! Environmental Emissions:        None
 ! Utility Tariffs:                None
 
-  Version,27.1;
+Version,27.1;
 
-  Timestep,4;
+Timestep,4;
 
-  Building,
-    Simple One Zone (no roof-no floor),  !- Name
-    0,                       !- North Axis {deg}
-    Suburbs,                 !- Terrain
-    3.9999999E-02,           !- Loads Convergence Tolerance Value {W}
-    4.0000002E-03,           !- Temperature Convergence Tolerance Value {deltaC}
-    MinimalShadowing,        !- Solar Distribution
-    25,                      !- Maximum Number of Warmup Days
-    6;                       !- Minimum Number of Warmup Days
+Building,
+  Simple One Zone (no roof-no floor),  !- Name
+  0.0,                     !- North Axis {deg}
+  Suburbs,                 !- Terrain
+  0.039999999,             !- Loads Convergence Tolerance Value {W}
+  0.0040000002,            !- Temperature Convergence Tolerance Value {deltaC}
+  MinimalShadowing,        !- Solar Distribution
+  25,                      !- Maximum Number of Warmup Days
+  6;                       !- Minimum Number of Warmup Days
 
-  HeatBalanceAlgorithm,ConductionTransferFunction;
+HeatBalanceAlgorithm,ConductionTransferFunction;
 
-  SurfaceConvectionAlgorithm:Inside,TARP;
+SurfaceConvectionAlgorithm:Inside,TARP;
 
-  SurfaceConvectionAlgorithm:Outside,DOE-2;
+SurfaceConvectionAlgorithm:Outside,DOE-2;
 
-  SimulationControl,
-    No,                      !- Do Zone Sizing Calculation
-    No,                      !- Do System Sizing Calculation
-    No,                      !- Do Plant Sizing Calculation
-    Yes,                     !- Run Simulation for Sizing Periods
-    No,                      !- Run Simulation for Weather File Run Periods
-    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
-    1;                       !- Maximum Number of HVAC Sizing Simulation Passes
+SimulationControl,
+  No,                      !- Do Zone Sizing Calculation
+  No,                      !- Do System Sizing Calculation
+  No,                      !- Do Plant Sizing Calculation
+  Yes,                     !- Run Simulation for Sizing Periods
+  No,                      !- Run Simulation for Weather File Run Periods
+  No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+  1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
-  RunPeriod,
-    TestRun,                 !- Name
-    1,                       !- Begin Month
-    1,                       !- Begin Day of Month
-    ,                        !- Begin Year
-    12,                      !- End Month
-    31,                      !- End Day of Month
-    ,                        !- End Year
-    Tuesday,                 !- Day of Week for Start Day
-    Yes,                     !- Use Weather File Holidays and Special Days
-    Yes,                     !- Use Weather File Daylight Saving Period
-    No,                      !- Apply Weekend Holiday Rule
-    Yes,                     !- Use Weather File Rain Indicators
-    Yes;                     !- Use Weather File Snow Indicators
+RunPeriod,
+  TestRun,                 !- Name
+  1,                       !- Begin Month
+  1,                       !- Begin Day of Month
+  ,                        !- Begin Year
+  12,                      !- End Month
+  31,                      !- End Day of Month
+  ,                        !- End Year
+  Tuesday,                 !- Day of Week for Start Day
+  Yes,                     !- Use Weather File Holidays and Special Days
+  Yes,                     !- Use Weather File Daylight Saving Period
+  No,                      !- Apply Weekend Holiday Rule
+  Yes,                     !- Use Weather File Rain Indicators
+  Yes;                     !- Use Weather File Snow Indicators
 
-  Site:Location,
-    Denver Centennial  Golden   N_CO_USA Design_Conditions,  !- Name
-    39.74,                   !- Latitude {deg}
-    -105.18,                 !- Longitude {deg}
-    -7.00,                   !- Time Zone {hr}
-    1829.00;                 !- Elevation {m}
+Site:Location,
+  Denver Centennial  Golden   N_CO_USA Design_Conditions,  !- Name
+  39.74,                   !- Latitude {deg}
+  -105.18,                 !- Longitude {deg}
+  -7.0,                    !- Time Zone {hr}
+  1829.0;                  !- Elevation {m}
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Htg 99% Condns DB default,  !- Name
-    12,                      !- Month
-    21,                      !- Day of Month
-    WinterDesignDay,         !- Day Type
-    -16,                     !- Maximum Dry-Bulb Temperature {C}
-    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -16,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    2.3,                     !- Wind Speed {m/s}
-    180,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Htg 99% Condns DB default,  !- Name
+  12,                      !- Month
+  21,                      !- Day of Month
+  WinterDesignDay,         !- Day Type
+  -16.0,                   !- Maximum Dry-Bulb Temperature {C}
+  0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  -16.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  2.3,                     !- Wind Speed {m/s}
+  180.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Htg 99% Condns DB - Zhang Huang Solar,  !- Name
-    12,                      !- Month
-    22,                      !- Day of Month
-    WinterDesignDay,         !- Day Type
-    -16,                     !- Maximum Dry-Bulb Temperature {C}
-    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -16,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    2.3,                     !- Wind Speed {m/s}
-    180,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ZhangHuang,              !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Htg 99% Condns DB - Zhang Huang Solar,  !- Name
+  12,                      !- Month
+  22,                      !- Day of Month
+  WinterDesignDay,         !- Day Type
+  -16.0,                   !- Maximum Dry-Bulb Temperature {C}
+  0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  -16.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  2.3,                     !- Wind Speed {m/s}
+  180.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ZhangHuang,              !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Htg 1/13 - sched solar,  !- Name
-    1,                       !- Month
-    13,                      !- Day of Month
-    WinterDesignDay,         !- Day Type
-    -16,                     !- Maximum Dry-Bulb Temperature {C}
-    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -16,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    2.3,                     !- Wind Speed {m/s}
-    180,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    Schedule,                !- Solar Model Indicator
-    Winter (1/13) Beam Solar,!- Beam Solar Day Schedule Name
-    Winter (1/13) Diffuse Solar;  !- Diffuse Solar Day Schedule Name
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Htg 1/13 - sched solar,  !- Name
+  1,                       !- Month
+  13,                      !- Day of Month
+  WinterDesignDay,         !- Day Type
+  -16.0,                   !- Maximum Dry-Bulb Temperature {C}
+  0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  -16.0,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  2.3,                     !- Wind Speed {m/s}
+  180.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  Schedule,                !- Solar Model Indicator
+  Winter (1/13) Beam Solar,  !- Beam Solar Day Schedule Name
+  Winter (1/13) Diffuse Solar;  !- Diffuse Solar Day Schedule Name
 
-  Schedule:Day:Hourly,
-    Winter (1/13) Beam Solar,!- Name
-    Any Number,              !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    0,                       !- Hour 6
-    0,                       !- Hour 7
-    190,                     !- Hour 8
-    698,                     !- Hour 9
-    852,                     !- Hour 10
-    892,                     !- Hour 11
-    919,                     !- Hour 12
-    957,                     !- Hour 13
-    953,                     !- Hour 14
-    856,                     !- Hour 15
-    700,                     !- Hour 16
-    213,                     !- Hour 17
-    0,                       !- Hour 18
-    0,                       !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+Schedule:Day:Hourly,
+  Winter (1/13) Beam Solar,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  0.0,                     !- Hour 1
+  0.0,                     !- Hour 2
+  0.0,                     !- Hour 3
+  0.0,                     !- Hour 4
+  0.0,                     !- Hour 5
+  0.0,                     !- Hour 6
+  0.0,                     !- Hour 7
+  190.0,                   !- Hour 8
+  698.0,                   !- Hour 9
+  852.0,                   !- Hour 10
+  892.0,                   !- Hour 11
+  919.0,                   !- Hour 12
+  957.0,                   !- Hour 13
+  953.0,                   !- Hour 14
+  856.0,                   !- Hour 15
+  700.0,                   !- Hour 16
+  213.0,                   !- Hour 17
+  0.0,                     !- Hour 18
+  0.0,                     !- Hour 19
+  0.0,                     !- Hour 20
+  0.0,                     !- Hour 21
+  0.0,                     !- Hour 22
+  0.0,                     !- Hour 23
+  0.0;                     !- Hour 24
 
-  Schedule:Day:Hourly,
-    Winter (1/13) Diffuse Solar,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    0,                       !- Hour 6
-    0,                       !- Hour 7
-    35,                      !- Hour 8
-    118,                     !- Hour 9
-    116,                     !- Hour 10
-    92,                      !- Hour 11
-    65,                      !- Hour 12
-    40,                      !- Hour 13
-    14,                      !- Hour 14
-    0,                       !- Hour 15
-    0,                       !- Hour 16
-    5,                       !- Hour 17
-    0,                       !- Hour 18
-    0,                       !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+Schedule:Day:Hourly,
+  Winter (1/13) Diffuse Solar,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  0.0,                     !- Hour 1
+  0.0,                     !- Hour 2
+  0.0,                     !- Hour 3
+  0.0,                     !- Hour 4
+  0.0,                     !- Hour 5
+  0.0,                     !- Hour 6
+  0.0,                     !- Hour 7
+  35.0,                    !- Hour 8
+  118.0,                   !- Hour 9
+  116.0,                   !- Hour 10
+  92.0,                    !- Hour 11
+  65.0,                    !- Hour 12
+  40.0,                    !- Hour 13
+  14.0,                    !- Hour 14
+  0.0,                     !- Hour 15
+  0.0,                     !- Hour 16
+  5.0,                     !- Hour 17
+  0.0,                     !- Hour 18
+  0.0,                     !- Hour 19
+  0.0,                     !- Hour 20
+  0.0,                     !- Hour 21
+  0.0,                     !- Hour 22
+  0.0,                     !- Hour 23
+  0.0;                     !- Hour 24
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Clg 1% Condns DB=>MWB default,  !- Name
-    7,                       !- Month
-    21,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.6,                    !- Maximum Dry-Bulb Temperature {C}
-    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Clg 1% Condns DB=>MWB default,  !- Name
+  7,                       !- Month
+  21,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.6,                    !- Maximum Dry-Bulb Temperature {C}
+  15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  4.0,                     !- Wind Speed {m/s}
+  120.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Clg 1% Condns DB=>MWB - Zhang Huang Solar,  !- Name
-    7,                       !- Month
-    22,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.6,                    !- Maximum Dry-Bulb Temperature {C}
-    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ZhangHuang,              !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Clg 1% Condns DB=>MWB - Zhang Huang Solar,  !- Name
+  7,                       !- Month
+  22,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.6,                    !- Maximum Dry-Bulb Temperature {C}
+  15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  4.0,                     !- Wind Speed {m/s}
+  120.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ZhangHuang,              !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Clg 1% Condns DB=>MWB - Schedule Solar,  !- Name
-    7,                       !- Month
-    13,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.6,                    !- Maximum Dry-Bulb Temperature {C}
-    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    Schedule,                !- Solar Model Indicator
-    Summer (7/13) Beam Solar,!- Beam Solar Day Schedule Name
-    Summer (7/13) Diffuse Solar;  !- Diffuse Solar Day Schedule Name
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Clg 1% Condns DB=>MWB - Schedule Solar,  !- Name
+  7,                       !- Month
+  13,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.6,                    !- Maximum Dry-Bulb Temperature {C}
+  15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  4.0,                     !- Wind Speed {m/s}
+  120.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  Schedule,                !- Solar Model Indicator
+  Summer (7/13) Beam Solar,  !- Beam Solar Day Schedule Name
+  Summer (7/13) Diffuse Solar;  !- Diffuse Solar Day Schedule Name
 
-  Schedule:Day:Hourly,
-    Summer (7/13) Beam Solar,!- Name
-    Any Number,              !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    0,                       !- Hour 5
-    85,                      !- Hour 6
-    514,                     !- Hour 7
-    778,                     !- Hour 8
-    848,                     !- Hour 9
-    849,                     !- Hour 10
-    790,                     !- Hour 11
-    719,                     !- Hour 12
-    392,                     !- Hour 13
-    2,                       !- Hour 14
-    2,                       !- Hour 15
-    29,                      !- Hour 16
-    286,                     !- Hour 17
-    346,                     !- Hour 18
-    84,                      !- Hour 19
-    0,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+Schedule:Day:Hourly,
+  Summer (7/13) Beam Solar,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  0.0,                     !- Hour 1
+  0.0,                     !- Hour 2
+  0.0,                     !- Hour 3
+  0.0,                     !- Hour 4
+  0.0,                     !- Hour 5
+  85.0,                    !- Hour 6
+  514.0,                   !- Hour 7
+  778.0,                   !- Hour 8
+  848.0,                   !- Hour 9
+  849.0,                   !- Hour 10
+  790.0,                   !- Hour 11
+  719.0,                   !- Hour 12
+  392.0,                   !- Hour 13
+  2.0,                     !- Hour 14
+  2.0,                     !- Hour 15
+  29.0,                    !- Hour 16
+  286.0,                   !- Hour 17
+  346.0,                   !- Hour 18
+  84.0,                    !- Hour 19
+  0.0,                     !- Hour 20
+  0.0,                     !- Hour 21
+  0.0,                     !- Hour 22
+  0.0,                     !- Hour 23
+  0.0;                     !- Hour 24
 
-  Schedule:Day:Hourly,
-    Summer (7/13) Diffuse Solar,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    0,                       !- Hour 1
-    0,                       !- Hour 2
-    0,                       !- Hour 3
-    0,                       !- Hour 4
-    1,                       !- Hour 5
-    71,                      !- Hour 6
-    159,                     !- Hour 7
-    177,                     !- Hour 8
-    178,                     !- Hour 9
-    173,                     !- Hour 10
-    179,                     !- Hour 11
-    187,                     !- Hour 12
-    313,                     !- Hour 13
-    145,                     !- Hour 14
-    129,                     !- Hour 15
-    208,                     !- Hour 16
-    167,                     !- Hour 17
-    90,                      !- Hour 18
-    53,                      !- Hour 19
-    1,                       !- Hour 20
-    0,                       !- Hour 21
-    0,                       !- Hour 22
-    0,                       !- Hour 23
-    0;                       !- Hour 24
+Schedule:Day:Hourly,
+  Summer (7/13) Diffuse Solar,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  0.0,                     !- Hour 1
+  0.0,                     !- Hour 2
+  0.0,                     !- Hour 3
+  0.0,                     !- Hour 4
+  1.0,                     !- Hour 5
+  71.0,                    !- Hour 6
+  159.0,                   !- Hour 7
+  177.0,                   !- Hour 8
+  178.0,                   !- Hour 9
+  173.0,                   !- Hour 10
+  179.0,                   !- Hour 11
+  187.0,                   !- Hour 12
+  313.0,                   !- Hour 13
+  145.0,                   !- Hour 14
+  129.0,                   !- Hour 15
+  208.0,                   !- Hour 16
+  167.0,                   !- Hour 17
+  90.0,                    !- Hour 18
+  53.0,                    !- Hour 19
+  1.0,                     !- Hour 20
+  0.0,                     !- Hour 21
+  0.0,                     !- Hour 22
+  0.0,                     !- Hour 23
+  0.0;                     !- Hour 24
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Htg 99% Rel Humidity From Weather Stat,  !- Name
-    12,                      !- Month
-    22,                      !- Day of Month
-    WinterDesignDay,         !- Day Type
-    -16,                     !- Maximum Dry-Bulb Temperature {C}
-    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    RelativeHumiditySchedule,!- Humidity Condition Type
-    ,                        !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    dd winter (12/22) rel humidity,  !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    2.3,                     !- Wind Speed {m/s}
-    180,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Htg 99% Rel Humidity From Weather Stat,  !- Name
+  12,                      !- Month
+  22,                      !- Day of Month
+  WinterDesignDay,         !- Day Type
+  -16.0,                   !- Maximum Dry-Bulb Temperature {C}
+  0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+  ,                        !- Dry-Bulb Temperature Range Modifier Type
+  ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  RelativeHumiditySchedule,  !- Humidity Condition Type
+  ,                        !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  dd winter (12/22) rel humidity,  !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  2.3,                     !- Wind Speed {m/s}
+  180.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Clg 1% Rel Humidity Changes,  !- Name
-    7,                       !- Month
-    22,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.6,                    !- Maximum Dry-Bulb Temperature {C}
-    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    multiplierschedule,      !- Dry-Bulb Temperature Range Modifier Type
-    default temp range,      !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    RelativeHumiditySchedule,!- Humidity Condition Type
-    ,                        !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    dd summer (7/22) rel humidity,  !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Clg 1% Rel Humidity Changes,  !- Name
+  7,                       !- Month
+  22,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.6,                    !- Maximum Dry-Bulb Temperature {C}
+  15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+  MultiplierSchedule,      !- Dry-Bulb Temperature Range Modifier Type
+  default temp range,      !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  RelativeHumiditySchedule,  !- Humidity Condition Type
+  ,                        !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  dd summer (7/22) rel humidity,  !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  4.0,                     !- Wind Speed {m/s}
+  120.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Clg 1% Temp Range multiplier schedule Changes,  !- Name
-    7,                       !- Month
-    23,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.6,                    !- Maximum Dry-Bulb Temperature {C}
-    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    multiplierschedule,      !- Dry-Bulb Temperature Range Modifier Type
-    temp range,              !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Clg 1% Temp Range multiplier schedule Changes,  !- Name
+  7,                       !- Month
+  23,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.6,                    !- Maximum Dry-Bulb Temperature {C}
+  15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+  MultiplierSchedule,      !- Dry-Bulb Temperature Range Modifier Type
+  temp range,              !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  4.0,                     !- Wind Speed {m/s}
+  120.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Clg 1% Temp Range delta schedule Changes,  !- Name
-    7,                       !- Month
-    24,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.6,                    !- Maximum Dry-Bulb Temperature {C}
-    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    differenceschedule,      !- Dry-Bulb Temperature Range Modifier Type
-    temp range deltas,       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Clg 1% Temp Range delta schedule Changes,  !- Name
+  7,                       !- Month
+  24,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.6,                    !- Maximum Dry-Bulb Temperature {C}
+  15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+  DifferenceSchedule,      !- Dry-Bulb Temperature Range Modifier Type
+  temp range deltas,       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  4.0,                     !- Wind Speed {m/s}
+  120.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.0;                     !- Sky Clearness
 
-  SizingPeriod:DesignDay,
-    Denver Centennial Golden Ann Clg 1% Sky Temperature modfier,  !- Name
-    7,                       !- Month
-    25,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    32.6,                    !- Maximum Dry-Bulb Temperature {C}
-    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    differenceschedule,      !- Dry-Bulb Temperature Range Modifier Type
-    temp range deltas,       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    4,                       !- Wind Speed {m/s}
-    120,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+SizingPeriod:DesignDay,
+  Denver Centennial Golden Ann Clg 1% Sky Temperature modfier,  !- Name
+  7,                       !- Month
+  25,                      !- Day of Month
+  SummerDesignDay,         !- Day Type
+  32.6,                    !- Maximum Dry-Bulb Temperature {C}
+  15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}
+  DifferenceSchedule,      !- Dry-Bulb Temperature Range Modifier Type
+  temp range deltas,       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                 !- Humidity Condition Type
+  15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                        !- Humidity Condition Day Schedule Name
+  ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  4.0,                     !- Wind Speed {m/s}
+  120.0,                   !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  ASHRAEClearSky,          !- Solar Model Indicator
+  ,                        !- Beam Solar Day Schedule Name
+  ,                        !- Diffuse Solar Day Schedule Name
+  ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.0;                     !- Sky Clearness
 
-  WeatherProperty:SkyTemperature,
-    Denver Centennial Golden Ann Clg 1% Sky Temperature modfier,  !- Name
-    ScheduleValue,           !- Calculation Type
-    DaySchedule5;            !- Schedule Name
+WeatherProperty:SkyTemperature,
+  Denver Centennial Golden Ann Clg 1% Sky Temperature modfier,  !- Name
+  ScheduleValue,           !- Calculation Type
+  DaySchedule5;            !- Schedule Name
 
-  WeatherProperty:SkyTemperature,
-    ,                        !- Name
-    ScheduleValue,           !- Calculation Type
-    ConstantSchedule5;       !- Schedule Name
+WeatherProperty:SkyTemperature,
+  ,                        !- Name
+  ScheduleValue,           !- Calculation Type
+  ConstantSchedule5;       !- Schedule Name
 
-  Schedule:Constant,ConstantSchedule5,Temperature,5;
+Schedule:Constant,ConstantSchedule5,Temperature,5.0;
 
-  Schedule:Day:Interval,
-    DaySchedule5,            !- Name
-    Temperature,             !- Schedule Type Limits Name
-    Average,                 !- Interpolate to Timestep
-    until: 24:00,            !- Time 1
-    5;                       !- Value Until Time 1
+Schedule:Day:Interval,
+  DaySchedule5,            !- Name
+  Temperature,             !- Schedule Type Limits Name
+  Average,                 !- Interpolate to Timestep
+  until: 24:00,            !- Time 1 {hh:mm}
+  5.0;                     !- Value Until Time 1
 
-  Schedule:Day:Interval,
-    dd winter (12/22) rel humidity,  !- Name
-    Percent,                 !- Schedule Type Limits Name
-    No,                      !- Interpolate to Timestep
-    until: 1:00,             !- Time 1
-    74,                      !- Value Until Time 1
-    until: 2:00,             !- Time 2
-    73,                      !- Value Until Time 2
-    until: 3:00,             !- Time 3
-    73,                      !- Value Until Time 3
-    until: 4:00,             !- Time 4
-    72,                      !- Value Until Time 4
-    until: 5:00,             !- Time 5
-    72,                      !- Value Until Time 5
-    until: 6:00,             !- Time 6
-    71,                      !- Value Until Time 6
-    until: 7:00,             !- Time 7
-    69,                      !- Value Until Time 7
-    until: 8:00,             !- Time 8
-    66,                      !- Value Until Time 8
-    until: 9:00,             !- Time 9
-    63,                      !- Value Until Time 9
-    until:10:00,             !- Time 10
-    55,                      !- Value Until Time 10
-    until:11:00,             !- Time 11
-    49,                      !- Value Until Time 11
-    until:12:00,             !- Time 12
-    44,                      !- Value Until Time 12
-    until:13:00,             !- Time 13
-    41,                      !- Value Until Time 13
-    until:14:00,             !- Time 14
-    37,                      !- Value Until Time 14
-    until:15:00,             !- Time 15
-    36,                      !- Value Until Time 15
-    until:16:00,             !- Time 16
-    40,                      !- Value Until Time 16
-    until:17:00,             !- Time 17
-    45,                      !- Value Until Time 17
-    until:18:00,             !- Time 18
-    52,                      !- Value Until Time 18
-    until:19:00,             !- Time 19
-    56,                      !- Value Until Time 19
-    until:20:00,             !- Time 20
-    61,                      !- Value Until Time 20
-    until:21:00,             !- Time 21
-    65,                      !- Value Until Time 21
-    until:22:00,             !- Time 22
-    67,                      !- Value Until Time 22
-    until:23:00,             !- Time 23
-    70,                      !- Value Until Time 23
-    until:24:00,             !- Time 24
-    72;                      !- Value Until Time 24
+Schedule:Day:Interval,
+  dd winter (12/22) rel humidity,  !- Name
+  Percent,                 !- Schedule Type Limits Name
+  No,                      !- Interpolate to Timestep
+  until: 1:00,             !- Time 1 {hh:mm}
+  74.0,                    !- Value Until Time 1
+  until: 2:00,             !- Time 2 {hh:mm}
+  73.0,                    !- Value Until Time 2
+  until: 3:00,             !- Time 3 {hh:mm}
+  73.0,                    !- Value Until Time 3
+  until: 4:00,             !- Time 4 {hh:mm}
+  72.0,                    !- Value Until Time 4
+  until: 5:00,             !- Time 5 {hh:mm}
+  72.0,                    !- Value Until Time 5
+  until: 6:00,             !- Time 6 {hh:mm}
+  71.0,                    !- Value Until Time 6
+  until: 7:00,             !- Time 7 {hh:mm}
+  69.0,                    !- Value Until Time 7
+  until: 8:00,             !- Time 8 {hh:mm}
+  66.0,                    !- Value Until Time 8
+  until: 9:00,             !- Time 9 {hh:mm}
+  63.0,                    !- Value Until Time 9
+  until:10:00,             !- Time 10 {hh:mm}
+  55.0,                    !- Value Until Time 10
+  until:11:00,             !- Time 11 {hh:mm}
+  49.0,                    !- Value Until Time 11
+  until:12:00,             !- Time 12 {hh:mm}
+  44.0,                    !- Value Until Time 12
+  until:13:00,             !- Time 13 {hh:mm}
+  41.0,                    !- Value Until Time 13
+  until:14:00,             !- Time 14 {hh:mm}
+  37.0,                    !- Value Until Time 14
+  until:15:00,             !- Time 15 {hh:mm}
+  36.0,                    !- Value Until Time 15
+  until:16:00,             !- Time 16 {hh:mm}
+  40.0,                    !- Value Until Time 16
+  until:17:00,             !- Time 17 {hh:mm}
+  45.0,                    !- Value Until Time 17
+  until:18:00,             !- Time 18 {hh:mm}
+  52.0,                    !- Value Until Time 18
+  until:19:00,             !- Time 19 {hh:mm}
+  56.0,                    !- Value Until Time 19
+  until:20:00,             !- Time 20 {hh:mm}
+  61.0,                    !- Value Until Time 20
+  until:21:00,             !- Time 21 {hh:mm}
+  65.0,                    !- Value Until Time 21
+  until:22:00,             !- Time 22 {hh:mm}
+  67.0,                    !- Value Until Time 22
+  until:23:00,             !- Time 23 {hh:mm}
+  70.0,                    !- Value Until Time 23
+  until:24:00,             !- Time 24 {hh:mm}
+  72.0;                    !- Value Until Time 24
 
-  Schedule:Day:Interval,
-    dd summer (7/22) rel humidity,  !- Name
-    Percent,                 !- Schedule Type Limits Name
-    No,                      !- Interpolate to Timestep
-    until: 0:15,             !- Time 1
-    36.32074913,             !- Value Until Time 1
-    until: 0:30,             !- Time 2
-    36.8326075,              !- Value Until Time 2
-    until: 0:45,             !- Time 3
-    37.35260377,             !- Value Until Time 3
-    until: 1:00,             !- Time 4
-    37.88087528,             !- Value Until Time 4
-    until: 1:15,             !- Time 5
-    38.41756203,             !- Value Until Time 5
-    until: 1:30,             !- Time 6
-    38.96280676,             !- Value Until Time 6
-    until: 1:45,             !- Time 7
-    39.51675507,             !- Value Until Time 7
-    until: 2:00,             !- Time 8
-    40.07955548,             !- Value Until Time 8
-    until: 2:15,             !- Time 9
-    40.53627105,             !- Value Until Time 9
-    until: 2:30,             !- Time 10
-    40.99882795,             !- Value Until Time 10
-    until: 2:45,             !- Time 11
-    41.46730652,             !- Value Until Time 11
-    until: 3:00,             !- Time 12
-    41.94178851,             !- Value Until Time 12
-    until: 3:15,             !- Time 13
-    42.30163969,             !- Value Until Time 13
-    until: 3:30,             !- Time 14
-    42.66495013,             !- Value Until Time 14
-    until: 3:45,             !- Time 15
-    43.0317559,              !- Value Until Time 15
-    until: 4:00,             !- Time 16
-    43.40209356,             !- Value Until Time 16
-    until: 4:15,             !- Time 17
-    43.52633069,             !- Value Until Time 17
-    until: 4:30,             !- Time 18
-    43.65096576,             !- Value Until Time 18
-    until: 4:45,             !- Time 19
-    43.77600014,             !- Value Until Time 19
-    until: 5:00,             !- Time 20
-    43.90143523,             !- Value Until Time 20
-    until: 5:15,             !- Time 21
-    43.65096576,             !- Value Until Time 21
-    until: 5:30,             !- Time 22
-    43.40209356,             !- Value Until Time 22
-    until: 5:45,             !- Time 23
-    43.15480754,             !- Value Until Time 23
-    until: 6:00,             !- Time 24
-    42.9090967,              !- Value Until Time 24
-    until: 6:15,             !- Time 25
-    42.30163969,             !- Value Until Time 25
-    until: 6:30,             !- Time 26
-    41.70379192,             !- Value Until Time 26
-    until: 6:45,             !- Time 27
-    41.11538926,             !- Value Until Time 27
-    until: 7:00,             !- Time 28
-    40.53627105,             !- Value Until Time 28
-    until: 7:15,             !- Time 29
-    39.51675507,             !- Value Until Time 29
-    until: 7:30,             !- Time 30
-    38.52592172,             !- Value Until Time 30
-    until: 7:45,             !- Time 31
-    37.56291157,             !- Value Until Time 31
-    until: 8:00,             !- Time 32
-    36.62689521,             !- Value Until Time 32
-    until: 8:15,             !- Time 33
-    35.32090954,             !- Value Until Time 33
-    until: 8:30,             !- Time 34
-    34.06726111,             !- Value Until Time 34
-    until: 8:45,             !- Time 35
-    32.86374126,             !- Value Until Time 35
-    until: 9:00,             !- Time 36
-    31.70780584,             !- Value Until Time 36
-    until: 9:15,             !- Time 37
-    30.4293166,              !- Value Until Time 37
-    until: 9:30,             !- Time 38
-    29.20907628,             !- Value Until Time 38
-    until: 9:45,             !- Time 39
-    28.04392783,             !- Value Until Time 39
-    until: 10:00,            !- Time 40
-    26.93096763,             !- Value Until Time 40
-    until: 10:15,            !- Time 41
-    25.72932305,             !- Value Until Time 41
-    until: 10:30,            !- Time 42
-    24.58766471,             !- Value Until Time 42
-    until: 10:45,            !- Time 43
-    23.50266255,             !- Value Until Time 43
-    until: 11:00,            !- Time 44
-    22.47122899,             !- Value Until Time 44
-    until: 11:15,            !- Time 45
-    21.54682576,             !- Value Until Time 45
-    until: 11:30,            !- Time 46
-    20.66508347,             !- Value Until Time 46
-    until: 11:45,            !- Time 47
-    19.82389247,             !- Value Until Time 47
-    until: 12:00,            !- Time 48
-    19.02126398,             !- Value Until Time 48
-    until: 12:15,            !- Time 49
-    18.44346526,             !- Value Until Time 49
-    until: 12:30,            !- Time 50
-    17.88554428,             !- Value Until Time 50
-    until: 12:45,            !- Time 51
-    17.34648604,             !- Value Until Time 51
-    until: 13:00,            !- Time 52
-    16.8254751,              !- Value Until Time 52
-    until: 13:15,            !- Time 53
-    16.48804663,             !- Value Until Time 53
-    until: 13:30,            !- Time 54
-    16.15829644,             !- Value Until Time 54
-    until: 13:45,            !- Time 55
-    15.83601873,             !- Value Until Time 55
-    until: 14:00,            !- Time 56
-    15.52101579,             !- Value Until Time 56
-    until: 14:15,            !- Time 57
-    15.40472615,             !- Value Until Time 57
-    until: 14:30,            !- Time 58
-    15.28942294,             !- Value Until Time 58
-    until: 14:45,            !- Time 59
-    15.17509652,             !- Value Until Time 59
-    until: 15:00,            !- Time 60
-    15.06173738,             !- Value Until Time 60
-    until: 15:15,            !- Time 61
-    15.17509652,             !- Value Until Time 61
-    until: 15:30,            !- Time 62
-    15.28942294,             !- Value Until Time 62
-    until: 15:45,            !- Time 63
-    15.40472615,             !- Value Until Time 63
-    until: 16:00,            !- Time 64
-    15.52101579,             !- Value Until Time 64
-    until: 16:15,            !- Time 65
-    15.7962495,              !- Value Until Time 65
-    until: 16:30,            !- Time 66
-    16.07703432,             !- Value Until Time 66
-    until: 16:45,            !- Time 67
-    16.36350174,             !- Value Until Time 67
-    until: 17:00,            !- Time 68
-    16.65578789,             !- Value Until Time 68
-    until: 17:15,            !- Time 69
-    17.12719191,             !- Value Until Time 69
-    until: 17:30,            !- Time 70
-    17.61388824,             !- Value Until Time 70
-    until: 17:45,            !- Time 71
-    18.1156428,              !- Value Until Time 71
-    until: 18:00,            !- Time 72
-    18.63381955,             !- Value Until Time 72
-    until: 18:15,            !- Time 73
-    19.26805852,             !- Value Until Time 73
-    until: 18:30,            !- Time 74
-    19.92689277,             !- Value Until Time 74
-    until: 18:45,            !- Time 75
-    20.61134222,             !- Value Until Time 75
-    until: 19:00,            !- Time 76
-    21.32247531,             !- Value Until Time 76
-    until: 19:15,            !- Time 77
-    22.06141277,             !- Value Until Time 77
-    until: 19:30,            !- Time 78
-    22.82933196,             !- Value Until Time 78
-    until: 19:45,            !- Time 79
-    23.62747182,             !- Value Until Time 79
-    until: 20:00,            !- Time 80
-    24.45713855,             !- Value Until Time 80
-    until: 20:15,            !- Time 81
-    25.18480913,             !- Value Until Time 81
-    until: 20:30,            !- Time 82
-    25.93692012,             !- Value Until Time 82
-    until: 20:45,            !- Time 83
-    26.71439853,             !- Value Until Time 83
-    until: 21:00,            !- Time 84
-    27.5182199,              !- Value Until Time 84
-    until: 21:15,            !- Time 85
-    28.27269292,             !- Value Until Time 85
-    until: 21:30,            !- Time 86
-    29.05060587,             !- Value Until Time 86
-    until: 21:45,            !- Time 87
-    29.85282077,             !- Value Until Time 87
-    until: 22:00,            !- Time 88
-    30.68024864,             !- Value Until Time 88
-    until: 22:15,            !- Time 89
-    31.36099072,             !- Value Until Time 89
-    until: 22:30,            !- Time 90
-    32.0587884,              !- Value Until Time 90
-    until: 22:45,            !- Time 91
-    32.77317806,             !- Value Until Time 91
-    until: 23:00,            !- Time 92
-    33.50569129,             !- Value Until Time 92
-    until: 23:15,            !- Time 93
-    34.06726111,             !- Value Until Time 93
-    until: 23:30,            !- Time 94
-    34.6395078,              !- Value Until Time 94
-    until: 23:45,            !- Time 95
-    35.22264571,             !- Value Until Time 95
-    until: 24:00,            !- Time 96
-    35.81689389;             !- Value Until Time 96
+Schedule:Day:Interval,
+  dd summer (7/22) rel humidity,  !- Name
+  Percent,                 !- Schedule Type Limits Name
+  No,                      !- Interpolate to Timestep
+  until: 0:15,             !- Time 1 {hh:mm}
+  36.32074913,             !- Value Until Time 1
+  until: 0:30,             !- Time 2 {hh:mm}
+  36.8326075,              !- Value Until Time 2
+  until: 0:45,             !- Time 3 {hh:mm}
+  37.35260377,             !- Value Until Time 3
+  until: 1:00,             !- Time 4 {hh:mm}
+  37.88087528,             !- Value Until Time 4
+  until: 1:15,             !- Time 5 {hh:mm}
+  38.41756203,             !- Value Until Time 5
+  until: 1:30,             !- Time 6 {hh:mm}
+  38.96280676,             !- Value Until Time 6
+  until: 1:45,             !- Time 7 {hh:mm}
+  39.51675507,             !- Value Until Time 7
+  until: 2:00,             !- Time 8 {hh:mm}
+  40.07955548,             !- Value Until Time 8
+  until: 2:15,             !- Time 9 {hh:mm}
+  40.53627105,             !- Value Until Time 9
+  until: 2:30,             !- Time 10 {hh:mm}
+  40.99882795,             !- Value Until Time 10
+  until: 2:45,             !- Time 11 {hh:mm}
+  41.46730652,             !- Value Until Time 11
+  until: 3:00,             !- Time 12 {hh:mm}
+  41.94178851,             !- Value Until Time 12
+  until: 3:15,             !- Time 13 {hh:mm}
+  42.30163969,             !- Value Until Time 13
+  until: 3:30,             !- Time 14 {hh:mm}
+  42.66495013,             !- Value Until Time 14
+  until: 3:45,             !- Time 15 {hh:mm}
+  43.0317559,              !- Value Until Time 15
+  until: 4:00,             !- Time 16 {hh:mm}
+  43.40209356,             !- Value Until Time 16
+  until: 4:15,             !- Time 17 {hh:mm}
+  43.52633069,             !- Value Until Time 17
+  until: 4:30,             !- Time 18 {hh:mm}
+  43.65096576,             !- Value Until Time 18
+  until: 4:45,             !- Time 19 {hh:mm}
+  43.77600014,             !- Value Until Time 19
+  until: 5:00,             !- Time 20 {hh:mm}
+  43.90143523,             !- Value Until Time 20
+  until: 5:15,             !- Time 21 {hh:mm}
+  43.65096576,             !- Value Until Time 21
+  until: 5:30,             !- Time 22 {hh:mm}
+  43.40209356,             !- Value Until Time 22
+  until: 5:45,             !- Time 23 {hh:mm}
+  43.15480754,             !- Value Until Time 23
+  until: 6:00,             !- Time 24 {hh:mm}
+  42.9090967,              !- Value Until Time 24
+  until: 6:15,             !- Time 25 {hh:mm}
+  42.30163969,             !- Value Until Time 25
+  until: 6:30,             !- Time 26 {hh:mm}
+  41.70379192,             !- Value Until Time 26
+  until: 6:45,             !- Time 27 {hh:mm}
+  41.11538926,             !- Value Until Time 27
+  until: 7:00,             !- Time 28 {hh:mm}
+  40.53627105,             !- Value Until Time 28
+  until: 7:15,             !- Time 29 {hh:mm}
+  39.51675507,             !- Value Until Time 29
+  until: 7:30,             !- Time 30 {hh:mm}
+  38.52592172,             !- Value Until Time 30
+  until: 7:45,             !- Time 31 {hh:mm}
+  37.56291157,             !- Value Until Time 31
+  until: 8:00,             !- Time 32 {hh:mm}
+  36.62689521,             !- Value Until Time 32
+  until: 8:15,             !- Time 33 {hh:mm}
+  35.32090954,             !- Value Until Time 33
+  until: 8:30,             !- Time 34 {hh:mm}
+  34.06726111,             !- Value Until Time 34
+  until: 8:45,             !- Time 35 {hh:mm}
+  32.86374126,             !- Value Until Time 35
+  until: 9:00,             !- Time 36 {hh:mm}
+  31.70780584,             !- Value Until Time 36
+  until: 9:15,             !- Time 37 {hh:mm}
+  30.4293166,              !- Value Until Time 37
+  until: 9:30,             !- Time 38 {hh:mm}
+  29.20907628,             !- Value Until Time 38
+  until: 9:45,             !- Time 39 {hh:mm}
+  28.04392783,             !- Value Until Time 39
+  until: 10:00,            !- Time 40 {hh:mm}
+  26.93096763,             !- Value Until Time 40
+  until: 10:15,            !- Time 41 {hh:mm}
+  25.72932305,             !- Value Until Time 41
+  until: 10:30,            !- Time 42 {hh:mm}
+  24.58766471,             !- Value Until Time 42
+  until: 10:45,            !- Time 43 {hh:mm}
+  23.50266255,             !- Value Until Time 43
+  until: 11:00,            !- Time 44 {hh:mm}
+  22.47122899,             !- Value Until Time 44
+  until: 11:15,            !- Time 45 {hh:mm}
+  21.54682576,             !- Value Until Time 45
+  until: 11:30,            !- Time 46 {hh:mm}
+  20.66508347,             !- Value Until Time 46
+  until: 11:45,            !- Time 47 {hh:mm}
+  19.82389247,             !- Value Until Time 47
+  until: 12:00,            !- Time 48 {hh:mm}
+  19.02126398,             !- Value Until Time 48
+  until: 12:15,            !- Time 49 {hh:mm}
+  18.44346526,             !- Value Until Time 49
+  until: 12:30,            !- Time 50 {hh:mm}
+  17.88554428,             !- Value Until Time 50
+  until: 12:45,            !- Time 51 {hh:mm}
+  17.34648604,             !- Value Until Time 51
+  until: 13:00,            !- Time 52 {hh:mm}
+  16.8254751,              !- Value Until Time 52
+  until: 13:15,            !- Time 53 {hh:mm}
+  16.48804663,             !- Value Until Time 53
+  until: 13:30,            !- Time 54 {hh:mm}
+  16.15829644,             !- Value Until Time 54
+  until: 13:45,            !- Time 55 {hh:mm}
+  15.83601873,             !- Value Until Time 55
+  until: 14:00,            !- Time 56 {hh:mm}
+  15.52101579,             !- Value Until Time 56
+  until: 14:15,            !- Time 57 {hh:mm}
+  15.40472615,             !- Value Until Time 57
+  until: 14:30,            !- Time 58 {hh:mm}
+  15.28942294,             !- Value Until Time 58
+  until: 14:45,            !- Time 59 {hh:mm}
+  15.17509652,             !- Value Until Time 59
+  until: 15:00,            !- Time 60 {hh:mm}
+  15.06173738,             !- Value Until Time 60
+  until: 15:15,            !- Time 61 {hh:mm}
+  15.17509652,             !- Value Until Time 61
+  until: 15:30,            !- Time 62 {hh:mm}
+  15.28942294,             !- Value Until Time 62
+  until: 15:45,            !- Time 63 {hh:mm}
+  15.40472615,             !- Value Until Time 63
+  until: 16:00,            !- Time 64 {hh:mm}
+  15.52101579,             !- Value Until Time 64
+  until: 16:15,            !- Time 65 {hh:mm}
+  15.7962495,              !- Value Until Time 65
+  until: 16:30,            !- Time 66 {hh:mm}
+  16.07703432,             !- Value Until Time 66
+  until: 16:45,            !- Time 67 {hh:mm}
+  16.36350174,             !- Value Until Time 67
+  until: 17:00,            !- Time 68 {hh:mm}
+  16.65578789,             !- Value Until Time 68
+  until: 17:15,            !- Time 69 {hh:mm}
+  17.12719191,             !- Value Until Time 69
+  until: 17:30,            !- Time 70 {hh:mm}
+  17.61388824,             !- Value Until Time 70
+  until: 17:45,            !- Time 71 {hh:mm}
+  18.1156428,              !- Value Until Time 71
+  until: 18:00,            !- Time 72 {hh:mm}
+  18.63381955,             !- Value Until Time 72
+  until: 18:15,            !- Time 73 {hh:mm}
+  19.26805852,             !- Value Until Time 73
+  until: 18:30,            !- Time 74 {hh:mm}
+  19.92689277,             !- Value Until Time 74
+  until: 18:45,            !- Time 75 {hh:mm}
+  20.61134222,             !- Value Until Time 75
+  until: 19:00,            !- Time 76 {hh:mm}
+  21.32247531,             !- Value Until Time 76
+  until: 19:15,            !- Time 77 {hh:mm}
+  22.06141277,             !- Value Until Time 77
+  until: 19:30,            !- Time 78 {hh:mm}
+  22.82933196,             !- Value Until Time 78
+  until: 19:45,            !- Time 79 {hh:mm}
+  23.62747182,             !- Value Until Time 79
+  until: 20:00,            !- Time 80 {hh:mm}
+  24.45713855,             !- Value Until Time 80
+  until: 20:15,            !- Time 81 {hh:mm}
+  25.18480913,             !- Value Until Time 81
+  until: 20:30,            !- Time 82 {hh:mm}
+  25.93692012,             !- Value Until Time 82
+  until: 20:45,            !- Time 83 {hh:mm}
+  26.71439853,             !- Value Until Time 83
+  until: 21:00,            !- Time 84 {hh:mm}
+  27.5182199,              !- Value Until Time 84
+  until: 21:15,            !- Time 85 {hh:mm}
+  28.27269292,             !- Value Until Time 85
+  until: 21:30,            !- Time 86 {hh:mm}
+  29.05060587,             !- Value Until Time 86
+  until: 21:45,            !- Time 87 {hh:mm}
+  29.85282077,             !- Value Until Time 87
+  until: 22:00,            !- Time 88 {hh:mm}
+  30.68024864,             !- Value Until Time 88
+  until: 22:15,            !- Time 89 {hh:mm}
+  31.36099072,             !- Value Until Time 89
+  until: 22:30,            !- Time 90 {hh:mm}
+  32.0587884,              !- Value Until Time 90
+  until: 22:45,            !- Time 91 {hh:mm}
+  32.77317806,             !- Value Until Time 91
+  until: 23:00,            !- Time 92 {hh:mm}
+  33.50569129,             !- Value Until Time 92
+  until: 23:15,            !- Time 93 {hh:mm}
+  34.06726111,             !- Value Until Time 93
+  until: 23:30,            !- Time 94 {hh:mm}
+  34.6395078,              !- Value Until Time 94
+  until: 23:45,            !- Time 95 {hh:mm}
+  35.22264571,             !- Value Until Time 95
+  until: 24:00,            !- Time 96 {hh:mm}
+  35.81689389;             !- Value Until Time 96
 
-  Schedule:Day:Interval,
-    default temp range,      !- Name
-    Fraction,                !- Schedule Type Limits Name
-    No,                      !- Interpolate to Timestep
-    until: 0:15,             !- Time 1
-    0.8325,                  !- Value Until Time 1
-    until: 0:30,             !- Time 2
-    0.845,                   !- Value Until Time 2
-    until: 0:45,             !- Time 3
-    0.8575,                  !- Value Until Time 3
-    until: 1:00,             !- Time 4
-    0.87,                    !- Value Until Time 4
-    until: 1:15,             !- Time 5
-    0.8825,                  !- Value Until Time 5
-    until: 1:30,             !- Time 6
-    0.895,                   !- Value Until Time 6
-    until: 1:45,             !- Time 7
-    0.9075,                  !- Value Until Time 7
-    until: 2:00,             !- Time 8
-    0.92,                    !- Value Until Time 8
-    until: 2:15,             !- Time 9
-    0.93,                    !- Value Until Time 9
-    until: 2:30,             !- Time 10
-    0.94,                    !- Value Until Time 10
-    until: 2:45,             !- Time 11
-    0.95,                    !- Value Until Time 11
-    until: 3:00,             !- Time 12
-    0.96,                    !- Value Until Time 12
-    until: 3:15,             !- Time 13
-    0.9675,                  !- Value Until Time 13
-    until: 3:30,             !- Time 14
-    0.975,                   !- Value Until Time 14
-    until: 3:45,             !- Time 15
-    0.9825,                  !- Value Until Time 15
-    until: 4:00,             !- Time 16
-    0.99,                    !- Value Until Time 16
-    until: 4:15,             !- Time 17
-    0.9925,                  !- Value Until Time 17
-    until: 4:30,             !- Time 18
-    0.995,                   !- Value Until Time 18
-    until: 4:45,             !- Time 19
-    0.9975,                  !- Value Until Time 19
-    until: 5:00,             !- Time 20
-    1,                       !- Value Until Time 20
-    until: 5:15,             !- Time 21
-    0.995,                   !- Value Until Time 21
-    until: 5:30,             !- Time 22
-    0.99,                    !- Value Until Time 22
-    until: 5:45,             !- Time 23
-    0.985,                   !- Value Until Time 23
-    until: 6:00,             !- Time 24
-    0.98,                    !- Value Until Time 24
-    until: 6:15,             !- Time 25
-    0.9675,                  !- Value Until Time 25
-    until: 6:30,             !- Time 26
-    0.955,                   !- Value Until Time 26
-    until: 6:45,             !- Time 27
-    0.9425,                  !- Value Until Time 27
-    until: 7:00,             !- Time 28
-    0.93,                    !- Value Until Time 28
-    until: 7:15,             !- Time 29
-    0.9075,                  !- Value Until Time 29
-    until: 7:30,             !- Time 30
-    0.885,                   !- Value Until Time 30
-    until: 7:45,             !- Time 31
-    0.8625,                  !- Value Until Time 31
-    until: 8:00,             !- Time 32
-    0.84,                    !- Value Until Time 32
-    until: 8:15,             !- Time 33
-    0.8075,                  !- Value Until Time 33
-    until: 8:30,             !- Time 34
-    0.775,                   !- Value Until Time 34
-    until: 8:45,             !- Time 35
-    0.7425,                  !- Value Until Time 35
-    until: 9:00,             !- Time 36
-    0.71,                    !- Value Until Time 36
-    until: 9:15,             !- Time 37
-    0.6725,                  !- Value Until Time 37
-    until: 9:30,             !- Time 38
-    0.635,                   !- Value Until Time 38
-    until: 9:45,             !- Time 39
-    0.5975,                  !- Value Until Time 39
-    until: 10:00,            !- Time 40
-    0.56,                    !- Value Until Time 40
-    until: 10:15,            !- Time 41
-    0.5175,                  !- Value Until Time 41
-    until: 10:30,            !- Time 42
-    0.475,                   !- Value Until Time 42
-    until: 10:45,            !- Time 43
-    0.4325,                  !- Value Until Time 43
-    until: 11:00,            !- Time 44
-    0.39,                    !- Value Until Time 44
-    until: 11:15,            !- Time 45
-    0.35,                    !- Value Until Time 45
-    until: 11:30,            !- Time 46
-    0.31,                    !- Value Until Time 46
-    until: 11:45,            !- Time 47
-    0.27,                    !- Value Until Time 47
-    until: 12:00,            !- Time 48
-    0.23,                    !- Value Until Time 48
-    until: 12:15,            !- Time 49
-    0.2,                     !- Value Until Time 49
-    until: 12:30,            !- Time 50
-    0.17,                    !- Value Until Time 50
-    until: 12:45,            !- Time 51
-    0.14,                    !- Value Until Time 51
-    until: 13:00,            !- Time 52
-    0.11,                    !- Value Until Time 52
-    until: 13:15,            !- Time 53
-    0.09,                    !- Value Until Time 53
-    until: 13:30,            !- Time 54
-    0.07,                    !- Value Until Time 54
-    until: 13:45,            !- Time 55
-    0.05,                    !- Value Until Time 55
-    until: 14:00,            !- Time 56
-    0.03,                    !- Value Until Time 56
-    until: 14:15,            !- Time 57
-    0.0225,                  !- Value Until Time 57
-    until: 14:30,            !- Time 58
-    0.015,                   !- Value Until Time 58
-    until: 14:45,            !- Time 59
-    0.0075,                  !- Value Until Time 59
-    until: 15:00,            !- Time 60
-    0,                       !- Value Until Time 60
-    until: 15:15,            !- Time 61
-    0.0075,                  !- Value Until Time 61
-    until: 15:30,            !- Time 62
-    0.015,                   !- Value Until Time 62
-    until: 15:45,            !- Time 63
-    0.0225,                  !- Value Until Time 63
-    until: 16:00,            !- Time 64
-    0.03,                    !- Value Until Time 64
-    until: 16:15,            !- Time 65
-    0.0475,                  !- Value Until Time 65
-    until: 16:30,            !- Time 66
-    0.065,                   !- Value Until Time 66
-    until: 16:45,            !- Time 67
-    0.0825,                  !- Value Until Time 67
-    until: 17:00,            !- Time 68
-    0.1,                     !- Value Until Time 68
-    until: 17:15,            !- Time 69
-    0.1275,                  !- Value Until Time 69
-    until: 17:30,            !- Time 70
-    0.155,                   !- Value Until Time 70
-    until: 17:45,            !- Time 71
-    0.1825,                  !- Value Until Time 71
-    until: 18:00,            !- Time 72
-    0.21,                    !- Value Until Time 72
-    until: 18:15,            !- Time 73
-    0.2425,                  !- Value Until Time 73
-    until: 18:30,            !- Time 74
-    0.275,                   !- Value Until Time 74
-    until: 18:45,            !- Time 75
-    0.3075,                  !- Value Until Time 75
-    until: 19:00,            !- Time 76
-    0.34,                    !- Value Until Time 76
-    until: 19:15,            !- Time 77
-    0.3725,                  !- Value Until Time 77
-    until: 19:30,            !- Time 78
-    0.405,                   !- Value Until Time 78
-    until: 19:45,            !- Time 79
-    0.4375,                  !- Value Until Time 79
-    until: 20:00,            !- Time 80
-    0.47,                    !- Value Until Time 80
-    until: 20:15,            !- Time 81
-    0.4975,                  !- Value Until Time 81
-    until: 20:30,            !- Time 82
-    0.525,                   !- Value Until Time 82
-    until: 20:45,            !- Time 83
-    0.5525,                  !- Value Until Time 83
-    until: 21:00,            !- Time 84
-    0.58,                    !- Value Until Time 84
-    until: 21:15,            !- Time 85
-    0.605,                   !- Value Until Time 85
-    until: 21:30,            !- Time 86
-    0.63,                    !- Value Until Time 86
-    until: 21:45,            !- Time 87
-    0.655,                   !- Value Until Time 87
-    until: 22:00,            !- Time 88
-    0.68,                    !- Value Until Time 88
-    until: 22:15,            !- Time 89
-    0.7,                     !- Value Until Time 89
-    until: 22:30,            !- Time 90
-    0.72,                    !- Value Until Time 90
-    until: 22:45,            !- Time 91
-    0.74,                    !- Value Until Time 91
-    until: 23:00,            !- Time 92
-    0.76,                    !- Value Until Time 92
-    until: 23:15,            !- Time 93
-    0.775,                   !- Value Until Time 93
-    until: 23:30,            !- Time 94
-    0.79,                    !- Value Until Time 94
-    until: 23:45,            !- Time 95
-    0.805,                   !- Value Until Time 95
-    until: 24:00,            !- Time 96
-    0.82;                    !- Value Until Time 96
+Schedule:Day:Interval,
+  default temp range,      !- Name
+  Fraction,                !- Schedule Type Limits Name
+  No,                      !- Interpolate to Timestep
+  until: 0:15,             !- Time 1 {hh:mm}
+  0.8325,                  !- Value Until Time 1
+  until: 0:30,             !- Time 2 {hh:mm}
+  0.845,                   !- Value Until Time 2
+  until: 0:45,             !- Time 3 {hh:mm}
+  0.8575,                  !- Value Until Time 3
+  until: 1:00,             !- Time 4 {hh:mm}
+  0.87,                    !- Value Until Time 4
+  until: 1:15,             !- Time 5 {hh:mm}
+  0.8825,                  !- Value Until Time 5
+  until: 1:30,             !- Time 6 {hh:mm}
+  0.895,                   !- Value Until Time 6
+  until: 1:45,             !- Time 7 {hh:mm}
+  0.9075,                  !- Value Until Time 7
+  until: 2:00,             !- Time 8 {hh:mm}
+  0.92,                    !- Value Until Time 8
+  until: 2:15,             !- Time 9 {hh:mm}
+  0.93,                    !- Value Until Time 9
+  until: 2:30,             !- Time 10 {hh:mm}
+  0.94,                    !- Value Until Time 10
+  until: 2:45,             !- Time 11 {hh:mm}
+  0.95,                    !- Value Until Time 11
+  until: 3:00,             !- Time 12 {hh:mm}
+  0.96,                    !- Value Until Time 12
+  until: 3:15,             !- Time 13 {hh:mm}
+  0.9675,                  !- Value Until Time 13
+  until: 3:30,             !- Time 14 {hh:mm}
+  0.975,                   !- Value Until Time 14
+  until: 3:45,             !- Time 15 {hh:mm}
+  0.9825,                  !- Value Until Time 15
+  until: 4:00,             !- Time 16 {hh:mm}
+  0.99,                    !- Value Until Time 16
+  until: 4:15,             !- Time 17 {hh:mm}
+  0.9925,                  !- Value Until Time 17
+  until: 4:30,             !- Time 18 {hh:mm}
+  0.995,                   !- Value Until Time 18
+  until: 4:45,             !- Time 19 {hh:mm}
+  0.9975,                  !- Value Until Time 19
+  until: 5:00,             !- Time 20 {hh:mm}
+  1.0,                     !- Value Until Time 20
+  until: 5:15,             !- Time 21 {hh:mm}
+  0.995,                   !- Value Until Time 21
+  until: 5:30,             !- Time 22 {hh:mm}
+  0.99,                    !- Value Until Time 22
+  until: 5:45,             !- Time 23 {hh:mm}
+  0.985,                   !- Value Until Time 23
+  until: 6:00,             !- Time 24 {hh:mm}
+  0.98,                    !- Value Until Time 24
+  until: 6:15,             !- Time 25 {hh:mm}
+  0.9675,                  !- Value Until Time 25
+  until: 6:30,             !- Time 26 {hh:mm}
+  0.955,                   !- Value Until Time 26
+  until: 6:45,             !- Time 27 {hh:mm}
+  0.9425,                  !- Value Until Time 27
+  until: 7:00,             !- Time 28 {hh:mm}
+  0.93,                    !- Value Until Time 28
+  until: 7:15,             !- Time 29 {hh:mm}
+  0.9075,                  !- Value Until Time 29
+  until: 7:30,             !- Time 30 {hh:mm}
+  0.885,                   !- Value Until Time 30
+  until: 7:45,             !- Time 31 {hh:mm}
+  0.8625,                  !- Value Until Time 31
+  until: 8:00,             !- Time 32 {hh:mm}
+  0.84,                    !- Value Until Time 32
+  until: 8:15,             !- Time 33 {hh:mm}
+  0.8075,                  !- Value Until Time 33
+  until: 8:30,             !- Time 34 {hh:mm}
+  0.775,                   !- Value Until Time 34
+  until: 8:45,             !- Time 35 {hh:mm}
+  0.7425,                  !- Value Until Time 35
+  until: 9:00,             !- Time 36 {hh:mm}
+  0.71,                    !- Value Until Time 36
+  until: 9:15,             !- Time 37 {hh:mm}
+  0.6725,                  !- Value Until Time 37
+  until: 9:30,             !- Time 38 {hh:mm}
+  0.635,                   !- Value Until Time 38
+  until: 9:45,             !- Time 39 {hh:mm}
+  0.5975,                  !- Value Until Time 39
+  until: 10:00,            !- Time 40 {hh:mm}
+  0.56,                    !- Value Until Time 40
+  until: 10:15,            !- Time 41 {hh:mm}
+  0.5175,                  !- Value Until Time 41
+  until: 10:30,            !- Time 42 {hh:mm}
+  0.475,                   !- Value Until Time 42
+  until: 10:45,            !- Time 43 {hh:mm}
+  0.4325,                  !- Value Until Time 43
+  until: 11:00,            !- Time 44 {hh:mm}
+  0.39,                    !- Value Until Time 44
+  until: 11:15,            !- Time 45 {hh:mm}
+  0.35,                    !- Value Until Time 45
+  until: 11:30,            !- Time 46 {hh:mm}
+  0.31,                    !- Value Until Time 46
+  until: 11:45,            !- Time 47 {hh:mm}
+  0.27,                    !- Value Until Time 47
+  until: 12:00,            !- Time 48 {hh:mm}
+  0.23,                    !- Value Until Time 48
+  until: 12:15,            !- Time 49 {hh:mm}
+  0.2,                     !- Value Until Time 49
+  until: 12:30,            !- Time 50 {hh:mm}
+  0.17,                    !- Value Until Time 50
+  until: 12:45,            !- Time 51 {hh:mm}
+  0.14,                    !- Value Until Time 51
+  until: 13:00,            !- Time 52 {hh:mm}
+  0.11,                    !- Value Until Time 52
+  until: 13:15,            !- Time 53 {hh:mm}
+  0.09,                    !- Value Until Time 53
+  until: 13:30,            !- Time 54 {hh:mm}
+  0.07,                    !- Value Until Time 54
+  until: 13:45,            !- Time 55 {hh:mm}
+  0.05,                    !- Value Until Time 55
+  until: 14:00,            !- Time 56 {hh:mm}
+  0.03,                    !- Value Until Time 56
+  until: 14:15,            !- Time 57 {hh:mm}
+  0.0225,                  !- Value Until Time 57
+  until: 14:30,            !- Time 58 {hh:mm}
+  0.015,                   !- Value Until Time 58
+  until: 14:45,            !- Time 59 {hh:mm}
+  0.0075,                  !- Value Until Time 59
+  until: 15:00,            !- Time 60 {hh:mm}
+  0.0,                     !- Value Until Time 60
+  until: 15:15,            !- Time 61 {hh:mm}
+  0.0075,                  !- Value Until Time 61
+  until: 15:30,            !- Time 62 {hh:mm}
+  0.015,                   !- Value Until Time 62
+  until: 15:45,            !- Time 63 {hh:mm}
+  0.0225,                  !- Value Until Time 63
+  until: 16:00,            !- Time 64 {hh:mm}
+  0.03,                    !- Value Until Time 64
+  until: 16:15,            !- Time 65 {hh:mm}
+  0.0475,                  !- Value Until Time 65
+  until: 16:30,            !- Time 66 {hh:mm}
+  0.065,                   !- Value Until Time 66
+  until: 16:45,            !- Time 67 {hh:mm}
+  0.0825,                  !- Value Until Time 67
+  until: 17:00,            !- Time 68 {hh:mm}
+  0.1,                     !- Value Until Time 68
+  until: 17:15,            !- Time 69 {hh:mm}
+  0.1275,                  !- Value Until Time 69
+  until: 17:30,            !- Time 70 {hh:mm}
+  0.155,                   !- Value Until Time 70
+  until: 17:45,            !- Time 71 {hh:mm}
+  0.1825,                  !- Value Until Time 71
+  until: 18:00,            !- Time 72 {hh:mm}
+  0.21,                    !- Value Until Time 72
+  until: 18:15,            !- Time 73 {hh:mm}
+  0.2425,                  !- Value Until Time 73
+  until: 18:30,            !- Time 74 {hh:mm}
+  0.275,                   !- Value Until Time 74
+  until: 18:45,            !- Time 75 {hh:mm}
+  0.3075,                  !- Value Until Time 75
+  until: 19:00,            !- Time 76 {hh:mm}
+  0.34,                    !- Value Until Time 76
+  until: 19:15,            !- Time 77 {hh:mm}
+  0.3725,                  !- Value Until Time 77
+  until: 19:30,            !- Time 78 {hh:mm}
+  0.405,                   !- Value Until Time 78
+  until: 19:45,            !- Time 79 {hh:mm}
+  0.4375,                  !- Value Until Time 79
+  until: 20:00,            !- Time 80 {hh:mm}
+  0.47,                    !- Value Until Time 80
+  until: 20:15,            !- Time 81 {hh:mm}
+  0.4975,                  !- Value Until Time 81
+  until: 20:30,            !- Time 82 {hh:mm}
+  0.525,                   !- Value Until Time 82
+  until: 20:45,            !- Time 83 {hh:mm}
+  0.5525,                  !- Value Until Time 83
+  until: 21:00,            !- Time 84 {hh:mm}
+  0.58,                    !- Value Until Time 84
+  until: 21:15,            !- Time 85 {hh:mm}
+  0.605,                   !- Value Until Time 85
+  until: 21:30,            !- Time 86 {hh:mm}
+  0.63,                    !- Value Until Time 86
+  until: 21:45,            !- Time 87 {hh:mm}
+  0.655,                   !- Value Until Time 87
+  until: 22:00,            !- Time 88 {hh:mm}
+  0.68,                    !- Value Until Time 88
+  until: 22:15,            !- Time 89 {hh:mm}
+  0.7,                     !- Value Until Time 89
+  until: 22:30,            !- Time 90 {hh:mm}
+  0.72,                    !- Value Until Time 90
+  until: 22:45,            !- Time 91 {hh:mm}
+  0.74,                    !- Value Until Time 91
+  until: 23:00,            !- Time 92 {hh:mm}
+  0.76,                    !- Value Until Time 92
+  until: 23:15,            !- Time 93 {hh:mm}
+  0.775,                   !- Value Until Time 93
+  until: 23:30,            !- Time 94 {hh:mm}
+  0.79,                    !- Value Until Time 94
+  until: 23:45,            !- Time 95 {hh:mm}
+  0.805,                   !- Value Until Time 95
+  until: 24:00,            !- Time 96 {hh:mm}
+  0.82;                    !- Value Until Time 96
 
-  Schedule:Day:Interval,
-    temp range,              !- Name
-    Fraction,                !- Schedule Type Limits Name
-    No,                      !- Interpolate to Timestep
-    until: 7:00,             !- Time 1
-    0.5,                     !- Value Until Time 1
-    until: 17:00,            !- Time 2
-    1.0,                     !- Value Until Time 2
-    until: 24:00,            !- Time 3
-    0.5;                     !- Value Until Time 3
+Schedule:Day:Interval,
+  temp range,              !- Name
+  Fraction,                !- Schedule Type Limits Name
+  No,                      !- Interpolate to Timestep
+  until: 7:00,             !- Time 1 {hh:mm}
+  0.5,                     !- Value Until Time 1
+  until: 17:00,            !- Time 2 {hh:mm}
+  1.0,                     !- Value Until Time 2
+  until: 24:00,            !- Time 3 {hh:mm}
+  0.5;                     !- Value Until Time 3
 
-  Schedule:Day:Interval,
-    temp range deltas,       !- Name
-    Temperature,             !- Schedule Type Limits Name
-    No,                      !- Interpolate to Timestep
-    until: 24:00,            !- Time 1
-    +0.5;                    !- Value Until Time 1
+Schedule:Day:Interval,
+  temp range deltas,       !- Name
+  Temperature,             !- Schedule Type Limits Name
+  No,                      !- Interpolate to Timestep
+  until: 24:00,            !- Time 1 {hh:mm}
+  0.5;                     !- Value Until Time 1
 
-  SizingPeriod:DesignDay,
-    Example Weather object,  !- Name
-    6,                       !- Month
-    9,                       !- Day of Month
-    Wednesday,               !- Day Type
-    ,                        !- Maximum Dry-Bulb Temperature {C}
-    ,                        !- Daily Dry-Bulb Temperature Range {deltaC}
-    TemperatureProfileSchedule,  !- Dry-Bulb Temperature Range Modifier Type
-    Example Weather Temp,    !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    RelativeHumiditySchedule,!- Humidity Condition Type
-    ,                        !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    Example Weather Relative Humidity,  !- Humidity Condition Day Schedule Name
-    0,                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    0,                       !- Daily Wet-Bulb Temperature Range {deltaC}
-    ,                        !- Barometric Pressure {Pa}
-    0,                       !- Wind Speed {m/s}
-    90,                      !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    Schedule,                !- Solar Model Indicator
-    Example Weather Direct Solar,  !- Beam Solar Day Schedule Name
-    Example Weather Diffuse Solar;  !- Diffuse Solar Day Schedule Name
+SizingPeriod:DesignDay,
+  Example Weather object,  !- Name
+  6,                       !- Month
+  9,                       !- Day of Month
+  Wednesday,               !- Day Type
+  ,                        !- Maximum Dry-Bulb Temperature {C}
+  ,                        !- Daily Dry-Bulb Temperature Range {deltaC}
+  TemperatureProfileSchedule,  !- Dry-Bulb Temperature Range Modifier Type
+  Example Weather Temp,    !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  RelativeHumiditySchedule,  !- Humidity Condition Type
+  ,                        !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  Example Weather Relative Humidity,  !- Humidity Condition Day Schedule Name
+  0.0,                     !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  0.0,                     !- Daily Wet-Bulb Temperature Range {deltaC}
+  ,                        !- Barometric Pressure {Pa}
+  0.0,                     !- Wind Speed {m/s}
+  90.0,                    !- Wind Direction {deg}
+  No,                      !- Rain Indicator
+  No,                      !- Snow Indicator
+  No,                      !- Daylight Saving Time Indicator
+  Schedule,                !- Solar Model Indicator
+  Example Weather Direct Solar,  !- Beam Solar Day Schedule Name
+  Example Weather Diffuse Solar;  !- Diffuse Solar Day Schedule Name
 
-  Schedule:Day:List,
-    Example Weather Temp,    !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Average,                 !- Interpolate to Timestep
-    15,                      !- Minutes per Item
-    19.55,                   !- Value 1
-    20.1,                    !- <none>
-    20.65,                   !- <none>
-    21.2,                    !- <none>
-    21.25,                   !- <none>
-    21.3,                    !- <none>
-    21.35,                   !- <none>
-    21.4,                    !- <none>
-    21.25,                   !- <none>
-    21.1,                    !- <none>
-    20.95,                   !- <none>
-    20.8,                    !- <none>
-    20.625,                  !- <none>
-    20.45,                   !- <none>
-    20.275,                  !- <none>
-    20.1,                    !- <none>
-    19.95,                   !- <none>
-    19.8,                    !- <none>
-    19.65,                   !- <none>
-    19.5,                    !- <none>
-    19.625,                  !- <none>
-    19.75,                   !- <none>
-    19.875,                  !- <none>
-    20,                      !- <none>
-    20.25,                   !- <none>
-    20.5,                    !- <none>
-    20.75,                   !- <none>
-    21,                      !- <none>
-    21.1,                    !- <none>
-    21.2,                    !- <none>
-    21.3,                    !- <none>
-    21.4,                    !- <none>
-    21.8,                    !- <none>
-    22.2,                    !- <none>
-    22.6,                    !- <none>
-    23,                      !- <none>
-    23,                      !- <none>
-    23,                      !- <none>
-    23,                      !- <none>
-    23,                      !- <none>
-    23.375,                  !- <none>
-    23.75,                   !- <none>
-    24.125,                  !- <none>
-    24.5,                    !- <none>
-    24.45,                   !- <none>
-    24.4,                    !- <none>
-    24.35,                   !- <none>
-    24.3,                    !- <none>
-    24.225,                  !- <none>
-    24.15,                   !- <none>
-    24.075,                  !- <none>
-    24,                      !- <none>
-    23.95,                   !- <none>
-    23.9,                    !- <none>
-    23.85,                   !- <none>
-    23.8,                    !- <none>
-    23.85,                   !- <none>
-    23.9,                    !- <none>
-    23.95,                   !- <none>
-    24,                      !- <none>
-    24,                      !- <none>
-    24,                      !- <none>
-    24,                      !- <none>
-    24,                      !- <none>
-    23.825,                  !- <none>
-    23.65,                   !- <none>
-    23.475,                  !- <none>
-    23.3,                    !- <none>
-    23.1,                    !- <none>
-    22.9,                    !- <none>
-    22.7,                    !- <none>
-    22.5,                    !- <none>
-    22.275,                  !- <none>
-    22.05,                   !- <none>
-    21.825,                  !- <none>
-    21.6,                    !- <none>
-    21.4,                    !- <none>
-    21.2,                    !- <none>
-    21,                      !- <none>
-    20.8,                    !- <none>
-    20.7,                    !- <none>
-    20.6,                    !- <none>
-    20.5,                    !- <none>
-    20.4,                    !- <none>
-    20.3,                    !- <none>
-    20.2,                    !- <none>
-    20.1,                    !- <none>
-    20,                      !- <none>
-    20,                      !- <none>
-    20,                      !- <none>
-    20,                      !- <none>
-    20,                      !- <none>
-    19.75,                   !- <none>
-    19.5,                    !- <none>
-    19.25,                   !- <none>
-    19;                      !- <none>
+Schedule:Day:List,
+  Example Weather Temp,    !- Name
+  Any Number,              !- Schedule Type Limits Name
+  Average,                 !- Interpolate to Timestep
+  15,                      !- Minutes per Item
+  19.55,                   !- Value 1
+  20.1,                    !- Value 2
+  20.65,                   !- Value 3
+  21.2,                    !- Value 4
+  21.25,                   !- Value 5
+  21.3,                    !- Value 6
+  21.35,                   !- Value 7
+  21.4,                    !- Value 8
+  21.25,                   !- Value 9
+  21.1,                    !- Value 10
+  20.95,                   !- Value 11
+  20.8,                    !- Value 12
+  20.625,                  !- Value 13
+  20.45,                   !- Value 14
+  20.275,                  !- Value 15
+  20.1,                    !- Value 16
+  19.95,                   !- Value 17
+  19.8,                    !- Value 18
+  19.65,                   !- Value 19
+  19.5,                    !- Value 20
+  19.625,                  !- Value 21
+  19.75,                   !- Value 22
+  19.875,                  !- Value 23
+  20.0,                    !- Value 24
+  20.25,                   !- Value 25
+  20.5,                    !- Value 26
+  20.75,                   !- Value 27
+  21.0,                    !- Value 28
+  21.1,                    !- Value 29
+  21.2,                    !- Value 30
+  21.3,                    !- Value 31
+  21.4,                    !- Value 32
+  21.8,                    !- Value 33
+  22.2,                    !- Value 34
+  22.6,                    !- Value 35
+  23.0,                    !- Value 36
+  23.0,                    !- Value 37
+  23.0,                    !- Value 38
+  23.0,                    !- Value 39
+  23.0,                    !- Value 40
+  23.375,                  !- Value 41
+  23.75,                   !- Value 42
+  24.125,                  !- Value 43
+  24.5,                    !- Value 44
+  24.45,                   !- Value 45
+  24.4,                    !- Value 46
+  24.35,                   !- Value 47
+  24.3,                    !- Value 48
+  24.225,                  !- Value 49
+  24.15,                   !- Value 50
+  24.075,                  !- Value 51
+  24.0,                    !- Value 52
+  23.95,                   !- Value 53
+  23.9,                    !- Value 54
+  23.85,                   !- Value 55
+  23.8,                    !- Value 56
+  23.85,                   !- Value 57
+  23.9,                    !- Value 58
+  23.95,                   !- Value 59
+  24.0,                    !- Value 60
+  24.0,                    !- Value 61
+  24.0,                    !- Value 62
+  24.0,                    !- Value 63
+  24.0,                    !- Value 64
+  23.825,                  !- Value 65
+  23.65,                   !- Value 66
+  23.475,                  !- Value 67
+  23.3,                    !- Value 68
+  23.1,                    !- Value 69
+  22.9,                    !- Value 70
+  22.7,                    !- Value 71
+  22.5,                    !- Value 72
+  22.275,                  !- Value 73
+  22.05,                   !- Value 74
+  21.825,                  !- Value 75
+  21.6,                    !- Value 76
+  21.4,                    !- Value 77
+  21.2,                    !- Value 78
+  21.0,                    !- Value 79
+  20.8,                    !- Value 80
+  20.7,                    !- Value 81
+  20.6,                    !- Value 82
+  20.5,                    !- Value 83
+  20.4,                    !- Value 84
+  20.3,                    !- Value 85
+  20.2,                    !- Value 86
+  20.1,                    !- Value 87
+  20.0,                    !- Value 88
+  20.0,                    !- Value 89
+  20.0,                    !- Value 90
+  20.0,                    !- Value 91
+  20.0,                    !- Value 92
+  19.75,                   !- Value 93
+  19.5,                    !- Value 94
+  19.25,                   !- Value 95
+  19.0;                    !- Value 96
 
-  Schedule:Day:List,
-    Example Weather Direct Solar,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Average,                 !- Interpolate to Timestep
-    15,                      !- Minutes per Item
-    0,                       !- Value 1
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    20,                      !- <none>
-    40,                      !- <none>
-    60,                      !- <none>
-    80,                      !- <none>
-    107.25,                  !- <none>
-    134.5,                   !- <none>
-    161.75,                  !- <none>
-    189,                     !- <none>
-    181,                     !- <none>
-    173,                     !- <none>
-    165,                     !- <none>
-    157,                     !- <none>
-    147.25,                  !- <none>
-    137.5,                   !- <none>
-    127.75,                  !- <none>
-    118,                     !- <none>
-    105.25,                  !- <none>
-    92.5,                    !- <none>
-    79.75,                   !- <none>
-    67,                      !- <none>
-    72.25,                   !- <none>
-    77.5,                    !- <none>
-    82.75,                   !- <none>
-    88,                      !- <none>
-    87.75,                   !- <none>
-    87.5,                    !- <none>
-    87.25,                   !- <none>
-    87,                      !- <none>
-    77.25,                   !- <none>
-    67.5,                    !- <none>
-    57.75,                   !- <none>
-    48,                      !- <none>
-    50.5,                    !- <none>
-    53,                      !- <none>
-    55.5,                    !- <none>
-    58,                      !- <none>
-    56,                      !- <none>
-    54,                      !- <none>
-    52,                      !- <none>
-    50,                      !- <none>
-    49.75,                   !- <none>
-    49.5,                    !- <none>
-    49.25,                   !- <none>
-    49,                      !- <none>
-    45,                      !- <none>
-    41,                      !- <none>
-    37,                      !- <none>
-    33,                      !- <none>
-    24.75,                   !- <none>
-    16.5,                    !- <none>
-    8.25,                    !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0;                       !- <none>
+Schedule:Day:List,
+  Example Weather Direct Solar,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  Average,                 !- Interpolate to Timestep
+  15,                      !- Minutes per Item
+  0.0,                     !- Value 1
+  0.0,                     !- Value 2
+  0.0,                     !- Value 3
+  0.0,                     !- Value 4
+  0.0,                     !- Value 5
+  0.0,                     !- Value 6
+  0.0,                     !- Value 7
+  0.0,                     !- Value 8
+  0.0,                     !- Value 9
+  0.0,                     !- Value 10
+  0.0,                     !- Value 11
+  0.0,                     !- Value 12
+  0.0,                     !- Value 13
+  0.0,                     !- Value 14
+  0.0,                     !- Value 15
+  0.0,                     !- Value 16
+  0.0,                     !- Value 17
+  0.0,                     !- Value 18
+  0.0,                     !- Value 19
+  0.0,                     !- Value 20
+  0.0,                     !- Value 21
+  0.0,                     !- Value 22
+  20.0,                    !- Value 23
+  40.0,                    !- Value 24
+  60.0,                    !- Value 25
+  80.0,                    !- Value 26
+  107.25,                  !- Value 27
+  134.5,                   !- Value 28
+  161.75,                  !- Value 29
+  189.0,                   !- Value 30
+  181.0,                   !- Value 31
+  173.0,                   !- Value 32
+  165.0,                   !- Value 33
+  157.0,                   !- Value 34
+  147.25,                  !- Value 35
+  137.5,                   !- Value 36
+  127.75,                  !- Value 37
+  118.0,                   !- Value 38
+  105.25,                  !- Value 39
+  92.5,                    !- Value 40
+  79.75,                   !- Value 41
+  67.0,                    !- Value 42
+  72.25,                   !- Value 43
+  77.5,                    !- Value 44
+  82.75,                   !- Value 45
+  88.0,                    !- Value 46
+  87.75,                   !- Value 47
+  87.5,                    !- Value 48
+  87.25,                   !- Value 49
+  87.0,                    !- Value 50
+  77.25,                   !- Value 51
+  67.5,                    !- Value 52
+  57.75,                   !- Value 53
+  48.0,                    !- Value 54
+  50.5,                    !- Value 55
+  53.0,                    !- Value 56
+  55.5,                    !- Value 57
+  58.0,                    !- Value 58
+  56.0,                    !- Value 59
+  54.0,                    !- Value 60
+  52.0,                    !- Value 61
+  50.0,                    !- Value 62
+  49.75,                   !- Value 63
+  49.5,                    !- Value 64
+  49.25,                   !- Value 65
+  49.0,                    !- Value 66
+  45.0,                    !- Value 67
+  41.0,                    !- Value 68
+  37.0,                    !- Value 69
+  33.0,                    !- Value 70
+  24.75,                   !- Value 71
+  16.5,                    !- Value 72
+  8.25,                    !- Value 73
+  0.0,                     !- Value 74
+  0.0,                     !- Value 75
+  0.0,                     !- Value 76
+  0.0,                     !- Value 77
+  0.0,                     !- Value 78
+  0.0,                     !- Value 79
+  0.0,                     !- Value 80
+  0.0,                     !- Value 81
+  0.0,                     !- Value 82
+  0.0,                     !- Value 83
+  0.0,                     !- Value 84
+  0.0,                     !- Value 85
+  0.0,                     !- Value 86
+  0.0,                     !- Value 87
+  0.0,                     !- Value 88
+  0.0,                     !- Value 89
+  0.0,                     !- Value 90
+  0.0,                     !- Value 91
+  0.0,                     !- Value 92
+  0.0,                     !- Value 93
+  0.0,                     !- Value 94
+  0.0,                     !- Value 95
+  0.0;                     !- Value 96
 
-  Schedule:Day:List,
-    Example Weather Diffuse Solar,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Average,                 !- Interpolate to Timestep
-    15,                      !- Minutes per Item
-    0,                       !- Value 1
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    11.25,                   !- <none>
-    20.5,                    !- <none>
-    29.75,                   !- <none>
-    39,                      !- <none>
-    61.75,                   !- <none>
-    84.5,                    !- <none>
-    107.25,                  !- <none>
-    130,                     !- <none>
-    153.5,                   !- <none>
-    177,                     !- <none>
-    200.5,                   !- <none>
-    224,                     !- <none>
-    248.5,                   !- <none>
-    273,                     !- <none>
-    297.5,                   !- <none>
-    322,                     !- <none>
-    337.75,                  !- <none>
-    353.5,                   !- <none>
-    369.25,                  !- <none>
-    385,                     !- <none>
-    392.75,                  !- <none>
-    400.5,                   !- <none>
-    408.25,                  !- <none>
-    416,                     !- <none>
-    418.75,                  !- <none>
-    421.5,                   !- <none>
-    424.25,                  !- <none>
-    427,                     !- <none>
-    427.25,                  !- <none>
-    427.5,                   !- <none>
-    427.75,                  !- <none>
-    428,                     !- <none>
-    430,                     !- <none>
-    432,                     !- <none>
-    434,                     !- <none>
-    436,                     !- <none>
-    426,                     !- <none>
-    416,                     !- <none>
-    406,                     !- <none>
-    396,                     !- <none>
-    381,                     !- <none>
-    366,                     !- <none>
-    351,                     !- <none>
-    336,                     !- <none>
-    312,                     !- <none>
-    288,                     !- <none>
-    264,                     !- <none>
-    240,                     !- <none>
-    212.5,                   !- <none>
-    185,                     !- <none>
-    157.5,                   !- <none>
-    130,                     !- <none>
-    107.75,                  !- <none>
-    85.5,                    !- <none>
-    63.25,                   !- <none>
-    41,                      !- <none>
-    31.5,                    !- <none>
-    22,                      !- <none>
-    12.5,                    !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0,                       !- <none>
-    0;                       !- <none>
+Schedule:Day:List,
+  Example Weather Diffuse Solar,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  Average,                 !- Interpolate to Timestep
+  15,                      !- Minutes per Item
+  0.0,                     !- Value 1
+  0.0,                     !- Value 2
+  0.0,                     !- Value 3
+  0.0,                     !- Value 4
+  0.0,                     !- Value 5
+  0.0,                     !- Value 6
+  0.0,                     !- Value 7
+  0.0,                     !- Value 8
+  0.0,                     !- Value 9
+  0.0,                     !- Value 10
+  0.0,                     !- Value 11
+  0.0,                     !- Value 12
+  0.0,                     !- Value 13
+  0.0,                     !- Value 14
+  0.0,                     !- Value 15
+  0.0,                     !- Value 16
+  0.0,                     !- Value 17
+  0.0,                     !- Value 18
+  11.25,                   !- Value 19
+  20.5,                    !- Value 20
+  29.75,                   !- Value 21
+  39.0,                    !- Value 22
+  61.75,                   !- Value 23
+  84.5,                    !- Value 24
+  107.25,                  !- Value 25
+  130.0,                   !- Value 26
+  153.5,                   !- Value 27
+  177.0,                   !- Value 28
+  200.5,                   !- Value 29
+  224.0,                   !- Value 30
+  248.5,                   !- Value 31
+  273.0,                   !- Value 32
+  297.5,                   !- Value 33
+  322.0,                   !- Value 34
+  337.75,                  !- Value 35
+  353.5,                   !- Value 36
+  369.25,                  !- Value 37
+  385.0,                   !- Value 38
+  392.75,                  !- Value 39
+  400.5,                   !- Value 40
+  408.25,                  !- Value 41
+  416.0,                   !- Value 42
+  418.75,                  !- Value 43
+  421.5,                   !- Value 44
+  424.25,                  !- Value 45
+  427.0,                   !- Value 46
+  427.25,                  !- Value 47
+  427.5,                   !- Value 48
+  427.75,                  !- Value 49
+  428.0,                   !- Value 50
+  430.0,                   !- Value 51
+  432.0,                   !- Value 52
+  434.0,                   !- Value 53
+  436.0,                   !- Value 54
+  426.0,                   !- Value 55
+  416.0,                   !- Value 56
+  406.0,                   !- Value 57
+  396.0,                   !- Value 58
+  381.0,                   !- Value 59
+  366.0,                   !- Value 60
+  351.0,                   !- Value 61
+  336.0,                   !- Value 62
+  312.0,                   !- Value 63
+  288.0,                   !- Value 64
+  264.0,                   !- Value 65
+  240.0,                   !- Value 66
+  212.5,                   !- Value 67
+  185.0,                   !- Value 68
+  157.5,                   !- Value 69
+  130.0,                   !- Value 70
+  107.75,                  !- Value 71
+  85.5,                    !- Value 72
+  63.25,                   !- Value 73
+  41.0,                    !- Value 74
+  31.5,                    !- Value 75
+  22.0,                    !- Value 76
+  12.5,                    !- Value 77
+  0.0,                     !- Value 78
+  0.0,                     !- Value 79
+  0.0,                     !- Value 80
+  0.0,                     !- Value 81
+  0.0,                     !- Value 82
+  0.0,                     !- Value 83
+  0.0,                     !- Value 84
+  0.0,                     !- Value 85
+  0.0,                     !- Value 86
+  0.0,                     !- Value 87
+  0.0,                     !- Value 88
+  0.0,                     !- Value 89
+  0.0,                     !- Value 90
+  0.0,                     !- Value 91
+  0.0,                     !- Value 92
+  0.0,                     !- Value 93
+  0.0,                     !- Value 94
+  0.0,                     !- Value 95
+  0.0;                     !- Value 96
 
-  Schedule:Day:List,
-    Example Weather Relative Humidity,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Average,                 !- Interpolate to Timestep
-    15,                      !- Minutes per Item
-    82,                      !- Value 1
-    81,                      !- <none>
-    80,                      !- <none>
-    79,                      !- <none>
-    79,                      !- <none>
-    79,                      !- <none>
-    79,                      !- <none>
-    79,                      !- <none>
-    79.75,                   !- <none>
-    80.5,                    !- <none>
-    81.25,                   !- <none>
-    82,                      !- <none>
-    82.5,                    !- <none>
-    83,                      !- <none>
-    83.5,                    !- <none>
-    84,                      !- <none>
-    84.75,                   !- <none>
-    85.5,                    !- <none>
-    86.25,                   !- <none>
-    87,                      !- <none>
-    86,                      !- <none>
-    85,                      !- <none>
-    84,                      !- <none>
-    83,                      !- <none>
-    81.75,                   !- <none>
-    80.5,                    !- <none>
-    79.25,                   !- <none>
-    78,                      !- <none>
-    76,                      !- <none>
-    74,                      !- <none>
-    72,                      !- <none>
-    70,                      !- <none>
-    68.75,                   !- <none>
-    67.5,                    !- <none>
-    66.25,                   !- <none>
-    65,                      !- <none>
-    65,                      !- <none>
-    65,                      !- <none>
-    65,                      !- <none>
-    65,                      !- <none>
-    63.5,                    !- <none>
-    62,                      !- <none>
-    60.5,                    !- <none>
-    59,                      !- <none>
-    60.25,                   !- <none>
-    61.5,                    !- <none>
-    62.75,                   !- <none>
-    64,                      !- <none>
-    65.25,                   !- <none>
-    66.5,                    !- <none>
-    67.75,                   !- <none>
-    69,                      !- <none>
-    70.25,                   !- <none>
-    71.5,                    !- <none>
-    72.75,                   !- <none>
-    74,                      !- <none>
-    72.75,                   !- <none>
-    71.5,                    !- <none>
-    70.25,                   !- <none>
-    69,                      !- <none>
-    69,                      !- <none>
-    69,                      !- <none>
-    69,                      !- <none>
-    69,                      !- <none>
-    70.25,                   !- <none>
-    71.5,                    !- <none>
-    72.75,                   !- <none>
-    74,                      !- <none>
-    74.25,                   !- <none>
-    74.5,                    !- <none>
-    74.75,                   !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75,                      !- <none>
-    75.75,                   !- <none>
-    76.5,                    !- <none>
-    77.25,                   !- <none>
-    78,                      !- <none>
-    79.25,                   !- <none>
-    80.5,                    !- <none>
-    81.75,                   !- <none>
-    83,                      !- <none>
-    82.5,                    !- <none>
-    82,                      !- <none>
-    81.5,                    !- <none>
-    81,                      !- <none>
-    81.5,                    !- <none>
-    82,                      !- <none>
-    82.5,                    !- <none>
-    83;                      !- <none>
+Schedule:Day:List,
+  Example Weather Relative Humidity,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  Average,                 !- Interpolate to Timestep
+  15,                      !- Minutes per Item
+  82.0,                    !- Value 1
+  81.0,                    !- Value 2
+  80.0,                    !- Value 3
+  79.0,                    !- Value 4
+  79.0,                    !- Value 5
+  79.0,                    !- Value 6
+  79.0,                    !- Value 7
+  79.0,                    !- Value 8
+  79.75,                   !- Value 9
+  80.5,                    !- Value 10
+  81.25,                   !- Value 11
+  82.0,                    !- Value 12
+  82.5,                    !- Value 13
+  83.0,                    !- Value 14
+  83.5,                    !- Value 15
+  84.0,                    !- Value 16
+  84.75,                   !- Value 17
+  85.5,                    !- Value 18
+  86.25,                   !- Value 19
+  87.0,                    !- Value 20
+  86.0,                    !- Value 21
+  85.0,                    !- Value 22
+  84.0,                    !- Value 23
+  83.0,                    !- Value 24
+  81.75,                   !- Value 25
+  80.5,                    !- Value 26
+  79.25,                   !- Value 27
+  78.0,                    !- Value 28
+  76.0,                    !- Value 29
+  74.0,                    !- Value 30
+  72.0,                    !- Value 31
+  70.0,                    !- Value 32
+  68.75,                   !- Value 33
+  67.5,                    !- Value 34
+  66.25,                   !- Value 35
+  65.0,                    !- Value 36
+  65.0,                    !- Value 37
+  65.0,                    !- Value 38
+  65.0,                    !- Value 39
+  65.0,                    !- Value 40
+  63.5,                    !- Value 41
+  62.0,                    !- Value 42
+  60.5,                    !- Value 43
+  59.0,                    !- Value 44
+  60.25,                   !- Value 45
+  61.5,                    !- Value 46
+  62.75,                   !- Value 47
+  64.0,                    !- Value 48
+  65.25,                   !- Value 49
+  66.5,                    !- Value 50
+  67.75,                   !- Value 51
+  69.0,                    !- Value 52
+  70.25,                   !- Value 53
+  71.5,                    !- Value 54
+  72.75,                   !- Value 55
+  74.0,                    !- Value 56
+  72.75,                   !- Value 57
+  71.5,                    !- Value 58
+  70.25,                   !- Value 59
+  69.0,                    !- Value 60
+  69.0,                    !- Value 61
+  69.0,                    !- Value 62
+  69.0,                    !- Value 63
+  69.0,                    !- Value 64
+  70.25,                   !- Value 65
+  71.5,                    !- Value 66
+  72.75,                   !- Value 67
+  74.0,                    !- Value 68
+  74.25,                   !- Value 69
+  74.5,                    !- Value 70
+  74.75,                   !- Value 71
+  75.0,                    !- Value 72
+  75.0,                    !- Value 73
+  75.0,                    !- Value 74
+  75.0,                    !- Value 75
+  75.0,                    !- Value 76
+  75.0,                    !- Value 77
+  75.0,                    !- Value 78
+  75.0,                    !- Value 79
+  75.0,                    !- Value 80
+  75.75,                   !- Value 81
+  76.5,                    !- Value 82
+  77.25,                   !- Value 83
+  78.0,                    !- Value 84
+  79.25,                   !- Value 85
+  80.5,                    !- Value 86
+  81.75,                   !- Value 87
+  83.0,                    !- Value 88
+  82.5,                    !- Value 89
+  82.0,                    !- Value 90
+  81.5,                    !- Value 91
+  81.0,                    !- Value 92
+  81.5,                    !- Value 93
+  82.0,                    !- Value 94
+  82.5,                    !- Value 95
+  83.0;                    !- Value 96
 
 ! The following is not used within the simulation but here for example purposes.
 ! An Hourly Schedule.  Once with interpolation, once without -- see the report in the .eio file.
 
-  Schedule:Day:List,
-    ListScheduleExample,     !- Name
-    Any Number,              !- Schedule Type Limits Name
-    No,                      !- Interpolate to Timestep
-    60,                      !- Minutes per Item
-    1,                       !- Value 1
-    2,                       !- <none>
-    3,                       !- <none>
-    4,                       !- <none>
-    5,                       !- <none>
-    6,                       !- <none>
-    7,                       !- <none>
-    8,                       !- <none>
-    9,                       !- <none>
-    10,                      !- <none>
-    11,                      !- <none>
-    12,                      !- <none>
-    13,                      !- <none>
-    14,                      !- <none>
-    15,                      !- <none>
-    16,                      !- <none>
-    17,                      !- <none>
-    18,                      !- <none>
-    19,                      !- <none>
-    20,                      !- <none>
-    21,                      !- <none>
-    22,                      !- <none>
-    23,                      !- <none>
-    24;                      !- <none>
+Schedule:Day:List,
+  ListScheduleExample,     !- Name
+  Any Number,              !- Schedule Type Limits Name
+  No,                      !- Interpolate to Timestep
+  60,                      !- Minutes per Item
+  1.0,                     !- Value 1
+  2.0,                     !- Value 2
+  3.0,                     !- Value 3
+  4.0,                     !- Value 4
+  5.0,                     !- Value 5
+  6.0,                     !- Value 6
+  7.0,                     !- Value 7
+  8.0,                     !- Value 8
+  9.0,                     !- Value 9
+  10.0,                    !- Value 10
+  11.0,                    !- Value 11
+  12.0,                    !- Value 12
+  13.0,                    !- Value 13
+  14.0,                    !- Value 14
+  15.0,                    !- Value 15
+  16.0,                    !- Value 16
+  17.0,                    !- Value 17
+  18.0,                    !- Value 18
+  19.0,                    !- Value 19
+  20.0,                    !- Value 20
+  21.0,                    !- Value 21
+  22.0,                    !- Value 22
+  23.0,                    !- Value 23
+  24.0;                    !- Value 24
 
-  Schedule:Day:List,
-    ListScheduleExample_int, !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Average,                 !- Interpolate to Timestep
-    60,                      !- Minutes per Item
-    1,                       !- Value 1
-    2,                       !- <none>
-    3,                       !- <none>
-    4,                       !- <none>
-    5,                       !- <none>
-    6,                       !- <none>
-    7,                       !- <none>
-    8,                       !- <none>
-    9,                       !- <none>
-    10,                      !- <none>
-    11,                      !- <none>
-    12,                      !- <none>
-    13,                      !- <none>
-    14,                      !- <none>
-    15,                      !- <none>
-    16,                      !- <none>
-    17,                      !- <none>
-    18,                      !- <none>
-    19,                      !- <none>
-    20,                      !- <none>
-    21,                      !- <none>
-    22,                      !- <none>
-    23,                      !- <none>
-    24;                      !- <none>
+Schedule:Day:List,
+  ListScheduleExample_int,  !- Name
+  Any Number,              !- Schedule Type Limits Name
+  Average,                 !- Interpolate to Timestep
+  60,                      !- Minutes per Item
+  1.0,                     !- Value 1
+  2.0,                     !- Value 2
+  3.0,                     !- Value 3
+  4.0,                     !- Value 4
+  5.0,                     !- Value 5
+  6.0,                     !- Value 6
+  7.0,                     !- Value 7
+  8.0,                     !- Value 8
+  9.0,                     !- Value 9
+  10.0,                    !- Value 10
+  11.0,                    !- Value 11
+  12.0,                    !- Value 12
+  13.0,                    !- Value 13
+  14.0,                    !- Value 14
+  15.0,                    !- Value 15
+  16.0,                    !- Value 16
+  17.0,                    !- Value 17
+  18.0,                    !- Value 18
+  19.0,                    !- Value 19
+  20.0,                    !- Value 20
+  21.0,                    !- Value 21
+  22.0,                    !- Value 22
+  23.0,                    !- Value 23
+  24.0;                    !- Value 24
 
-  Material:NoMass,
-    R13LAYER,                !- Name
-    Rough,                   !- Roughness
-    2.290965,                !- Thermal Resistance {m2-K/W}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+Material:NoMass,
+  R13LAYER,                !- Name
+  Rough,                   !- Roughness
+  2.290965,                !- Thermal Resistance {m2-K/W}
+  0.9,                     !- Thermal Absorptance
+  0.75,                    !- Solar Absorptance
+  0.75;                    !- Visible Absorptance
 
-  Material,
-    C10 - 8 IN HW CONCRETE,  !- Name
-    MediumRough,             !- Roughness
-    0.2033016,               !- Thickness {m}
-    1.729577,                !- Conductivity {W/m-K}
-    2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+Material,
+  C10 - 8 IN HW CONCRETE,  !- Name
+  MediumRough,             !- Roughness
+  0.2033016,               !- Thickness {m}
+  1.729577,                !- Conductivity {W/m-K}
+  2242.585,                !- Density {kg/m3}
+  836.8,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.65,                    !- Solar Absorptance
+  0.65;                    !- Visible Absorptance
 
-  Material,
-    E2 - 1 / 2 IN SLAG OR STONE,  !- Name
-    Rough,                   !- Roughness
-    1.2710161E-02,           !- Thickness {m}
-    1.435549,                !- Conductivity {W/m-K}
-    881.0155,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5500000,               !- Solar Absorptance
-    0.5500000;               !- Visible Absorptance
+Material,
+  E2 - 1 / 2 IN SLAG OR STONE,  !- Name
+  Rough,                   !- Roughness
+  0.012710161,             !- Thickness {m}
+  1.435549,                !- Conductivity {W/m-K}
+  881.0155,                !- Density {kg/m3}
+  1673.6,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.55,                    !- Solar Absorptance
+  0.55;                    !- Visible Absorptance
 
-  Material,
-    E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
-    Rough,                   !- Roughness
-    9.5402403E-03,           !- Thickness {m}
-    0.1902535,               !- Conductivity {W/m-K}
-    1121.292,                !- Density {kg/m3}
-    1673.600,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.7500000,               !- Solar Absorptance
-    0.7500000;               !- Visible Absorptance
+Material,
+  E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Name
+  Rough,                   !- Roughness
+  0.0095402403,            !- Thickness {m}
+  0.1902535,               !- Conductivity {W/m-K}
+  1121.292,                !- Density {kg/m3}
+  1673.6,                  !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.75,                    !- Solar Absorptance
+  0.75;                    !- Visible Absorptance
 
-  Material,
-    B5 - 1 IN DENSE INSULATION,  !- Name
-    VeryRough,               !- Roughness
-    2.5E-02,                 !- Thickness {m}
-    4.0E-02,                 !- Conductivity {W/m-K}
-    91.30524,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.5000000,               !- Solar Absorptance
-    0.5000000;               !- Visible Absorptance
+Material,
+  B5 - 1 IN DENSE INSULATION,  !- Name
+  VeryRough,               !- Roughness
+  0.025,                   !- Thickness {m}
+  0.04,                    !- Conductivity {W/m-K}
+  91.30524,                !- Density {kg/m3}
+  836.8,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.5,                     !- Solar Absorptance
+  0.5;                     !- Visible Absorptance
 
-  Material,
-    C12 - 2 IN HW CONCRETE,  !- Name
-    MediumRough,             !- Roughness
-    5.0901599E-02,           !- Thickness {m}
-    1.729577,                !- Conductivity {W/m-K}
-    2242.585,                !- Density {kg/m3}
-    836.8000,                !- Specific Heat {J/kg-K}
-    0.9000000,               !- Thermal Absorptance
-    0.6500000,               !- Solar Absorptance
-    0.6500000;               !- Visible Absorptance
+Material,
+  C12 - 2 IN HW CONCRETE,  !- Name
+  MediumRough,             !- Roughness
+  0.050901599,             !- Thickness {m}
+  1.729577,                !- Conductivity {W/m-K}
+  2242.585,                !- Density {kg/m3}
+  836.8,                   !- Specific Heat {J/kg-K}
+  0.9,                     !- Thermal Absorptance
+  0.65,                    !- Solar Absorptance
+  0.65;                    !- Visible Absorptance
 
-  Construction,
-    R13WALL,                 !- Name
-    R13LAYER;                !- Outside Layer
+Construction,
+  R13WALL,                 !- Name
+  R13LAYER;                !- Outside Layer
 
-  Construction,
-    FLOOR SLAB 8 IN,         !- Name
-    C10 - 8 IN HW CONCRETE;  !- Outside Layer
+Construction,
+  FLOOR SLAB 8 IN,         !- Name
+  C10 - 8 IN HW CONCRETE;  !- Outside Layer
 
-  Construction,
-    ROOF34,                  !- Name
-    E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer
-    E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Layer 2
-    B5 - 1 IN DENSE INSULATION,  !- Layer 3
-    C12 - 2 IN HW CONCRETE;  !- Layer 4
+Construction,
+  ROOF34,                  !- Name
+  E2 - 1 / 2 IN SLAG OR STONE,  !- Outside Layer
+  E3 - 3 / 8 IN FELT AND MEMBRANE,  !- Layer 2
+  B5 - 1 IN DENSE INSULATION,  !- Layer 3
+  C12 - 2 IN HW CONCRETE;  !- Layer 4
 
-  Zone,
-    ZONE ONE,                !- Name
-    0,                       !- Direction of Relative North {deg}
-    0,                       !- X Origin {m}
-    0,                       !- Y Origin {m}
-    0,                       !- Z Origin {m}
-    1,                       !- Type
-    1,                       !- Multiplier
-    autocalculate,           !- Ceiling Height {m}
-    autocalculate;           !- Volume {m3}
+Zone,
+  ZONE ONE,                !- Name
+  0.0,                     !- Direction of Relative North {deg}
+  0.0,                     !- X Origin {m}
+  0.0,                     !- Y Origin {m}
+  0.0,                     !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  Autocalculate,           !- Ceiling Height {m}
+  Autocalculate;           !- Volume {m3}
 
-  ScheduleTypeLimits,
-    Fraction,                !- Name
-    0.0,                     !- Lower Limit Value
-    1.0,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+ScheduleTypeLimits,
+  Fraction,                !- Name
+  0.0,                     !- Lower Limit Value
+  1.0,                     !- Upper Limit Value
+  Continuous;              !- Numeric Type
 
-  ScheduleTypeLimits,
-    Any Number;              !- Name
+ScheduleTypeLimits,
+  Any Number;              !- Name
 
-  ScheduleTypeLimits,
-    Percent,                 !- Name
-    0.0,                     !- Lower Limit Value
-    100.0,                   !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
+ScheduleTypeLimits,
+  Percent,                 !- Name
+  0.0,                     !- Lower Limit Value
+  100.0,                   !- Upper Limit Value
+  Continuous;              !- Numeric Type
 
-  ScheduleTypeLimits,
-    Temperature,             !- Name
-    -60,                     !- Lower Limit Value
-    200,                     !- Upper Limit Value
-    CONTINUOUS,              !- Numeric Type
-    Temperature;             !- Unit Type
+ScheduleTypeLimits,
+  Temperature,             !- Name
+  -60.0,                   !- Lower Limit Value
+  200.0,                   !- Upper Limit Value
+  Continuous,              !- Numeric Type
+  Temperature;             !- Unit Type
 
-  GlobalGeometryRules,
-    UpperLeftCorner,         !- Starting Vertex Position
-    CounterClockWise,        !- Vertex Entry Direction
-    World;                   !- Coordinate System
+GlobalGeometryRules,
+  UpperLeftCorner,         !- Starting Vertex Position
+  Counterclockwise,        !- Vertex Entry Direction
+  World;                   !- Coordinate System
 
-  BuildingSurface:Detailed,
-    Zn001:Wall001,           !- Name
-    Wall,                    !- Surface Type
-    R13WALL,                 !- Construction Name
-    ZONE ONE,                !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
-    4,                       !- Number of Vertices
-    0,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  Zn001:Wall001,           !- Name
+  Wall,                    !- Surface Type
+  R13WALL,                 !- Construction Name
+  ZONE ONE,                !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  15.24,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
-  BuildingSurface:Detailed,
-    Zn001:Wall002,           !- Name
-    Wall,                    !- Surface Type
-    R13WALL,                 !- Construction Name
-    ZONE ONE,                !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
-    4,                       !- Number of Vertices
-    15.24000,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24000,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  Zn001:Wall002,           !- Name
+  Wall,                    !- Surface Type
+  R13WALL,                 !- Construction Name
+  ZONE ONE,                !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+  15.24,0.0,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  15.24,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
-  BuildingSurface:Detailed,
-    Zn001:Wall003,           !- Name
-    Wall,                    !- Surface Type
-    R13WALL,                 !- Construction Name
-    ZONE ONE,                !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
-    4,                       !- Number of Vertices
-    15.24000,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  Zn001:Wall003,           !- Name
+  Wall,                    !- Surface Type
+  R13WALL,                 !- Construction Name
+  ZONE ONE,                !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+  15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
-  BuildingSurface:Detailed,
-    Zn001:Wall004,           !- Name
-    Wall,                    !- Surface Type
-    R13WALL,                 !- Construction Name
-    ZONE ONE,                !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0.5000000,               !- View Factor to Ground
-    4,                       !- Number of Vertices
-    0,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
-    0,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
-    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
-    0,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  Zn001:Wall004,           !- Name
+  Wall,                    !- Surface Type
+  R13WALL,                 !- Construction Name
+  ZONE ONE,                !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.5,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0.0,15.24,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,0.0,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
-  BuildingSurface:Detailed,
-    Zn001:Flr001,            !- Name
-    Floor,                   !- Surface Type
-    FLOOR SLAB 8 IN,         !- Construction Name
-    ZONE ONE,                !- Zone Name
-    ,                        !- Space Name
-    Surface,                 !- Outside Boundary Condition
-    Zn001:Flr001,            !- Outside Boundary Condition Object
-    NoSun,                   !- Sun Exposure
-    NoWind,                  !- Wind Exposure
-    1.000000,                !- View Factor to Ground
-    4,                       !- Number of Vertices
-    0,0,0,  !- X,Y,Z ==> Vertex 1 {m}
-    0,15.24,0,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24,15.24,0,  !- X,Y,Z ==> Vertex 3 {m}
-    15.24,0,0;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  Zn001:Flr001,            !- Name
+  Floor,                   !- Surface Type
+  FLOOR SLAB 8 IN,         !- Construction Name
+  ZONE ONE,                !- Zone Name
+  ,                        !- Space Name
+  Surface,                 !- Outside Boundary Condition
+  Zn001:Flr001,            !- Outside Boundary Condition Object
+  NoSun,                   !- Sun Exposure
+  NoWind,                  !- Wind Exposure
+  1.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0.0,0.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+  0.0,15.24,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+  15.24,15.24,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+  15.24,0.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
 
-  BuildingSurface:Detailed,
-    Zn002:Roof001,           !- Name
-    Roof,                    !- Surface Type
-    ROOF34,                  !- Construction Name
-    ZONE ONE,                !- Zone Name
-    ,                        !- Space Name
-    Outdoors,                !- Outside Boundary Condition
-    ,                        !- Outside Boundary Condition Object
-    SunExposed,              !- Sun Exposure
-    WindExposed,             !- Wind Exposure
-    0,                       !- View Factor to Ground
-    4,                       !- Number of Vertices
-    0,0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
-    15.24,0,4.572,  !- X,Y,Z ==> Vertex 2 {m}
-    15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 3 {m}
-    0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+BuildingSurface:Detailed,
+  Zn002:Roof001,           !- Name
+  Roof,                    !- Surface Type
+  ROOF34,                  !- Construction Name
+  ZONE ONE,                !- Zone Name
+  ,                        !- Space Name
+  Outdoors,                !- Outside Boundary Condition
+  ,                        !- Outside Boundary Condition Object
+  SunExposed,              !- Sun Exposure
+  WindExposed,             !- Wind Exposure
+  0.0,                     !- View Factor to Ground
+  4,                       !- Number of Vertices
+  0.0,0.0,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+  15.24,0.0,4.572,  !- X,Y,Z ==> Vertex 2 {m}
+  15.24,15.24,4.572,  !- X,Y,Z ==> Vertex 3 {m}
+  0.0,15.24,4.572;  !- X,Y,Z ==> Vertex 4 {m}
 
-  Output:Variable,*,Site Outdoor Air Drybulb Temperature,timestep;
+Output:Variable,*,Site Outdoor Air Drybulb Temperature,Timestep;
 
-  Output:Variable,*,Site Outdoor Air Relative Humidity,timestep;
+Output:Variable,*,Site Outdoor Air Relative Humidity,Timestep;
 
-  Output:Variable,*,Zone Mean Air Temperature,timestep;
+Output:Variable,*,Zone Mean Air Temperature,Timestep;
 
-  Output:Variable,*,Site Direct Solar Radiation Rate per Area,timestep;
+Output:Variable,*,Site Direct Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,*,Site Diffuse Solar Radiation Rate per Area,timestep;
+Output:Variable,*,Site Diffuse Solar Radiation Rate per Area,Timestep;
 
-  Output:Variable,*,Site Sky Temperature,timestep;
+Output:Variable,*,Site Sky Temperature,Timestep;
 
-  Output:Variable,*,Sizing Period Site Drybulb Temperature Range Modifier Schedule Value,timestep;
+Output:Variable,*,Sizing Period Site Drybulb Temperature Range Modifier Schedule Value,Timestep;
 
-  Output:Variable,*,Sizing Period Site Humidity Condition Schedule Value,timestep;
+Output:Variable,*,Sizing Period Site Humidity Condition Schedule Value,Timestep;
 
-  Output:Variable,*,Sizing Period Site Beam Solar Schedule Value,timestep;
+Output:Variable,*,Sizing Period Site Beam Solar Schedule Value,Timestep;
 
-  Output:Variable,*,Sizing Period Site Diffuse Solar Schedule Value,timestep;
+Output:Variable,*,Sizing Period Site Diffuse Solar Schedule Value,Timestep;
 
-  Output:Variable,*,Sizing Period Site Sky Temperature Schedule Value,timestep;
+Output:Variable,*,Sizing Period Site Sky Temperature Schedule Value,Timestep;
 
-  Output:VariableDictionary,Regular;
+Output:VariableDictionary,regular;
 
-  Output:Surfaces:Drawing,dxf;
+Output:Surfaces:Drawing,DXF;
 
-  Output:Constructions,Constructions;
+Output:Constructions,Constructions;
 
-  Output:Schedules,Timestep;
+Output:Schedules,Timestep;
 
-  Output:Schedules,Hourly;
+Output:Schedules,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Building,hourly;
+Output:Meter:MeterFileOnly,EnergyTransfer:Building,Hourly;
 
-  Output:Meter:MeterFileOnly,EnergyTransfer:Facility,hourly;
+Output:Meter:MeterFileOnly,EnergyTransfer:Facility,Hourly;
 
-  OutputControl:Table:Style,
-    HTML;                    !- Column Separator
+OutputControl:Table:Style,
+  HTML;                    !- Column Separator
 
-  Output:Table:SummaryReports,
-    AllSummary;              !- Report 1 Name
-
+Output:Table:SummaryReports,
+  AllSummary;              !- Report 1 Name

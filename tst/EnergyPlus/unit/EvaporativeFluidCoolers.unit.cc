@@ -162,23 +162,25 @@ TEST_F(EnergyPlusFixture, EvapFluidCoolerSpecs_getDesignCapacitiesTest)
 
 TEST_F(EnergyPlusFixture, ExerciseSingleSpeedEvapFluidCooler)
 {
-    std::string const idf_objects = delimited_string({"EvaporativeFluidcooler:SingleSpeed,",
-                                                      "Big EvaporativeFluidCooler,  !- Name",
-                                                      "Condenser EvaporativeFluidcooler Inlet Node,  !- Water Inlet Node Name",
-                                                      "Condenser EvaporativeFluidcooler Outlet Node,  !- Water Outlet Node Name",
-                                                      "3.02,                    !- Design Air Flow Rate {m3/s}",
-                                                      "2250,                    !- Design Air Flow Rate Fan Power {W}",
-                                                      "0.002208,                !- Design Spray Water Flow Rate {m3/s}",
-                                                      "UserSpecifiedDesignCapacity,  !- Performance Input Method",
-                                                      ",                        !- Outdoor Air Inlet Node Name",
-                                                      ",                        !- Heat Rejection Capacity and Nominal Capacity Sizing Ratio",
-                                                      "1000,                        !- Standard Design Capacity {W}",
-                                                      ",                        !- Design Air Flow Rate U-factor Times Area Value {W/K}",
-                                                      "0.001703,                !- Design Water Flow Rate {m3/s}",
-                                                      "87921,                   !- User Specified Design Capacity {W}",
-                                                      "46.11,                   !- Design Entering Water Temperature {C}",
-                                                      "35,                      !- Design Entering Air Temperature {C}",
-                                                      "25.6;                    !- Design Entering Air Wet-bulb Temperature {C}"});
+    std::string const idf_objects = delimited_string({
+        "EvaporativeFluidCooler:SingleSpeed,",
+        "  Big EvaporativeFluidCooler,  !- Name",
+        "  Condenser EvaporativeFluidcooler Inlet Node,  !- Water Inlet Node Name",
+        "  Condenser EvaporativeFluidcooler Outlet Node,  !- Water Outlet Node Name",
+        "  3.02,                    !- Design Air Flow Rate {m3/s}",
+        "  2250.0,                  !- Design Air Flow Rate Fan Power {W}",
+        "  0.002208,                !- Design Spray Water Flow Rate {m3/s}",
+        "  UserSpecifiedDesignCapacity,  !- Performance Input Method",
+        "  ,                        !- Outdoor Air Inlet Node Name",
+        "  ,                        !- Heat Rejection Capacity and Nominal Capacity Sizing Ratio",
+        "  1000.0,                  !- Standard Design Capacity {W}",
+        "  ,                        !- Design Air Flow Rate U-factor Times Area Value {W/K}",
+        "  0.001703,                !- Design Water Flow Rate {m3/s}",
+        "  87921.0,                 !- User Specified Design Capacity {W}",
+        "  46.11,                   !- Design Entering Water Temperature {C}",
+        "  35.0,                    !- Design Entering Air Temperature {C}",
+        "  25.6;                    !- Design Entering Air Wet-bulb Temperature {C}",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -238,39 +240,41 @@ TEST_F(EnergyPlusFixture, ExerciseSingleSpeedEvapFluidCooler)
 }
 TEST_F(EnergyPlusFixture, ExerciseTwoSpeedEvapFluidCooler)
 {
-    std::string const idf_objects = delimited_string({"EvaporativeFluidCooler:TwoSpeed,",
-                                                      "Central Tower,           !- Name",
-                                                      "Central Tower Inlet Node,!- Water Inlet Node Name",
-                                                      "Central Tower Outlet Node,  !- Water Outlet Node Name",
-                                                      "autosize,                !- High Fan Speed Air Flow Rate {m3/s}",
-                                                      "autosize,                !- High Fan Speed Fan Power {W}",
-                                                      "autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
-                                                      ",                        !- Low Fan Speed Air Flow Rate Sizing Factor",
-                                                      "autocalculate,           !- Low Fan Speed Fan Power {W}",
-                                                      ",                        !- Low Fan Speed Fan Power Sizing Factor",
-                                                      "0.002208,                !- Design Spray Water Flow Rate {m3/s}",
-                                                      "UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method",
-                                                      ",                        !- Outdoor Air Inlet Node Name",
-                                                      "1.25,                    !- Heat Rejection Capacity and Nominal Capacity Sizing Ratio",
-                                                      "1000,                        !- High Speed Standard Design Capacity {W}",
-                                                      "1000,                        !- Low Speed Standard Design Capacity {W}",
-                                                      "0.5,                     !- Low Speed Standard Capacity Sizing Factor",
-                                                      "autosize,                !- High Fan Speed U-factor Times Area Value {W/K}",
-                                                      "autocalculate,           !- Low Fan Speed U-factor Times Area Value {W/K}",
-                                                      "0.6,                     !- Low Fan Speed U-Factor Times Area Sizing Factor",
-                                                      "autosize,                !- Design Water Flow Rate {m3/s}",
-                                                      ",                        !- High Speed User Specified Design Capacity {W}",
-                                                      ",                        !- Low Speed User Specified Design Capacity {W}",
-                                                      "0.5,                     !- Low Speed User Specified Design Capacity Sizing Factor",
-                                                      ",                        !- Design Entering Water Temperature {C}",
-                                                      ",                        !- Design Entering Air Temperature {C}",
-                                                      ",                        !- Design Entering Air Wet-bulb Temperature {C}",
-                                                      "1,                       !- High Speed Sizing Factor",
-                                                      "SaturatedExit,           !- Evaporation Loss Mode",
-                                                      ",                        !- Evaporation Loss Factor {percent/K}",
-                                                      "0.008,                   !- Drift Loss Percent {percent}",
-                                                      "ConcentrationRatio,      !- Blowdown Calculation Mode",
-                                                      "3;                       !- Blowdown Concentration Ratio"});
+    std::string const idf_objects = delimited_string({
+        "EvaporativeFluidCooler:TwoSpeed,",
+        "  Central Tower,           !- Name",
+        "  Central Tower Inlet Node,  !- Water Inlet Node Name",
+        "  Central Tower Outlet Node,  !- Water Outlet Node Name",
+        "  Autosize,                !- High Fan Speed Air Flow Rate {m3/s}",
+        "  Autosize,                !- High Fan Speed Fan Power {W}",
+        "  Autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
+        "  ,                        !- Low Fan Speed Air Flow Rate Sizing Factor",
+        "  Autocalculate,           !- Low Fan Speed Fan Power {W}",
+        "  ,                        !- Low Fan Speed Fan Power Sizing Factor",
+        "  0.002208,                !- Design Spray Water Flow Rate {m3/s}",
+        "  UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method",
+        "  ,                        !- Outdoor Air Inlet Node Name",
+        "  1.25,                    !- Heat Rejection Capacity and Nominal Capacity Sizing Ratio",
+        "  1000.0,                  !- High Speed Standard Design Capacity {W}",
+        "  1000.0,                  !- Low Speed Standard Design Capacity {W}",
+        "  0.5,                     !- Low Speed Standard Capacity Sizing Factor",
+        "  Autosize,                !- High Fan Speed U-factor Times Area Value {W/K}",
+        "  Autocalculate,           !- Low Fan Speed U-factor Times Area Value {W/K}",
+        "  0.6,                     !- Low Fan Speed U-Factor Times Area Sizing Factor",
+        "  Autosize,                !- Design Water Flow Rate {m3/s}",
+        "  ,                        !- High Speed User Specified Design Capacity {W}",
+        "  ,                        !- Low Speed User Specified Design Capacity {W}",
+        "  0.5,                     !- Low Speed User Specified Design Capacity Sizing Factor",
+        "  ,                        !- Design Entering Water Temperature {C}",
+        "  ,                        !- Design Entering Air Temperature {C}",
+        "  ,                        !- Design Entering Air Wet-bulb Temperature {C}",
+        "  1.0,                     !- High Speed Sizing Factor",
+        "  SaturatedExit,           !- Evaporation Loss Mode",
+        "  ,                        !- Evaporation Loss Factor {percent/K}",
+        "  0.008,                   !- Drift Loss Percent {percent}",
+        "  ConcentrationRatio,      !- Blowdown Calculation Mode",
+        "  3.0;                     !- Blowdown Concentration Ratio",
+    });
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
@@ -332,7 +336,7 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_SizeWhenPlantSizingIndexIsZeroAndAutos
 {
     // Test for #10817
     std::string const idf_objects = delimited_string({
-        "EvaporativeFluidcooler:SingleSpeed,",
+        "EvaporativeFluidCooler:SingleSpeed,",
         "  Big EvaporativeFluidCooler,  !- Name",
         "  Condenser EvaporativeFluidcooler Inlet Node,  !- Water Inlet Node Name",
         "  Condenser EvaporativeFluidcooler Outlet Node,  !- Water Outlet Node Name",
@@ -347,7 +351,7 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_SizeWhenPlantSizingIndexIsZeroAndAutos
         "  Autosize,                !- Design Water Flow Rate {m3/s}",
         "  ,                        !- User Specified Design Capacity {W}",
         "  46.11,                   !- Design Entering Water Temperature {C}",
-        "  35,                      !- Design Entering Air Temperature {C}",
+        "  35.0,                    !- Design Entering Air Temperature {C}",
         "  25.6;                    !- Design Entering Air Wet-bulb Temperature {C}",
     });
 
@@ -387,7 +391,7 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_SingleSpeed_DesignEnteringWaterIsAutos
         "  Condenser EvaporativeFluidCooler Inlet Node,  !- Water Inlet Node Name",
         "  Condenser EvaporativeFluidCooler Outlet Node,  !- Water Outlet Node Name",
         "  3.02,                    !- Design Air Flow Rate {m3/s}",
-        "  2250,                    !- Design Air Flow Rate Fan Power {W}",
+        "  2250.0,                  !- Design Air Flow Rate Fan Power {W}",
         "  0.002208,                !- Design Spray Water Flow Rate {m3/s}",
         "  UserSpecifiedDesignCapacity,  !- Performance Input Method",
         "  ,                        !- Outdoor Air Inlet Node Name",
@@ -395,9 +399,9 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_SingleSpeed_DesignEnteringWaterIsAutos
         "  ,                        !- Standard Design Capacity {W}",
         "  ,                        !- Design Air Flow Rate U-factor Times Area Value {W/K}",
         "  0.001703,                !- Design Water Flow Rate {m3/s}",
-        "  87921,                   !- User Specified Design Capacity {W}",
+        "  87921.0,                 !- User Specified Design Capacity {W}",
         "  Autosize,                !- Design Entering Water Temperature {C}",
-        "  35,                      !- Design Entering Air Temperature {C}",
+        "  35.0,                    !- Design Entering Air Temperature {C}",
         "  25.6;                    !- Design Entering Air Wet-bulb Temperature {C}",
     });
 
@@ -480,16 +484,15 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_DesignEnteringWaterIsAutosize
 
     // Test for #11283
     std::string const idf_objects = delimited_string({
-
         "EvaporativeFluidCooler:TwoSpeed,",
         "  Big EvaporativeFluidCooler,  !- Name",
         "  Condenser EvaporativeFluidCooler Inlet Node,  !- Water Inlet Node Name",
         "  Condenser EvaporativeFluidCooler Outlet Node,  !- Water Outlet Node Name",
         "  3.02,                    !- High Fan Speed Air Flow Rate {m3/s}",
-        "  2250,                    !- High Fan Speed Fan Power {W}",
-        "  autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
+        "  2250.0,                  !- High Fan Speed Fan Power {W}",
+        "  Autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
         "  ,                        !- Low Fan Speed Air Flow Rate Sizing Factor",
-        "  autocalculate,           !- Low Fan Speed Fan Power {W}",
+        "  Autocalculate,           !- Low Fan Speed Fan Power {W}",
         "  ,                        !- Low Fan Speed Fan Power Sizing Factor",
         "  0.002208,                !- Design Spray Water Flow Rate {m3/s}",
         "  UserSpecifiedDesignCapacity,  !- Performance Input Method",
@@ -502,18 +505,18 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_DesignEnteringWaterIsAutosize
         "  ,                        !- Low Fan Speed U-factor Times Area Value {W/K}",
         "  ,                        !- Low Fan Speed U-Factor Times Area Sizing Factor",
         "  0.001703,                !- Design Water Flow Rate {m3/s}",
-        "  87921,                   !- High Speed User Specified Design Capacity {W}",
-        "  21980,                   !- Low Speed User Specified Design Capacity {W}",
+        "  87921.0,                 !- High Speed User Specified Design Capacity {W}",
+        "  21980.0,                 !- Low Speed User Specified Design Capacity {W}",
         "  0.25,                    !- Low Speed User Specified Design Capacity Sizing Factor",
         "  Autosize,                !- Design Entering Water Temperature {C}",
         "  35.0,                    !- Design Entering Air Temperature {C}",
         "  25.6,                    !- Design Entering Air Wet-bulb Temperature {C}",
-        "  1,                       !- High Speed Sizing Factor",
+        "  1.0,                     !- High Speed Sizing Factor",
         "  SaturatedExit,           !- Evaporation Loss Mode",
         "  ,                        !- Evaporation Loss Factor {percent/K}",
         "  0.008,                   !- Drift Loss Percent {percent}",
         "  ConcentrationRatio,      !- Blowdown Calculation Mode",
-        "  3;                       !- Blowdown Concentration Ratio",
+        "  3.0;                     !- Blowdown Concentration Ratio",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -598,16 +601,15 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_UserSpecifiedDesignCapacity_L
 
     // Test for #11283
     std::string const idf_objects = delimited_string({
-
         "EvaporativeFluidCooler:TwoSpeed,",
         "  Big EvaporativeFluidCooler,  !- Name",
         "  Condenser EvaporativeFluidCooler Inlet Node,  !- Water Inlet Node Name",
         "  Condenser EvaporativeFluidCooler Outlet Node,  !- Water Outlet Node Name",
         "  3.02,                    !- High Fan Speed Air Flow Rate {m3/s}",
-        "  2250,                    !- High Fan Speed Fan Power {W}",
-        "  autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
+        "  2250.0,                  !- High Fan Speed Fan Power {W}",
+        "  Autocalculate,           !- Low Fan Speed Air Flow Rate {m3/s}",
         "  ,                        !- Low Fan Speed Air Flow Rate Sizing Factor",
-        "  autocalculate,           !- Low Fan Speed Fan Power {W}",
+        "  Autocalculate,           !- Low Fan Speed Fan Power {W}",
         "  ,                        !- Low Fan Speed Fan Power Sizing Factor",
         "  0.002208,                !- Design Spray Water Flow Rate {m3/s}",
         "  UserSpecifiedDesignCapacity,  !- Performance Input Method",
@@ -620,18 +622,18 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_UserSpecifiedDesignCapacity_L
         "  ,                        !- Low Fan Speed U-factor Times Area Value {W/K}",
         "  ,                        !- Low Fan Speed U-Factor Times Area Sizing Factor",
         "  0.001703,                !- Design Water Flow Rate {m3/s}",
-        "  87921,                   !- High Speed User Specified Design Capacity {W}",
+        "  87921.0,                 !- High Speed User Specified Design Capacity {W}",
         "  Autocalculate,           !- Low Speed User Specified Design Capacity {W}",           // This is set to autocalculate
         "  0.25,                    !- Low Speed User Specified Design Capacity Sizing Factor", // This has a default of 0.5 anyways
         "  46.11,                   !- Design Entering Water Temperature {C}",
         "  35.0,                    !- Design Entering Air Temperature {C}",
         "  25.6,                    !- Design Entering Air Wet-bulb Temperature {C}",
-        "  1,                       !- High Speed Sizing Factor",
+        "  1.0,                     !- High Speed Sizing Factor",
         "  SaturatedExit,           !- Evaporation Loss Mode",
         "  ,                        !- Evaporation Loss Factor {percent/K}",
         "  0.008,                   !- Drift Loss Percent {percent}",
         "  ConcentrationRatio,      !- Blowdown Calculation Mode",
-        "  3;                       !- Blowdown Concentration Ratio",
+        "  3.0;                     !- Blowdown Concentration Ratio",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
