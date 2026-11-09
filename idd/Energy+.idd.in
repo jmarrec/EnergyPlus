@@ -10756,7 +10756,6 @@ WindowShadingControl,
        \note and OnIfHighSolarOrHighLuminanceTillNextMorning.
        \type real
        \units W/m2, deg C or cd/m2
-       \ip-units unknown
   A12, \field Daylighting Control Object Name
        \note Reference to the Daylighting:Controls object that provides the glare and illuminance control to the zone.
        \type object-list
