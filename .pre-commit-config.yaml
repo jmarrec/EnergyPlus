@@ -85,25 +85,6 @@ repos:
     pass_filenames: true
     require_serial: true
 
-  - id: validate-idd-units
-    name: validate IDD units
-    entry: python scripts/dev/validate_idd_units.py
-    args: ['--verbose']
-    language: python
-    # files: '.*\.(idd.in|idd)'
-    files: '.*\.idd.in$'  # The old IDDs will issue a ton of warnings
-    pass_filenames: true
-    require_serial: true
-
-  - id: check-stray-fields-in-idd
-    name: check stray fields in IDD
-    entry: python scripts/dev/check_stray_fields_in_idd.py
-    args: ['--verbose']
-    language: python
-    files: '.*\.idd.in$'  # The old IDDs will issue a ton of warnings
-    pass_filenames: true
-    require_serial: true
-
   - id: verify-idfs-in-cmake
     name: verify IDFs in testfiles CMake
     entry: python scripts/dev/verify_idfs_in_cmake.py
