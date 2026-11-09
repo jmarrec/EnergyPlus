@@ -1568,7 +1568,6 @@ WeatherProperty:SkyTemperature,
   A2 , \field Calculation Type
        \note The field indicates that the sky temperature will be imported from external schedules or calculated by alternative methods other than default.
        \type choice
-       \required-field
        \default ClarkAllen
        \key ClarkAllen
        \key Brunt
@@ -2391,7 +2390,6 @@ Site:WaterMainsTemperature,
        \note If calculation method is CorrelationFromWeatherFile, the two numeric input
        \note fields are ignored. Instead, EnergyPlus calculates them from weather file.
        \type choice
-       \required-field
        \default CorrelationFromWeatherFile
        \key Schedule
        \key Correlation
@@ -6607,7 +6605,6 @@ MaterialProperty:VariableAbsorptance,
   A3 , \field Control Signal
        \note the variable that drives the change in outside-face thermal/solar absorptance
        \type choice
-       \required-field
        \default SurfaceTemperature
        \key SurfaceTemperature
        \key SurfaceReceivedSolarRadiation
@@ -13398,7 +13395,6 @@ SurfaceProperty:SurroundingSurfaces,
        \required-field
   N3 , \field Surrounding Surface 1 View Factor
        \type real
-       \required-field
        \minimum 0.0
        \maximum 1.0
        \default 0.0
@@ -31201,7 +31197,6 @@ ZoneHVAC:WaterToAirHeatPump,
   N7 , \field Maximum Supply Air Temperature from Supplemental Heater
        \note Supply air temperature from the supplemental heater will not exceed this value.
        \type real
-       \required-field
        \autosizable
        \units C
        \default autosize
@@ -32770,7 +32765,6 @@ ZoneHVAC:TerminalUnit:VariableRefrigerantFlow,
   N11, \field Maximum Supply Air Temperature from Supplemental Heater
        \note Supply air temperature from the supplemental heater will not exceed this value.
        \type real
-       \required-field
        \autosizable
        \units C
        \default autosize
@@ -54415,7 +54409,6 @@ LoadProfile:Plant,
        \object-list ScheduleNames
   A6 , \field Plant Loop Fluid Type
        \type choice
-       \required-field
        \default Water
        \key Water
        \key Steam
@@ -55154,18 +55147,15 @@ Boiler:Steam,
        \key OtherFuel2
   N1 , \field Maximum Operating Pressure
        \type real
-       \required-field
        \units Pa
        \default 160000
   N2 , \field Theoretical Efficiency
        \type real
-       \required-field
        \minimum> 0.0
        \maximum 1.0
        \default 0.8
   N3 , \field Design Outlet Steam Temperature
        \type real
-       \required-field
        \units C
        \default 100
   N4 , \field Nominal Capacity
@@ -57776,7 +57766,6 @@ HeatPump:AirToWater:FuelFired:Heating,
   A6 , \field Fuel Type
        \note Fuel Type (NaturalGas, Propane, Gasoline, Diesel etc.)
        \type choice
-       \required-field
        \default NaturalGas
        \key NaturalGas
        \key Propane
@@ -57801,7 +57790,6 @@ HeatPump:AirToWater:FuelFired:Heating,
   N2 , \field Nominal COP
        \note Nominal COP (Coefficient of Performance)
        \type real
-       \required-field
        \units W/W
        \minimum> 0.0
        \default 1.0
@@ -57830,7 +57818,6 @@ HeatPump:AirToWater:FuelFired:Heating,
   A8 , \field Flow Mode
        \note Flow Mode for the water side of the fuel-fired absorption heat pump
        \type choice
-       \required-field
        \default NotModulated
        \key NotModulated
        \key ConstantFlow
@@ -57839,14 +57826,12 @@ HeatPump:AirToWater:FuelFired:Heating,
        \note Outdoor air temperature curve input variable;
        \note The options are Outdoor Air Dry Bulb or Wet Bulb temperature for curves
        \type choice
-       \required-field
        \default DryBulb
        \key DryBulb
        \key WetBulb
   A10, \field Water Temperature Curve Input Variable
        \note Water Temperature curve input variable - Condenser Entering or Leaving Water Temperature for curves
        \type choice
-       \required-field
        \default EnteringCondenser
        \key EnteringCondenser
        \key LeavingCondenser
@@ -57977,7 +57962,6 @@ HeatPump:AirToWater:FuelFired:Cooling,
   A6 , \field Fuel Type
        \note Fuel Type (NaturalGas, Propane, Gasoline, Diesel etc.)
        \type choice
-       \required-field
        \default NaturalGas
        \key NaturalGas
        \key Propane
@@ -58002,7 +57986,6 @@ HeatPump:AirToWater:FuelFired:Cooling,
   N2 , \field Nominal COP
        \note Nominal COP (Coefficient of Performance)
        \type real
-       \required-field
        \units W/W
        \minimum> 0.0
        \default 1.0
@@ -58031,7 +58014,6 @@ HeatPump:AirToWater:FuelFired:Cooling,
   A8 , \field Flow Mode
        \note Flow Mode for the water side of the fuel-fired absorption heat pump
        \type choice
-       \required-field
        \default NotModulated
        \key NotModulated
        \key ConstantFlow
@@ -58040,14 +58022,12 @@ HeatPump:AirToWater:FuelFired:Cooling,
        \note Outdoor air temperature curve input variable;
        \note The options are Outdoor Air Dry Bulb or Wet Bulb temperature for curves
        \type choice
-       \required-field
        \default DryBulb
        \key DryBulb
        \key WetBulb
   A10, \field Water Temperature Curve Input Variable
        \note Water Temperature curve input variable - Condenser Entering or Leaving Water Temperature for curves
        \type choice
-       \required-field
        \default EnteringEvaporator
        \key EnteringEvaporator
        \key LeavingEvaporator
@@ -61815,7 +61795,6 @@ GroundHeatExchanger:Vertical:Sizing:Rectangle,
   N1 , \field Design Flow Rate Per Borehole
        \note Design flow rate per borehole used to size borehole field
        \type real
-       \required-field
        \units m3/s
        \minimum> 0.0
        \default 0.0005
@@ -85453,7 +85432,6 @@ PythonPlugin:SearchPaths,
        \note Adding the current working directory allows Python to find
        \note plugin scripts in the current directory.
        \type choice
-       \required-field
        \default Yes
        \key Yes
        \key No
@@ -85462,7 +85440,6 @@ PythonPlugin:SearchPaths,
        \note same directory as the running input file, even if that is not
        \note the current working directory.
        \type choice
-       \required-field
        \default Yes
        \key Yes
        \key No
@@ -85472,7 +85449,6 @@ PythonPlugin:SearchPaths,
        \note If this is enabled, and that variable is set, the value of the variable
        \note will be added to the Python search path.
        \type choice
-       \required-field
        \default Yes
        \key Yes
        \key No
@@ -85495,7 +85471,6 @@ PythonPlugin:Instance,
        \note If this field is enabled, the plugin will be executed during warmup days, otherwise it
        \note will only be executed once warmup is completed and the actual run period begins
        \type choice
-       \required-field
        \default No
        \key Yes
        \key No
