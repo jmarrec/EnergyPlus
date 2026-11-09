@@ -29,7 +29,7 @@ repos:
   - id: isort
 
 - repo: https://github.com/jmarrec/energyplus-toolkit
-  rev: v0.2.2
+  rev: v0.3.0
   hooks:
   - id: energyplus-format-idd
     args: [-q]
@@ -42,6 +42,9 @@ repos:
     args: [--idd, idd/Energy+.idd.in, -q]
     # Tests encode/decode rountrip, so shouldn't be modified
     exclude: ^tst/EnergyPlus/unit/(InputProcessor|IdfParser)\.unit\.cc$
+  - id: energyplus-lint-idd
+    # Limit to the current IDD
+    files: ^idd/Energy\+\.idd\.in$
 
 - repo: https://github.com/pre-commit/mirrors-clang-format
   rev: 'v19.1.1'
