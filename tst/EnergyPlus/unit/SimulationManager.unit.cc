@@ -84,15 +84,17 @@ TEST_F(EnergyPlusFixture, CheckThreading)
 TEST_F(EnergyPlusFixture, Test_PerformancePrecisionTradeoffs)
 {
     std::string const idf_objects = delimited_string({
-        "  SimulationControl,",
-        "    No,                      !- Do Zone Sizing Calculation",
-        "    No,                      !- Do System Sizing Calculation",
-        "    No,                      !- Do Plant Sizing Calculation",
-        "    No,                      !- Run Simulation for Sizing Periods",
-        "    Yes;                     !- Run Simulation for Weather File Run Periods",
+        "SimulationControl,",
+        "  No,                      !- Do Zone Sizing Calculation",
+        "  No,                      !- Do System Sizing Calculation",
+        "  No,                      !- Do Plant Sizing Calculation",
+        "  No,                      !- Run Simulation for Sizing Periods",
+        "  Yes,                     !- Run Simulation for Weather File Run Periods",
+        "  ,                        !- Do HVAC Sizing Simulation for Sizing Periods",
+        "  ;                        !- Maximum Number of HVAC Sizing Simulation Passes",
 
-        "  PerformancePrecisionTradeoffs,",
-        "    No;       ! - Use Coil Direct Solutions",
+        "PerformancePrecisionTradeoffs,",
+        "  No;                      ! - Use Coil Direct Solutions",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -107,9 +109,8 @@ TEST_F(EnergyPlusFixture, Test_PerformancePrecisionTradeoffs_DirectSolution_Mess
 {
     // issue 7646
     std::string const idf_objects = delimited_string({
-        "  PerformancePrecisionTradeoffs,",
-        "     Yes; ! - Use Coil Direct Solutions",
-
+        "PerformancePrecisionTradeoffs,",
+        "  Yes;                     ! - Use Coil Direct Solutions",
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
@@ -168,8 +169,8 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
 {
     {
         std::string const idf_objects = delimited_string({
-            "  Output:DebuggingData,",
-            "    No;                      !- Report Debugging Data",
+            "Output:DebuggingData,",
+            "  No;                      !- Report Debugging Data",
         });
 
         EXPECT_TRUE(process_idf(idf_objects));
@@ -183,9 +184,9 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
 
     {
         std::string const idf_objects = delimited_string({
-            "  Output:DebuggingData,",
-            "    Yes,                     !- Report Debugging Data",
-            "    ;                        !- Report During Warmup",
+            "Output:DebuggingData,",
+            "  Yes,                     !- Report Debugging Data",
+            "  ;                        !- Report During Warmup",
         });
 
         state->init_state_called = false;
@@ -201,9 +202,9 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
 
     {
         std::string const idf_objects = delimited_string({
-            "  Output:DebuggingData,",
-            "    No,                      !- Report Debugging Data",
-            "    Yes;                     !- Report During Warmup",
+            "Output:DebuggingData,",
+            "  No,                      !- Report Debugging Data",
+            "  Yes;                     !- Report During Warmup",
         });
 
         state->init_state_called = false;
@@ -220,13 +221,13 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
     // Unicity warning
     {
         std::string const idf_objects = delimited_string({
-            "  Output:DebuggingData,",
-            "    No,                      !- Report Debugging Data",
-            "    Yes;                     !- Report During Warmup",
+            "Output:DebuggingData,",
+            "  No,                      !- Report Debugging Data",
+            "  Yes;                     !- Report During Warmup",
 
-            "  Output:DebuggingData,",
-            "    Yes,                     !- Report Debugging Data",
-            "    No;                      !- Report During Warmup",
+            "Output:DebuggingData,",
+            "  Yes,                     !- Report Debugging Data",
+            "  No;                      !- Report During Warmup",
         });
 
         state->init_state_called = false;
@@ -252,7 +253,7 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
 TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_DefaultState)
 {
     std::string const idf_objects = delimited_string({
-        "  Output:Diagnostics;",
+        "Output:Diagnostics;",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -284,9 +285,9 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_DefaultState)
 TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_SimpleCase)
 {
     std::string const idf_objects = delimited_string({
-        "  Output:Diagnostics,",
-        "    DisplayAllWarnings,      !- Key 1",
-        "    DisplayAdvancedReportVariables;    !- Key 2",
+        "Output:Diagnostics,",
+        "  DisplayAllWarnings,      !- Key 1",
+        "  DisplayAdvancedReportVariables;  !- Key 2",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -313,19 +314,19 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_AllKeys)
 {
     // All keys
     std::string const idf_objects = delimited_string({
-        "  Output:Diagnostics,",
-        "    DisplayAllWarnings,",
-        "    DisplayExtraWarnings,",
-        "    DisplayUnusedSchedules,",
-        "    DisplayUnusedObjects,",
-        "    DisplayAdvancedReportVariables,",
-        "    DisplayZoneAirHeatBalanceOffBalance,",
-        "    DoNotMirrorDetachedShading,",
-        "    DoNotMirrorAttachedShading,",
-        "    DisplayWeatherMissingDataWarnings,",
-        "    ReportDuringWarmup,",
-        "    ReportDetailedWarmupConvergence,",
-        "    ReportDuringHVACSizingSimulation;",
+        "Output:Diagnostics,",
+        "  DisplayAllWarnings,      !- Key 1",
+        "  DisplayExtraWarnings,    !- Key 2",
+        "  DisplayUnusedSchedules,  !- Key 3",
+        "  DisplayUnusedObjects,    !- Key 4",
+        "  DisplayAdvancedReportVariables,  !- Key 5",
+        "  DisplayZoneAirHeatBalanceOffBalance,  !- Key 6",
+        "  DoNotMirrorDetachedShading,  !- Key 7",
+        "  DoNotMirrorAttachedShading,  !- Key 8",
+        "  DisplayWeatherMissingDataWarnings,  !- Key 9",
+        "  ReportDuringWarmup,      !- Key 10",
+        "  ReportDetailedWarmupConvergence,  !- Key 11",
+        "  ReportDuringHVACSizingSimulation;  !- Key 12",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -351,11 +352,11 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_AllKeys)
 TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_Unicity)
 {
     std::string const idf_objects = delimited_string({
-        "  Output:Diagnostics,",
-        "    DisplayAdvancedReportVariables;    !- Key 1",
+        "Output:Diagnostics,",
+        "  DisplayAdvancedReportVariables;  !- Key 1",
 
-        "  Output:Diagnostics,",
-        "    DisplayAllWarnings;      !- Key 1",
+        "Output:Diagnostics,",
+        "  DisplayAllWarnings;      !- Key 1",
     });
 
     compare_err_stream("", true);
@@ -439,9 +440,9 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_UndocumentedFlags)
 TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_HasEmpty)
 {
     std::string const idf_objects = delimited_string({
-        "  Output:Diagnostics,",
-        "    ,                                  !- Key 1",
-        "    DisplayAdvancedReportVariables;    !- Key 2",
+        "Output:Diagnostics,",
+        "  ,                        !- Key 1",
+        "  DisplayAdvancedReportVariables;  !- Key 2",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -472,13 +473,14 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_HasEmpty)
 TEST_F(EnergyPlusFixture, SimulationManager_HVACSizingSimulationChoiceTest)
 {
     std::string const idf_objects = delimited_string({
-        "  SimulationControl,",
-        "    No,                      !- Do Zone Sizing Calculation",
-        "    No,                      !- Do System Sizing Calculation",
-        "    No,                      !- Do Plant Sizing Calculation",
-        "    No,                      !- Run Simulation for Sizing Periods",
-        "    Yes,                     !- Run Simulation for Weather File Run Periods",
-        "    Yes;                     !- Do HVAC Sizing Simulation for Sizing Periods",
+        "SimulationControl,",
+        "  No,                      !- Do Zone Sizing Calculation",
+        "  No,                      !- Do System Sizing Calculation",
+        "  No,                      !- Do Plant Sizing Calculation",
+        "  No,                      !- Run Simulation for Sizing Periods",
+        "  Yes,                     !- Run Simulation for Weather File Run Periods",
+        "  Yes,                     !- Do HVAC Sizing Simulation for Sizing Periods",
+        "  ;                        !- Maximum Number of HVAC Sizing Simulation Passes",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -494,13 +496,13 @@ TEST_F(EnergyPlusFixture, Test_SimulationControl_ZeroSimulation)
     // Test for #9191
     std::string const idf_objects = delimited_string({
         "SimulationControl,",
-        "  No,                       !- Do Zone Sizing Calculation",
-        "  No,                       !- Do System Sizing Calculation",
-        "  Yes,                      !- Do Plant Sizing Calculation",
-        "  No,                       !- Run Simulation for Sizing Periods",
-        "  No,                       !- Run Simulation for Weather File Run Periods",
-        "  No,                       !- Do HVAC Sizing Simulation for Sizing Periods",
-        "  1;                        !- Maximum Number of HVAC Sizing Simulation Passes",
+        "  No,                      !- Do Zone Sizing Calculation",
+        "  No,                      !- Do System Sizing Calculation",
+        "  Yes,                     !- Do Plant Sizing Calculation",
+        "  No,                      !- Run Simulation for Sizing Periods",
+        "  No,                      !- Run Simulation for Weather File Run Periods",
+        "  No,                      !- Do HVAC Sizing Simulation for Sizing Periods",
+        "  1;                       !- Maximum Number of HVAC Sizing Simulation Passes",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -525,13 +527,13 @@ TEST_F(EnergyPlusFixture, Test_SimulationControl_PureLoadCalc)
     // Test for #9191
     std::string const idf_objects = delimited_string({
         "SimulationControl,",
-        "  Yes,                      !- Do Zone Sizing Calculation",
-        "  Yes,                      !- Do System Sizing Calculation",
-        "  No,                       !- Do Plant Sizing Calculation",
-        "  No,                       !- Run Simulation for Sizing Periods",
-        "  No,                       !- Run Simulation for Weather File Run Periods",
-        "  No,                       !- Do HVAC Sizing Simulation for Sizing Periods",
-        "  1;                        !- Maximum Number of HVAC Sizing Simulation Passes",
+        "  Yes,                     !- Do Zone Sizing Calculation",
+        "  Yes,                     !- Do System Sizing Calculation",
+        "  No,                      !- Do Plant Sizing Calculation",
+        "  No,                      !- Run Simulation for Sizing Periods",
+        "  No,                      !- Run Simulation for Weather File Run Periods",
+        "  No,                      !- Do HVAC Sizing Simulation for Sizing Periods",
+        "  1;                       !- Maximum Number of HVAC Sizing Simulation Passes",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
@@ -583,13 +585,13 @@ TEST_F(EnergyPlusFixture, SimulationManager_PlantSizingInputTest)
     // Unit Test for Defect #10797: Check for Bad Input (avoid a hard crash)
     std::string const idf_objects = delimited_string({
         "SimulationControl,",
-        "  No,                       !- Do Zone Sizing Calculation",
-        "  No,                       !- Do System Sizing Calculation",
-        "  Yes,                      !- Do Plant Sizing Calculation",
-        "  No,                       !- Run Simulation for Sizing Periods",
-        "  No,                       !- Run Simulation for Weather File Run Periods",
-        "  Yes,                      !- Do HVAC Sizing Simulation for Sizing Periods",
-        "  2;                        !- Maximum Number of HVAC Sizing Simulation Passes",
+        "  No,                      !- Do Zone Sizing Calculation",
+        "  No,                      !- Do System Sizing Calculation",
+        "  Yes,                     !- Do Plant Sizing Calculation",
+        "  No,                      !- Run Simulation for Sizing Periods",
+        "  No,                      !- Run Simulation for Weather File Run Periods",
+        "  Yes,                     !- Do HVAC Sizing Simulation for Sizing Periods",
+        "  2;                       !- Maximum Number of HVAC Sizing Simulation Passes",
     });
 
     EXPECT_TRUE(process_idf(idf_objects));

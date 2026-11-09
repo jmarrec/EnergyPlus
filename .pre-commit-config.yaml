@@ -28,6 +28,24 @@ repos:
   hooks:
   - id: isort
 
+- repo: https://github.com/jmarrec/energyplus-toolkit
+  rev: v0.3.0
+  hooks:
+  - id: energyplus-format-idd
+    args: [-q]
+    # Limit to the current IDD
+    files: ^idd/Energy\+\.idd\.in$
+  - id: energyplus-format-idf
+    args: [--idd, idd/Energy+.idd.in, -q]
+    exclude: '^(src/Basement|performance_tests/Inactive)/'
+  - id: energyplus-format-unit-test
+    args: [--idd, idd/Energy+.idd.in, -q]
+    # Tests encode/decode rountrip, so shouldn't be modified
+    exclude: ^tst/EnergyPlus/unit/(InputProcessor|IdfParser)\.unit\.cc$
+  - id: energyplus-lint-idd
+    # Limit to the current IDD
+    files: ^idd/Energy\+\.idd\.in$
+
 - repo: https://github.com/pre-commit/mirrors-clang-format
   rev: 'v19.1.1'
   hooks:
@@ -64,25 +82,6 @@ repos:
     args: ['--verbose']
     language: python
     types_or: [python, c, c++]
-    pass_filenames: true
-    require_serial: true
-
-  - id: validate-idd-units
-    name: validate IDD units
-    entry: python scripts/dev/validate_idd_units.py
-    args: ['--verbose']
-    language: python
-    # files: '.*\.(idd.in|idd)'
-    files: '.*\.idd.in$'  # The old IDDs will issue a ton of warnings
-    pass_filenames: true
-    require_serial: true
-
-  - id: check-stray-fields-in-idd
-    name: check stray fields in IDD
-    entry: python scripts/dev/check_stray_fields_in_idd.py
-    args: ['--verbose']
-    language: python
-    files: '.*\.idd.in$'  # The old IDDs will issue a ton of warnings
     pass_filenames: true
     require_serial: true
 

@@ -76,7 +76,7 @@ TEST_F(ResultsFrameworkFixture, ResultsFramework_ParseJsonObject1)
 {
     std::string const idf_objects = delimited_string({
         "Output:JSON,",
-        "TimeSeriesAndTabular;",
+        "  TimeSeriesAndTabular;    !- Option Type",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -90,7 +90,7 @@ TEST_F(ResultsFrameworkFixture, ResultsFramework_ParseJsonObject2)
 {
     std::string const idf_objects = delimited_string({
         "Output:JSON,",
-        "TimeSeries;",
+        "  TimeSeries;              !- Option Type",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));

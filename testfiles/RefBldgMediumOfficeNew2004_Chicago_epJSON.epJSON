@@ -5846,7 +5846,7 @@
         "Perimeter_bot_ZN_1_Wall_South_Window": {
             "building_surface_name": "Perimeter_bot_ZN_1_Wall_South",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 0.0,
@@ -5866,7 +5866,7 @@
         "Perimeter_bot_ZN_2_Wall_East_Window": {
             "building_surface_name": "Perimeter_bot_ZN_2_Wall_East",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 49.911,
@@ -5886,7 +5886,7 @@
         "Perimeter_bot_ZN_3_Wall_North_Window": {
             "building_surface_name": "Perimeter_bot_ZN_3_Wall_North",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 49.91,
@@ -5906,7 +5906,7 @@
         "Perimeter_bot_ZN_4_Wall_West_Window": {
             "building_surface_name": "Perimeter_bot_ZN_4_Wall_West",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 0.0,
@@ -5926,7 +5926,7 @@
         "Perimeter_mid_ZN_1_Wall_South_Window": {
             "building_surface_name": "Perimeter_mid_ZN_1_Wall_South",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 0.0,
@@ -5946,7 +5946,7 @@
         "Perimeter_mid_ZN_2_Wall_East_Window": {
             "building_surface_name": "Perimeter_mid_ZN_2_Wall_East",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 49.911,
@@ -5966,7 +5966,7 @@
         "Perimeter_mid_ZN_3_Wall_North_Window": {
             "building_surface_name": "Perimeter_mid_ZN_3_Wall_North",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 49.91,
@@ -5986,7 +5986,7 @@
         "Perimeter_mid_ZN_4_Wall_West_Window": {
             "building_surface_name": "Perimeter_mid_ZN_4_Wall_West",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 0.0,
@@ -6006,7 +6006,7 @@
         "Perimeter_top_ZN_1_Wall_South_Window": {
             "building_surface_name": "Perimeter_top_ZN_1_Wall_South",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 0.0,
@@ -6026,7 +6026,7 @@
         "Perimeter_top_ZN_2_Wall_East_Window": {
             "building_surface_name": "Perimeter_top_ZN_2_Wall_East",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 49.911,
@@ -6046,7 +6046,7 @@
         "Perimeter_top_ZN_3_Wall_North_Window": {
             "building_surface_name": "Perimeter_top_ZN_3_Wall_North",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 49.91,
@@ -6066,7 +6066,7 @@
         "Perimeter_top_ZN_4_Wall_West_Window": {
             "building_surface_name": "Perimeter_top_ZN_4_Wall_West",
             "construction_name": "Window Non-res Fixed",
-            "multiplier": 1.0,
+            "multiplier": 1,
             "number_of_vertices": 4,
             "surface_type": "Window",
             "vertex_1_x_coordinate": 0.0,
