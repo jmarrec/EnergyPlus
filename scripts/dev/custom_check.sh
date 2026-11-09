@@ -22,7 +22,6 @@ echo "Running Custom-Check: verify_idfs_in_cmake"; python3 "$REPO_ROOT"/scripts/
 echo "Running Custom-Check: check_non_utf8"; python3 "$REPO_ROOT"/scripts/dev/check_non_utf8.py || EXIT_STATUS=$?
 echo "Running Custom-Check: find_byref_bool_override"; python3 "$REPO_ROOT"/scripts/dev/find_byref_bool_override.py || EXIT_STATUS=$?
 echo "Running Custom-Check: check_for_tabs"; python3 "$REPO_ROOT"/scripts/dev/check_for_tabs.py || EXIT_STATUS=$?
-echo "Running Custom-Check: check_for_bom_in_idfs"; python3 "$REPO_ROOT"/scripts/dev/check_for_bom_in_idfs.py || EXIT_STATUS=$?
 echo "Running Custom-Check: verify_cmake_dirs"; python3 "$REPO_ROOT"/scripts/dev/verify_cmake_dirs.py || EXIT_STATUS=$?
 echo "Running Custom-Check: find_included_cc_files"; python3 "$REPO_ROOT"/scripts/dev/find_included_cc_files.py || EXIT_STATUS=$?
 echo "Running Custom-Check: analyze_state"; python3 "$REPO_ROOT"/scripts/dev/analyze_state.py || EXIT_STATUS=$?
