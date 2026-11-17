@@ -145,13 +145,15 @@ protected:
         return is_valid;
     }
 
+public:
     // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
     // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
     static std::string delimited_string(std::vector<std::string> const &strings, std::string const &delimiter = "\n");
 
     // This function reads all the lines in the supplied filePath. It puts each line into the vector.
-    std::vector<std::string> read_lines_in_file(fs::path const &filePath);
+    static std::vector<std::string> read_lines_in_file(fs::path const &filePath);
 
+protected:
     // Compare an expected string against the ESO stream. The default is to reset the ESO stream after every call.
     // It is easier to test successive functions if the ESO stream is 'empty' before the next call.
     // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
