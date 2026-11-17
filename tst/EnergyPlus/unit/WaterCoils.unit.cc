@@ -119,14 +119,6 @@ class WaterCoilsTest : public EnergyPlusFixture
 {
 
 public:
-    //    static void SetUpTestSuite()
-    //    {
-    //        EnergyPlusFixture::SetUpTestSuite(); // Sets up the base fixture
-    //    }
-    static void TearDownTestSuite()
-    {
-    }
-
     void SetUp() override
     {
         EnergyPlusFixture::SetUp(); // Sets up individual test cases.
@@ -158,11 +150,6 @@ public:
         state->dataSize->FinalZoneSizing.allocate(1);
         state->dataAirSystemsData->PrimaryAirSystems.allocate(1);
         state->dataAirLoop->AirLoopControlInfo.allocate(1);
-    }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
     }
 };
 

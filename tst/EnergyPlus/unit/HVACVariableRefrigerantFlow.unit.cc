@@ -515,11 +515,6 @@ protected:
         dxCoil2.PLFFPLR.allocate(1);
         dxCoil2.PLFFPLR(1) = Sch1;
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
 };
 
 TEST_F(AirLoopFixture, VRF_SysModel_inAirloop)

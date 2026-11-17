@@ -155,11 +155,6 @@ protected:
         state->afn->AirflowNetworkNodeSimu.allocate(6);
         state->afn->AirflowNetworkLinkSimu.allocate(5);
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
 };
 
 TEST_F(RoomAirflowNetworkTest, RAFNTest)

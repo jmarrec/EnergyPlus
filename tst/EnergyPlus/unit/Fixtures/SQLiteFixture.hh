@@ -62,14 +62,6 @@ class SQLiteFixture : public EnergyPlusFixture
 {
 
 protected:
-    //    static void SetUpTestSuite()
-    //    {
-    //        EnergyPlusFixture::SetUpTestSuite();
-    //    }
-    static void TearDownTestSuite()
-    {
-    }
-
     std::shared_ptr<std::ostringstream> ss;
 
     void SetUp() override
@@ -87,11 +79,6 @@ protected:
         state->dataSQLiteProcedures->sqlite->sqliteExecuteCommand("PRAGMA foreign_keys = ON;");
         EXPECT_EQ("SQLite3 message, std::ostringstream open for processing!\n", ss->str());
         ss->str(std::string());
-    }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
     }
 
     void resetDatabase()

@@ -76,10 +76,6 @@ public:
         this->ModelA.fullySolidDensity = 3.0;
         this->ModelA.fullyLiquidDensity = 4.0;
     }
-
-    void TearDown() override
-    {
-    }
 };
 
 struct GetSpecHeatArgs

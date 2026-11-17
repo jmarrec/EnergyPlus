@@ -135,11 +135,6 @@ protected:
         state->dataZoneEquip->ZoneEquipList(1).HeatingPriority(1) = 1;
         state->dataZoneEquip->ZoneEquipList(1).EquipType(1) = DataZoneEquipment::ZoneEquipType::EvaporativeCooler;
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown();
-    }
 };
 
 TEST_F(ZoneHVACEvapCoolerUnitTest, DirectCelDekPad_CyclingUnit_Sim)

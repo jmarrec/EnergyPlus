@@ -127,11 +127,6 @@ protected:
         state->dataPlnt->PlantLoop(1).VolumeWasAutoSized = true;
     }
 
-    void TearDown() override
-    {
-        EnergyPlus::EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    };
-
 public:
     Real64 lowLogVal;
     Real64 midLogVal;

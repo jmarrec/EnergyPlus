@@ -55,13 +55,7 @@
 
 class CoilCoolingDXTest : public EnergyPlus::SQLiteFixture
 {
-public:
 protected:
-    void SetUp() override
-    {
-        EnergyPlus::SQLiteFixture::SetUp(); // Sets up the base fixture first.
-    }
-
     std::string getSpeedObjectString(const std::string &speedObjectName)
     {
         std::string const idf_objects = delimited_string({"Coil:Cooling:DX:CurveFit:Speed, ",
@@ -218,12 +212,5 @@ protected:
         std::string performanceObject = this->getPerformanceObjectString("PerformanceObjectName", addAlternateMode, numSpeedsPerMode);
         std::string fullObject = coilObject + performanceObject;
         return fullObject;
-    }
-
-    void TearDown() override
-    {
-        EnergyPlus::SQLiteFixture::TearDown(); // Remember to tear down the base
-                                               // fixture after cleaning up
-                                               // derived fixture!
     }
 };

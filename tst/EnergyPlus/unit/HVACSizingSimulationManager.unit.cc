@@ -127,11 +127,6 @@ protected:
         state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::System].TimeStep = &state->dataHVACGlobal->TimeStepSys;
         state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::System].CurMinute = 0;
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
 };
 
 TEST_F(HVACSizingSimulationManagerTest, WeatherFileDaysTest3)

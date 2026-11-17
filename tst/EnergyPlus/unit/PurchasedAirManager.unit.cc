@@ -132,11 +132,6 @@ protected:
 
         state->dataZoneEquip->ZoneEquipInputsFilled = false;
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
 };
 
 TEST_F(EnergyPlusFixture, SizePurchasedAirTest_Test1)

@@ -55,21 +55,6 @@ namespace EnergyPlus {
 
 class GeometryFixture : public testing::Test
 {
-protected:
-    static void SetUpTestSuite()
-    {
-    }
-    static void TearDownTestSuite()
-    {
-    }
-
-    void SetUp() override
-    {
-    }
-
-    void TearDown() override
-    {
-    }
 };
 
 } // namespace EnergyPlus

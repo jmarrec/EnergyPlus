@@ -163,11 +163,6 @@ protected:
         ExpectedResult2 = 0.0;
         ExpectedResult3 = 0.0;
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
 };
 
 TEST_F(LowTempRadiantSystemTest, SizeLowTempRadiantElectric)

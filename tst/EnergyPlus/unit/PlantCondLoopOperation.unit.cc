@@ -69,14 +69,6 @@ class DistributePlantLoadTest : public EnergyPlusFixture
 {
 
 public:
-    //    static void SetUpTestSuite()
-    //    {
-    //        EnergyPlusFixture::SetUpTestSuite(); // Sets up the base fixture
-    //    }
-    static void TearDownTestSuite()
-    {
-    }
-
     void SetUp() override
     {
         EnergyPlusFixture::SetUp(); // Sets up individual test cases.
@@ -123,10 +115,6 @@ public:
         for (int compNum = 1; compNum <= state->dataPlnt->PlantLoop(1).OpScheme(1).EquipList(1).NumComps; ++compNum) {
             thisBranch.Comp(compNum).MyLoad = 0.0;
         }
-    }
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
     }
 };
 

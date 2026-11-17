@@ -232,25 +232,12 @@ protected:
         state->dataSize->PlantSizData(2).ExitTemp = 6.0;
         state->dataSize->PlantSizData(2).DeltaT = 5.0;
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
 };
 
 class AirloopUnitarySysTest : public EnergyPlusFixture
 {
 
 public:
-    //    static void SetUpTestSuite()
-    //    {
-    //        EnergyPlusFixture::SetUpTestSuite(); // Sets up the base fixture
-    //    }
-    static void TearDownTestSuite()
-    {
-    }
-
     void SetUp() override
     {
         EnergyPlusFixture::SetUp(); // Sets up individual test cases.
@@ -294,31 +281,11 @@ public:
         state->dataLoopNodes->Node.allocate(30);
         state->dataHeatBal->HeatReclaimVS_Coil.allocate(4);
     }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
 };
 
 class NoNegativeCapacityTest : public EnergyPlusFixture
 {
-public:
-    static void TearDownTestSuite()
-    {
-    }
-
 protected:
-    void SetUp() override
-    {
-        EnergyPlusFixture::SetUp(); // Sets up the base fixture first.
-    }
-
-    void TearDown() override
-    {
-        EnergyPlusFixture::TearDown(); // Remember to tear down the base fixture after cleaning up derived fixture!
-    }
-
     std::string buildVSCoilUnitaryNoNegativeCapacityIDF(std::string const &maxDryBulbTemperature,
                                                         std::string const &centralCoolingDesignSupplyAirTemperature)
     {

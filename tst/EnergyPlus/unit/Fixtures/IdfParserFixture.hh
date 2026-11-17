@@ -64,21 +64,6 @@ namespace EnergyPlus {
 class IdfParserFixture : public testing::Test
 {
 protected:
-    static void SetUpTestSuite()
-    {
-    }
-    static void TearDownTestSuite()
-    {
-    }
-
-    void SetUp() override
-    {
-    }
-
-    void TearDown() override
-    {
-    }
-
     // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
     // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
     std::string delimited_string(std::vector<std::string> const &strings, std::string const &delimiter = "\n")
