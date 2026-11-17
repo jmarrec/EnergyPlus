@@ -96,9 +96,9 @@ struct ExpectedParams
 class CommandLineInterfaceFixture : public EnergyPlusFixture
 {
 protected:
-    static void SetUpTestCase()
+    static void SetUpTestSuite()
     {
-        EnergyPlusFixture::SetUpTestCase();
+        EnergyPlusFixture::SetUpTestSuite();
 
         // For the "legacy" mode, we need *any* in.idf / in.epw in the current directory
         // This is done via cmake for the CTest case at least, but if you run the energyplusapi_tests exe directly, the current directory isn't

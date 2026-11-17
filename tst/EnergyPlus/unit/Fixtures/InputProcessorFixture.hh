@@ -64,11 +64,11 @@ class InputProcessorFixture : public EnergyPlusFixture
 protected:
     using json = nlohmann::json;
 
-    //    static void SetUpTestCase()
+    //    static void SetUpTestSuite()
     //    {
-    //        EnergyPlusFixture::SetUpTestCase(); // Sets up the base fixture
+    //        EnergyPlusFixture::SetUpTestSuite(); // Sets up the base fixture
     //    }
-    static void TearDownTestCase()
+    static void TearDownTestSuite()
     {
     }
 

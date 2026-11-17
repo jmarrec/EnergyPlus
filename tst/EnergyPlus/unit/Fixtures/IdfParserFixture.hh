@@ -64,10 +64,10 @@ namespace EnergyPlus {
 class IdfParserFixture : public testing::Test
 {
 protected:
-    static void SetUpTestCase()
+    static void SetUpTestSuite()
     {
     }
-    static void TearDownTestCase()
+    static void TearDownTestSuite()
     {
     }
 

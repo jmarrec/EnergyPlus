@@ -243,11 +243,11 @@ class AirloopUnitarySysTest : public EnergyPlusFixture
 {
 
 public:
-    //    static void SetUpTestCase()
+    //    static void SetUpTestSuite()
     //    {
-    //        EnergyPlusFixture::SetUpTestCase(); // Sets up the base fixture
+    //        EnergyPlusFixture::SetUpTestSuite(); // Sets up the base fixture
     //    }
-    static void TearDownTestCase()
+    static void TearDownTestSuite()
     {
     }
 
@@ -304,7 +304,7 @@ public:
 class NoNegativeCapacityTest : public EnergyPlusFixture
 {
 public:
-    static void TearDownTestCase()
+    static void TearDownTestSuite()
     {
     }
 

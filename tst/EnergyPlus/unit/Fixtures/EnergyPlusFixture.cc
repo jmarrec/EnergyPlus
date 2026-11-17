@@ -74,7 +74,7 @@ using json = nlohmann::json;
 
 namespace EnergyPlus {
 
-// void EnergyPlusFixture::SetUpTestCase()
+// void EnergyPlusFixture::SetUpTestSuite()
 //{
 //    state->dataInputProcessing->inputProcessor = InputProcessor::factory();
 //}
