@@ -77,7 +77,13 @@ struct IPShortCutsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) IPShortCutsData();
+        this->cAlphaFieldNames.deallocate();
+        this->cNumericFieldNames.deallocate();
+        this->lNumericFieldBlanks.deallocate();
+        this->lAlphaFieldBlanks.deallocate();
+        this->cAlphaArgs.deallocate();
+        this->rNumericArgs.deallocate();
+        this->cCurrentModuleObject.clear();
     }
 };
 

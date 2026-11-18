@@ -48,6 +48,9 @@
 #ifndef OutputReportPredefined_hh_INCLUDED
 #define OutputReportPredefined_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -1625,7 +1628,8 @@ struct OutputReportPredefinedData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) OutputReportPredefinedData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

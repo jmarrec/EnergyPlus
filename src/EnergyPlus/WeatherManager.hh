@@ -49,6 +49,7 @@
 #define WeatherManager_hh_INCLUDED
 
 // C++ Headers
+#include <memory>
 #include <vector>
 
 // ObjexxFCL Headers
@@ -934,7 +935,8 @@ struct WeatherManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) WeatherManagerData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 } // namespace EnergyPlus

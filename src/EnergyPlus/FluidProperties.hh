@@ -605,20 +605,40 @@ struct FluidData : BaseGlobalStruct
 
     void clear_state() override
     {
+        DebugReportGlycols = false;
+        DebugReportRefrigerants = false;
+        GlycolErrorLimitTest = 1;
+        RefrigErrorLimitTest = 1;
 
+        // Array of pointers: need to deallocate sub objects and then deallocate the array of pointers
         for (int i = 1; i <= refrigs.isize(); ++i) {
             refrigs(i)->HshValues.deallocate();
             refrigs(i)->RhoshValues.deallocate();
             delete refrigs(i);
         }
+        refrigs.deallocate();
+
         for (int i = 1; i <= glycolsRaw.isize(); ++i) {
             delete glycolsRaw(i);
         }
+        glycolsRaw.deallocate();
+
         for (int i = 1; i <= glycols.isize(); ++i) {
             delete glycols(i);
         }
+        glycols.deallocate();
 
-        new (this) FluidData();
+        glycolErrorLimits.fill(0);
+
+        SatErrCountGetSupHeatEnthalpyRefrig = 0;
+        SatErrCountGetSupHeatDensityRefrig = 0;
+        TempRangeErrCountGetInterpolatedSatProp = 0;
+        TempRangeErrIndexGetInterpolatedSatProp = 0;
+
+#ifdef EP_cache_GlycolSpecificHeat
+        // The cache has to be reset, it's keyed in getSpecificHeat by temperature and the glycol's index (this->Num) which is file input dependent
+        cached_t_sh.fill({});
+#endif
     }
 };
 

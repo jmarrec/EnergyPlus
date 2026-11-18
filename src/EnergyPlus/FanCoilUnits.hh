@@ -408,7 +408,8 @@ struct FanCoilUnitsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) FanCoilUnitsData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

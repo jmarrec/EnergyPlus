@@ -48,6 +48,9 @@
 #ifndef ThermalComfort_hh_INCLUDED
 #define ThermalComfort_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Optional.hh>
 
@@ -382,7 +385,8 @@ struct ThermalComfortsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ThermalComfortsData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 
     // Default Constructor

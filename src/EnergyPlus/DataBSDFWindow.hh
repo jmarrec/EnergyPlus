@@ -374,7 +374,13 @@ struct BSDFWindowData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) BSDFWindowData();
+        this->TotComplexFenStates = 0;
+        this->FirstBSDF = 0;
+        this->MaxBkSurf = 20;
+        this->TotThermalModels = 0;
+        this->SUNCOSTS = Vector3D(); // keep the fixed 60x24 allocation, only zero it: nothing re-allocates SUNCOSTS
+        this->BSDFTempMtrx.deallocate();
+        this->ComplexWind.clear();
     }
 };
 

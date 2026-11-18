@@ -373,7 +373,8 @@ struct ConstructionData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ConstructionData();
+        this->Construct.deallocate();
+        this->LayerPoint = 0; // keep the fixed MaxLayersInConstruct allocation, only zero it: nothing re-allocates LayerPoint
     }
 };
 
