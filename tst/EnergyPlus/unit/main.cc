@@ -60,7 +60,8 @@
 
 #ifdef EP_LSAN_ENABLED
 // Compiled-in LeakSanitizer suppressions, merged with any passed via LSAN_OPTIONS=suppressions=...
-extern "C" const char *__lsan_default_suppressions()
+// Must be exported: the sanitizer runtime looks it up dynamically, and tests build with -fvisibility=hidden
+extern "C" __attribute__((visibility("default"))) const char *__lsan_default_suppressions()
 {
     return "leak:libdbus-1\n"; // system library, not ours
 }
