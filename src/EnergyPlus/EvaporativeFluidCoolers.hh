@@ -266,7 +266,9 @@ struct EvaporativeFluidCoolersData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) EvaporativeFluidCoolersData();
+        this->GetEvapFluidCoolerInputFlag = true;
+        this->SimpleEvapFluidCooler.deallocate();
+        this->UniqueSimpleEvapFluidCoolerNames.clear();
     }
 };
 

@@ -466,14 +466,18 @@ struct FansData : BaseGlobalStruct
 
     void clear_state() override
     {
+        NumNightVentPerf = 0;
+        GetFanInputFlag = true;
+        ZoneEquipmentListChecked = false;
+        NightVentPerf.deallocate();
+        ErrCount = 0;
+
         for (int i = 1; i <= (int)fans.size(); ++i) {
             delete fans(i);
         }
 
         fans.clear();
         fanMap.clear();
-
-        new (this) FansData();
     }
 };
 

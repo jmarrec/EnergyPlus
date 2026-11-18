@@ -440,7 +440,8 @@ struct CondenserLoopTowersData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) CondenserLoopTowersData();
+        this->GetInput = true;
+        this->towers.deallocate();
     }
 };
 

@@ -281,7 +281,8 @@ struct ChillerReformulatedEIRData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ChillerReformulatedEIRData();
+        this->GetInputREIR = true;
+        this->ElecReformEIRChiller.deallocate();
     }
 };
 

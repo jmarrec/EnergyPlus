@@ -201,7 +201,15 @@ struct DualDuctData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DualDuctData();
+        this->NumDDAirTerminal = 0;
+        this->NumDualDuctVarVolOA = 0;
+        this->GetDualDuctInputFlag = true;
+        this->dd_airterminal.deallocate();
+        this->UniqueDualDuctAirTerminalNames.clear();
+        this->ZoneEquipmentListChecked = false;
+        this->GetDualDuctOutdoorAirRecircUseFirstTimeOnly = true;
+        this->RecircIsUsedARR.deallocate();
+        this->DamperNamesARR.deallocate();
     }
 };
 

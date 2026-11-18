@@ -155,7 +155,7 @@ struct DefineEquipData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DefineEquipData();
+        this->AirDistUnit.deallocate();
     }
 };
 

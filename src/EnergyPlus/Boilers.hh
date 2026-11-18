@@ -195,7 +195,8 @@ struct BoilersData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) BoilersData();
+        this->getBoilerInputFlag = true;
+        this->Boiler.clear();
     }
 };
 

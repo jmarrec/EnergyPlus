@@ -172,7 +172,9 @@ struct WindTurbineData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) WindTurbineData();
+        this->GetInputFlag = true;
+        this->MyOneTimeFlag = true;
+        this->WindTurbineSys.deallocate();
     }
 };
 

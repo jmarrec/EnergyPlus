@@ -134,7 +134,9 @@ struct IndoorGreenData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) IndoorGreenData();
+        this->NumIndoorGreen = 0;
+        this->getInputFlag = true;
+        this->indoorGreens.deallocate();
     }
 };
 

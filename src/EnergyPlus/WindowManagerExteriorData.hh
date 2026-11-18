@@ -176,7 +176,7 @@ struct WindowManagerExteriorData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) WindowManagerExteriorData();
+        this->p_inst.reset();
     }
 };
 

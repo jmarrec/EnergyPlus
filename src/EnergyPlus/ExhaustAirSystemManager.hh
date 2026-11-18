@@ -159,7 +159,9 @@ struct ExhaustAirSystemMgr : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ExhaustAirSystemMgr();
+        this->GetInputFlag = true;
+        this->mixerIndexMap.clear();
+        this->mappingDone = false;
     }
 };
 
@@ -178,7 +180,7 @@ struct ExhaustControlSystemMgr : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ExhaustControlSystemMgr();
+        this->GetInputFlag = true;
     }
 };
 

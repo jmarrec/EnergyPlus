@@ -271,7 +271,13 @@ struct SolarCollectorsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) SolarCollectorsData();
+        this->NumOfCollectors = 0;
+        this->NumOfParameters = 0;
+        this->GetInputFlag = true;
+        this->Parameters.deallocate();
+        this->Collector.deallocate();
+        this->UniqueParametersNames.clear();
+        this->UniqueCollectorNames.clear();
     }
 };
 

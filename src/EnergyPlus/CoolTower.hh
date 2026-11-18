@@ -153,7 +153,8 @@ struct CoolTowerData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) CoolTowerData();
+        this->GetInputFlag = true;
+        this->CoolTowerSys.deallocate();
     }
 };
 

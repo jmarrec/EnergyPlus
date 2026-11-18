@@ -146,7 +146,7 @@ struct GroundTemperatureManagerData final : BaseGlobalStruct
         for (const auto &groundTempModel : groundTempModels) {
             delete groundTempModel;
         }
-        new (this) GroundTemperatureManagerData();
+        groundTempModels.clear();
     }
 
     virtual ~GroundTemperatureManagerData() = default;

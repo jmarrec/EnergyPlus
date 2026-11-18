@@ -269,7 +269,15 @@ struct WaterUseData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) WaterUseData();
+        this->numWaterEquipment = 0;
+        this->numWaterConnections = 0;
+        this->getWaterUseInputFlag = true;
+        this->calcRhoH2O = true;
+        this->MyEnvrnFlagLocal = true;
+        this->rhoH2OStd = 1000.0;
+        this->CheckEquipName.deallocate();
+        this->WaterEquipment.deallocate();
+        this->WaterConnections.deallocate();
     }
 };
 

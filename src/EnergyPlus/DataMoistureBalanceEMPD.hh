@@ -86,7 +86,14 @@ struct MoistureBalanceEMPDData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) MoistureBalanceEMPDData();
+        this->RVSurfaceOld.deallocate();
+        this->RVSurface.deallocate();
+        this->HeatFluxLatent.deallocate();
+        this->RVSurfLayerOld.deallocate();
+        this->RVdeepOld.deallocate();
+        this->RVSurfLayer.deallocate();
+        this->RVDeepLayer.deallocate();
+        this->RVwall.deallocate();
     }
 };
 

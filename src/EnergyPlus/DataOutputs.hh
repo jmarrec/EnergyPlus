@@ -121,7 +121,16 @@ struct OutputsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) OutputsData();
+        this->MaxConsideredOutputVariables = 0;
+        this->NumConsideredOutputVariables = 0;
+        this->iNumberOfRecords = 0;
+        this->iNumberOfDefaultedFields = 0;
+        this->iTotalFieldsWithDefaults = 0;
+        this->iNumberOfAutoSizedFields = 0;
+        this->iTotalAutoSizableFields = 0;
+        this->iNumberOfAutoCalcedFields = 0;
+        this->iTotalAutoCalculatableFields = 0;
+        this->OutputVariablesForSimulation.clear();
     }
 };
 

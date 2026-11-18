@@ -266,7 +266,9 @@ struct PhotovoltaicThermalCollectorsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) PhotovoltaicThermalCollectorsData();
+        this->GetInputFlag = true;
+        this->NumPVT = 0;
+        this->PVT.deallocate();
     }
 };
 

@@ -105,7 +105,9 @@ struct ZoneAirLoopEquipmentManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ZoneAirLoopEquipmentManagerData();
+        this->GetAirDistUnitsFlag = true;
+        this->InitAirDistUnitsFlag = true;
+        this->numADUInitialized = 0;
     }
 };
 

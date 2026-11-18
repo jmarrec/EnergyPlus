@@ -189,7 +189,14 @@ struct ConvergParamsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ConvergParamsData();
+        this->MinTimeStepSys = (1.0 / 60.0);
+        this->MaxZoneTempDiff = 0.3;
+        this->MaxIter = 20;
+        this->MaxPlantSubIterations = 8;
+        this->MinPlantSubIterations = 2;
+        this->ZoneInletConvergence.deallocate();
+        this->AirLoopConvergence.deallocate();
+        this->PlantConvergence.deallocate();
     }
 };
 

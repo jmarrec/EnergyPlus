@@ -302,7 +302,13 @@ struct AirSystemsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) AirSystemsData();
+        this->PrimaryAirSystems.deallocate();
+        this->ZoneCompToPlant.deallocate();
+        this->ZoneSubCompToPlant.deallocate();
+        this->ZoneSubSubCompToPlant.deallocate();
+        this->AirSysCompToPlant.deallocate();
+        this->AirSysSubCompToPlant.deallocate();
+        this->AirSysSubSubCompToPlant.deallocate();
     }
 };
 

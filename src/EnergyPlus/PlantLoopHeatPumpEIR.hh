@@ -565,7 +565,8 @@ struct EIRPlantLoopHeatPumpsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) EIRPlantLoopHeatPumpsData();
+        this->heatPumps.clear();
+        this->getInputsPLHP = true;
     }
 };
 
@@ -584,7 +585,8 @@ struct EIRFuelFiredHeatPumpsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) EIRFuelFiredHeatPumpsData();
+        this->heatPumps.clear();
+        this->getInputsFFHP = true;
     }
 };
 
@@ -603,7 +605,8 @@ struct HeatPumpAirToWatersData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) HeatPumpAirToWatersData();
+        this->heatPumps.clear();
+        this->getInputsAWHP = true;
     }
 };
 } // namespace EnergyPlus

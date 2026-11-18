@@ -260,7 +260,8 @@ struct ChillerElectricEIRData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ChillerElectricEIRData();
+        this->getInputFlag = true;
+        this->ElectricEIRChiller.deallocate();
     }
 };
 

@@ -195,7 +195,12 @@ struct AirLoopHVACDOASData final : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) AirLoopHVACDOASData();
+        this->GetInputOnceFlag = true;
+        this->getAirLoopMixerInputOnceFlag = true;
+        this->getAirLoopSplitterInputOnceFlag = true;
+        this->airloopDOAS.clear();
+        this->airloopMixer.clear();
+        this->airloopSplitter.clear();
     }
 };
 

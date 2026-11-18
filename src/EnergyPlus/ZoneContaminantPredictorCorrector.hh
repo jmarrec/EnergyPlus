@@ -118,7 +118,10 @@ struct ZoneContaminantPredictorCorrectorData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ZoneContaminantPredictorCorrectorData();
+        this->GetZoneAirContamInputFlag = true;
+        this->MyOneTimeFlag = true;
+        this->MyEnvrnFlag = true;
+        this->MyConfigOneTimeFlag = true;
     }
 };
 

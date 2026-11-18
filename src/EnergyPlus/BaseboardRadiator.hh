@@ -135,7 +135,8 @@ struct BaseboardRadiatorData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) BaseboardRadiatorData();
+        this->getInputFlag = true;
+        this->baseboards.deallocate();
     }
 };
 

@@ -169,7 +169,8 @@ struct BoilerSteamData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) BoilerSteamData();
+        this->getSteamBoilerInput = true;
+        this->Boiler.deallocate();
     }
 };
 

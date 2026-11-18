@@ -292,7 +292,14 @@ struct ZoneEquipmentManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ZoneEquipmentManagerData();
+        this->AvgData.deallocate();
+        this->NumOfTimeStepInDay = 0;
+        this->GetZoneEquipmentInputFlag = true;
+        this->SizeZoneEquipmentOneTimeFlag = true;
+        this->PrioritySimOrder.deallocate();
+        this->InitZoneEquipmentOneTimeFlag = true;
+        this->InitZoneEquipmentEnvrnFlag = true;
+        this->FirstPassZoneEquipFlag = true;
     }
 };
 

@@ -298,7 +298,16 @@ struct SteamCoilsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) SteamCoilsData();
+        this->NumSteamCoils = 0;
+        this->MySizeFlag.deallocate();
+        this->CoilWarningOnceFlag.deallocate();
+        this->CheckEquipName.deallocate();
+        this->GetSteamCoilsInputFlag = true;
+        this->MyOneTimeFlag = true;
+        this->MyEnvrnFlag.deallocate();
+        this->MyPlantScanFlag.deallocate();
+        this->ErrCount = 0;
+        this->SteamCoil.deallocate();
     }
 };
 } // namespace EnergyPlus

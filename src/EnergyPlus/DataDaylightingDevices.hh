@@ -145,7 +145,8 @@ struct DataDaylightingDevicesData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DataDaylightingDevicesData();
+        this->TDDPipe.deallocate();
+        this->Shelf.deallocate();
     }
 };
 

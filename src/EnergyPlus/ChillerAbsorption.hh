@@ -208,7 +208,8 @@ struct ChillerAbsorberData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ChillerAbsorberData();
+        this->getInput = true;
+        this->absorptionChillers.deallocate();
     }
 };
 

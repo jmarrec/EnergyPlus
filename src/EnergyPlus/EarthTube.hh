@@ -217,7 +217,12 @@ struct EarthTubeData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) EarthTubeData();
+        this->GetInputFlag = true;
+        this->initFirstTime = true;
+        this->timeElapsed = 0.0;
+        this->EarthTubeSys.deallocate();
+        this->ZnRptET.deallocate();
+        this->EarthTubePars.deallocate();
     }
 };
 

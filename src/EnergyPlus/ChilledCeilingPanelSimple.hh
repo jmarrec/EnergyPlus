@@ -191,7 +191,8 @@ struct ChilledCeilingPanelSimpleData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ChilledCeilingPanelSimpleData();
+        this->GetInputFlag = true;
+        this->CoolingPanel.deallocate();
     }
 };
 

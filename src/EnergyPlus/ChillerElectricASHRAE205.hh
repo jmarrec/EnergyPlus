@@ -161,7 +161,8 @@ struct ChillerElectricASHRAE205Data : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ChillerElectricASHRAE205Data();
+        this->getInputFlag = true;
+        this->Electric205Chiller.deallocate();
     }
 };
 

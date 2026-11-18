@@ -176,7 +176,8 @@ struct ZoneDehumidifierData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ZoneDehumidifierData();
+        this->GetInputFlag = true;
+        this->ZoneDehumid.deallocate();
     }
 };
 

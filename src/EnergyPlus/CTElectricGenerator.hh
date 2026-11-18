@@ -158,7 +158,8 @@ struct CTElectricGeneratorData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) CTElectricGeneratorData();
+        this->getCTInputFlag = true;
+        this->CTGenerator.deallocate();
     }
 };
 

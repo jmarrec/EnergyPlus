@@ -550,7 +550,15 @@ struct LoopNodeData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) LoopNodeData();
+        this->NumOfNodes = 0;
+        this->NumofSplitters = 0;
+        this->NumofMixers = 0;
+        this->NodeID.deallocate();
+        this->Node.deallocate();
+        this->DefaultNodeValues = Node::NodeData{};
+        this->MoreNodeInfo.deallocate();
+        this->MarkedNode.deallocate();
+        this->NodeSetpointCheck.deallocate();
     }
 };
 

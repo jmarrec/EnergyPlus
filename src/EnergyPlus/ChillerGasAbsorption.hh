@@ -233,7 +233,8 @@ struct ChillerGasAbsorptionData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ChillerGasAbsorptionData();
+        this->getGasAbsorberInputs = true;
+        this->GasAbsorber.deallocate();
     }
 };
 
