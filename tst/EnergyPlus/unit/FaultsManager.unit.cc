@@ -139,9 +139,6 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
     // (2)The rated operational point of Fan_2 does not fall on the fan curve
     TestResult = fault2.CheckFaultyAirFilterFanCurve(*state);
     EXPECT_FALSE(TestResult);
-
-    // Clean up
-    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFilterFanCurve_AutosizedFan)
@@ -367,9 +364,6 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CalFaultyFanAirFl
         CalFaultyFanAirFlowReduction(*state, fan1->Name, fan1->maxAirFlowRate, fan1->deltaPress, FanFaultyDeltaPressInc * fan1->deltaPress, 1);
 
     EXPECT_NEAR(3.845, FanDesignFlowRateDec, 0.005);
-
-    // Clean up
-    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, FaultsManager_TemperatureSensorOffset_CoilSAT)

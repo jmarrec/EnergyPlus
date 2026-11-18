@@ -128,6 +128,9 @@ TEST_F(EnergyPlusFixture, Fans_ConstantVolume_EMSPressureRiseResetTest)
     fan1->EMSPressureOverrideOn = false;
     fan1->EMSPressureValue = 0.0;
 
+    state->dataFans->fans.push_back(fan1);
+    state->dataFans->fanMap.insert_or_assign(fan1->Name, state->dataFans->fans.size());
+
     state->dataHVACGlobal->TurnFansOn = true;
     state->dataHVACGlobal->TurnFansOff = false;
     // simulate the fan

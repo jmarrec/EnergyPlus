@@ -467,7 +467,6 @@ TEST_F(EnergyPlusFixture, EvaporativeCoolers_IndEvapCoolerPower)
     EXPECT_EQ(200 * 0.8 + 100 * 0.8 * 0.5, EvapCond(EvapCoolNum).EvapCoolerPower);
 
     EvapCond.deallocate();
-    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, EvaporativeCoolers_SizeEvapCooler)

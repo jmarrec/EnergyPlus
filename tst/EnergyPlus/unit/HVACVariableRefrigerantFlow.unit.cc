@@ -3077,9 +3077,6 @@ TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_CompResidual)
     // Run and Check
     double CompResidual = HVACVariableRefrigerantFlow::CompResidual_FluidTCtrl(*state, Tdis, CondHeat, 1, Te);
     EXPECT_NEAR(1.652, CompResidual, 0.005);
-
-    // Clean up
-    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_FanSpdResidualCool)
