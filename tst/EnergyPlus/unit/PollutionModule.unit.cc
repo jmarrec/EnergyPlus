@@ -584,3 +584,69 @@ TEST_F(EnergyPlusFixture, PollutionModule_TestEnvironmentalImpactFactors)
     // Previously because of a typo, it would reset it to the input value of zero (or even a negative number).
     ASSERT_NEAR(state->dataPollution->SteamConvEffic, ExpectedOutput, AllowedTolerance);
 }
+
+TEST_F(EnergyPlusFixture, PollutionModule_ClearState_ResetsFuelFactors)
+{
+    // clear_state must fully reset pollCoeffs, otherwise a second run in the same process (eg: API) inherits the previous run's FuelFactors:
+    // .used stays true, stale coefficients are used, and re-entering the same fuel is flagged as a duplicate and ignored
+
+    {
+        SCOPED_TRACE("Run 1: NaturalGas fuel factor");
+        std::string const idf_objects1 = delimited_string({
+            "FuelFactors,",
+            "  NaturalGas,              !- Existing Fuel Resource Name",
+            "  1.0;                     !- Source Energy Factor {J/J}",
+        });
+        ASSERT_TRUE(process_idf(idf_objects1));
+        Pollution::GetPollutionFactorInput(*state);
+
+        auto const &elec = state->dataPollution->pollCoeffs[(int)Pollution::PollFuel::Electricity];
+        EXPECT_FALSE(elec.used);
+        EXPECT_EQ(0.0, elec.sourceCoeff);
+        auto const &natGas = state->dataPollution->pollCoeffs[(int)Pollution::PollFuel::NaturalGas];
+        EXPECT_TRUE(natGas.used);
+        EXPECT_EQ(1.0, natGas.sourceCoeff);
+    }
+
+    state->dataPollution->clear_state();
+
+    {
+        SCOPED_TRACE("Run 2: no NaturalGas fuel factor, only Electricity");
+        std::string const idf_objects2 = delimited_string({
+            "FuelFactors,",
+            "  Electricity,             !- Existing Fuel Resource Name",
+            "  2.0;                     !- Source Energy Factor {J/J}",
+        });
+        ASSERT_TRUE(process_idf(idf_objects2));
+        Pollution::GetPollutionFactorInput(*state);
+
+        auto const &elec = state->dataPollution->pollCoeffs[(int)Pollution::PollFuel::Electricity];
+        EXPECT_TRUE(elec.used);
+        EXPECT_EQ(2.0, elec.sourceCoeff);
+        auto const &natGas = state->dataPollution->pollCoeffs[(int)Pollution::PollFuel::NaturalGas];
+        EXPECT_FALSE(natGas.used);
+        EXPECT_EQ(0.0, natGas.sourceCoeff);
+    }
+
+    state->dataPollution->clear_state();
+
+    {
+        SCOPED_TRACE("Run 3: NaturalGas again, with a different factor: must be picked up, not flagged as already entered");
+        std::string const idf_objects3 = delimited_string({
+            "FuelFactors,",
+            "  NaturalGas,              !- Existing Fuel Resource Name",
+            "  3.0;                     !- Source Energy Factor {J/J}",
+        });
+        ASSERT_TRUE(process_idf(idf_objects3));
+        Pollution::GetPollutionFactorInput(*state);
+
+        auto const &elec = state->dataPollution->pollCoeffs[(int)Pollution::PollFuel::Electricity];
+        EXPECT_FALSE(elec.used);
+        EXPECT_EQ(0.0, elec.sourceCoeff);
+        auto const &natGas = state->dataPollution->pollCoeffs[(int)Pollution::PollFuel::NaturalGas];
+        EXPECT_TRUE(natGas.used);
+        EXPECT_EQ(3.0, natGas.sourceCoeff);
+
+        EXPECT_FALSE(compare_err_stream_substring("already entered", true, false));
+    }
+}
