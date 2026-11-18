@@ -88,12 +88,9 @@ namespace PVWatts {
                                        Real64 groundCoverageRatio)
         : moduleType_(moduleType), arrayType_(arrayType), geometryType_(geometryType), DCtoACRatio_(1.1), inverterEfficiency_(0.96),
           outputDCPower_(1000.0), outputDCEnergy_(0.0), outputACPower_(0.0), outputACEnergy_(0.0), cellTemperature_(-9999),
-          planeOfArrayIrradiance_(-9999), shadedPercent_(0.0), pvwattsModule_(ssc_module_create("pvwattsv5_1ts")), pvwattsData_(ssc_data_create()),
-          NumTimeStepsToday_(0.0)
+          planeOfArrayIrradiance_(-9999), shadedPercent_(0.0), NumTimeStepsToday_(0.0)
 
     {
-
-        assert(pvwattsModule_ != nullptr);
 
         bool errorsFound(false);
 
@@ -149,6 +146,11 @@ namespace PVWatts {
             ShowFatalError(state, "Errors found in getting PVWatts input");
         }
 
+        // Create the SSC handles only once inputs are validated, so a fatal error above doesn't leak them
+        pvwattsModule_ = ssc_module_create("pvwattsv5_1ts");
+        pvwattsData_ = ssc_data_create();
+        assert(pvwattsModule_ != nullptr);
+
         // Initialize m_pvwattsData
         // Location
         ssc_data_set_number(pvwattsData_, "lat", state.dataWeather->WeatherFileLatitude);
@@ -167,6 +169,12 @@ namespace PVWatts {
         ssc_data_set_number(pvwattsData_, "gcr", groundCoverageRatio_);
         // Initialize shaded percent
         ssc_data_set_number(pvwattsData_, "shaded_percent", shadedPercent_);
+    }
+
+    PVWattsGenerator::~PVWattsGenerator()
+    {
+        ssc_module_free(pvwattsModule_);
+        ssc_data_free(pvwattsData_);
     }
 
     void PVWattsGenerator::setupOutputVariables(EnergyPlusData &state)

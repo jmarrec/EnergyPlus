@@ -147,8 +147,8 @@ namespace PVWatts {
         Real64 planeOfArrayIrradiance_;
         Real64 shadedPercent_;
 
-        ssc_module_t pvwattsModule_;
-        ssc_data_t pvwattsData_;
+        ssc_module_t pvwattsModule_ = nullptr;
+        ssc_data_t pvwattsData_ = nullptr;
         Real64 NumTimeStepsToday_;
 
     public:
@@ -165,6 +165,12 @@ namespace PVWatts {
                          Real64 azimuth = 180.0,
                          size_t surfaceNum = 0,
                          Real64 groundCoverageRatio = 0.4);
+
+        ~PVWattsGenerator();
+
+        // Owns raw SSC handles freed in the destructor: copying would double free
+        PVWattsGenerator(const PVWattsGenerator &) = delete;
+        PVWattsGenerator &operator=(const PVWattsGenerator &) = delete;
 
         void setupOutputVariables(EnergyPlusData &state);
 
