@@ -51,6 +51,7 @@
 // C++ Headers
 #include <functional>
 #include <iosfwd>
+#include <memory>
 #include <string>
 
 // EnergyPlus Headers
@@ -187,7 +188,8 @@ struct DataGlobal : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DataGlobal();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

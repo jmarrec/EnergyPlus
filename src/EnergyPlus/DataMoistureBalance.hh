@@ -48,6 +48,9 @@
 #ifndef DataMoistureBalance_hh_INCLUDED
 #define DataMoistureBalance_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 
@@ -87,7 +90,8 @@ struct MoistureBalanceData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) MoistureBalanceData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

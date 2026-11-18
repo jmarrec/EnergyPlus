@@ -48,6 +48,9 @@
 #ifndef PlantCentralGSHP_hh_INCLUDED
 #define PlantCentralGSHP_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 
@@ -392,7 +395,8 @@ struct PlantCentralGSHPData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) PlantCentralGSHPData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

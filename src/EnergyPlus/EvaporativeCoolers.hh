@@ -48,6 +48,9 @@
 #ifndef EvaporativeCoolers_hh_INCLUDED
 #define EvaporativeCoolers_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 
@@ -463,7 +466,8 @@ struct EvaporativeCoolersData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) EvaporativeCoolersData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

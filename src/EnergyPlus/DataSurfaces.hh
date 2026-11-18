@@ -50,6 +50,7 @@
 
 // C++ Headers
 #include <cstddef>
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -1824,7 +1825,8 @@ struct SurfacesData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) SurfacesData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

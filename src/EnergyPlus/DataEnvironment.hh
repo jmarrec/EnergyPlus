@@ -48,6 +48,9 @@
 #ifndef DataEnvironment_hh_INCLUDED
 #define DataEnvironment_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 
@@ -216,7 +219,8 @@ struct EnvironmentData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) EnvironmentData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

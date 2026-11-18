@@ -50,6 +50,9 @@
 
 #include <unordered_map>
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -418,7 +421,8 @@ struct SingleDuctData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) SingleDuctData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

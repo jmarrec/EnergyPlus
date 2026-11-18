@@ -48,6 +48,9 @@
 #ifndef DataAirLoop_hh_INCLUDED
 #define DataAirLoop_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 
@@ -253,7 +256,8 @@ struct DataAirLoopData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DataAirLoopData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

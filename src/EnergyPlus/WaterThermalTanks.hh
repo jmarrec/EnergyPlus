@@ -48,6 +48,9 @@
 #ifndef WaterThermalTanks_hh_INCLUDED
 #define WaterThermalTanks_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.fwd.hh>
 
@@ -1046,7 +1049,8 @@ struct WaterThermalTanksData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) WaterThermalTanksData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

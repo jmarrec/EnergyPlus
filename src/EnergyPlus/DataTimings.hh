@@ -48,6 +48,9 @@
 #ifndef DataTimings_hh_INCLUDED
 #define DataTimings_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/EnergyPlus.hh>
@@ -86,7 +89,8 @@ struct DataTimingsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DataTimingsData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

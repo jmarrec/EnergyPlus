@@ -48,6 +48,9 @@
 #ifndef DXCoils_hh_INCLUDED
 #define DXCoils_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -994,7 +997,8 @@ struct DXCoilsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DXCoilsData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

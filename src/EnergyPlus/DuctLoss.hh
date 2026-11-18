@@ -48,6 +48,9 @@
 #ifndef DuctLoss_hh_INCLUDED
 #define DuctLoss_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -175,7 +178,8 @@ struct DuctLossData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DuctLossData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

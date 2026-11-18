@@ -48,6 +48,9 @@
 #ifndef BranchInputManager_hh_INCLUDED
 #define BranchInputManager_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -326,7 +329,8 @@ struct BranchInputManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) BranchInputManagerData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

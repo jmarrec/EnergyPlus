@@ -52,6 +52,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 // ObjexxFCL Headers
@@ -2110,7 +2111,8 @@ struct HeatBalanceData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) HeatBalanceData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

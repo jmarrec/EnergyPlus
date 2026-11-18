@@ -48,6 +48,9 @@
 #ifndef DesiccantDehumidifiers_hh_INCLUDED
 #define DesiccantDehumidifiers_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -302,7 +305,8 @@ struct DesiccantDehumidifiersData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DesiccantDehumidifiersData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

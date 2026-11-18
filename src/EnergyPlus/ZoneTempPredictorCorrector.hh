@@ -49,6 +49,7 @@
 #define ZoneTempPredictorCorrector_hh_INCLUDED
 
 // C++ Headers
+#include <memory>
 #include <string>
 #include <unordered_set>
 
@@ -440,7 +441,8 @@ struct ZoneTempPredictorCorrectorData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ZoneTempPredictorCorrectorData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

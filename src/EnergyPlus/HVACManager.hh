@@ -48,6 +48,9 @@
 #ifndef HVACManager_hh_INCLUDED
 #define HVACManager_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 
@@ -164,7 +167,8 @@ struct HVACManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) HVACManagerData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

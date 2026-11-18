@@ -48,6 +48,9 @@
 #ifndef ConvectionCoefficients_hh_INCLUDED
 #define ConvectionCoefficients_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Optional.hh>
@@ -796,7 +799,8 @@ struct ConvectionCoefficientsData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) ConvectionCoefficientsData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

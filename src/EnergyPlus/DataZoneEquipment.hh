@@ -49,6 +49,7 @@
 #define DataZoneEquipment_hh_INCLUDED
 
 // C++ Headers
+#include <memory>
 #include <unordered_set>
 
 // ObjexxFCL Headers
@@ -605,7 +606,8 @@ struct DataZoneEquipmentData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) DataZoneEquipmentData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 

@@ -48,6 +48,9 @@
 #ifndef DataSizing_hh_INCLUDED
 #define DataSizing_hh_INCLUDED
 
+// C++ Headers
+#include <memory>
+
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array2D.hh>
@@ -1396,7 +1399,8 @@ struct SizingData : BaseGlobalStruct
 
     void clear_state() override
     {
-        new (this) SizingData();
+        std::destroy_at(this);
+        std::construct_at(this);
     }
 };
 
