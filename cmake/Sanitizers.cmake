@@ -53,6 +53,11 @@ function(enable_sanitizers project_name)
         target_compile_options(${project_name} INTERFACE -fsanitize=${sanitizer})
         target_link_libraries(${project_name} INTERFACE -fsanitize=${sanitizer})
       endforeach()
+
+      # LeakSanitizer is part of both the address and leak sanitizers: let code use <sanitizer/lsan_interface.h>
+      if("address" IN_LIST SANITIZERS OR "leak" IN_LIST SANITIZERS)
+        target_compile_definitions(${project_name} INTERFACE EP_LSAN_ENABLED)
+      endif()
     endif()
   endif()
 

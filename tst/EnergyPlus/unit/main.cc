@@ -58,6 +58,14 @@
 #    include <cfloat>
 #endif
 
+#ifdef EP_LSAN_ENABLED
+// Compiled-in LeakSanitizer suppressions, merged with any passed via LSAN_OPTIONS=suppressions=...
+extern "C" const char *__lsan_default_suppressions()
+{
+    return "leak:libdbus-1\n"; // system library, not ours
+}
+#endif
+
 // Google Test main
 int main(int argc, char **argv)
 {

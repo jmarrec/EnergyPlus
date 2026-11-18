@@ -52,6 +52,10 @@
 // CLI Headers
 #include <CLI/CLI11.hpp>
 
+#ifdef EP_LSAN_ENABLED
+#    include <sanitizer/lsan_interface.h>
+#endif
+
 // EnergyPlus Headers
 #include <EnergyPlus/CommandLineInterface.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -328,6 +332,10 @@ main([)python";
             "You can pass extra arguments after the ghedesigner keyword, they should be the input file and output directory.");
 
         gheDesignerSubCommand->callback([&state, &python_fwd_args] {
+#        ifdef EP_LSAN_ENABLED
+            // This process only runs GHEDesigner in the embedded interpreter, which doesn't free its memory at exit
+            __lsan_disable();
+#        endif
             EnergyPlus::Python::PythonEngine engine(state);
             // There's probably better to be done, like instantiating the pythonEngine with the argc/argv then calling PyRun_SimpleFile but whatever
             std::string cmd = Python::PythonEngine::getTclPreppedPreamble(python_fwd_args);
