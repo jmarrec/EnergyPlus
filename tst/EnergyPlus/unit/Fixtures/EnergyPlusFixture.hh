@@ -109,6 +109,9 @@ private:
 class EnergyPlusFixture : public testing::Test
 {
 protected:
+    static void SetUpTestSuite();
+    static void TearDownTestSuite();
+
     // This is run every unit test for this fixture.
     // It sets up the various stream redirections.
     // It also calls show_message every unit test to output a begin message to the error file.
@@ -271,7 +274,9 @@ protected:
     bool process_json(nlohmann::json const &epJSON, bool use_assertions = true);
 
 public:
-    EnergyPlusData *state;
+    EnergyPlusData *state = nullptr;
+
+    inline static EnergyPlusData *sharedState = nullptr;
 
 private:
     // Opens output files as stringstreams

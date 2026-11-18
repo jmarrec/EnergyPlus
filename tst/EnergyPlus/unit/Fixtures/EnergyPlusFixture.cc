@@ -66,6 +66,7 @@
 #include <EnergyPlus/SimulationManager.hh>
 
 #include <algorithm>
+#include <cstdlib>
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <regex>
@@ -94,13 +95,36 @@ void EnergyPlusFixture::openOutputFiles()
     this->state->files.ssz.open_as_stringstream();
 }
 
+namespace {
+    bool reuseState()
+    {
+        static bool const b = std::getenv("EP_TEST_REUSE_STATE") != nullptr;
+        return b;
+    }
+} // namespace
+
+void EnergyPlusFixture::SetUpTestSuite()
+{
+    if (reuseState()) {
+        sharedState = new EnergyPlusData;
+    }
+}
+
+void EnergyPlusFixture::TearDownTestSuite()
+{
+    if (reuseState()) {
+        delete sharedState;
+        sharedState = nullptr;
+    }
+}
+
 void EnergyPlusFixture::SetUp()
 {
-    //    if (this->state) {
-    //        this->state->clear_state();
-    //    } else {
-    this->state = new EnergyPlusData;
-    //    }
+    if (reuseState()) {
+        this->state = sharedState;
+    } else {
+        this->state = new EnergyPlusData;
+    }
 
     show_message();
 
@@ -137,7 +161,9 @@ void EnergyPlusFixture::TearDown()
     state->files.shade.del();
 
     state->clear_state();
-    delete this->state;
+    if (!reuseState()) {
+        delete this->state;
+    }
 }
 
 void EnergyPlusFixture::show_message()
