@@ -119,6 +119,10 @@ struct UFADManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
+        this->HeightFloorSubzoneTop = 0.2;
+        this->ThickOccupiedSubzoneMin = 0.2;
+        this->HeightIntMass = 0.0;
+        this->HeightIntMassDefault = 2.0;
         this->MyOneTimeFlag = true;
         this->MySizeFlag.deallocate();
     }

@@ -195,6 +195,10 @@ struct SystemVarsData : BaseGlobalStruct
         NumberIntRadThreads = 1;
         iNominalTotSurfaces = 0;
         Threading = false;
+        DisableSelfShadingWithinGroup = false;
+        DisableSelfShadingBetweenGroup = false;
+        shadingGroupsNum = 0;
+        shadingGroupZoneListNames.deallocate();
     }
 };
 

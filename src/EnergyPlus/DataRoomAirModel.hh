@@ -626,6 +626,10 @@ struct RoomAirModelData : BaseGlobalStruct
 
     void clear_state() override
     {
+        GetAirModelData = true;
+        MyOneTimeFlag = true;
+        MyEnvrnFlag.clear();
+
         anyNonMixingRoomAirModel = false;
         TotNumOfAirNodes = 0;
         TotNumOfRoomAFNNodes = 0;

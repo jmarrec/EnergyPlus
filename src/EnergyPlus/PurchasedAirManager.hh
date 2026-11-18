@@ -418,6 +418,7 @@ struct PurchasedAirManagerData : BaseGlobalStruct
         CheckEquipName.deallocate();
         PurchAir.deallocate();
         PurchAirNumericFields.deallocate();
+        PurchAirPlenumArrays.deallocate();
         InitPurchasedAirMyOneTimeFlag = true;
         InitPurchasedAirZoneEquipmentListChecked = false; // True after the Zone Equipment List has been checked for items
         InitPurchasedAirMyEnvrnFlag.deallocate();

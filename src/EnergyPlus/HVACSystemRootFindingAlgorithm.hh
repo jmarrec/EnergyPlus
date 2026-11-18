@@ -84,6 +84,9 @@ struct RootFindingData : BaseGlobalStruct
 
     void clear_state() override
     {
+        this->Algorithm.clear();
+        this->NumOfIter = 5;
+        this->rootAlgo = RootAlgo::RegulaFalsi;
     }
 };
 

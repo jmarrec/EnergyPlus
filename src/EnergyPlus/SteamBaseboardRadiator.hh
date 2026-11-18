@@ -243,15 +243,19 @@ struct SteamBaseboardRadiatorData : BaseGlobalStruct
     void clear_state() override
     {
         NumSteamBaseboards = 0;
+        NumSteamBaseboardsDesign = 0;
         MySizeFlag.clear();
         MyEnvrnFlag.clear();
         CheckEquipName.clear();
+        CheckDesignObjectName.deallocate();
         SetLoopIndexFlag.clear();
         GetInputFlag = true;
         MyOneTimeFlag = true;
         ZoneEquipmentListChecked = false;
         SteamBaseboard.clear();
+        SteamBaseboardDesign.deallocate();
         SteamBaseboardNumericFields.clear();
+        SteamBaseboardDesignNumericFields.deallocate();
         SteamBaseboardDesignNames.clear();
     }
 

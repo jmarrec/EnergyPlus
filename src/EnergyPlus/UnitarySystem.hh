@@ -1033,6 +1033,7 @@ struct UnitarySystemsData : BaseGlobalStruct
     void clear_state() override
     {
         numUnitarySystems = 0;
+        economizerFlag = false;
         HeatingLoad = false;
         CoolingLoad = false;
         MoistureLoad = 0.0;

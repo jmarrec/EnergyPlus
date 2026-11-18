@@ -158,6 +158,7 @@ struct ThermalChimneysData : BaseGlobalStruct
     void clear_state() override
     {
         ThermalChimneyGetInputFlag = true;
+        TotThermalChimney = 0;
         ZnRptThermChim.deallocate();
         ThermalChimneySys.deallocate();
         ThermalChimneyReport.deallocate();

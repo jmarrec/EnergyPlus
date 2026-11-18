@@ -179,6 +179,17 @@ struct EcoRoofManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
+        this->CumRunoff = 0.0;
+        this->CumET = 0.0;
+        this->CumPrecip = 0.0;
+        this->CumIrrigation = 0.0;
+        this->MonthlyIrrigation.fill(0.0);
+        this->CurrentRunoff = 0.0;
+        this->CurrentET = 0.0;
+        this->CurrentPrecipitation = 0.0;
+        this->CurrentIrrigation = 0.0;
+        this->Tfold = 0.0;
+        this->Tgold = 0.0;
         this->EcoRoofbeginFlag = true;
         this->CalcEcoRoofMyEnvrnFlag = true;
         this->FirstEcoSurf = 0;

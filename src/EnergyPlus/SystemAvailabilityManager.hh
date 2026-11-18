@@ -653,6 +653,7 @@ struct SystemAvailabilityManagerData : BaseGlobalStruct
         InitSysAvailManagers_MyOneTimeFlag = true;
         CalcNCycSysAvailMgr_OneTimeFlag = true;
         NumOptStartSysAvailMgrs = 0;
+        NumHybridVentSysAvailMgrs = 0;
         SchedData.deallocate();
         SchedOnData.deallocate();
         SchedOffData.deallocate();
@@ -672,6 +673,9 @@ struct SystemAvailabilityManagerData : BaseGlobalStruct
         OptStart_AdaTempGradTrdHeat.deallocate();
         OptStart_AdaTempGradTrdCool.deallocate();
         PlantAvailMgr.deallocate();
+        ZoneComp.deallocate();
+        ZoneCompNCControlType.deallocate();
+        OptStart.deallocate();
         MyOneTimeFlag = true;
         MyEnvrnFlag = true;
         CurrentEndTime = 0.0;

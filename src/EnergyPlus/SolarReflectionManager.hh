@@ -184,6 +184,8 @@ struct SolarReflectionManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
+        this->TotSolReflRecSurf = 0;
+        this->SolReflRecSurf.deallocate();
         this->IHr = 0;
         this->SunVec = Vector3D();
         this->RecSurfNum = 0;

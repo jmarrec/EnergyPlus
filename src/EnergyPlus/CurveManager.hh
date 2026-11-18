@@ -465,11 +465,15 @@ struct CurveManagerData : BaseGlobalStruct
 
     void clear_state() override
     {
+        CurveValueMyBeginTimeStepFlag = false;
+        FrictionFactorErrorHasOccurred = false;
+        showFallbackMessage = true;
         for (Curve::Curve *c : curves) {
             delete c;
         }
         curves.clear();
         curveMap.clear();
+        btwxtManager.clear();
     }
 };
 

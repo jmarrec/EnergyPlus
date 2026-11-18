@@ -1408,6 +1408,7 @@ struct OutputReportTabularData : BaseGlobalStruct
     {
         this->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::None;
         this->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::NotFound;
+        this->unitsStyle_JSON = OutputReportTabular::UnitsStyle::NotFound;
         this->OutputTableBinnedCount = 0;
         this->BinResultsTableCount = 0;
         this->BinResultsIntervalCount = 0;
@@ -1429,6 +1430,10 @@ struct OutputReportTabularData : BaseGlobalStruct
         this->del = Array1D_string(OutputReportTabular::maxNumStyles);
         this->TableStyle = Array1D<OutputReportTabular::TableStyle>(OutputReportTabular::maxNumStyles, OutputReportTabular::TableStyle::Invalid);
         this->timeInYear = 0.0;
+        this->formatReals_Tabular = true;
+        this->formatReals_JSON = true;
+        this->formatReals_SQLite = true;
+        this->tabularReportPasses.clear();
         this->displayTabularBEPS = false;
         this->displayLEEDSummary = false;
         this->displayTabularCompCosts = false;
@@ -1452,14 +1457,14 @@ struct OutputReportTabularData : BaseGlobalStruct
         this->displayThermalResilienceSummaryExplicitly = false;
         this->displayCO2ResilienceSummaryExplicitly = false;
         this->displayVisualResilienceSummaryExplicitly = false;
-        this->meterNumTotalsBEPS = Array1D_int(OutputReportTabular::numResourceTypes, 0);
-        this->meterNumTotalsSource = Array1D_int(OutputReportTabular::numSourceTypes, 0);
+        this->meterNumTotalsBEPS = Array1D_int(OutputReportTabular::numResourceTypes, -1);
+        this->meterNumTotalsSource = Array1D_int(OutputReportTabular::numSourceTypes, -1);
         this->fuelfactorsused = Array1D_bool(OutputReportTabular::numSourceTypes, false);
         this->ffUsed = Array1D_bool(OutputReportTabular::numResourceTypes, false);
         this->SourceFactors = Array1D<Real64>(OutputReportTabular::numResourceTypes, 0.0);
         this->ffSchedUsed = Array1D_bool(OutputReportTabular::numResourceTypes, false);
         this->ffScheds = Array1D<Sched::Schedule *>(OutputReportTabular::numResourceTypes, nullptr);
-        this->meterNumEndUseBEPS = Array2D_int(OutputReportTabular::numResourceTypes, static_cast<int>(Constant::EndUse::Num), 0);
+        this->meterNumEndUseBEPS = Array2D_int(OutputReportTabular::numResourceTypes, static_cast<int>(Constant::EndUse::Num), -1);
         this->meterNumEndUseSubBEPS.deallocate();
         this->meterNumEndUseSpTypeBEPS.deallocate();
         this->resourceTypeNames = Array1D_string(OutputReportTabular::numResourceTypes);

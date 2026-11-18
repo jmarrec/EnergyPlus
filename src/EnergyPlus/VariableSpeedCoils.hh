@@ -626,6 +626,7 @@ struct VariableSpeedCoilsData : BaseGlobalStruct
         this->NumVarSpeedCoils = 0;
         this->MyOneTimeFlag = true;
         this->GetCoilsInputFlag = true;
+        this->CrankcaseHeaterReportVarFlag = true;
         this->SourceSideMassFlowRate = 0.0;
         this->SourceSideInletTemp = 0.0;
         this->SourceSideInletEnth = 0.0;

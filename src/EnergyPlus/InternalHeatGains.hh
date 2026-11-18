@@ -385,6 +385,8 @@ struct InternalHeatGainsData : BaseGlobalStruct
     {
         this->GetInternalHeatGainsInputFlag = true;
         this->ErrorsFound = false;
+        this->lightsObjects.clear();
+        this->zoneElectricObjects.clear();
     }
 };
 

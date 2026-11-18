@@ -236,6 +236,7 @@ struct TranspiredCollectorData : BaseGlobalStruct
     void clear_state() override
     {
         this->NumUTSC = 0;
+        this->CheckEquipName.deallocate();
         this->GetInputFlag = true;
         this->UTSC.deallocate();
         this->MyOneTimeFlag = true;

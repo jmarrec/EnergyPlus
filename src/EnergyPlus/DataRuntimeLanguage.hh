@@ -820,6 +820,8 @@ struct RuntimeLanguageData : BaseGlobalStruct
 
     void clear_state() override
     {
+        this->emsVarBuiltInStart = 0;
+        this->emsVarBuiltInEnd = 0;
         this->NumProgramCallManagers = 0;
         this->NumSensors = 0;
         this->numActuatorsUsed = 0;

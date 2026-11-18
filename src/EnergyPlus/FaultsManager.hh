@@ -437,6 +437,9 @@ struct FaultsManagerData : BaseGlobalStruct
         NumFaultyCondenserSWTSensor = 0;
         NumFaultyTowerFouling = 0;
         NumFaultyCoilSATSensor = 0;
+        NumFaultyBoilerFouling = 0;
+        NumFaultyChillerFouling = 0;
+        NumFaultyEvapCoolerFouling = 0;
 
         FaultsEconomizer.deallocate();
         FouledCoils.deallocate();
@@ -447,6 +450,9 @@ struct FaultsManagerData : BaseGlobalStruct
         FaultsCondenserSWTSensor.deallocate();
         FaultsTowerFouling.deallocate();
         FaultsCoilSATSensor.deallocate();
+        FaultsBoilerFouling.deallocate();
+        FaultsChillerFouling.deallocate();
+        FaultsEvapCoolerFouling.deallocate();
     }
 };
 

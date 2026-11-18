@@ -556,6 +556,8 @@ struct WindowManagerData : BaseGlobalStruct
         this->A23 = 0.0;
         this->A45 = 0.0;
         this->A67 = 0.0;
+        this->inExtWindowModel.reset();
+        this->winOpticalModel.reset();
         Window::CWindowConstructionsSimplified::clearState();
         this->RunMeOnceFlag = false;
         this->BGFlag = false;    // True if between-glass shade or blind

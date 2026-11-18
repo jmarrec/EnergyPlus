@@ -974,6 +974,30 @@ struct MaterialData : BaseGlobalStruct
         }
         materials.clear();
         materialMap.clear();
+        NumNoMasses = 0;
+        NumIRTs = 0;
+        NumAirGaps = 0;
+        NumW5Glazings = 0;
+        NumW5AltGlazings = 0;
+        NumW5Gases = 0;
+        NumW5GasMixtures = 0;
+        NumW7Gaps = 0;
+        NumBlinds = 0;
+        NumScreens = 0;
+        NumTCGlazings = 0;
+        NumShades = 0;
+        NumSimpleWindows = 0;
+        NumEQLGlazings = 0;
+        NumEQLShades = 0;
+        NumEQLDrapes = 0;
+        NumEQLBlinds = 0;
+        NumEQLScreens = 0;
+        NumEQLGaps = 0;
+        NumEcoRoofs = 0;
+        AnyVariableAbsorptance = false;
+        NumSpectralData = 0;
+        WindowThermalModel.deallocate();
+        SpectralData.deallocate();
     }
 };
 

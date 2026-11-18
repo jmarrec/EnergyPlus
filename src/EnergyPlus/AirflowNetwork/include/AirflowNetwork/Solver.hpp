@@ -671,6 +671,7 @@ namespace AirflowNetwork {
             VAVTerminalRatio = 0.0;
             VAVSystem = false;
             simulation_control = AirflowNetwork::SimulationControl();
+            control_defaulted = false;
             distribution_simulated = false;
             multizone_always_simulated = false;
             ExtLargeOpeningErrCount = 0;

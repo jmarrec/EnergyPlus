@@ -404,7 +404,28 @@ struct PollutionData : BaseGlobalStruct
         this->NumEnvImpactFactors = 0;
         this->NumFuelFactors = 0;
 
+        this->pollComps.fill({});
+
+        this->facilityMeterNums.fill(-1);
+        this->facilityMeterVals.fill(0.0);
+        this->facilityMeterFuelComponentVals.fill(0.0);
+
+        this->pollutantVals.fill(0.0);
+
         this->pollFuelFactorList.clear();
+
+        this->TotCarbonEquivFromN2O = 0.0;
+        this->TotCarbonEquivFromCH4 = 0.0;
+        this->TotCarbonEquivFromCO2 = 0.0;
+
+        this->pollCoeffs.fill({});
+
+        this->CarbonEquivN2O = 0.0;
+        this->CarbonEquivCH4 = 0.0;
+        this->CarbonEquivCO2 = 0.0;
+        this->PurchHeatEffic = 0.0;
+        this->PurchCoolCOP = 0.0;
+        this->SteamConvEffic = 0.0;
     }
 };
 

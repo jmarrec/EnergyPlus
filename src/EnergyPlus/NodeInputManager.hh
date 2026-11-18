@@ -204,9 +204,20 @@ struct NodeInputManagerData : BaseGlobalStruct
         this->MaxCheckNodes = 0;
         this->NodeVarsSetup = false;
         this->NodeLists.deallocate();
+        this->RhoAirStdInit = 0.0;
+        this->RhoWaterStdInit = 0.0;
         this->GetOnlySingleNodeNodeNums.deallocate();
         this->GetOnlySingleNodeFirstTime = true;
         this->NodeWetBulbRepReq.deallocate();
+        this->NodeWetBulbScheds.deallocate();
+        this->NodeRelHumidityRepReq.deallocate();
+        this->NodeRelHumidityScheds.deallocate();
+        this->NodeDewPointRepReq.deallocate();
+        this->NodeDewPointScheds.deallocate();
+        this->NodeSpecificHeatRepReq.deallocate();
+        this->NodeSpecificHeatScheds.deallocate();
+        this->nodeReportingStrings.clear();
+        this->nodeFluids.clear();
     }
 };
 

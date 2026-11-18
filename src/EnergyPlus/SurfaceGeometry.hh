@@ -528,6 +528,7 @@ struct SurfaceGeometryData : BaseGlobalStruct
         GetSurfaceDataOneTimeFlag = false;
         UniqueSurfaceNames.clear();
         kivaManager = HeatBalanceKivaManager::KivaManager();
+        exposedFoundationPerimeter.surfaceMap.clear();
         firstTime = true;
         noTransform = true;
         CheckConvexityFirstTime = true;

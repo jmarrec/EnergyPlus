@@ -371,6 +371,7 @@ struct UserDefinedComponentsData : BaseGlobalStruct
     void clear_state() override
     {
         this->GetInput = true;
+        this->GetAirTerminalInput = true;
         this->GetPlantCompInput = true;
         this->NumUserPlantComps = 0;
         this->NumUserCoils = 0;

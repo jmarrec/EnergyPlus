@@ -522,7 +522,7 @@ struct SolarShadingData : BaseGlobalStruct
     void clear_state() override
     {
         this->MaxHCV = 15;
-        this->MaxHCS = 1500;
+        this->MaxHCS = 15000;
         this->MAXHCArrayBounds = 0;
         this->MAXHCArrayIncrement = 0;
         this->NVS = 0;
@@ -646,6 +646,12 @@ struct SolarShadingData : BaseGlobalStruct
         this->sin_Theta.clear();
         this->cos_Theta.clear();
         this->shd_stream.reset();
+#ifdef EP_NO_OPENGL
+        this->penumbra = false;
+#else
+        this->penumbra.reset();
+#endif
+        this->penumbraIDs.clear();
     }
 
     // Default Constructor

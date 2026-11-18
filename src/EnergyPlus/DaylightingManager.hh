@@ -616,6 +616,21 @@ struct DaylightingData : BaseGlobalStruct
         this->XValue.clear();
         this->YValue.clear();
         this->IllumValue.clear();
+        this->maxControlRefPoints = 0;
+        this->maxShadeDeployOrderExtWins = 0;
+        this->maxDayltgExtWins = 0;
+        this->maxEnclSubSurfaces = 0;
+        this->mapResultsToReport = false;
+        this->mapResultsReported = false;
+        this->DFSReportSizingDays = false;
+        this->DFSReportAllShadowCalculationDays = false;
+        this->enclDaylight.deallocate();
+        this->ZoneDaylight.deallocate();
+        this->daylightControl.deallocate();
+        this->illumMaps.deallocate();
+        this->DaylRefPt.deallocate();
+        this->DElightComplexFene.deallocate();
+        this->spacePowerReductionFactor.deallocate();
     }
 };
 

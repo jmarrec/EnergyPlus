@@ -330,9 +330,11 @@ struct IceThermalStorageData : BaseGlobalStruct
     void clear_state() override
     {
         this->getITSInput = true;
+        this->NumThermalStorageSizing = 0;
         this->NumSimpleIceStorage = 0;
         this->NumDetailedIceStorage = 0;
         this->TotalNumIceStorage = 0;
+        this->ThermalStorageSizing.deallocate();
         this->SimpleIceStorage.deallocate();
         this->DetailedIceStorage.deallocate();
     }

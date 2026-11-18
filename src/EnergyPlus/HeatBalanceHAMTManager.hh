@@ -237,6 +237,31 @@ struct HeatBalHAMTMgrData : BaseGlobalStruct
 
     void clear_state() override
     {
+        this->firstcell.deallocate();
+        this->lastcell.deallocate();
+        this->Extcell.deallocate();
+        this->ExtRadcell.deallocate();
+        this->ExtConcell.deallocate();
+        this->ExtSkycell.deallocate();
+        this->ExtGrncell.deallocate();
+        this->Intcell.deallocate();
+        this->IntConcell.deallocate();
+        this->watertot.deallocate();
+        this->surfrh.deallocate();
+        this->surfextrh.deallocate();
+        this->surftemp.deallocate();
+        this->surfexttemp.deallocate();
+        this->surfvp.deallocate();
+        this->extvtc.deallocate();
+        this->intvtc.deallocate();
+        this->extvtcflag.deallocate();
+        this->intvtcflag.deallocate();
+        this->MyEnvrnFlag.deallocate();
+        this->deltat = 0.0;
+        this->TotCellsMax = 0;
+        this->latswitch = false;
+        this->rainswitch = false;
+        this->cells.deallocate();
         this->OneTimeFlag = true;
         this->qvpErrCount = 0;
         this->qvpErrReport = 0;

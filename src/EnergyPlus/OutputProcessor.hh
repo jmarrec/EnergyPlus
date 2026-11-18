@@ -982,8 +982,10 @@ struct OutputProcessorData : BaseGlobalStruct
         this->MaxVariablesForOutput = 0;
         this->NumOfRVariable_Setup = 0;
         this->NumTotalRVariable = 0;
+        this->NumOfRVariable = 0;
         this->NumOfRVariable_Sum = 0;
         this->NumOfRVariable_Meter = 0;
+        this->NumOfIVariable = 0;
         this->NumOfIVariable_Setup = 0;
         this->NumTotalIVariable = 0;
         this->NumOfIVariable_Sum = 0;

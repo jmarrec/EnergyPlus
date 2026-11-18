@@ -578,6 +578,10 @@ void EnergyPlusData::clear_state()
     this->files.psz.close();
     this->files.zsz.close();
     this->files.spsz.close();
+    this->files.outputControl = IOFiles::OutputControl();
+    this->files.inputWeatherFile.close();
+    this->files.inputWeatherFilePath = InputFilePath{""};
+    this->files.inputWeatherFile = InputFile{""};
 }
 
 void EnergyPlusData::init_constant_state(EnergyPlusData &state)

@@ -411,6 +411,7 @@ struct VentilatedSlabData : BaseGlobalStruct
 
     void clear_state() override
     {
+        this->OperatingMode = 0;
         this->MyOneTimeFlag = true;
         this->GetInputFlag = true;
         this->HCoilOn = false;
