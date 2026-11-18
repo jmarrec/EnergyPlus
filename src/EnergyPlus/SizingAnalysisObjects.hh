@@ -106,15 +106,15 @@ class SizingLog
 public:
     SizingLog(double &rVariable);
 
-    int NumOfEnvironmentsInLogSet;
-    int NumOfDesignDaysInLogSet;
-    int NumberOfSizingPeriodsInLogSet;
+    int NumOfEnvironmentsInLogSet = 0;
+    int NumOfDesignDaysInLogSet = 0;
+    int NumberOfSizingPeriodsInLogSet = 0;
     std::map<int, int> ztStepCountByEnvrnMap; // key is the seed original Environment number, or index in the Environment Structure
     std::map<int, int>
         envrnStartZtStepIndexMap; // key is the seed original Environment number, produces index in zone step vector where that period begins
     std::map<int, int> newEnvrnToSeedEnvrnMap; // key is the new HVAC sim environment number, produces Seed environment number
-    int NumOfStepsInLogSet;                    // sum of all zone timestep steps in log
-    int timeStepsInAverage;                    // breadth back in time for running average, zone timesteps
+    int NumOfStepsInLogSet = 0;                // sum of all zone timestep steps in log
+    int timeStepsInAverage = 0;                // breadth back in time for running average, zone timesteps
     Real64 &p_rVariable;                       // reference to variable being logged
 
     std::vector<ZoneTimestepObject> ztStepObj; // will be sized to the sum of all steps, eg. timesteps in hour * 24 hours * 2 design days.
