@@ -591,12 +591,8 @@ struct ResultsFrameworkData : BaseGlobalStruct
 
     void clear_state() override
     {
-        using OutputProcessor::ReportFreq;
-        for (int iFreq = (int)ReportFreq::TimeStep; iFreq < (int)ReportFreq::Num; ++iFreq) {
-            auto &meters = this->resultsFramework->Meters[iFreq];
-            meters.setDataFrameEnabled(false);
-            meters.setVariablesScanned(false);
-        }
+        // Fresh object: data frames (variables, rows), outputVariables, MDD/RDD, tabular reports and flags all carry over otherwise
+        this->resultsFramework = std::make_unique<ResultsFramework::ResultsFramework>();
     }
 };
 

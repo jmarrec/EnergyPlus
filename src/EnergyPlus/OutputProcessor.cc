@@ -3510,7 +3510,8 @@ void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType co
         }
 
         // Update meters on the TimeStep  (Zone)
-        if (op->meterValues.capacity() > 0) {
+        if (!op->meterValues.empty()) {
+            assert(op->meterValues.size() == op->meters.size());
             for (int iMeter = 0; iMeter < (int)op->meters.size(); ++iMeter) {
                 auto *meter = op->meters[iMeter];
                 if (meter->type == MeterType::Normal || meter->type == MeterType::Custom) {
@@ -3543,7 +3544,7 @@ void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType co
                     assert(false);
                 }
             } // for (iMeter)
-        } // if (op->meterValues.capacity() > 0)
+        } // if (!op->meterValues.empty())
 
         for (auto *var : op->outVars) {
             if (var->timeStepType != TimeStepType::Zone && var->timeStepType != TimeStepType::System) {
